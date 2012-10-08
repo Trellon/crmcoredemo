@@ -21,6 +21,7 @@ dependencies[] = search
 
 ; Install CRM Core dependencies.
 dependencies[] = addressfield
+dependencies[] = admin_menu
 dependencies[] = cck_phone
 dependencies[] = ctools
 dependencies[] = date
@@ -31,16 +32,15 @@ dependencies[] = email
 dependencies[] = entity
 dependencies[] = entityreference
 dependencies[] = entity_token
+dependencies[] = features
 dependencies[] = field_group
 dependencies[] = link
 dependencies[] = name
 dependencies[] = relation
-dependencies[] = views
-dependencies[] = views_ui
-dependencies[] = features
 dependencies[] = select_or_other
 dependencies[] = token
-dependencies[] = admin_menu
+dependencies[] = views
+dependencies[] = views_ui
 
 ; Install CRM Core modules.
 dependencies[] = crm_core
