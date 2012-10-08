@@ -1,0 +1,43 @@
+<?php
+/**
+ * @file
+ * Installation for CRM_Core_Donation_lb
+ */
+ 
+/**
+ * Implements hook_schema()
+ */
+function crm_core_donation_lb_schema() {
+  $schema['crm_core_donation_lb'] = array(
+    'description' => 'Stores CRM Core Donation leaderboard information',
+    'fields' => array(
+      'donation_page_id' => array(
+        'description' => 'Donation page ID',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),    
+      'donor_count' => array(
+        'description' => 'Number of donors',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'total' => array(
+        'description' => 'Total amount of the donation',
+        'type' => 'float',
+        'description' => 'Total amount donated',
+        'precision' => 10,
+        'scale' => 2,
+      ),
+      'last_donation' => array(
+      'description' => 'Timestamp of when the last donation was made',
+      'type' => 'int',
+      'not null' => FALSE,
+      'default' => 0,
+      ),
+  ),
+    'primary key' => array('donation_page_id'),
+  );
+
+  return $schema;
+}

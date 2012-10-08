@@ -1,0 +1,747 @@
+<?php
+/**
+ * @file
+ * crm_core_donation_lb.views_default.inc
+ */
+
+/**
+ * Implements hook_views_default_views().
+ */
+function crm_core_donation_lb_views_default_views() {
+  $view = new view;
+  $view->name = 'donation_leaderboard';
+  $view->description = 'Displays top donation pages stats';
+  $view->tag = 'default';
+  $view->base_table = 'crm_core_donation_lb';
+  $view->human_name = 'donation leaderboard';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'Donation Leaderboard';
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['perm'] = 'access crm core donation page';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '1';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['group_rendered'] = 1;
+  $handler->display->display_options['style_options']['row_class'] = 'row-[counter]';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'uid' => 'uid',
+    'counter' => 'counter',
+    'name' => 'name',
+    'picture' => 'picture',
+    'donation_page_id' => 'donation_page_id',
+    'donor_count' => 'donor_count',
+    'total' => 'total',
+    'id' => 'id',
+    'nothing' => 'nothing',
+  );
+  $handler->display->display_options['style_options']['default'] = '-1';
+  $handler->display->display_options['style_options']['info'] = array(
+    'uid' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'counter' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'name' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'picture' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'donation_page_id' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'donor_count' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'total' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'id' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'nothing' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
+  $handler->display->display_options['style_options']['override'] = 1;
+  $handler->display->display_options['style_options']['sticky'] = 0;
+  $handler->display->display_options['style_options']['empty_table'] = 0;
+  /* Relationship: CRM Donation Leaderboard: Donation page ID */
+  $handler->display->display_options['relationships']['donation_page_id']['id'] = 'donation_page_id';
+  $handler->display->display_options['relationships']['donation_page_id']['table'] = 'crm_core_donation_lb';
+  $handler->display->display_options['relationships']['donation_page_id']['field'] = 'donation_page_id';
+  $handler->display->display_options['relationships']['donation_page_id']['required'] = 0;
+  /* Relationship: CRM Donation: Donation Page Owner */
+  $handler->display->display_options['relationships']['uid']['id'] = 'uid';
+  $handler->display->display_options['relationships']['uid']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['relationships']['uid']['field'] = 'uid';
+  $handler->display->display_options['relationships']['uid']['relationship'] = 'donation_page_id';
+  $handler->display->display_options['relationships']['uid']['required'] = 0;
+  /* Field: User: Uid */
+  $handler->display->display_options['fields']['uid']['id'] = 'uid';
+  $handler->display->display_options['fields']['uid']['table'] = 'users';
+  $handler->display->display_options['fields']['uid']['field'] = 'uid';
+  $handler->display->display_options['fields']['uid']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['uid']['label'] = '';
+  $handler->display->display_options['fields']['uid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['uid']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['uid']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['uid']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['uid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['uid']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['uid']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['uid']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['uid']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['uid']['link_to_user'] = 1;
+  /* Field: CRM Donation Leaderboard: Donation page ID */
+  $handler->display->display_options['fields']['donation_page_id']['id'] = 'donation_page_id';
+  $handler->display->display_options['fields']['donation_page_id']['table'] = 'crm_core_donation_lb';
+  $handler->display->display_options['fields']['donation_page_id']['field'] = 'donation_page_id';
+  $handler->display->display_options['fields']['donation_page_id']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['format_plural'] = 0;
+  /* Field: User: Name */
+  $handler->display->display_options['fields']['name']['id'] = 'name';
+  $handler->display->display_options['fields']['name']['table'] = 'users';
+  $handler->display->display_options['fields']['name']['field'] = 'name';
+  $handler->display->display_options['fields']['name']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['name']['label'] = '';
+  $handler->display->display_options['fields']['name']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['make_link'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['path'] = 'profile/[uid]';
+  $handler->display->display_options['fields']['name']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['name']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['name']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['name']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['name']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['name']['link_to_user'] = 0;
+  $handler->display->display_options['fields']['name']['overwrite_anonymous'] = 0;
+  $handler->display->display_options['fields']['name']['format_username'] = 1;
+  /* Field: CRM Donation Leaderboard: Donor Count */
+  $handler->display->display_options['fields']['donor_count']['id'] = 'donor_count';
+  $handler->display->display_options['fields']['donor_count']['table'] = 'crm_core_donation_lb';
+  $handler->display->display_options['fields']['donor_count']['field'] = 'donor_count';
+  $handler->display->display_options['fields']['donor_count']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['donor_count']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['donor_count']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['donor_count']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['donor_count']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['donor_count']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['donor_count']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['donor_count']['hide_alter_empty'] = 1;
+  /* Field: CRM Donation Leaderboard: Total donation amount */
+  $handler->display->display_options['fields']['total']['id'] = 'total';
+  $handler->display->display_options['fields']['total']['table'] = 'crm_core_donation_lb';
+  $handler->display->display_options['fields']['total']['field'] = 'total';
+  $handler->display->display_options['fields']['total']['alter']['alter_text'] = 1;
+  $handler->display->display_options['fields']['total']['alter']['text'] = '[total]
+    Raised';
+  $handler->display->display_options['fields']['total']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['total']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['total']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['total']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['total']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['total']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['total']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['total']['hide_alter_empty'] = 1;
+  /* Field: User: Picture */
+  $handler->display->display_options['fields']['picture']['id'] = 'picture';
+  $handler->display->display_options['fields']['picture']['table'] = 'users';
+  $handler->display->display_options['fields']['picture']['field'] = 'picture';
+  $handler->display->display_options['fields']['picture']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['picture']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['picture']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['picture']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['picture']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['picture']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['picture']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['picture']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['picture']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['picture']['link_photo_to_profile'] = 1;
+  /* Sort criterion: CRM Donation Leaderboard: Total donation amount */
+  $handler->display->display_options['sorts']['total']['id'] = 'total';
+  $handler->display->display_options['sorts']['total']['table'] = 'crm_core_donation_lb';
+  $handler->display->display_options['sorts']['total']['field'] = 'total';
+  $handler->display->display_options['sorts']['total']['order'] = 'DESC';
+  /* Filter criterion: CRM Donation: Personal donation page */
+  $handler->display->display_options['filters']['pdp']['id'] = 'pdp';
+  $handler->display->display_options['filters']['pdp']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['filters']['pdp']['field'] = 'pdp';
+  $handler->display->display_options['filters']['pdp']['relationship'] = 'donation_page_id';
+  $handler->display->display_options['filters']['pdp']['value']['value'] = '1';
+  
+  /* Display: Other leaders */
+  $handler = $view->new_display('page', 'Other leaders', 'page');
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '20';
+  $handler->display->display_options['pager']['options']['offset'] = '1';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['expose']['items_per_page_options_all'] = 0;
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  /* Header: Global: View area */
+  $handler->display->display_options['header']['view']['id'] = 'view';
+  $handler->display->display_options['header']['view']['table'] = 'views';
+  $handler->display->display_options['header']['view']['field'] = 'view';
+  $handler->display->display_options['header']['view']['empty'] = FALSE;
+  $handler->display->display_options['header']['view']['view_to_insert'] = 'donation_leaderboard:block_1';
+  $handler->display->display_options['header']['view']['inherit_arguments'] = 0;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: User: Uid */
+  $handler->display->display_options['fields']['uid']['id'] = 'uid';
+  $handler->display->display_options['fields']['uid']['table'] = 'users';
+  $handler->display->display_options['fields']['uid']['field'] = 'uid';
+  $handler->display->display_options['fields']['uid']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['uid']['label'] = '';
+  $handler->display->display_options['fields']['uid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['uid']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['uid']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['uid']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['uid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['uid']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['uid']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['uid']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['uid']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['uid']['link_to_user'] = 1;
+  /* Field: Global: View result counter */
+  $handler->display->display_options['fields']['counter']['id'] = 'counter';
+  $handler->display->display_options['fields']['counter']['table'] = 'views';
+  $handler->display->display_options['fields']['counter']['field'] = 'counter';
+  $handler->display->display_options['fields']['counter']['label'] = 'Rank';
+  $handler->display->display_options['fields']['counter']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['counter']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['counter']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['counter']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['counter']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['counter']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['counter']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['counter']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['counter']['counter_start'] = '1';
+  /* Field: User: Name */
+  $handler->display->display_options['fields']['name']['id'] = 'name';
+  $handler->display->display_options['fields']['name']['table'] = 'users';
+  $handler->display->display_options['fields']['name']['field'] = 'name';
+  $handler->display->display_options['fields']['name']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['name']['label'] = '';
+  $handler->display->display_options['fields']['name']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['name']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['make_link'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['path'] = 'profile/[uid]';
+  $handler->display->display_options['fields']['name']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['name']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['name']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['name']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['name']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['name']['link_to_user'] = 0;
+  $handler->display->display_options['fields']['name']['overwrite_anonymous'] = 0;
+  $handler->display->display_options['fields']['name']['format_username'] = 1;
+  /* Field: User: Picture */
+  $handler->display->display_options['fields']['picture']['id'] = 'picture';
+  $handler->display->display_options['fields']['picture']['table'] = 'users';
+  $handler->display->display_options['fields']['picture']['field'] = 'picture';
+  $handler->display->display_options['fields']['picture']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['picture']['label'] = 'User';
+  $handler->display->display_options['fields']['picture']['alter']['alter_text'] = 1;
+  $handler->display->display_options['fields']['picture']['alter']['text'] = '[picture] [name]';
+  $handler->display->display_options['fields']['picture']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['picture']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['picture']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['picture']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['picture']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['picture']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['picture']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['picture']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['picture']['link_photo_to_profile'] = 1;
+  /* Field: CRM Donation Leaderboard: Donation page ID */
+  $handler->display->display_options['fields']['donation_page_id']['id'] = 'donation_page_id';
+  $handler->display->display_options['fields']['donation_page_id']['table'] = 'crm_core_donation_lb';
+  $handler->display->display_options['fields']['donation_page_id']['field'] = 'donation_page_id';
+  $handler->display->display_options['fields']['donation_page_id']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['format_plural'] = 0;
+  /* Field: CRM Donation Leaderboard: Donor Count */
+  $handler->display->display_options['fields']['donor_count']['id'] = 'donor_count';
+  $handler->display->display_options['fields']['donor_count']['table'] = 'crm_core_donation_lb';
+  $handler->display->display_options['fields']['donor_count']['field'] = 'donor_count';
+  $handler->display->display_options['fields']['donor_count']['label'] = 'Number of donations';
+  $handler->display->display_options['fields']['donor_count']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['donor_count']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['donor_count']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['donor_count']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['donor_count']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['donor_count']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['donor_count']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['donor_count']['hide_alter_empty'] = 1;
+  /* Field: CRM Donation Leaderboard: Total donation amount */
+  $handler->display->display_options['fields']['total']['id'] = 'total';
+  $handler->display->display_options['fields']['total']['table'] = 'crm_core_donation_lb';
+  $handler->display->display_options['fields']['total']['field'] = 'total';
+  $handler->display->display_options['fields']['total']['alter']['alter_text'] = 1;
+  $handler->display->display_options['fields']['total']['alter']['text'] = '$[total]
+    ';
+  $handler->display->display_options['fields']['total']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['total']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['total']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['total']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['total']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['total']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['total']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['total']['hide_alter_empty'] = 1;
+  /* Field: CRM Donation: Donation page ID */
+  $handler->display->display_options['fields']['id']['id'] = 'id';
+  $handler->display->display_options['fields']['id']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['fields']['id']['field'] = 'id';
+  $handler->display->display_options['fields']['id']['relationship'] = 'donation_page_id';
+  $handler->display->display_options['fields']['id']['label'] = '';
+  $handler->display->display_options['fields']['id']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['id']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['id']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['id']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['id']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['id']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['id']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['id']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['id']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['id']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['id']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['id']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['id']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['id']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['id']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['id']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['id']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['id']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['id']['separator'] = '';
+  $handler->display->display_options['fields']['id']['format_plural'] = 0;
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = 'Link';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<span>Donation page</span>';
+  $handler->display->display_options['fields']['nothing']['alter']['make_link'] = 1;
+  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'donation_pages/[id]';
+  $handler->display->display_options['fields']['nothing']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['nothing']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['nothing']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['nothing']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['nothing']['alter']['link_class'] = 'rbutton';
+  $handler->display->display_options['fields']['nothing']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['nothing']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['nothing']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['nothing']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['nothing']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['nothing']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['nothing']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['nothing']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['nothing']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['nothing']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['nothing']['hide_alter_empty'] = 0;
+  $handler->display->display_options['path'] = 'donate/leaders';
+  $handler->display->display_options['menu']['type'] = 'normal';
+  $handler->display->display_options['menu']['title'] = 'Leaderboard';
+  $handler->display->display_options['menu']['description'] = 'Donation leaderboard';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['name'] = 'main-menu';
+  
+  /* Display: Top leader */
+  $handler = $view->new_display('block', 'Top leader', 'block_1');
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['style_options']['group_rendered'] = 1;
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: User: Uid */
+  $handler->display->display_options['fields']['uid']['id'] = 'uid';
+  $handler->display->display_options['fields']['uid']['table'] = 'users';
+  $handler->display->display_options['fields']['uid']['field'] = 'uid';
+  $handler->display->display_options['fields']['uid']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['uid']['label'] = '';
+  $handler->display->display_options['fields']['uid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['uid']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['uid']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['uid']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['uid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['uid']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['uid']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['uid']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['uid']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['uid']['link_to_user'] = 1;
+  /* Field: CRM Donation Leaderboard: Donation page ID */
+  $handler->display->display_options['fields']['donation_page_id']['id'] = 'donation_page_id';
+  $handler->display->display_options['fields']['donation_page_id']['table'] = 'crm_core_donation_lb';
+  $handler->display->display_options['fields']['donation_page_id']['field'] = 'donation_page_id';
+  $handler->display->display_options['fields']['donation_page_id']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['donation_page_id']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['donation_page_id']['format_plural'] = 0;
+  /* Field: User: Picture */
+  $handler->display->display_options['fields']['picture']['id'] = 'picture';
+  $handler->display->display_options['fields']['picture']['table'] = 'users';
+  $handler->display->display_options['fields']['picture']['field'] = 'picture';
+  $handler->display->display_options['fields']['picture']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['picture']['label'] = '';
+  $handler->display->display_options['fields']['picture']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['picture']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['make_link'] = 1;
+  $handler->display->display_options['fields']['picture']['alter']['path'] = 'profile/[uid]';
+  $handler->display->display_options['fields']['picture']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['picture']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['picture']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['picture']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['picture']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['picture']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['picture']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['picture']['link_photo_to_profile'] = 0;
+  /* Field: User: Name */
+  $handler->display->display_options['fields']['name']['id'] = 'name';
+  $handler->display->display_options['fields']['name']['table'] = 'users';
+  $handler->display->display_options['fields']['name']['field'] = 'name';
+  $handler->display->display_options['fields']['name']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['name']['label'] = '';
+  $handler->display->display_options['fields']['name']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['name']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['make_link'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['path'] = 'profile/[uid]';
+  $handler->display->display_options['fields']['name']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['name']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['name']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['name']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['name']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['name']['link_to_user'] = 0;
+  $handler->display->display_options['fields']['name']['overwrite_anonymous'] = 0;
+  $handler->display->display_options['fields']['name']['format_username'] = 1;
+  /* Field: CRM Donation Leaderboard: Donor Count */
+  $handler->display->display_options['fields']['donor_count']['id'] = 'donor_count';
+  $handler->display->display_options['fields']['donor_count']['table'] = 'crm_core_donation_lb';
+  $handler->display->display_options['fields']['donor_count']['field'] = 'donor_count';
+  $handler->display->display_options['fields']['donor_count']['label'] = '';
+  $handler->display->display_options['fields']['donor_count']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['donor_count']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['donor_count']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['donor_count']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['donor_count']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['donor_count']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['donor_count']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['donor_count']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['donor_count']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['donor_count']['hide_alter_empty'] = 1;
+  /* Field: Global: View result counter */
+  $handler->display->display_options['fields']['counter']['id'] = 'counter';
+  $handler->display->display_options['fields']['counter']['table'] = 'views';
+  $handler->display->display_options['fields']['counter']['field'] = 'counter';
+  $handler->display->display_options['fields']['counter']['label'] = '';
+  $handler->display->display_options['fields']['counter']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['counter']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['counter']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['counter']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['counter']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['counter']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['counter']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['counter']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['counter']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['counter']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['counter']['counter_start'] = '1';
+  /* Field: CRM Donation: Header */
+  $handler->display->display_options['fields']['header']['id'] = 'header';
+  $handler->display->display_options['fields']['header']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['fields']['header']['field'] = 'header';
+  $handler->display->display_options['fields']['header']['relationship'] = 'donation_page_id';
+  $handler->display->display_options['fields']['header']['label'] = '';
+  $handler->display->display_options['fields']['header']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['header']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['header']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['header']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['header']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['header']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['header']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['header']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['header']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['header']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['header']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['header']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['header']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['header']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['header']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['header']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['header']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['header']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['header']['format'] = 'key';
+  $handler->display->display_options['fields']['header']['key'] = 'value';
+  /* Field: CRM Donation Leaderboard: Total donation amount */
+  $handler->display->display_options['fields']['total']['id'] = 'total';
+  $handler->display->display_options['fields']['total']['table'] = 'crm_core_donation_lb';
+  $handler->display->display_options['fields']['total']['field'] = 'total';
+  $handler->display->display_options['fields']['total']['label'] = '';
+  $handler->display->display_options['fields']['total']['alter']['alter_text'] = 1;
+  $handler->display->display_options['fields']['total']['alter']['text'] = '<div id="donation_leader">
+    <div class="position">
+    [counter]
+    </div>
+    <div class="picture">
+    [picture]
+    <span>[name]</span>
+    </div>
+  <div class="description">
+  [header]
+  </div>
+    <div class="amount">
+    $[total] <br />
+    Raised
+    </div>
+    </div>';
+  $handler->display->display_options['fields']['total']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['total']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['total']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['total']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['total']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['total']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['total']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['total']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['total']['hide_alter_empty'] = 1;
+
+
+  $views['donation_leaderboard'] = $view; 
+  return $views;
+}

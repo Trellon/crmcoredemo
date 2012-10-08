@@ -1,0 +1,407 @@
+<?php
+/**
+ * @file
+ * Code for the SF Center Volunteer feature.
+ */
+
+include_once('crm_core_volunteer.features.inc');
+include_once('crm_core_volunteer.userpoints.inc');
+
+/**
+ * Implements hook_menu
+ */
+function crm_core_volunteer_menu() {
+  
+  $items['admin/structure/crm/volunteer/config'] = array(
+    'title' => t('Volunteer settings'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('crm_core_volunteer_config'),
+    'access arguments' => array('administer crm core volunteer'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  
+  $items['node/%node/volunteer/%crm_core_profile'] = array(
+    'title' => 'Volunteer',
+    'page callback' => 'crm_core_volunteer_attachment_form',
+    'page arguments' => array(1, 3),
+    'access arguments' => array('crm_core volunteer apply'),
+    // this can change in the future
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;  
+}
+
+/**
+ * Implements hook_permission()
+ */
+function crm_core_volunteer_permission() {
+  return array(
+    'administer crm core volunteer' => array(
+      'title' => t('Administer CRM Core volunteer'),
+      'description' => t('Administer CRM Core volunteers'),
+    ),
+    'crm_core volunteer apply' => array(
+      'title' => t('Application for volunteer opportunities'),
+      'description' => t('Allow user to commit to volunteer opportunities.'),
+    ),
+  );
+}
+
+/**
+ * implements hook_node_view
+ * Adding an event registration link on the event pages
+ */
+function crm_core_volunteer_node_view($node, $view_mode) {
+    // @todo: be able to configure the weight of the registration link
+    if ($node->type == variable_get('crm_core_volunteer_content_type', 'page')) {
+      $crm_core_profile_volunteer = variable_get('crm_core_volunteer_profile', '');
+      if ($crm_core_profile_volunteer == '') {
+        return;  
+      }
+            
+      drupal_add_css(drupal_get_path('module', 'crm_core_volunteer') . '/crm_core_volunteer.css');
+      
+      // user has no access to volunteer
+      if (!user_access('crm_core volunteer apply')) {
+        if (!user_is_logged_in()) {
+          $node->content['crm_core_volunteer_link'] = array(
+           '#markup' => l('<span>Login/Create account to Volunteer!</span>', 'user', array('query' => array('destination' => drupal_get_path_alias('node/' . $node->nid)), 'html' => TRUE, 'attributes' => array('class' => array('crm_core_volunteer_link')))),
+         );
+         return;           
+        } else {
+          // user is auth user but does not have access to register for event
+          return;
+        }      
+      }
+      // user has access to register for volunteer opportunity
+      // (optional) check for quota/limit of application/registration
+      if (crm_core_volunteer_check_quota($node)) {
+         $node->content['crm_core_volunteer_link'] = array(
+           '#markup' => '<p class="crm_core_volunteer_link"><span>Application is closed</span></p>',
+         );      
+         return;        
+      }      
+      // check for commitment
+      $registration_check = _crm_core_volunteer_check_commitment($node->nid);
+       if ($registration_check) {
+         $node->content['crm_core_volunteer_link'] = array(
+           '#markup' => '<p class="crm_core_volunteer_link"><span>You have already committed to this opportunity</span></p>',
+         );      
+           return;            
+       }      
+  
+       // all clear: display the button     
+       $node->content['crm_core_volunteer_link'] = array(
+         '#markup' => l('<span>Volunteer</span>', 'node/' . $node->nid . '/volunteer/' . $crm_core_profile_volunteer, array('html' => TRUE, 'attributes' => array('class' => array('crm_core_volunteer_link')))),
+       );      
+    }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function crm_core_volunteer_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'crm_core_volunteer'),
+  );
+}
+
+/**
+ * Implements hook_views_data_alter
+ */
+function crm_core_volunteer_views_data_alter(&$data) {
+  $data['node']['volunteer_link'] = array(
+    'field' => array(
+      'title' => t('Volunteer Link'),
+      'help' => t('Provide a link to the volunteer opportunity registration screen'),
+      'handler' => 'crm_core_volunteer_handler_field_volunteer_link',
+    ),
+  );  
+}
+
+
+/**
+ * Main registration form to be attached
+ */
+function crm_core_volunteer_attachment_form($node, $crm_core_profile) {
+      
+  // check for node type to attach the form
+  if ($node->type == variable_get('crm_core_volunteer_content_type', 'page')) {
+      // check the attachment profile
+      $attachment_profile_name = variable_get('crm_core_volunteer_profile', '');
+      if ($attachment_profile_name == '') {
+        return drupal_access_denied();  
+      }
+       
+      // optionally, check the quota/slots for a volunteer opportunity
+      if (crm_core_volunteer_check_quota($node)) {
+         return t('Sorry, the application to this volunteer opporutnity is closed'); 
+      }
+      // lastly, check if user has already committed to this opportunity
+      $registration_check = _crm_core_volunteer_check_commitment($node->nid);
+      if ($registration_check) {
+        return drupal_access_denied();  
+      }      
+      if ($attachment_profile_name == $crm_core_profile['name']) {
+         module_load_include('inc', 'crm_core_profile', 'crm_core_profile.forms');
+         return drupal_get_form('crm_core_profile_entry_form', $crm_core_profile);
+      }      
+  }
+  
+  return drupal_access_denied();  
+}
+
+///**
+// * Implements hook_crm_core_profile_activity_alter
+// * We are just setting some default value to the crm_core_profile form in the activity data container
+// * the $form here refers to the $form['activity'] data container from the original crm_core_profile form
+// */
+function crm_core_volunteer_crm_core_profile_activity_alter(&$form, $profile_name) {  
+  if ($profile_name == variable_get('crm_core_volunteer_profile', '')) {
+    $form['title']['#value'] = t('Volunteer Opportunity Commitment');
+    
+    // this has to exist because the form is located at 
+    // node/nid/register/crm_core_profile_name
+    $node = menu_get_object();
+    
+    $default_value = sprintf('%s (%s)', $node->title, $node->nid);
+
+    $form['field_volunteer_opportunity'][LANGUAGE_NONE][0]['target_id']['#default_value'] = $default_value;         
+  }  
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter
+ */
+function crm_core_volunteer_form_crm_core_profile_entry_form_alter(&$form, &$form_state, $form_id) {
+  // adding additional classes to the event registration form
+  $profile = $form_state['profile'];
+  
+  // making sure we are on the correct volunteer opportunity profile
+  if ($profile['name'] != variable_get('crm_core_volunteer_profile', '')) {
+    return;  
+  }
+  
+  // todo: set the volunteer toggle for the contact as 1
+
+  if (empty($form['#attributes']['class'])) {
+    $form['#attributes']['class'] = array('crm_core_volunteer_form');
+  }
+  else {
+    $form['#attributes']['class'] += array('crm_core_volunteer_form');
+  }
+    
+  if ($node = menu_get_object()) { 
+    // adding content details
+    $teaser = field_attach_view('node', $node, 'teaser');
+    $teaser = render($teaser);
+    
+    $form['volunteer'] = array(
+      '#type' => 'fieldset', 
+      '#title' => t('Volunteer Details'),   
+      '#collapsible' => TRUE,  
+      '#collapsed' => FALSE,
+      '#weight' => '-999',
+    );
+    
+    $form['volunteer']['volunteer_title'] = array(
+      '#prefix' => '<h4>',
+      '#markup' => $node->title,
+      '#suffix' => '</h4>',
+    );
+    
+    $form['volunteer']['volunteer_detail'] = array(
+      '#markup' => $teaser,
+    );
+    
+     $form_state['profile']['redirect'] = drupal_get_path_alias('node/' . $node->nid);
+     $form['#submit'][] = 'crm_core_volunteer_profile_form_submit';          
+  }
+}
+
+/**
+ * Submission handler for free event registration
+ */
+function crm_core_volunteer_profile_form_submit($form, &$form_state) {
+  $message = variable_get('crm_core_volunteer_redirect_message', 'Thank you for applying to be a volunteer for this opportunity!');
+  drupal_set_message($message);
+}
+
+/*
+ * Implements hook_crm_core_profile_theme_alter
+ */
+function crm_core_volunteer_crm_core_profile_theme_alter(&$form, &$render_fields) {
+   if ($form['profile_name']['#value'] == variable_get('crm_core_volunteer_profile', '')) {
+     $render_fields['-999'] = 'volunteer';  
+   } 
+}
+
+/**
+ * Configuration form
+ */
+function crm_core_volunteer_config($form, &$form_state) {
+  
+  // we need to get the content type we want to attach
+  $_node_types = node_type_get_types();
+  $options = array('' => t('--Select--'));
+  foreach($_node_types as $node_type) {
+    $options[$node_type->type] = $node_type->name;  
+  }
+
+  $form['content'] = array(
+    '#type' => 'fieldset', 
+    '#title' => t('Content Settings'),   
+    '#collapsible' => TRUE,  
+    '#collapsed' => FALSE,
+  );
+
+  // select the content type for the component
+  $volunteer_content_type = variable_get('crm_core_volunteer_content_type', 'page');
+  
+  $form['content']['crm_core_volunteer_content_type'] = array(
+    '#type' => 'select',
+    '#title' => 'Select the content type for volunteer',
+    '#options' => $options,
+    '#description' => t('This will enable the CRM Core Profile form to be attached to the content type'),
+    '#default_value' => $volunteer_content_type,
+    '#required' => TRUE,
+  );
+  
+  $volunteer_content_fields = array();
+  foreach (field_info_instances('node', $volunteer_content_type) as $field_name => $field) {
+    $volunteer_content_fields[$field_name] = $field['label'];
+  }
+  
+  // configuration for volunteer quota/slots management
+  $form['content']['crm_core_volunteer_quota'] = array(
+    '#type' => 'select',
+    '#title' => 'Selects the field for volunteer limit (optional)',
+    '#options' => array('' => '--Select--',) + $volunteer_content_fields,
+    '#description' => t('By default, each volunteer opportunity can have unlimited commitments to it, an optional field from the volunteer content type can be used to restrict how many volunteers can apply for each opportunity.'),
+    '#default_value' => variable_get('crm_core_volunteer_quota', ''),
+  );
+  
+  $form['crm'] = array(
+    '#type' => 'fieldset', 
+    '#title' => t('CRM Settings'),   
+    '#collapsible' => TRUE,  
+    '#collapsed' => FALSE,
+  );  
+  
+  $crm_core_profiles = crm_core_profile_load_all();
+  $profile_options = array('' => t('--Select--'));
+  foreach($crm_core_profiles as $crm_core_profile) {
+    $profile_options[$crm_core_profile['name']] = $crm_core_profile['label'];  
+  }
+  
+  // profile we will use to attach to the event
+  $form['crm']['crm_core_volunteer_profile'] = array(
+    '#type' => 'select',
+    '#title' => 'Select the CRM Core profile to use for volunteer commitments',
+    '#options' => $profile_options,
+    '#default_value' => variable_get('crm_core_volunteer_profile', ''),
+    '#required' => TRUE,
+  );
+    
+  $form['crm_core_volunteer_redirect_message'] = array(
+    '#type' => 'textarea',
+    '#title' => 'redirect message',
+    '#description' => 'When someone successfully commits to a volunteer opportunity, this message will be shown',
+    '#default_value' => variable_get('crm_core_volunteer_redirect_message', 'Thank you for applying to be a volunteer for this opportunity!'),
+  );
+  
+  return system_settings_form($form); 
+     
+}
+
+/**
+ * Helper function used to check if a user has registered for the volunteer opportunity
+ * @params
+ *
+ * $nid    The volunteer opportunity content nid
+ */
+function _crm_core_volunteer_check_commitment($nid) {
+   global $user;
+   
+   if (!module_exists('crm_user_sync')) {
+      return FALSE;
+   }
+   $related_contact = _crm_user_sync_get_related_entity('user', $user->uid, 'crm_user_sync');
+   if (!empty($related_contact)) {
+     // find the activity with the event referencing to this node
+     // do entity field query
+    $query = new EntityFieldQuery;
+    $results = $query
+      ->entityCondition('entity_type', 'crm_core_activity')
+      ->propertyCondition('type', 'volunteer_commitment')
+      ->fieldCondition('field_activity_participants', 'target_id', $related_contact->contact_id, '=')
+      ->fieldCondition('field_activity_participants', 'target_type', 'crm_core_contact', '=')
+      ->fieldCondition('field_volunteer_opportunity', 'target_id', $nid)
+      ->execute();  
+     if (!empty($results)) {
+       return TRUE;  
+     }   
+   }
+   return FALSE;   
+}
+
+/**
+ * Helper function used to check if the limit to how many volunteer application can have have been reached
+ * @params
+ *
+ * $node    The volunteer opportunity content node
+ *
+ * @return
+ *
+ * (bool) if the quota has been reached, TRUE, if quota has not been reached, FALSE
+ */
+function crm_core_volunteer_check_quota($node) {
+  // check if the quota/number of slots/limit for this opportunity has already been reached
+  $volunteer_quota_field = variable_get('crm_core_volunteer_quota', '');
+  if ($volunteer_quota_field != '') {
+    // 1. entityfield query to see how many activity for this volunteer opp has been created.
+    $committed_quota = _crm_core_volunteer_check_quota($node->nid);
+    if (empty($node->{$volunteer_quota_field})) {
+      return FALSE;  
+    }
+    $set_quota = $node->{$volunteer_quota_field}[LANGUAGE_NONE][0]['value'];
+    if (is_numeric($set_quota)) {
+      if ($committed_quota == $set_quota) {
+        return TRUE;  
+      }  
+    } 
+  }
+  return FALSE;  
+}
+
+/**
+ * Helper function used to check the number of application/registration to a volunteer opportunity content
+ * @params
+ *
+ * $nid    The volunteer opportunity content nid
+ *
+ * @return
+ *
+ * (int) $quota, the number of application/commitment
+ */
+function _crm_core_volunteer_check_quota($nid) {
+  
+  $quota = 0;
+
+  $query = new EntityFieldQuery;
+  $results = $query
+    ->entityCondition('entity_type', 'crm_core_activity')
+    ->propertyCondition('type', 'volunteer_commitment')
+    ->fieldCondition('field_volunteer_opportunity', 'target_id', $nid)
+    ->execute();
+  
+  if (empty($results)) {
+    $quota = 0;  
+  }
+  else {
+    $quota = count($results['crm_core_activity']);  
+  } 
+  return $quota;
+}

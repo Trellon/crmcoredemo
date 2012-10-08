@@ -1,0 +1,329 @@
+<?php
+
+/**
+ * Implements hook_install().
+ *
+ * Performs actions to set up the site for this profile.
+ *
+ * @see system_install()
+ */
+function crm_core_np_np_install() {
+
+  // Enable some standard blocks.
+  $default_theme = variable_get('theme_default', 'bartik');
+  $values = array(
+    array(
+      'module' => 'system',
+      'delta' => 'main',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'content',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'user',
+      'delta' => 'login',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'sidebar_first',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'navigation',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'sidebar_first',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'management',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 1,
+      'region' => 'sidebar_first',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'help',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'help',
+      'pages' => '',
+      'cache' => -1,
+    ),
+  );
+  $query = db_insert('block')->fields(array('module', 'delta', 'theme', 'status', 'weight', 'region', 'pages', 'cache'));
+  foreach ($values as $record) {
+    $query->values($record);
+  }
+  $query->execute();
+  
+  $field = array(
+    'field_name' => 'field_' . $vocabulary->machine_name,
+    'type' => 'taxonomy_term_reference',
+    // Set cardinality to unlimited for tagging.
+    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+    'settings' => array(
+      'allowed_values' => array(
+        array(
+          'vocabulary' => $vocabulary->machine_name,
+          'parent' => 0,
+        ),
+      ),
+    ),
+  );
+  field_create_field($field);
+
+  $instance = array(
+    'field_name' => 'field_' . $vocabulary->machine_name,
+    'entity_type' => 'node',
+    'label' => 'Tags',
+    'bundle' => 'article',
+    'description' => $vocabulary->help,
+    'widget' => array(
+      'type' => 'taxonomy_autocomplete',
+      'weight' => -4,
+    ),
+    'display' => array(
+      'default' => array(
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 10,
+      ),
+      'teaser' => array(
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 10,
+      ),
+    ),
+  );
+  field_create_instance($instance);
+
+
+  // Create an image field named "Image", enabled for the 'article' content type.
+  // Many of the following values will be defaulted, they're included here as an illustrative examples.
+  // See http://api.drupal.org/api/function/field_create_field/7
+
+  $field = array(
+    'field_name' => 'field_image',
+    'type' => 'image',
+    'cardinality' => 1,
+    'locked' => FALSE,
+    'indexes' => array('fid' => array('fid')),
+    'settings' => array(
+      'uri_scheme' => 'public',
+      'default_image' => FALSE,
+    ),
+    'storage' => array(
+      'type' => 'field_sql_storage',
+      'settings' => array(),
+    ),
+  );
+  field_create_field($field);
+
+
+  // Many of the following values will be defaulted, they're included here as an illustrative examples.
+  // See http://api.drupal.org/api/function/field_create_instance/7
+  $instance = array(
+    'field_name' => 'field_image',
+    'entity_type' => 'node',
+    'label' => 'Image',
+    'bundle' => 'article',
+    'description' => st('Upload an image to go with this article.'),
+    'required' => FALSE,
+
+    'settings' => array(
+      'file_directory' => 'field/image',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'alt_field' => TRUE,
+      'title_field' => '',
+    ),
+
+    'widget' => array(
+      'type' => 'image_image',
+      'settings' => array(
+        'progress_indicator' => 'throbber',
+        'preview_image_style' => 'thumbnail',
+      ),
+      'weight' => -1,
+    ),
+
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'image',
+        'settings' => array('image_style' => 'large', 'image_link' => ''),
+        'weight' => -1,
+      ),
+      'teaser' => array(
+        'label' => 'hidden',
+        'type' => 'image',
+        'settings' => array('image_style' => 'medium', 'image_link' => 'content'),
+        'weight' => -1,
+      ),
+    ),
+  );
+  field_create_instance($instance);
+
+  // Allow visitor account creation, but with administrative approval.
+  variable_set('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL);
+
+  // Enable default permissions for system roles.
+  user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content'));
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content'));
+  
+  // disable overlay and toolbar
+  $modules = array(
+    'overlay',
+    'toolbar',
+  );
+  module_disable($modules);
+  
+}
+
+
+/**
+ * Implements hook_install_tasks().
+ *
+ * Perform some taks after features have been extracted.
+ */
+function crm_core_np_install_tasks() {
+  $tasks = array(
+    '_crm_core_np_features_form' => array(
+      'type' => 'form',
+      'display' => TRUE,
+      'display_name' => 'Install CRM Core features',
+    ),
+    '_crm_core_np_set_theme_form' => array(
+      'type' => 'form',
+      'display' => TRUE,
+      'display_name' => 'Select a theme',
+    ),
+  );
+  return $tasks;
+}
+
+function _crm_core_np_features() {
+  
+  $t = get_t();
+  
+  return array(
+      'crm_core_donation' => array(
+        'title' => $t('CRM Core Donation'),
+        'description' => $t('CRM Core Donation allows the creation of one step donation pages, Personal donation pages (PDP) payment integration, recurring payments, leaderboards and so much more'),
+      ),
+      'crm_core_event_registration' => array(
+        'title' => $t('CRM Core Event Registration'),
+        'description' => $t('CRM Core Event Registration allows the creation of event registration forms for paid and non-paid event types'),
+      ),
+      'crm_core_node_claim' => array(
+        'title' => $t('CRM Core Node Claim'),
+        'description' => $t('CRM Core Node Claim allows users to claim and take ownership of a content type'),
+      ),
+      'crm_core_volunteer' => array(
+        'title' => $t('CRM Core Volunteer'),
+        'description' => $t('CRM Core Volunteer allows signing up for volunteer opportunities'),
+       ),   
+    );  
+}
+
+/**
+ * Install crm core features
+ */
+function _crm_core_np_features_form(&$form_state, $install_state) {
+  
+  $features = _crm_core_np_features();
+  
+  foreach ($features as $module => $info) {
+    $form['features'][$module] = array(
+      '#type' => 'checkbox',
+      '#title' => $info['title'],
+      '#description' => $info['description'],    
+    );  
+  }
+  
+    $form['features']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => st('Next'),
+  );
+  return $form;  
+}
+
+/**
+ * Submission handler
+ */
+function _crm_core_np_features_submit ($form, &$form_state) {
+  
+  $features = _crm_core_np_features();
+  $modules = array();
+  
+  // enable each features
+  foreach (array_keys($features) as $feature) {
+    if ($form_state['values'][$feature] == 1) {
+      $modules[] = $feature;
+    }  
+  }
+  
+  features_install_modules($modules);
+  // module_enable($modules);
+    
+}
+
+
+function _crm_core_np_set_theme_form(&$form_state, $install_state) {
+  
+  $themes = array(
+    'default' => st('Default Drupal theme (Bartik)'),
+    'stark' => st('Stark'),
+    'garland' => st('Garland'),
+    'seven' => st('Seven'),
+    // 'corolla' => st('Corolla'),
+  );
+
+  $form = array();
+  $form['theme'] = array(
+    '#type' => 'fieldset',
+    '#title' => st('Theme settings'),
+    '#collapsible' => FALSE,
+  );
+  $form['theme']['default_theme'] = array(
+    '#type' => 'radios',
+    '#title' => st('Default theme'),
+    '#options' => $themes,
+    '#default_value' => 'default',
+  );
+    $form['theme']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => st('Submit'),
+  );
+  return $form;
+}
+
+function _crm_core_np_set_theme_form_submit ($form, &$form_state) {//$install_state) {
+
+  $theme = $form_state['values']['default_theme'];
+
+  if ($theme == 'default') {
+    return;
+  }
+
+  theme_enable (array($theme));
+  
+    // Set the default theme.
+  variable_set('theme_default', $theme);
+
+  // Disable the default Bartik theme
+  theme_disable(array('bartik'));
+}

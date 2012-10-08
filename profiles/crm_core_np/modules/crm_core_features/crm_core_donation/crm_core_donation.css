@@ -1,0 +1,159 @@
+/*
+ * Css for donation module
+ */
+#crm-core-profile-entry-form.donation fieldset {
+margin: 20px 0;
+}
+
+label[for='edit-activity-field-donation-amounts-und-select'],
+label[for='edit-activity-field-donation-dedication-type-und'],
+label[for='edit-contact-name-und-0']
+ {
+display:none;
+}
+
+#crm-core-profile-entry-form.donation #dedication_info {
+display:none;  
+}
+
+/*
+ * Amounts
+ */
+#crm-core-profile-entry-form.donation #amounts {
+/*border: 1px solid #CCCCCC;
+padding:5px;
+overflow:hidden;
+margin: 10px 0;*/
+}
+
+#crm-core-profile-entry-form.donation #amounts div.form-type-radio {
+float:left;
+margin-right:5px;
+}
+
+#crm-core-profile-entry-form.donation #amounts div.form-type-radio input {
+width:auto;
+}
+
+/*
+ * IMO/IHO
+ */
+#crm-core-profile-entry-form.donation #dedication {
+/*border: 1px solid #CCCCCC;
+padding:5px;
+overflow:hidden;
+margin: 10px 0;
+*/
+}
+
+#crm-core-profile-entry-form.donation #dedication div.form-type-radio {
+float:left;
+margin-right:5px;
+}
+
+#crm-core-profile-entry-form.donation #dedication div.form-type-radio input {
+width:auto;
+}
+
+
+
+/*
+ * Billing information
+ */
+#crm-core-profile-entry-form.donation #billing {
+width:48%;
+float:left;
+margin-right: 10px;
+}
+
+#crm-core-profile-entry-form.donation #billing fieldset {
+margin-top: 0;
+}
+
+#crm-core-profile-entry-form.donation #billing < fieldset {
+height:270px;
+}
+
+#crm-core-profile-entry-form.donation #billing label,
+#crm-core-profile-entry-form.donation #billing div.description
+ {
+float:left;
+width:80px;
+margin-right:0 !important;
+}
+
+#crm-core-profile-entry-form.donation #billing #edit-field-billing-address fieldset {
+border:0;
+margin-bottom:5px;
+}
+
+#crm-core-profile-entry-form.donation #billing #edit-field-billing-address fieldset legend {
+display:none;
+}
+
+
+#crm-core-profile-entry-form.donation #billing #edit-field-billing-address .fieldset-wrapper {
+margin:0;
+padding:0;
+}
+
+div.form-item-field-billing-address-und-0-country {
+display:none;
+}
+
+#crm-core-profile-entry-form.donation #billing div.form-type-name-element {
+margin:0;
+}
+
+#crm-core-profile-entry-form.donation #billing .form-item-field-contact-email-und-0-email {
+margin:0;
+}
+
+/*
+ * payment
+ */
+#crm-core-profile-entry-form.donation #payment fieldset {
+min-height:284px;
+}
+
+select#edit-cc-expiration-day {
+display:none;
+}
+
+/*
+ * Donate button
+ */
+#crm-core-profile-entry-form.donation input#edit-submit {
+display:block;
+margin:auto;
+background:grey;
+border:0;
+width:200px;
+color:white;
+font-size:24px;
+font-weight:bold;
+padding:5px;
+text-transform:uppercase;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+-khtml-border-radius: 10px;
+border-radius: 10px;
+clear:both;
+}
+
+/* Recurring donation */
+
+#crm-core-profile-entry-form.donation fieldset#edit-recurring {
+clear:both;  
+}
+
+#crm-core-profile-entry-form.donation fieldset#edit-recurring .form-item {
+float:left;
+margin-right:10px;
+}
+
+#donation_footer,
+#donation_header
+ {
+margin-top: 20px;  
+}

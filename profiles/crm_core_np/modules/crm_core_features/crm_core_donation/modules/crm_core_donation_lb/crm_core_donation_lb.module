@@ -1,0 +1,244 @@
+<?php
+/**
+ * @file
+ * Code for the CRM Core Donation Leaderboard feature.
+ */
+
+function crm_core_donation_lb_menu() {
+  
+  $items['admin/structure/crm/donation/leaderboard'] = array(
+    'title' => 'Donation leaderboard',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('crm_core_donation_lb_form'),
+    'access arguments' => array('administer crm core donation'),
+    'type' => MENU_LOCAL_TASK,
+  );
+  
+  return $items;  
+}
+ 
+ 
+/**
+ * Implements hook_views_api().
+ */
+function crm_core_donation_lb_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'crm_core_donation_lb'),
+  );
+}
+ 
+/**
+ * Implements hook_entity_insert
+ *
+ * When a donation is made, we aggregate the amount into our meta-table
+ */
+function crm_core_donation_lb_entity_insert($entity, $type) {
+  // update the count for the doation page total
+  if ($type != 'crm_core_activity') {
+    return;  
+  }
+  if ($entity->type == 'donation') {
+    // get the donation page
+    $donation_page_id = $entity->field_donation_campaign[LANGUAGE_NONE][0]['value'];
+    module_load_include('inc', 'crm_core_donation', 'crm_core_donation.pages');
+    $donation_page = crm_core_donation_page_load($donation_page_id);
+    if (empty($donation_page)) {
+      return;  
+    }
+    $record = array();
+    $dp_stat = crm_core_donation_lb_load($donation_page_id);
+    if (!empty($dp_stat)) {
+      $record = $dp_stat;
+      $record['donor_count'] += 1;
+      $record['total'] += $entity->field_donation_amounts[LANGUAGE_NONE][0]['value'];
+      $record['last_donation'] = time();
+    }
+    else {
+      $record = array(
+        'donation_page_id' => $donation_page_id,
+        'donor_count' => 1,
+        'total' => $entity->field_donation_amounts[LANGUAGE_NONE][0]['value'],
+        'last_donation' => time(),
+      );  
+    }
+    crm_core_donation_lb_save($record); 
+  }    
+}
+
+/**
+ * Form builder
+ */
+function crm_core_donation_lb_form($form, &$form_state) {
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Re-calculate totals'),
+  );
+  
+  $form['message'] = array(
+    '#markup' => 'Only Re-calculate totals if you have enabled the donation leaderboard module after donations have already been made, it will go back and total up all the donations from each pages',
+    '#prefix' => '<div class="messages warning">',
+    '#suffix' => '</div>',
+  );
+
+  return $form;  
+}
+
+/**
+ * Submission handler
+ */
+function crm_core_donation_lb_form_submit($form, &$form_state) {
+  $function = 'crm_core_donation_lb_batch';
+  $batch = $function();
+  batch_set($batch);  
+}
+
+/**
+ * Batch controller
+ */
+function crm_core_donation_lb_batch() {
+ 
+ drupal_set_message(t('Recalculating total donations for each donation page'));
+
+  $operations = array();  
+  
+  // we have to get get the list of donation page ids and use that as the count
+  $data = array();
+  $query = db_select('crm_core_donation_page', 'p')
+  ->fields('p')
+  ->condition('status', 1);
+
+  $result = $query->execute();
+  while($record = $result->fetchAssoc()) {
+    $data[] = $record;  
+  }
+
+  $num_operations = count($data);
+
+  for ($i = 0; $i<$num_operations; $i++) {
+    $donation_page_id = $data[$i]['id'];
+    $operations[] = array('crm_core_donation_lb_batch_op', array($donation_page_id, t('(Operation @operation)', array('@operation' => $i))));
+  }
+  $batch = array(
+    'operations' => $operations,
+    'finished' => 'crm_core_donation_lb_batch_finished',
+  );
+  return $batch;  
+}
+
+/**
+ * Batch op
+ */
+function crm_core_donation_lb_batch_op($donation_page_id, $operation_details, &$context) {
+  module_load_include('inc', 'crm_core_donation', 'crm_core_donation.pages');
+  $donation_page = crm_core_donation_page_load($donation_page_id);
+  
+  $context['results'][] = 'donation_page_id: ' . $donation_page_id;
+  $context['message'] = t('Re-calculating for donation page: @title', array('@title' => $donation_page['title']));
+  crm_core_donation_lb_calc($donation_page_id);
+}
+
+/**
+ * Batch finished
+ */
+function crm_core_donation_lb_batch_finished($success, $results, $operations) {
+  if ($success) {
+    drupal_set_message(t('@count donation pages processed', array('@count' => count($results))));
+  }
+  else {
+    // An error occurred.
+    // $operations contains the operations that remained unprocessed.
+    $error_operation = reset($operations);
+    drupal_set_message(t('An error occurred while processing @operation with arguments : @args', array('@operation' => $error_operation[0], '@args' => print_r($error_operation[0], TRUE))));
+  }
+}
+
+/**
+ * Calculate the total for each donation page
+ */
+function crm_core_donation_lb_calc($donation_page_id) {
+  $query = new EntityFieldQuery();
+  $donations = $query->entityCondition('entity_type', 'crm_core_activity')
+                  ->entityCondition('bundle', 'donation')
+                  ->fieldCondition('field_donation_campaign', 'value', $donation_page_id)
+                  ->execute();
+  
+  $count = 0;
+  $total = 0;                
+  if (!empty($donations)) {
+    $count = count($donations['crm_core_activity']);  
+    foreach($donations['crm_core_activity'] as $id => $donation) {
+        $entity = crm_core_activity_load($id);
+        $total += $entity->field_donation_amounts[LANGUAGE_NONE][0]['value'];
+    }  
+    $update = array(
+      'donation_page_id' => $donation_page_id,
+      'donor_count' => $count,
+      'total' => $total,
+    );
+    crm_core_donation_lb_save($update); 
+  }
+}
+
+/**
+ * Load a donation page stat
+ *
+ * @params
+ * (int) $id    the donation apge id
+ *
+ * @return
+ * (array) $data     the donation page stat array
+ */
+function crm_core_donation_lb_load($id) {
+  $data = array();
+  $query = db_select('crm_core_donation_lb', 'b')
+  ->fields('b')
+  ->condition('donation_page_id', $id);
+
+  $result = $query->execute();
+  $data = $result->fetchAssoc();
+
+  return $data;    
+}
+
+/**
+ * Views preprocess function
+ */
+function crm_core_donation_lb_preprocess_views_view(&$vars) {
+  if ($vars['view']->name == 'donation_leaderboard') {
+      drupal_add_css(drupal_get_path('module', 'crm_core_donation_lb') . '/crm_core_donation_lb.css');
+  }  
+}
+
+/**
+ * Save a donation page
+ *
+ * @params
+ * (array) $record    the donation page stat array
+ *
+ */
+function crm_core_donation_lb_save($record) {
+  $dp_stat = crm_core_donation_lb_load($record['donation_page_id']);
+  if (!empty($dp_stat)) {
+    $res = drupal_write_record('crm_core_donation_lb', $record, 'donation_page_id');        
+  }
+  else 
+  {
+    $res = drupal_write_record('crm_core_donation_lb', $record);
+  } 
+  return $res;  
+}
+
+/**
+ * Delete a donation page
+ *
+ * @params
+ * (int) $id    the donation apge id
+ *
+ */
+function crm_core_donation_lb_delete($id) {
+  db_delete('crm_core_donation_lb')
+  ->condition('donation_page_id', $id)
+  ->execute();  
+}

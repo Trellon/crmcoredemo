@@ -1,0 +1,388 @@
+<?php
+/**
+ * @file
+ * Code for the CRM Core Node Claim feature.
+ */
+
+include_once('crm_core_node_claim.features.inc');
+
+include_once('crm_core_node_claim.userpoints.inc');
+
+
+/**
+ * Implements hook_menu
+ */
+function crm_core_node_claim_menu() {
+  
+  $items['admin/structure/crm/node_claim/config'] = array(
+    'title' => t('Node claim settings'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('crm_core_node_claim_config'),
+    'access arguments' => array('administer crm core node claim'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  
+  $items['node/%node/claim/%crm_core_profile'] = array(
+    'title' => 'Resource Claim',
+    'page callback' => 'crm_core_node_claim_attachment_form',
+    'page arguments' => array(1, 3),
+    'access arguments' => array('crm_core node_claim claim'),
+    // this can change in the future
+    'type' => MENU_CALLBACK,
+  );
+  
+  // approval
+  $items['admin/structure/crm/node_claim/approve/%crm_core_activity'] = array(
+    'title' => t('Approve resource claim'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('crm_core_node_claim_moderate', 5, 'approve'),
+    'access arguments' => array('administer crm core node claim'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  // reject links
+  $items['admin/structure/crm/node_claim/reject/%crm_core_activity'] = array(
+    'title' => t('Reject resource claim'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('crm_core_node_claim_moderate', 5, 'reject'),
+    'access arguments' => array('administer crm core node claim'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  return $items;  
+}
+
+/**
+ * Implements hook_permission()
+ */
+function crm_core_node_claim_permission() {
+  return array(
+    'administer crm core node claim' => array(
+      'title' => t('Administer CRM Core Node Claim'),
+      'description' => t('Administer CRM Core Node Claim'),
+    ),
+    'crm_core node_claim claim' => array(
+      'title' => t('Claim nodes'),
+      'description' => t('Allow users to claim node'),
+    ),
+  );
+}
+
+/**
+ * Moderate the resource claim form
+ */
+function crm_core_node_claim_moderate($form, &$form_state, $crm_core_activity, $mode = 'approve') {
+  
+  $form['mode'] = array(
+    '#type' => 'value',
+    '#value' => $mode,
+  );
+  
+  $form_state['crm_core_activity'] = $crm_core_activity;
+
+  $question = t('Do you want to @mode this profile claim?', array('@mode' => $mode));
+  if ($mode == 'approve') {
+    $description = t('Once this claim is confirmed, the claim requester will be granted administration privilege');
+  } else {
+    $description = t('Once this claim is rejected, the claim requester will not be able to claim this resource again.');  
+  }
+  
+  $path = 'admin/structure/crm/node_claim/reject/' . $crm_core_activity->activity_id . '/reject';
+
+  $form = confirm_form($form, $question, $path, $description, ucwords($mode), t('Cancel'));
+
+  return $form;
+  
+}
+
+/**
+ * Validation handler
+ */
+function crm_core_node_claim_moderate_validate($form, &$form_state) {
+}
+
+/**
+ * Submission handler
+ */
+function crm_core_node_claim_moderate_submit($form, &$form_state) {
+  $mode = $form_state['values']['mode'];
+  $activity = $form_state['crm_core_activity'];
+  $claim_reference = node_load($activity->field_claim_reference[LANGUAGE_NONE][0]['target_id']);
+  $contact = crm_core_contact_load($activity->field_activity_participants[LANGUAGE_NONE][0]['target_id']);
+  
+  if ($mode === 'approve') {
+    $activity->field_claim_status[LANGUAGE_NONE][0]['value'] = 'accepted';
+    
+    // save the resource
+    $claim_user = _crm_user_sync_get_related_entity('crm_core_contact', $contact->contact_id, 'crm_user_sync');
+    $claim_reference->uid = $claim_user->uid;
+    $claim_reference->name = $claim_user->name;
+    $claim_reference->changed = time();
+    node_save($claim_reference);
+  }
+  else {
+    $activity->field_claim_status[LANGUAGE_NONE][0]['value'] = 'rejected';
+  }
+  
+  crm_core_activity_save($activity);
+ 
+  // quickly create 2 rules event for triggered email
+  rules_invoke_event('crm_core_node_claim_' . $mode, $claim_reference, $contact, $activity);  
+  
+  $form_state['redirect'] = 'admin/structure/crm/node_claim'; 
+}
+
+
+/**
+ * implements hook_node_view
+ * Adding an node claim link on the event pages
+ */
+function crm_core_node_claim_node_view($node, $view_mode) {
+    // @todo: be able to configure the weight of the registration link
+    if ($node->type == variable_get('crm_core_node_claim_content_type', 'page')) {
+      $crm_core_profile_node_claim = variable_get('crm_core_node_claim_profile', '');
+      if ($crm_core_profile_node_claim == '') {
+        return;  
+      }
+            
+      drupal_add_css(drupal_get_path('module', 'crm_core_node_claim') . '/crm_core_node_claim.css');
+      
+      // user has no access to volunteer
+      if (!user_access('crm_core node_claim claim')) {
+        if (!user_is_logged_in()) {
+          $node->content['crm_core_node_claim_link'] = array(
+           '#markup' => l('<span>Login/Create account to claim this resource!</span>', 'user', array('query' => array('destination' => drupal_get_path_alias('node/' . $node->nid)), 'html' => TRUE, 'attributes' => array('class' => array('crm_core_node_claim_link')))),
+         );
+         return;           
+        } else {
+          // user is auth user but does not have access to register for event
+          return;
+        }      
+      }
+      
+      // user has access to register for volunteer opportunity
+      // check for claimed
+      $claim_check = _crm_core_node_claim_check_claim($node->nid);
+       if ($claim_check) {
+         $node->content['crm_core_node_claim_link'] = array(
+           '#markup' => '<p class="crm_core_node_claim_link"><span>You have already claimed this resource</span></p>',
+         );      
+           return;            
+       }      
+      
+       // display the button     
+       $node->content['crm_core_node_claim_link'] = array(
+         '#markup' => l('<span>Claim this Resource</span>', 'node/' . $node->nid . '/claim/' . $crm_core_profile_node_claim, array('html' => TRUE, 'attributes' => array('class' => array('crm_core_node_claim_link')))),
+       );      
+    }
+}
+
+/**
+ * Main registration form to be attached
+ */
+function crm_core_node_claim_attachment_form($node, $crm_core_profile) {
+  
+ // drupal_set_title(t('Register for @title', array('@title' => $node->title)));
+    
+  // check for node type to attach the form
+  if ($node->type == variable_get('crm_core_node_claim_content_type', 'page')) {
+      // check the attachment profile
+      $attachment_profile_name = variable_get('crm_core_node_claim_profile', '');
+      if ($attachment_profile_name == '') {
+        return drupal_access_denied();  
+      }
+      
+      // lastly, check if user has already claimed this node
+      $claim_check = _crm_core_node_claim_check_claim($node->nid);
+      if ($claim_check) {
+        return drupal_access_denied();  
+      }      
+      if ($attachment_profile_name == $crm_core_profile['name']) {
+         module_load_include('inc', 'crm_core_profile', 'crm_core_profile.forms');
+         return drupal_get_form('crm_core_profile_entry_form', $crm_core_profile);
+      }      
+  }
+  return drupal_access_denied();  
+}
+
+/**
+ * Implements hook_crm_core_profile_activity_alter
+ * We are just setting some default value to the crm_core_profile form in the activity data container
+ * the $form here refers to the $form['activity'] data container from the original crm_core_profile form
+ */
+function crm_core_node_claim_crm_core_profile_activity_alter(&$form, $profile_name) {  
+  if ($profile_name == variable_get('crm_core_node_claim_profile', '')) {
+    $form['title']['#value'] = t('Resource Claim');
+    
+    // this has to exist because the form is located at 
+    // node/nid/claim/crm_core_profile_name
+    $node = menu_get_object();
+  
+    // setting the resource reference on the crm_core_activity
+    $default_value = sprintf('%s (%s)', $node->title, $node->nid);
+    $form['field_claim_reference'][LANGUAGE_NONE][0]['target_id']['#default_value'] = $default_value;
+    
+    // @bug: the title and description is not changed?
+    $form['field_activity_notes'][LANGUAGE_NONE]['#title'] = $form['field_activity_notes'][LANGUAGE_NONE][0]['#title'] = t('Message');
+    $form['field_activity_notes'][LANGUAGE_NONE]['#description'] = $form['field_activity_notes'][LANGUAGE_NONE][0]['#description'] = t('Please briefly explain why you are claiming this resource');    
+             
+  }  
+}
+
+/**
+ * Implements hook_crm_core_profile_theme_alter
+ */
+function crm_core_node_claim_crm_core_profile_theme_alter(&$form, &$render_fields) {
+  
+  if ($form['profile_name']['#value'] == variable_get('crm_core_node_claim_profile', '')) {
+    $render_fields['-999'] = 'node_claim';  
+  }  
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter
+ */
+function crm_core_node_claim_form_crm_core_profile_entry_form_alter(&$form, &$form_state, $form_id) {
+  // adding additional classes to the event registration form
+  $profile = $form_state['profile'];
+  
+  // making sure we are on the correct node_claim registration profile
+  if ($profile['name'] != variable_get('crm_core_node_claim_profile', '')) {
+    return;  
+  }
+  
+  if (empty($form['#attributes']['class'])) {
+    $form['#attributes']['class'] = array('crm_core_node_claim_form');
+  }
+  else {
+    $form['#attributes']['class'] += array('crm_core_node_claim_form');
+  }
+    
+  if ($node = menu_get_object()) { 
+    // adding content details
+    $teaser = field_attach_view('node', $node, 'teaser');
+    $teaser = render($teaser);
+    
+    $form['node_claim'] = array(
+      '#type' => 'fieldset', 
+      '#title' => t('Resource Details'),   
+      '#collapsible' => TRUE,  
+      '#collapsed' => FALSE,
+      '#weight' => '-999',
+    );
+    
+    $form['node_claim']['node_claim_title'] = array(
+      '#prefix' => '<h4>',
+      '#markup' => $node->title,
+      '#suffix' => '</h4>',
+    );
+    
+    $form['node_claim']['node_claim_detail'] = array(
+      '#markup' => $teaser,
+    );
+    
+     $form_state['profile']['redirect'] = drupal_get_path_alias('node/' . $node->nid);
+     $form['#submit'][] = 'crm_core_node_claim_profile_form_submit';         
+  }
+}
+
+/**
+ * Submission handler for free event registration
+ */
+function crm_core_node_claim_profile_form_submit($form, &$form_state) {
+  $message = variable_get('crm_core_node_claim_redirect_message', 'Thank you for claiming this resource, you will receive notification shortly.');
+  drupal_set_message($message);
+}
+
+/**
+ * Configuration form
+ */
+function crm_core_node_claim_config($form, &$form_state) {
+  
+  // we need to get the content type we want to attach
+  $_node_types = node_type_get_types();
+  $options = array('' => t('--Select--'));
+  foreach($_node_types as $node_type) {
+    $options[$node_type->type] = $node_type->name;  
+  }
+
+  $form['content'] = array(
+    '#type' => 'fieldset', 
+    '#title' => t('Content Settings'),   
+    '#collapsible' => TRUE,  
+    '#collapsed' => FALSE,
+  );
+
+  // select the content type for the component
+  $form['content']['crm_core_node_claim_content_type'] = array(
+    '#type' => 'select',
+    '#title' => 'Select the content type for node claim',
+    '#options' => $options,
+    '#description' => t('This will enable the CRM Core Profile form to be attached to the content type'),
+    '#default_value' => variable_get('crm_core_node_claim_content_type', 'page'),
+    '#required' => TRUE,
+  );
+    
+  $form['crm'] = array(
+    '#type' => 'fieldset', 
+    '#title' => t('CRM Settings'),   
+    '#collapsible' => TRUE,  
+    '#collapsed' => FALSE,
+  );  
+  
+  $crm_core_profiles = crm_core_profile_load_all();
+  $profile_options = array('' => t('--Select--'));
+  foreach($crm_core_profiles as $crm_core_profile) {
+    $profile_options[$crm_core_profile['name']] = $crm_core_profile['label'];  
+  }
+  
+  // profile we will use to attach to the event
+  $form['crm']['crm_core_node_claim_profile'] = array(
+    '#type' => 'select',
+    '#title' => 'Select the CRM Core profile to use for node claim',
+    '#options' => $profile_options,
+    '#default_value' => variable_get('crm_core_node_claim_profile', ''),
+    '#required' => TRUE,
+  );
+    
+  $form['crm_core_node_claim_redirect_message'] = array(
+    '#type' => 'textarea',
+    '#title' => 'redirect message',
+    '#description' => 'When someone successfully claims a resource, this message will be shown',
+    '#default_value' => variable_get('crm_core_node_claim_redirect_message', 'Thank you for claiming this resource, you will receive notification shortly'),
+  );
+  
+  return system_settings_form($form); 
+     
+}
+
+/**
+ * Helper function used to check if a user has registered for the volunteer opportunity
+ * @params
+ *
+ * $nid    The volunteer opportunity content nid
+ */
+function _crm_core_node_claim_check_claim($nid) {
+   global $user;
+   
+   if (!module_exists('crm_user_sync')) {
+      return FALSE;
+   }
+   $related_contact = _crm_user_sync_get_related_entity('user', $user->uid, 'crm_user_sync');
+   if (!empty($related_contact)) {
+     // find the activity with the event referencing to this node
+     // do entity field query
+    $query = new EntityFieldQuery;
+    $results = $query
+      ->entityCondition('entity_type', 'crm_core_activity')
+      ->propertyCondition('type', 'node_claim')
+      ->fieldCondition('field_activity_participants', 'target_id', $related_contact->contact_id, '=')
+      ->fieldCondition('field_activity_participants', 'target_type', 'crm_core_contact', '=')
+      ->fieldCondition('field_claim_reference', 'target_id', $nid)
+      ->execute();  
+     if (!empty($results)) {
+       return TRUE;  
+     }   
+   }
+   return FALSE;   
+}

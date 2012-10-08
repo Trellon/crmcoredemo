@@ -1,0 +1,6 @@
+name = "CRM Core Donation Leaderboard"
+description = "This module provides easy way to enhance quality of your events listing filtering."
+core = "7.x"
+package = "CRM Core"
+version = "7.x-1.0"
+dependencies[] = "crm_core_donation"

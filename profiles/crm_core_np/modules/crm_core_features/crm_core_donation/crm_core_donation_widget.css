@@ -1,0 +1,94 @@
+ 
+#crm_core_donation_widget {
+font-family:arial;
+width:200px;
+background: #eee;
+padding:10px;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+-khtml-border-radius: 10px;
+border-radius: 10px;
+}
+
+#crm_core_donation_widget h2 {
+color:white;
+font-size:14px;
+font-weight:bold;
+text-align:center;
+margin:0 0 15px 0;
+padding:10px;
+background:#aad4ff;
+-moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+-khtml-border-radius: 5px;
+border-radius: 5px;
+}
+
+#crm_core_donation_widget .progress .start,
+#crm_core_donation_widget .progress .end {
+font-size:10px;
+font-weight:bold;
+}
+
+
+#crm_core_donation_widget .current {
+text-align:center;
+font-weight:bold;
+font-size:12px;
+margin: 3px 0;
+}
+
+#crm_core_donation_widget .progress {
+overflow:hidden;
+}
+
+#crm_core_donation_widget .progress .start {
+float:left;
+}
+
+#crm_core_donation_widget .progress .end {
+float:right;
+}
+
+#crm_core_donation_widget a.donate {
+background:#aad4ff;
+padding:5px;
+width:100px;
+margin:auto;
+display:block;
+text-align:center;
+-moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+-khtml-border-radius: 5px;
+border-radius: 5px;
+border:2px solid white;
+}
+
+#crm_core_donation_widget a.donate:link,
+#crm_core_donation_widget a.donate:visited
+ {
+color:white;
+text-decoration:none;
+font-size:12px;
+font-weight:bold;
+text-transform:uppercase;
+}
+
+.progressbar {
+background-color: #666;
+border-radius: 13px; /* (height of inner div) / 2 + padding */
+padding: 1px;
+clear:both;
+}
+    
+.progressbar div {
+background-color: red;
+width: 90%; /* Adjust with JavaScript */
+height: 5px;
+border-radius: 10px;
+}
+
+#crm_core_donation_widget .description {
+font-size:12px;
+margin: 10px 0;
+}

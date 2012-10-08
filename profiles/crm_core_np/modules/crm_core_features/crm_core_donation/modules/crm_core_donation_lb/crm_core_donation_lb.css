@@ -1,0 +1,54 @@
+/**
+ * Css page
+ */
+
+#donation_leader {
+margin-top: 20px;
+border-bottom: 1px solid grey;
+padding-bottom:10px;
+overflow:hidden;
+}
+
+#donation_leader .position {
+font-size:64px;
+font-weight:bold;
+float:left;
+border: 1px solid grey;
+padding:20px 15px;
+height:95px;
+}
+
+#donation_leader .picture {
+float:left;
+margin-left: 5px;
+text-align:center;
+}
+
+#donation_leader .description {
+float:left;
+margin-left: 15px;
+width:600px;
+
+}
+
+#donation_leader .picture img {
+width:100px;
+height:100px;
+}
+
+#donation_leader .picture span a {
+font-weight:bold;
+}
+
+#donation_leader .amount {
+float:right;
+margin-right:20px;
+font-size:28px;
+font-weight:bold;
+text-align:center;
+}
+
+.view-id-donation_leaderboard.view-display-id-page .views-field-picture img {
+  width: 32px;
+  height: 32px;
+}

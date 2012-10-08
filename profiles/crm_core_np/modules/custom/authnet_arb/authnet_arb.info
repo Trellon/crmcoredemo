@@ -1,0 +1,4 @@
+name = Authnet ARB API
+description = "An API to Authnet ARB based on Authnet SDK."
+package = Trellon
+core = 7.x

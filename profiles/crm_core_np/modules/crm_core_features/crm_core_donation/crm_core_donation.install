@@ -1,0 +1,131 @@
+<?php
+/**
+ * @file
+ * Installation for CRM_Core_Donation
+ */
+ 
+/**
+ * Implements hook_schema()
+ */
+function crm_core_donation_schema() {
+  $schema['crm_core_donation_page'] = array(
+    'description' => 'Stores CRM Core Donation page information',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Donation page ID',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ),    
+      'name' => array(
+        'description' => 'The CRM Core Profile FORM ID',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'amounts' => array(
+        'description' => 'The amount options for this form',
+        'type' => 'blob',
+        'serialize' => TRUE,
+        'description' => 'A serialized array of amount information',
+      ),
+      'title' => array(
+        'description' => 'Title of the donation page',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'header' => array(
+        'description' => 'Header of the donation page',
+        'type' => 'blob',
+        'serialize' => TRUE,
+        'not null' => FALSE,
+      ),
+      'footer' => array(
+        'description' => 'Footer of the donation page',
+        'type' => 'blob',
+        'serialize' => TRUE,
+        'not null' => FALSE,
+      ),
+      'campaign' => array(
+        'description' => 'The donation campaign',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'goal' => array(
+        'description' => 'The goal amount of the donation page',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'path' => array(
+        'description' => 'The drupal path for the donation form',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'redirect' => array(
+        'description' => 'The redirect path when the form is submitted',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'status' => array(
+        'description' => 'The status of the profile form, defaults to active',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 1,
+        'size' => 'tiny',
+      ),
+      'widget' => array(
+        'description' => 'If a widget should come with the donation form',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 0,
+        'size' => 'tiny',
+      ),
+      'data' => array(
+        'type' => 'blob',
+        'not null' => FALSE,
+        'size' => 'big',
+        'serialize' => TRUE,
+        'description' => 'A serialized array of additional information',
+      ),
+      'uid' => array(
+        'description' => 'The profile form creator uid',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 1,
+      ),
+      'start' => array(
+        'description' => 'Timestamp of when this page should go live',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'end' => array(
+        'description' => 'Timestamp of when this page should end',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'pdp' => array(
+        'description' => 'Designate if this is a personal donation page',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 0,
+        'size' => 'tiny',
+      ),
+      'created' => array(
+        'description' => 'Timestamp of when the profile form is created',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+  ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
