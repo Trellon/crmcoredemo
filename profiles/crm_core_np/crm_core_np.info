@@ -15,11 +15,9 @@ dependencies[] = options
 dependencies[] = path
 dependencies[] = taxonomy
 dependencies[] = dblog
-dependencies[] = overlay
 dependencies[] = field_ui
 dependencies[] = file
 dependencies[] = search
-dependencies[] = toolbar
 
 ; Install CRM Core dependencies.
 dependencies[] = addressfield

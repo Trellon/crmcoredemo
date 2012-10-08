@@ -184,13 +184,6 @@ function crm_core_np_install() {
   user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content'));
   user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content'));
   
-  // disable overlay and toolbar
-  $modules = array(
-    'overlay',
-    'toolbar',
-  );
-  module_disable($modules);
-  
 }
 
 
