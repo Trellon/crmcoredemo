@@ -264,7 +264,7 @@ function _crm_core_np_features_form(&$form_state, $install_state) {
 /**
  * Submission handler
  */
-function _crm_core_np_features_submit ($form, &$form_state) {
+function _crm_core_np_features_form_submit ($form, &$form_state) {
   
   $features = _crm_core_np_features();
   $modules = array();
@@ -276,7 +276,7 @@ function _crm_core_np_features_submit ($form, &$form_state) {
     }  
   }
   
-  features_install_modules($modules);
+  // features_install_modules($modules);
   // module_enable($modules);
     
 }
