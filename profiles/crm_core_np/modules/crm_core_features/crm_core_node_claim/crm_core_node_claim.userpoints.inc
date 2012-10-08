@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Code for the SF Center Node claim feature.
+ * Code for the CRM Core Node claim feature.
  * userpoints integration
  */
 define('USERPOINTS_NODE_CLAIM', 'crm_core_node_claim');

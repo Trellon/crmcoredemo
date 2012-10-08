@@ -22,8 +22,5 @@ function crm_core_node_claim_default_crm_core_activity_type() {
  * Implements hook_views_api().
  */
 function crm_core_node_claim_views_api() {
-  list($module, $api) = func_get_args();
-  if ($module == "views" && $api == "views_default") {
-    return array("version" => "3.0");
-  }
+  return array("version" => "3.0");
 }
