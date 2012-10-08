@@ -7,7 +7,7 @@
  *
  * @see system_install()
  */
-function crm_core_np_np_install() {
+function crm_core_np_install() {
 
   // Enable some standard blocks.
   $default_theme = variable_get('theme_default', 'bartik');
