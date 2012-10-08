@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Code for the SF Center Event Registration feature.
+ * Code for the CRM Core Event Registration feature.
  * userpoints integration
  */
 define('USERPOINTS_EVENT_REGISTRATION', 'crm_core_event_registration');

@@ -1,10 +1,11 @@
 <?php
 /**
  * @file
- * Code for the SF Center Event Registration feature.
+ * Code for the CRM Core Event Registration feature.
  */
 
 include_once('crm_core_event_registration.features.inc');
+
 include_once('crm_core_event_registration.userpoints.inc');
 
 /**
@@ -245,9 +246,9 @@ function crm_core_event_registration_form_crm_core_profile_entry_form_alter(&$fo
  * Implements hook_crm_core_profile_theme_alter
  */
 function crm_core_event_registration_crm_core_profile_theme_alter(&$form, &$render_fields) {
-   if ($form['profile_name']['#value'] == variable_get('crm_core_event_registration_profile', '')) {
-     $render_fields['-999'] = 'event';  
-   } 
+  if (array_key_exists('event', $form)) {
+    $render_fields['-999'] = 'event';  
+  }  
 }
 
 /** 

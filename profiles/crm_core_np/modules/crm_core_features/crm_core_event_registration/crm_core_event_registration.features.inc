@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * sf_center_event_registration.features.inc
+ * crm_core_event_registration.features.inc
  */
 
 /**
