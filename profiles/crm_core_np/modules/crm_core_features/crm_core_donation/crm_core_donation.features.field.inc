@@ -10,7 +10,7 @@
 function crm_core_donation_field_default_fields() {
   $fields = array();
 
-  // Exported field: 'crm_core_activity-donation-field_activity_date'
+  // Exported field: 'crm_core_activity-donation-field_activity_date'.
   $fields['crm_core_activity-donation-field_activity_date'] = array(
     'field_config' => array(
       'active' => '1',
@@ -22,6 +22,7 @@ function crm_core_donation_field_default_fields() {
       'field_name' => 'field_activity_date',
       'foreign keys' => array(),
       'indexes' => array(),
+      'locked' => '0',
       'module' => 'date',
       'settings' => array(
         'granularity' => array(
@@ -90,7 +91,7 @@ function crm_core_donation_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_activity_notes'
+  // Exported field: 'crm_core_activity-donation-field_activity_notes'.
   $fields['crm_core_activity-donation-field_activity_notes'] = array(
     'field_config' => array(
       'active' => '1',
@@ -113,6 +114,7 @@ function crm_core_donation_field_default_fields() {
           0 => 'format',
         ),
       ),
+      'locked' => '1',
       'module' => 'text',
       'settings' => array(),
       'translatable' => '0',
@@ -147,12 +149,12 @@ function crm_core_donation_field_default_fields() {
           'rows' => 5,
         ),
         'type' => 'text_textarea',
-        'weight' => '2',
+        'weight' => 2,
       ),
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_activity_participants'
+  // Exported field: 'crm_core_activity-donation-field_activity_participants'.
   $fields['crm_core_activity-donation-field_activity_participants'] = array(
     'field_config' => array(
       'active' => '1',
@@ -164,11 +166,11 @@ function crm_core_donation_field_default_fields() {
       'field_name' => 'field_activity_participants',
       'foreign keys' => array(),
       'indexes' => array(
-        'target_entity' => array(
-          0 => 'target_type',
-          1 => 'target_id',
+        'target_id' => array(
+          0 => 'target_id',
         ),
       ),
+      'locked' => '1',
       'module' => 'entityreference',
       'settings' => array(
         'handler' => 'base',
@@ -213,12 +215,12 @@ function crm_core_donation_field_default_fields() {
           'size' => 60,
         ),
         'type' => 'entityreference_autocomplete_tags',
-        'weight' => '0',
+        'weight' => 0,
       ),
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_donation_amounts'
+  // Exported field: 'crm_core_activity-donation-field_donation_amounts'.
   $fields['crm_core_activity-donation-field_donation_amounts'] = array(
     'field_config' => array(
       'active' => '1',
@@ -228,6 +230,7 @@ function crm_core_donation_field_default_fields() {
       'field_name' => 'field_donation_amounts',
       'foreign keys' => array(),
       'indexes' => array(),
+      'locked' => '0',
       'module' => 'number',
       'settings' => array(),
       'translatable' => '0',
@@ -262,7 +265,7 @@ function crm_core_donation_field_default_fields() {
       'required' => 1,
       'settings' => array(
         'max' => '',
-        'min' => '35',
+        'min' => '0',
         'prefix' => '',
         'suffix' => '',
         'user_register_form' => FALSE,
@@ -272,6 +275,7 @@ function crm_core_donation_field_default_fields() {
         'module' => 'select_or_other',
         'settings' => array(
           'available_options' => '35|$35
+50|$50
 60|$60
 100|$100
 250|$250
@@ -291,7 +295,7 @@ function crm_core_donation_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_donation_campaign'
+  // Exported field: 'crm_core_activity-donation-field_donation_campaign'.
   $fields['crm_core_activity-donation-field_donation_campaign'] = array(
     'field_config' => array(
       'active' => '1',
@@ -312,6 +316,7 @@ function crm_core_donation_field_default_fields() {
           0 => 'format',
         ),
       ),
+      'locked' => '0',
       'module' => 'text',
       'settings' => array(
         'max_length' => '255',
@@ -353,7 +358,7 @@ function crm_core_donation_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_donation_cc_last4'
+  // Exported field: 'crm_core_activity-donation-field_donation_cc_last4'.
   $fields['crm_core_activity-donation-field_donation_cc_last4'] = array(
     'field_config' => array(
       'active' => '1',
@@ -374,6 +379,7 @@ function crm_core_donation_field_default_fields() {
           0 => 'format',
         ),
       ),
+      'locked' => '0',
       'module' => 'text',
       'settings' => array(
         'max_length' => '4',
@@ -415,7 +421,7 @@ function crm_core_donation_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_donation_dedication_email'
+  // Exported field: 'crm_core_activity-donation-field_donation_dedication_email'.
   $fields['crm_core_activity-donation-field_donation_dedication_email'] = array(
     'field_config' => array(
       'active' => '1',
@@ -425,6 +431,7 @@ function crm_core_donation_field_default_fields() {
       'field_name' => 'field_donation_dedication_email',
       'foreign keys' => array(),
       'indexes' => array(),
+      'locked' => '0',
       'module' => 'email',
       'settings' => array(),
       'translatable' => '0',
@@ -463,7 +470,7 @@ function crm_core_donation_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_donation_dedication_name'
+  // Exported field: 'crm_core_activity-donation-field_donation_dedication_name'.
   $fields['crm_core_activity-donation-field_donation_dedication_name'] = array(
     'field_config' => array(
       'active' => '1',
@@ -484,6 +491,7 @@ function crm_core_donation_field_default_fields() {
           0 => 'format',
         ),
       ),
+      'locked' => '0',
       'module' => 'text',
       'settings' => array(
         'max_length' => '255',
@@ -525,7 +533,7 @@ function crm_core_donation_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_donation_dedication_type'
+  // Exported field: 'crm_core_activity-donation-field_donation_dedication_type'.
   $fields['crm_core_activity-donation-field_donation_dedication_type'] = array(
     'field_config' => array(
       'active' => '1',
@@ -539,11 +547,12 @@ function crm_core_donation_field_default_fields() {
           0 => 'value',
         ),
       ),
+      'locked' => '0',
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
           'OBO' => 'On behalf of',
-          'IMO' => 'Im memory of',
+          'IMO' => 'In memory of',
           'IHO' => 'In honor of',
         ),
         'allowed_values_function' => '',
@@ -582,7 +591,7 @@ function crm_core_donation_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_donation_order'
+  // Exported field: 'crm_core_activity-donation-field_donation_order'.
   $fields['crm_core_activity-donation-field_donation_order'] = array(
     'field_config' => array(
       'active' => '1',
@@ -592,11 +601,11 @@ function crm_core_donation_field_default_fields() {
       'field_name' => 'field_donation_order',
       'foreign keys' => array(),
       'indexes' => array(
-        'target_entity' => array(
-          0 => 'target_type',
-          1 => 'target_id',
+        'target_id' => array(
+          0 => 'target_id',
         ),
       ),
+      'locked' => '0',
       'module' => 'entityreference',
       'settings' => array(
         'handler' => 'base',
@@ -654,7 +663,7 @@ function crm_core_donation_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_donation_payment_type'
+  // Exported field: 'crm_core_activity-donation-field_donation_payment_type'.
   $fields['crm_core_activity-donation-field_donation_payment_type'] = array(
     'field_config' => array(
       'active' => '1',
@@ -668,6 +677,7 @@ function crm_core_donation_field_default_fields() {
           0 => 'value',
         ),
       ),
+      'locked' => '0',
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
@@ -716,7 +726,7 @@ function crm_core_donation_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_donation_receive_date'
+  // Exported field: 'crm_core_activity-donation-field_donation_receive_date'.
   $fields['crm_core_activity-donation-field_donation_receive_date'] = array(
     'field_config' => array(
       'active' => '1',
@@ -726,6 +736,7 @@ function crm_core_donation_field_default_fields() {
       'field_name' => 'field_donation_receive_date',
       'foreign keys' => array(),
       'indexes' => array(),
+      'locked' => '0',
       'module' => 'date',
       'settings' => array(
         'cache_count' => '4',
@@ -796,7 +807,7 @@ function crm_core_donation_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_donation_source'
+  // Exported field: 'crm_core_activity-donation-field_donation_source'.
   $fields['crm_core_activity-donation-field_donation_source'] = array(
     'field_config' => array(
       'active' => '1',
@@ -817,6 +828,7 @@ function crm_core_donation_field_default_fields() {
           0 => 'format',
         ),
       ),
+      'locked' => '0',
       'module' => 'text',
       'settings' => array(
         'max_length' => '255',
@@ -858,7 +870,7 @@ function crm_core_donation_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-donation-field_donation_status'
+  // Exported field: 'crm_core_activity-donation-field_donation_status'.
   $fields['crm_core_activity-donation-field_donation_status'] = array(
     'field_config' => array(
       'active' => '1',
@@ -872,13 +884,14 @@ function crm_core_donation_field_default_fields() {
           0 => 'value',
         ),
       ),
+      'locked' => '0',
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
           'pending' => 'pending',
           'complete' => 'complete',
           'refund' => 'refund',
-          'declined' => 'declined',  
+          'declined' => 'declined',
         ),
         'allowed_values_function' => '',
       ),

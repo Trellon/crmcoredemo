@@ -94,7 +94,7 @@ function crm_core_donation_menu() {
     'access arguments' => array('create crm core donation PDP'),
     'type' => MENU_LOCAL_TASK,
   );
-    
+  
   return $items;  
 }
 
@@ -469,7 +469,6 @@ function crm_core_donation_form_theme_preprocess(&$variables) {
  * Implements hook_form_FORM_ID_alter
  */
 function crm_core_donation_form_crm_core_profile_entry_form_alter(&$form, &$form_state, $form_id) {
-
   // adding additional classes
   $profile = $form_state['profile'];
   
@@ -616,7 +615,7 @@ function crm_core_donation_form_validate($form, &$form_state) {
   
   // call payment method validator
   module_load_include('inc', 'commerce_payment', 'includes/commerce_payment.checkout_pane');
-  return commerce_payment_pane_checkout_form_validate($form, $form_state, $form_state['checkout_pane'], $order );
+  return commerce_payment_pane_checkout_form_validate($form, $form_state, $form_state['checkout_pane'], $order);
 }
 
 function crm_core_donation_form_submit($form, &$form_state) {
@@ -655,7 +654,7 @@ function crm_core_donation_form_submit($form, &$form_state) {
 
   // call a payment method
   module_load_include('inc', 'commerce_payment', 'includes/commerce_payment.checkout_pane');
-  commerce_payment_pane_checkout_form_submit($form, &$form_state, $form_state['checkout_pane'], &$order);
+  commerce_payment_pane_checkout_form_submit($form, $form_state, $form_state['checkout_pane'], $order);
 
   $form_state['order'] = $order;
 
