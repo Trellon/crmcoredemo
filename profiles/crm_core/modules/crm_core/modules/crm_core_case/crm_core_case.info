@@ -1,0 +1,21 @@
+name = CRM Core Case
+description = Provide case entity.
+package = CRM
+version = VERSION
+core = 7.x
+
+dependencies[] = entity
+dependencies[] = entityreference
+dependencies[] = crm_core_contact
+dependencies[] = taxonomy
+dependencies[] = views
+
+files[] = crm_core_case.controller.inc
+files[] = includes/views/handlers/crm_core_case_handler_filter_crm_core_case_status.inc
+
+; Information added by drupal.org packaging script on 2012-10-05
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "crm_core"
+datestamp = "1349396048"
+

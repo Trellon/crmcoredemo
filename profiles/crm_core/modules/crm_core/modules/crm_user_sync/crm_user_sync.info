@@ -1,0 +1,33 @@
+name = CRM User Synchronization
+description = Synchronizes users from selected roles with contacts.
+package = CRM
+version = VERSION
+core = 7.x
+configure = crm/admin/user-sync
+
+
+; =======================
+; Dependencies
+; =======================
+
+; Core Dependencies
+dependencies[] = crm_core_contact
+
+; Contrib Dependencies
+dependencies[] = relation
+
+
+; =======================
+; Module Files
+; =======================
+
+; Base Files
+files[] = crm_user_sync.module
+files[] = crm_user_sync.admin.inc
+files[] = views/views_plugin_argument_default_contact_id.inc
+; Information added by drupal.org packaging script on 2012-10-05
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "crm_core"
+datestamp = "1349396048"
+

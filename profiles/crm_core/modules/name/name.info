@@ -1,0 +1,17 @@
+name = Name Field
+description = Defines a persons name field type.
+dependencies[] = field
+package = Fields
+version = VERSION
+core = 7.x
+recommends[] = namedb
+
+files[] = tests/name.test
+files[] = includes/name_handler_filter_name_fulltext.inc
+
+; Information added by drupal.org packaging script on 2012-05-04
+version = "7.x-1.5"
+core = "7.x"
+project = "name"
+datestamp = "1336108562"
+

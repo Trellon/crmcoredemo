@@ -1,0 +1,61 @@
+name = CRM Core
+description = Install with CRM Core pre-configured for use.
+core = 7.x
+distribution_name = CRM Core
+
+; Install necessary core modules.
+dependencies[] = block
+dependencies[] = comment
+dependencies[] = contextual
+dependencies[] = image
+dependencies[] = list
+dependencies[] = menu
+dependencies[] = number
+dependencies[] = options
+dependencies[] = path
+dependencies[] = taxonomy
+dependencies[] = dblog
+dependencies[] = overlay
+dependencies[] = field_ui
+dependencies[] = file
+dependencies[] = search
+dependencies[] = toolbar
+
+; Install CRM Core dependencies.
+dependencies[] = addressfield
+dependencies[] = cck_phone
+dependencies[] = ctools
+dependencies[] = date
+dependencies[] = date_api
+dependencies[] = date_popup
+dependencies[] = date_views
+dependencies[] = email
+dependencies[] = entity
+dependencies[] = entityreference
+dependencies[] = entity_token
+dependencies[] = field_group
+dependencies[] = link
+dependencies[] = name
+dependencies[] = relation
+dependencies[] = views
+dependencies[] = views_ui
+
+; Install CRM Core modules.
+dependencies[] = crm_core
+dependencies[] = crm_core_contact
+dependencies[] = crm_core_relationship
+dependencies[] = crm_core_activity
+dependencies[] = crm_user_sync
+
+; Install CRM Core UI modules.
+dependencies[] = crm_ui
+dependencies[] = crm_core_contact_ui
+dependencies[] = crm_core_activity_ui
+dependencies[] = crm_core_relationship_ui
+
+; Install non essential modules.
+dependencies[] = rules
+dependencies[] = rules_admin
+
+; System Requirements.
+php_memory_limit = 128M

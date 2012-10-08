@@ -1,0 +1,30 @@
+name = CRM Core Relationship UI
+description = User Interface for relationships between contacts. Back end is Relation module.
+package = CRM
+version = VERSION
+core = 7.x
+configure = admin/structure/crm/relationship-types
+
+
+; =======================
+; Dependencies
+; =======================
+
+; Core Dependencies
+dependencies[] = crm_core_relationship
+dependencies[] = crm_ui
+
+; =======================
+; Module Files
+; =======================
+
+files[] = crm_core_relationship_ui.module
+
+; Test
+files[] = crm_core_relationship_ui.test
+; Information added by drupal.org packaging script on 2012-10-05
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "crm_core"
+datestamp = "1349396048"
+

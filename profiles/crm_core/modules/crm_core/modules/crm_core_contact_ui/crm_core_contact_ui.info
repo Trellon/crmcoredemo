@@ -1,0 +1,36 @@
+name = CRM Core Contact UI
+description = User Interface for CRM Core contacts.
+package = CRM
+version = VERSION
+core = 7.x
+configure = admin/structure/crm/contact-types
+
+; =======================
+; Dependencies
+; =======================
+
+; Core Dependencies
+dependencies[] = crm_core_contact
+dependencies[] = crm_ui
+dependencies[] = search
+
+; =======================
+; Module Files
+; =======================
+
+; Base Files
+files[] = crm_core_contact_ui.module
+
+; Views include
+files[] = views/crm_core_contact_ui.views.inc
+
+; Tests
+files[] = crm_core_contact_ui.test
+
+
+; Information added by drupal.org packaging script on 2012-10-05
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "crm_core"
+datestamp = "1349396048"
+

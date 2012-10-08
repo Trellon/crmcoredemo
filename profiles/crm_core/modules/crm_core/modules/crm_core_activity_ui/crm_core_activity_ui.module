@@ -1,0 +1,140 @@
+<?php
+
+/**
+ * Implements hook_menu()
+ */
+function crm_core_activity_ui_menu() {
+  $items = array();
+
+  /*
+   * Contact Activities
+   */
+  /*$items['crm/contact/%crm_core_contact/activity'] = array(
+    'title' => 'Activity',
+    'description' => 'View contact activity',
+    'page callback' => 'crm_core_contact_activity',
+    'page arguments' => array(2),
+    'access arguments' => array('view contacts'),
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+    'file' => 'crm_core_activity_ui.pages.inc',
+  );*/
+
+  // Menu items for creation of new Activities.
+  foreach (crm_core_activity_types() as $type => $info) {
+    $items['crm/contact/%crm_core_contact/activity/add/' . $type] = array(
+      'title' => 'Add Activity',
+      'description' => 'Add an activity to this contact',
+      'page callback' => 'crm_core_activity_entity_ui_get_form_wrapper',
+      'page arguments' => array(2, 5),
+      'access callback' => 'entity_access',
+      'access arguments' => array('create', 'crm_core_activity', 5),
+      'type' => MENU_NORMAL_ITEM,
+      'file' => 'crm_core_activity_ui.pages.inc',
+    );
+  }
+
+  $items['crm/activity/%crm_core_activity'] =  array(
+    'title' => 'Activity',
+    'page callback' => 'crm_core_activity_view',
+    'page arguments' => array(2),
+    'title callback' => 'crm_core_activity_label',
+    'title arguments' => array(2),
+    'access callback' => 'entity_access',
+    'access arguments' => array('view', 'crm_core_activity', 2),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['crm/activity/%crm_core_activity/view'] = array(
+    'title' => 'View',
+    'weight' => -10,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+  );
+
+  $items['crm/activity/%crm_core_activity/edit'] = array(
+    'title' => 'Edit',
+    'page callback' => 'entity_ui_get_form',
+    'page arguments' => array('crm_core_activity', 2, 'edit'),
+    'access callback' => 'entity_access',
+    'access arguments' => array('edit', 'crm_core_activity', 2),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'crm_core_activity_ui.pages.inc',
+  );
+
+  $items['crm/activity/%crm_core_activity/delete'] = array(
+    'title' => 'Delete',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('crm_core_activity_form_delete_confirm', 2),
+    'access callback' => 'entity_access',
+    'access arguments' => array('edit', 'crm_core_activity', 2),
+    'weight' => 1,
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'crm_core_activity_ui.pages.inc',
+  );
+
+  $items['admin/structure/crm/activity-types/list'] = array(
+    'title' => 'List',
+    'weight' => -10,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function crm_core_activity_ui_menu_alter(&$items) {
+  $items['admin/structure/crm/activity-types']['type'] = MENU_LOCAL_TASK;
+  // Set "Add activity" as local action.
+  $items['crm/contact/%/activity/add']['type'] = MENU_LOCAL_ACTION;
+  $items['crm/contact/%/activity/add']['context'] = MENU_CONTEXT_PAGE;
+  unset($items['crm/contact/%/activity/add']['tab_root']);
+}
+
+/**
+ * Implements hook_admin_menu_map().
+ */
+function crm_core_activity_ui_admin_menu_map() {
+  $arguments = array();
+  $crm_core_activity_types = array_keys(crm_core_activity_types());
+  foreach ($crm_core_activity_types as $type) {
+    $arguments[] = array(
+      '%crm_core_activity_type' => array($type),
+      '%entity_object' => array($type),
+    );
+  }
+
+  $map['admin/structure/crm/activity-types/manage/%crm_core_activity_type'] = array(
+    // Link generated items directly to the "Activity Types" item.
+    'parent' => 'admin/structure/crm/activity-types',
+    // Hide the "List" item, as this expansion will expose all available
+    // options.
+    'hide' => 'admin/structure/crm/activity-types/list',
+    // Create expansion arguments for the '%crm_core_activity_type' placeholder.
+    'arguments' => $arguments,
+  );
+  return $map;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function crm_core_activity_ui_form_alter(&$form, &$form_state, $form_id) {
+  // Alter the operations links so they looks like CTools dropbutton
+  if ($form_id == 'crm_core_activity_type_overview_form') {
+    $ops_count = $form['table']['#header'][2]['colspan'];
+    $form['table']['#header'][2] = t('Operations');
+
+    crm_ui_ctools_add_dropbutton_files();
+    foreach($form['table']['#rows'] as $key => $row) {
+      $output = theme('crm_ui_ctools_dropbutton', array(
+        'ops_count' => $ops_count,
+        'links' => $row,
+        'index' => $key,
+      ));
+      $form['table']['#rows'][$key] = array_merge(array_slice($row, 0, count($row) - $ops_count), array($output));
+    }
+  }
+}
