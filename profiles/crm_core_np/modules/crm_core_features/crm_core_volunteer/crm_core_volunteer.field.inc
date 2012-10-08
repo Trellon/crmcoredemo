@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * sf_center_volunteer.features.field.inc
+ * crm_core_volunteer.features.field.inc
  */
 
 /**

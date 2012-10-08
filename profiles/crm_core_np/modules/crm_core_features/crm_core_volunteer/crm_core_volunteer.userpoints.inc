@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Code for the SF Center Volunteer feature.
+ * Code for the CRM Core Volunteer feature.
  * userpoints integration
  */
 define('USERPOINTS_VOLUNTEER', 'userpoints_crm_core_volunteer');

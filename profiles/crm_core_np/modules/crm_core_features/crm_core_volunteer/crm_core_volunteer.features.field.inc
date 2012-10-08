@@ -10,7 +10,7 @@
 function crm_core_volunteer_field_default_fields() {
   $fields = array();
 
-  // Exported field: 'crm_core_activity-volunteer_commitment-field_activity_date'
+  // Exported field: 'crm_core_activity-volunteer_commitment-field_activity_date'.
   $fields['crm_core_activity-volunteer_commitment-field_activity_date'] = array(
     'field_config' => array(
       'active' => '1',
@@ -22,6 +22,7 @@ function crm_core_volunteer_field_default_fields() {
       'field_name' => 'field_activity_date',
       'foreign keys' => array(),
       'indexes' => array(),
+      'locked' => '0',
       'module' => 'date',
       'settings' => array(
         'granularity' => array(
@@ -90,7 +91,7 @@ function crm_core_volunteer_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-volunteer_commitment-field_activity_notes'
+  // Exported field: 'crm_core_activity-volunteer_commitment-field_activity_notes'.
   $fields['crm_core_activity-volunteer_commitment-field_activity_notes'] = array(
     'field_config' => array(
       'active' => '1',
@@ -113,6 +114,7 @@ function crm_core_volunteer_field_default_fields() {
           0 => 'format',
         ),
       ),
+      'locked' => '1',
       'module' => 'text',
       'settings' => array(),
       'translatable' => '0',
@@ -147,12 +149,12 @@ function crm_core_volunteer_field_default_fields() {
           'rows' => 5,
         ),
         'type' => 'text_textarea',
-        'weight' => '2',
+        'weight' => 2,
       ),
     ),
   );
 
-  // Exported field: 'crm_core_activity-volunteer_commitment-field_activity_participants'
+  // Exported field: 'crm_core_activity-volunteer_commitment-field_activity_participants'.
   $fields['crm_core_activity-volunteer_commitment-field_activity_participants'] = array(
     'field_config' => array(
       'active' => '1',
@@ -164,11 +166,11 @@ function crm_core_volunteer_field_default_fields() {
       'field_name' => 'field_activity_participants',
       'foreign keys' => array(),
       'indexes' => array(
-        'target_entity' => array(
-          0 => 'target_type',
-          1 => 'target_id',
+        'target_id' => array(
+          0 => 'target_id',
         ),
       ),
+      'locked' => '1',
       'module' => 'entityreference',
       'settings' => array(
         'handler' => 'base',
@@ -213,12 +215,12 @@ function crm_core_volunteer_field_default_fields() {
           'size' => 60,
         ),
         'type' => 'entityreference_autocomplete_tags',
-        'weight' => '0',
+        'weight' => 0,
       ),
     ),
   );
 
-  // Exported field: 'crm_core_activity-volunteer_commitment-field_volunteer_opportunity'
+  // Exported field: 'crm_core_activity-volunteer_commitment-field_volunteer_opportunity'.
   $fields['crm_core_activity-volunteer_commitment-field_volunteer_opportunity'] = array(
     'field_config' => array(
       'active' => '1',
@@ -228,11 +230,11 @@ function crm_core_volunteer_field_default_fields() {
       'field_name' => 'field_volunteer_opportunity',
       'foreign keys' => array(),
       'indexes' => array(
-        'target_entity' => array(
-          0 => 'target_type',
-          1 => 'target_id',
+        'target_id' => array(
+          0 => 'target_id',
         ),
       ),
+      'locked' => '0',
       'module' => 'entityreference',
       'settings' => array(
         'handler' => 'base',
@@ -290,7 +292,7 @@ function crm_core_volunteer_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-volunteer_commitment-field_volunteer_status'
+  // Exported field: 'crm_core_activity-volunteer_commitment-field_volunteer_status'.
   $fields['crm_core_activity-volunteer_commitment-field_volunteer_status'] = array(
     'field_config' => array(
       'active' => '1',
@@ -304,6 +306,7 @@ function crm_core_volunteer_field_default_fields() {
           0 => 'value',
         ),
       ),
+      'locked' => '0',
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
@@ -351,7 +354,7 @@ function crm_core_volunteer_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-volunteer_commitment-field_volunteer_time'
+  // Exported field: 'crm_core_activity-volunteer_commitment-field_volunteer_time'.
   $fields['crm_core_activity-volunteer_commitment-field_volunteer_time'] = array(
     'field_config' => array(
       'active' => '1',
@@ -361,6 +364,7 @@ function crm_core_volunteer_field_default_fields() {
       'field_name' => 'field_volunteer_time',
       'foreign keys' => array(),
       'indexes' => array(),
+      'locked' => '0',
       'module' => 'number',
       'settings' => array(),
       'translatable' => '0',

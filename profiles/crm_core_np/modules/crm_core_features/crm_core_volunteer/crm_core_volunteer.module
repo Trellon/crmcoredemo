@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Code for the SF Center Volunteer feature.
+ * Code for the CRM Core Volunteer feature.
  */
 
 include_once('crm_core_volunteer.features.inc');
@@ -179,7 +179,7 @@ function crm_core_volunteer_form_crm_core_profile_entry_form_alter(&$form, &$for
   // adding additional classes to the event registration form
   $profile = $form_state['profile'];
   
-  // making sure we are on the correct volunteer opportunity profile
+  // making sure we are on the correct event registration profile
   if ($profile['name'] != variable_get('crm_core_volunteer_profile', '')) {
     return;  
   }
