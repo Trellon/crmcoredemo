@@ -12,7 +12,7 @@ include_once('crm_core_event_registration.userpoints.inc');
  * Implements hook_menu
  */
 function crm_core_event_registration_menu() {
-  
+
   $items['admin/structure/crm/event/registration'] = array(
     'title' => t('Event Registration Settings'),
     'page callback' => 'drupal_get_form',
@@ -21,7 +21,7 @@ function crm_core_event_registration_menu() {
     'access arguments' => array('administer site configurations'),
     'type' => MENU_NORMAL_ITEM,
   );
-  
+
   $items['node/%node/register/%crm_core_profile'] = array(
     'title' => 'Register',
     'page callback' => 'crm_core_event_registration_attachment_form',
@@ -31,7 +31,7 @@ function crm_core_event_registration_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  return $items;  
+  return $items;
 }
 
 /**
@@ -43,49 +43,49 @@ function crm_core_event_registration_node_view($node, $view_mode) {
     if ($node->type == variable_get('crm_core_event_registration_content_type', '')) {
       $crm_core_profile_event = variable_get('crm_core_event_registration_profile', '');
       if ($crm_core_profile_event == '') {
-        return;  
+        return;
       }
-      
+
     // do not display the register button if registration type is set to external or none
     $event_registration_field = variable_get('crm_core_event_registration_registration_type', '');
       if ($event_registration_field != '') {
-        $event_registration_field_value = variable_get('crm_core_event_registration_registration_type_value', '');  
+        $event_registration_field_value = variable_get('crm_core_event_registration_registration_type_value', '');
         if (empty($node->{$event_registration_field})) {
           return;
         }
         if ($node->{$event_registration_field}[LANGUAGE_NONE][0]['value'] != $event_registration_field_value) {
-          return;  
+          return;
         }
-      }  
-      
+      }
+
       drupal_add_css(drupal_get_path('module', 'crm_core_event_registration') . '/crm_core_event_registration.css');
-      
+
       // user has no access to register for event
       if (!user_access('crm_core register for events')) {
         if (!user_is_logged_in()) {
           $node->content['crm_core_event_reg_link'] = array(
            '#markup' => l('<span>Login/Create account to Register!</span>', 'user', array('query' => array('destination' => drupal_get_path_alias('node/' . $node->nid)), 'html' => TRUE, 'attributes' => array('class' => array('crm_core_event_reg_link')))),
          );
-         return;           
+         return;
         } else {
           // user is auth user but does not have access to register for event
           return;
-        }      
+        }
       }
-       // user has access to register for event     
+       // user has access to register for event
        // determine if the crm_core_contact (user) has already registered for this event
        $registration_check = _crm_core_event_registration_check_registration($node->nid);
        if ($registration_check) {
          $node->content['crm_core_event_reg_link'] = array(
            '#markup' => '<p class="crm_core_event_reg_link"><span>You have already registered for this event</span></p>',
-         );      
-           return;            
+         );
+           return;
        }
-       
+
        // display registration button
        $node->content['crm_core_event_reg_link'] = array(
          '#markup' => l('<span>Register</span>', 'node/' . $node->nid . '/register/' . $crm_core_profile_event, array('html' => TRUE, 'attributes' => array('class' => array('crm_core_event_reg_link')))),
-       );      
+       );
     }
 }
 
@@ -93,40 +93,40 @@ function crm_core_event_registration_node_view($node, $view_mode) {
  * Main registration form to be attached
  */
 function crm_core_event_registration_attachment_form($node, $crm_core_profile) {
-  
+
   drupal_set_title(t('Register for @title', array('@title' => $node->title)));
-    
+
   // check for node type to attach the form
-  if ($node->type == variable_get('crm_core_event_registration_content_type', 'page')) {    
+  if ($node->type == variable_get('crm_core_event_registration_content_type', 'page')) {
       $attachment_profile_name = variable_get('crm_core_event_registration_profile', '');
       if ($attachment_profile_name == '') {
-        return drupal_access_denied();  
+        return drupal_access_denied();
       }
 
       // only events that have registration enabled (internal) should there be a form
       $event_registration_field = variable_get('crm_core_event_registration_registration_type', '');
       if ($event_registration_field != '') {
-        $event_registration_field_value = variable_get('crm_core_event_registration_registration_type_value', '');  
-        
+        $event_registration_field_value = variable_get('crm_core_event_registration_registration_type_value', '');
+
         if (empty($node->{$event_registration_field})) {
           return drupal_access_denied();
         }
-        
+
         if ($node->{$event_registration_field}[LANGUAGE_NONE][0]['value'] != $event_registration_field_value) {
-          return drupal_access_denied();  
+          return drupal_access_denied();
         }
       }
-      
+
       // lastly, check if the crm_core_contact user has already registered for this event
       $registration_check = _crm_core_event_registration_check_registration($node->nid);
       if ($registration_check) {
-        return drupal_access_denied();  
+        return drupal_access_denied();
       }
-      
+
        module_load_include('inc', 'crm_core_profile', 'crm_core_profile.forms');
        return drupal_get_form('crm_core_profile_entry_form', $crm_core_profile);
   }
-  return;  
+  return;
 }
 
 /**
@@ -146,31 +146,31 @@ function crm_core_event_registration_permission() {
  * We are just setting some default value to the crm_core_profile form in the activity data container
  * the $form here refers to the $form['activity'] data container from the original crm_core_profile form
  */
-function crm_core_event_registration_crm_core_profile_activity_alter(&$form, $profile_name) {  
+function crm_core_event_registration_crm_core_profile_activity_alter(&$form, $profile_name) {
   if ($profile_name == variable_get('crm_core_event_registration_profile', '')) {
     $form['title']['#value'] = 'Event Registration';
-    
-    // this has to exist because the form is located at 
+
+    // this has to exist because the form is located at
     // node/nid/register/crm_core_profile_name
     $node = menu_get_object();
-    
+
     // setting the event reference on the crm_core_activity
     // $event_reference_field = variable_get('crm_core_event_registration_event_ref', '');
     // if ($event_reference_field != '') {
       $default_value = sprintf('%s (%s)', $node->title, $node->nid);
-      //$form[$event_reference_field][LANGUAGE_NONE][0]['target_id']['#default_value'] = $default_value; 
-      $form['field_registration_event'][LANGUAGE_NONE][0]['target_id']['#default_value'] = $default_value;      
+      //$form[$event_reference_field][LANGUAGE_NONE][0]['target_id']['#default_value'] = $default_value;
+      $form['field_registration_event'][LANGUAGE_NONE][0]['target_id']['#default_value'] = $default_value;
     //}
-    
+
     // setting default value for registration status for free events as registered
     // this requires the event product be configured
     $event_product_field = variable_get('crm_core_event_registration_product', '');
     if ($event_product_field != '') {
       if (empty($node->{$event_product_field})) {
-         $form['field_registration_status'][LANGUAGE_NONE]['#default_value'][0] = 'registered';   
-       }       
-    }  
-  }  
+         $form['field_registration_status'][LANGUAGE_NONE]['#default_value'][0] = 'registered';
+       }
+    }
+  }
 }
 
 /**
@@ -179,10 +179,10 @@ function crm_core_event_registration_crm_core_profile_activity_alter(&$form, $pr
 function crm_core_event_registration_form_crm_core_profile_entry_form_alter(&$form, &$form_state, $form_id) {
   // adding additional classes to the event registration form
   $profile = $form_state['profile'];
-  
+
   // making sure we are on the correct event registration profile
   if ($profile['name'] != variable_get('crm_core_event_registration_profile', '')) {
-    return;  
+    return;
   }
 
   if (empty($form['#attributes']['class'])) {
@@ -191,36 +191,36 @@ function crm_core_event_registration_form_crm_core_profile_entry_form_alter(&$fo
   else {
     $form['#attributes']['class'] += array('crm_core_event_registration_form');
   }
-  
+
   // depending on the event registration type (free/paid)
   // we will issue different and submission handler
   // @todo: somehow we have to use the event product reference field to basically
   // add the product to the user's cart and redirect to the check out page
   $event_product_field = variable_get('crm_core_event_registration_product', '');
-  
-  if ($node = menu_get_object()) { 
+
+  if ($node = menu_get_object()) {
     // adding event details
     $event_teaser = field_attach_view('node', $node, 'teaser');
     $event_teaser = render($event_teaser);
-    
+
     $form['event'] = array(
-      '#type' => 'fieldset', 
-      '#title' => t('Event Details'),   
-      '#collapsible' => TRUE,  
+      '#type' => 'fieldset',
+      '#title' => t('Event Details'),
+      '#collapsible' => TRUE,
       '#collapsed' => FALSE,
       '#weight' => '-999',
     );
-    
+
     $form['event']['event_title'] = array(
       '#prefix' => '<h4>',
       '#markup' => $node->title,
       '#suffix' => '</h4>',
     );
-    
+
     $form['event']['event_detail'] = array(
       '#markup' => $event_teaser,
     );
-    
+
     if ($event_product_field != '') {
       if (!empty($node->{$event_product_field})) {
         $product_id = $node->{$event_product_field}[LANGUAGE_NONE][0]['product_id'];
@@ -228,17 +228,17 @@ function crm_core_event_registration_form_crm_core_profile_entry_form_alter(&$fo
           '#type' => 'value',
           '#value' => $product_id,
         );
-        
+
          $form['submit']['#value'] = t('Continue to next step');
          $form['#validate'][] = 'crm_core_event_registration_checkout_validate';
-         $form['#submit'][] = 'crm_core_event_registration_checkout_submit'; 
-      }       
+         $form['#submit'][] = 'crm_core_event_registration_checkout_submit';
+      }
     }
     // free product, we are done
     else {
       $form_state['profile']['redirect'] = drupal_get_path_alias('node/' . $node->nid);
-      $form['#submit'][] = 'crm_core_event_registration_profile_form_submit';      
-    }  
+      $form['#submit'][] = 'crm_core_event_registration_profile_form_submit';
+    }
   }
 }
 
@@ -247,59 +247,59 @@ function crm_core_event_registration_form_crm_core_profile_entry_form_alter(&$fo
  */
 function crm_core_event_registration_crm_core_profile_theme_alter(&$form, &$render_fields) {
   if (array_key_exists('event', $form)) {
-    $render_fields['-999'] = 'event';  
-  }  
+    $render_fields['-999'] = 'event';
+  }
 }
 
-/** 
+/**
  * Validation handler
  */
 function crm_core_event_registration_checkout_validate($form, &$form_state) {
 
-  // form_set_error('aaa', 'bbb');  
+  // form_set_error('aaa', 'bbb');
 }
 
 /**
  * Paid event registration submission handler
  */
 function crm_core_event_registration_checkout_submit($form, &$form_state) {
-    
+
   // @todo: check the order status, clear out the user's cart first before we add
   // any order.
   // we also need to use the checkout hook to change some ui to not say quantity, products, etc
-  
+
   global $user;
   $product_id = $form_state['values']['product_id'];
-  
+
   // Create the new order in checkout; you might also check first to
   // see if your user already has an order to use instead of a new one.
   $order = commerce_order_new($user->uid, 'checkout_checkout');
-  
+
   // Save the order to get its ID.
   commerce_order_save($order);
-  
+
   // Load whatever product represents the item the customer will be
   // paying for and create a line item for it.
   $product = commerce_product_load($product_id);
   $line_item = commerce_product_line_item_new($product, 1, $order->order_id);
-  
+
   // Save the line item to get its ID.
   commerce_line_item_save($line_item);
-  
+
   // Add the line item to the order using fago's rockin' wrapper.
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
   $order_wrapper->commerce_line_items[] = $line_item;
-  
+
   // adding the event registration order reference field to the order
   // @todo: this needs to be a configuration option thing
   // $order->field_crm_activity_id[LANGUAGE_NONE][0]['target_id'] = $form_state['crm_core_activity']->activity_id;
   $order->data['crm_core_event_registration'] = $form_state['crm_core_activity']->activity_id;
-  
+
   // Save the order again to update its line item reference field.
   commerce_order_save($order);
-    
+
   // direct user to the checkout form
-  $form_state['redirect'] = 'checkout/' . $order->order_id;    
+  $form_state['redirect'] = 'checkout/' . $order->order_id;
 }
 
 /**
@@ -318,15 +318,15 @@ function crm_core_event_registration_commerce_checkout_complete($order) {
       // update the activity status (event)
       $activity->field_registration_status[LANGUAGE_NONE][0]['value'] = 'registered';
       // update the order reference on the activity
-      $activity->field_registration_order[LANGUAGE_NONE][0]['target_id'] = $order->order_id; 
+      $activity->field_registration_order[LANGUAGE_NONE][0]['target_id'] = $order->order_id;
       crm_core_activity_save($activity);
-      
+
       $nid = $activity->field_registration_event[LANGUAGE_NONE][0]['target_id'];
        // going back to the event
        $path = drupal_get_path_alias('node/' . $nid);
        drupal_goto($path);
-    }  
-  }  
+    }
+  }
 }
 
 /**
@@ -334,7 +334,7 @@ function crm_core_event_registration_commerce_checkout_complete($order) {
  */
 function crm_core_event_registration_commerce_checkout_pane_info_alter(&$checkout_panes) {
   // do not want "Shopping cart contents"
-  $checkout_panes['cart_contents']['title'] = t('Item Details');  
+  $checkout_panes['cart_contents']['title'] = t('Item Details');
 }
 
 
@@ -350,18 +350,18 @@ function crm_core_event_registration_profile_form_submit($form, &$form_state) {
  * Configuration form
  */
 function crm_core_event_registration_config($form, &$form_state) {
-  
+
   // we need to get the content type we want to attach
   $_node_types = node_type_get_types();
   $options = array('' => t('--Select--'));
   foreach($_node_types as $node_type) {
-    $options[$node_type->type] = $node_type->name;  
+    $options[$node_type->type] = $node_type->name;
   }
 
   $form['content'] = array(
-    '#type' => 'fieldset', 
-    '#title' => t('Content Settings'),   
-    '#collapsible' => TRUE,  
+    '#type' => 'fieldset',
+    '#title' => t('Content Settings'),
+    '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
 
@@ -374,15 +374,15 @@ function crm_core_event_registration_config($form, &$form_state) {
     '#default_value' => variable_get('crm_core_event_registration_content_type', 'page'),
     '#required' => TRUE,
   );
-  
+
   // Getting the registration type field from the content type
   $event_content_type = variable_get('crm_core_event_registration_content_type', 'page');
-  
+
   $event_content_fields = array();
   foreach (field_info_instances('node', $event_content_type) as $field_name => $field) {
     $event_content_fields[$field_name] = $field['label'];
   }
-  
+
   $form['content']['crm_core_event_registration_registration_type'] = array(
     '#type' => 'select',
     '#title' => 'Select the registration type field (optional)',
@@ -390,7 +390,7 @@ function crm_core_event_registration_config($form, &$form_state) {
     '#description' => t('By default, the event registration form will be enabled on all (event) contents configured above, select a field that would be used to tell if the event registration form should appear (i.e. internal registration/external registration)'),
     '#default_value' => variable_get('crm_core_event_registration_registration_type', ''),
   );
-  
+
   // based on the field selected, we should select the value that will be used for internal registration
   $event_registration_registration_type_values = array();
   $event_registration_type_field = variable_get('crm_core_event_registration_registration_type', '');
@@ -398,8 +398,8 @@ function crm_core_event_registration_config($form, &$form_state) {
     $_event_registration_type_field = field_info_field($event_registration_type_field);
     $event_registration_registration_type_values = $_event_registration_type_field['settings']['allowed_values'];
   }
-  
-  if (!empty($event_registration_registration_type_values)) {  
+
+  if (!empty($event_registration_registration_type_values)) {
     $form['content']['crm_core_event_registration_registration_type_value'] = array(
       '#type' => 'select',
       '#title' => 'Select the registration type field value',
@@ -408,29 +408,29 @@ function crm_core_event_registration_config($form, &$form_state) {
       '#default_value' => variable_get('crm_core_event_registration_registration_type_value', ''),
     );
   }
-  
+
   $form['content']['crm_core_event_registration_product'] = array(
     '#type' => 'select',
     '#title' => 'Paid registration product field (optional)',
     '#options' => $event_content_fields,
     '#description' => t('This should be a commerce product reference field, if it exists for an event content, the user will be redirected to a checkout page when they register for events'),
     '#default_value' => variable_get('crm_core_event_registration_product', ''),
-  );  
-  
+  );
+
   $form['crm'] = array(
-    '#type' => 'fieldset', 
-    '#title' => t('CRM Settings'),   
-    '#collapsible' => TRUE,  
+    '#type' => 'fieldset',
+    '#title' => t('CRM Settings'),
+    '#collapsible' => TRUE,
     '#collapsed' => FALSE,
-  );  
-  
-  
+  );
+
+
   $crm_core_profiles = crm_core_profile_load_all();
   $profile_options = array('' => t('--Select--'));
   foreach($crm_core_profiles as $crm_core_profile) {
-    $profile_options[$crm_core_profile['name']] = $crm_core_profile['label'];  
+    $profile_options[$crm_core_profile['name']] = $crm_core_profile['label'];
   }
-  
+
   // profile we will use to attach to the event
   $form['crm']['crm_core_event_registration_profile'] = array(
     '#type' => 'select',
@@ -439,7 +439,7 @@ function crm_core_event_registration_config($form, &$form_state) {
     '#default_value' => variable_get('crm_core_event_registration_profile', ''),
     '#required' => TRUE,
   );
-  
+
   // field for event referencing
   // we get the option list first
   $event_profile = variable_get('crm_core_event_registration_profile', '');
@@ -450,7 +450,7 @@ function crm_core_event_registration_config($form, &$form_state) {
      foreach(field_info_instances('crm_core_activity', $crm_core_profile_activity['bundle_type']) as $field_name => $field) {
       $field_options[$field_name] = $field['label'];
     }
-    
+
        // profile we will use to attach to the event
 //       $form['crm']['crm_core_event_registration_event_ref'] = array(
 //         '#type' => 'select',
@@ -459,18 +459,18 @@ function crm_core_event_registration_config($form, &$form_state) {
 //         '#description' => t('The activity field should usually be a entity reference field to the event content type'),
 //         '#default_value' => variable_get('crm_core_event_registration_event_ref', ''),
 //       );
-          
+
   }
-  
+
   $form['crm_core_event_registration_redirect_message'] = array(
     '#type' => 'textarea',
     '#title' => 'redirect message',
     '#description' => 'When someone successfully registers for an event, this message will be shown',
     '#default_value' => variable_get('crm_core_event_registration_redirect_message', 'Thank you for register for the event. You will be notified shortly.'),
   );
-  
-  return system_settings_form($form); 
-     
+
+  return system_settings_form($form);
+
 }
 
 /**
@@ -481,7 +481,7 @@ function crm_core_event_registration_config($form, &$form_state) {
  */
 function _crm_core_event_registration_check_registration($nid) {
    global $user;
-   
+
    if (!module_exists('crm_user_sync')) {
       return FALSE;
    }
@@ -494,12 +494,11 @@ function _crm_core_event_registration_check_registration($nid) {
       ->entityCondition('entity_type', 'crm_core_activity')
       ->propertyCondition('type', 'event_registration')
       ->fieldCondition('field_activity_participants', 'target_id', $related_contact->contact_id, '=')
-      ->fieldCondition('field_activity_participants', 'target_type', 'crm_core_contact', '=')
       ->fieldCondition('field_registration_event', 'target_id', $nid)
-      ->execute();  
+      ->execute();
      if (!empty($results)) {
-       return TRUE;  
-     }   
+       return TRUE;
+     }
    }
-   return FALSE;   
+   return FALSE;
 }
