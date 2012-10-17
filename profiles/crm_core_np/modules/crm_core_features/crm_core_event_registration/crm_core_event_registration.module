@@ -386,7 +386,7 @@ function crm_core_event_registration_config($form, &$form_state) {
   $form['content']['crm_core_event_registration_registration_type'] = array(
     '#type' => 'select',
     '#title' => 'Select the registration type field (optional)',
-    '#options' => $event_content_fields,
+    '#options' => array('' => t('-None-')) + $event_content_fields,
     '#description' => t('By default, the event registration form will be enabled on all (event) contents configured above, select a field that would be used to tell if the event registration form should appear (i.e. internal registration/external registration)'),
     '#default_value' => variable_get('crm_core_event_registration_registration_type', ''),
   );
@@ -412,7 +412,7 @@ function crm_core_event_registration_config($form, &$form_state) {
   $form['content']['crm_core_event_registration_product'] = array(
     '#type' => 'select',
     '#title' => 'Paid registration product field (optional)',
-    '#options' => $event_content_fields,
+    '#options' => array('' => t('-None-')) + $event_content_fields,
     '#description' => t('This should be a commerce product reference field, if it exists for an event content, the user will be redirected to a checkout page when they register for events'),
     '#default_value' => variable_get('crm_core_event_registration_product', ''),
   );
@@ -446,10 +446,10 @@ function crm_core_event_registration_config($form, &$form_state) {
   if ($event_profile != '') {
      $field_options = array('' => t('--Select--'));
      // load the crm_core_profile activity info
-     $crm_core_profile_activity = crm_core_profile_activity_load($event_profile);
-     foreach(field_info_instances('crm_core_activity', $crm_core_profile_activity['bundle_type']) as $field_name => $field) {
-      $field_options[$field_name] = $field['label'];
-    }
+//     $crm_core_profile_activity = crm_core_profile_activity_load($event_profile);
+//     foreach(field_info_instances('crm_core_activity', $crm_core_profile_activity['bundle_type']) as $field_name => $field) {
+//      $field_options[$field_name] = $field['label'];
+//    }
 
        // profile we will use to attach to the event
 //       $form['crm']['crm_core_event_registration_event_ref'] = array(
