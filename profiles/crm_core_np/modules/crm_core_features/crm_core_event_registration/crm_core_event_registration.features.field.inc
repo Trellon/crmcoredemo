@@ -10,7 +10,7 @@
 function crm_core_event_registration_field_default_fields() {
   $fields = array();
 
-  // Exported field: 'crm_core_activity-event_registration-field_activity_date'.
+  // Exported field: 'crm_core_activity-event_registration-field_activity_date'
   $fields['crm_core_activity-event_registration-field_activity_date'] = array(
     'field_config' => array(
       'active' => '1',
@@ -22,7 +22,6 @@ function crm_core_event_registration_field_default_fields() {
       'field_name' => 'field_activity_date',
       'foreign keys' => array(),
       'indexes' => array(),
-      'locked' => '0',
       'module' => 'date',
       'settings' => array(
         'granularity' => array(
@@ -91,7 +90,7 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-event_registration-field_activity_notes'.
+  // Exported field: 'crm_core_activity-event_registration-field_activity_notes'
   $fields['crm_core_activity-event_registration-field_activity_notes'] = array(
     'field_config' => array(
       'active' => '1',
@@ -114,7 +113,6 @@ function crm_core_event_registration_field_default_fields() {
           0 => 'format',
         ),
       ),
-      'locked' => '1',
       'module' => 'text',
       'settings' => array(),
       'translatable' => '0',
@@ -154,7 +152,7 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-event_registration-field_activity_participants'.
+  // Exported field: 'crm_core_activity-event_registration-field_activity_participants'
   $fields['crm_core_activity-event_registration-field_activity_participants'] = array(
     'field_config' => array(
       'active' => '1',
@@ -166,11 +164,11 @@ function crm_core_event_registration_field_default_fields() {
       'field_name' => 'field_activity_participants',
       'foreign keys' => array(),
       'indexes' => array(
-        'target_id' => array(
-          0 => 'target_id',
+        'target_entity' => array(
+          0 => 'target_type',
+          1 => 'target_id',
         ),
       ),
-      'locked' => '1',
       'module' => 'entityreference',
       'settings' => array(
         'handler' => 'base',
@@ -220,7 +218,7 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-event_registration-field_registration_attendee'.
+  // Exported field: 'crm_core_activity-event_registration-field_registration_attendee'
   $fields['crm_core_activity-event_registration-field_registration_attendee'] = array(
     'field_config' => array(
       'active' => '1',
@@ -230,7 +228,6 @@ function crm_core_event_registration_field_default_fields() {
       'field_name' => 'field_registration_attendee',
       'foreign keys' => array(),
       'indexes' => array(),
-      'locked' => '0',
       'module' => 'number',
       'settings' => array(),
       'translatable' => '0',
@@ -280,7 +277,7 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-event_registration-field_registration_event'.
+  // Exported field: 'crm_core_activity-event_registration-field_registration_event'
   $fields['crm_core_activity-event_registration-field_registration_event'] = array(
     'field_config' => array(
       'active' => '1',
@@ -288,20 +285,13 @@ function crm_core_event_registration_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_registration_event',
-      'foreign keys' => array(
-        'node' => array(
-          'columns' => array(
-            'target_id' => 'nid',
-          ),
-          'table' => 'node',
-        ),
-      ),
+      'foreign keys' => array(),
       'indexes' => array(
-        'target_id' => array(
-          0 => 'target_id',
+        'target_entity' => array(
+          0 => 'target_type',
+          1 => 'target_id',
         ),
       ),
-      'locked' => '0',
       'module' => 'entityreference',
       'settings' => array(
         'handler' => 'base',
@@ -359,7 +349,7 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-event_registration-field_registration_event_type'.
+  // Exported field: 'crm_core_activity-event_registration-field_registration_event_type'
   $fields['crm_core_activity-event_registration-field_registration_event_type'] = array(
     'field_config' => array(
       'active' => '1',
@@ -373,7 +363,6 @@ function crm_core_event_registration_field_default_fields() {
           0 => 'value',
         ),
       ),
-      'locked' => '0',
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
@@ -416,7 +405,7 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-event_registration-field_registration_order'.
+  // Exported field: 'crm_core_activity-event_registration-field_registration_order'
   $fields['crm_core_activity-event_registration-field_registration_order'] = array(
     'field_config' => array(
       'active' => '1',
@@ -424,20 +413,13 @@ function crm_core_event_registration_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_registration_order',
-      'foreign keys' => array(
-        'commerce_order' => array(
-          'columns' => array(
-            'target_id' => 'order_id',
-          ),
-          'table' => 'commerce_order',
-        ),
-      ),
+      'foreign keys' => array(),
       'indexes' => array(
-        'target_id' => array(
-          0 => 'target_id',
+        'target_entity' => array(
+          0 => 'target_type',
+          1 => 'target_id',
         ),
       ),
-      'locked' => '0',
       'module' => 'entityreference',
       'settings' => array(
         'handler' => 'base',
@@ -495,7 +477,7 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-event_registration-field_registration_role'.
+  // Exported field: 'crm_core_activity-event_registration-field_registration_role'
   $fields['crm_core_activity-event_registration-field_registration_role'] = array(
     'field_config' => array(
       'active' => '1',
@@ -509,7 +491,6 @@ function crm_core_event_registration_field_default_fields() {
           0 => 'value',
         ),
       ),
-      'locked' => '0',
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
@@ -558,7 +539,7 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-event_registration-field_registration_status'.
+  // Exported field: 'crm_core_activity-event_registration-field_registration_status'
   $fields['crm_core_activity-event_registration-field_registration_status'] = array(
     'field_config' => array(
       'active' => '1',
@@ -572,7 +553,6 @@ function crm_core_event_registration_field_default_fields() {
           0 => 'value',
         ),
       ),
-      'locked' => '0',
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
@@ -1385,24 +1365,28 @@ function crm_core_event_registration_field_default_fields() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Address');
-  t('Admission');
   t('Date');
-  t('Event');
   t('Event Date');
   t('Event Images');
   t('Event Summary');
+  t('Notes');
+  t('Participants');
+  t('Phone');
+  t('Registration');
+  t('Website');
+
+  t('Admission');
+  t('Date');
+  t('Event');
   t('Event Type');
   t('Notes');
   t('Number of Attendees');
   t('Participants');
-  t('Phone');
-  t('Registration');
   t('Role');
   t('Status');
   t('The order associated with this event registration if the event type was paid');
   t('The registration role for the given user');
   t('The status of this registration');
-  t('Website');
-
+  
   return $fields;
 }

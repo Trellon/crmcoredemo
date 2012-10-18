@@ -76,6 +76,13 @@ function crm_core_event_registration_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'crm_core_event_registration_profile';
+  $strongarm->value = 'event_registration';
+  $export['crm_core_event_registration_profile'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'crm_core_event_registration_redirect_message';
   $strongarm->value = 'Thank you for register for the event. You will be notified shortly.';
   $export['crm_core_event_registration_redirect_message'] = $strongarm;
