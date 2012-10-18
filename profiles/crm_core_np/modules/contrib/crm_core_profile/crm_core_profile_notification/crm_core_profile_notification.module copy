@@ -33,8 +33,9 @@ function crm_core_profile_notification_mail($key, &$message, $params) {
 
 /**
  * Implements hook_crm_core_profile_save
+ * Deprecated
  */
-function crm_core_profile_notification_crm_core_profile_save($profile, $form_state_values) {
+/*function crm_core_profile_notification_crm_core_profile_save($profile, $form_state_values) {
   // we will trigger an email in this hook as well as prepare the tokens
   // load the notification settings for this profile
   $notification_settings = crm_core_profile_notification_load($profile['name']);
@@ -85,7 +86,7 @@ function crm_core_profile_notification_crm_core_profile_save($profile, $form_sta
     
     drupal_mail('crm_core_profile_notification', 'crm_core_profile_notification', $to, LANGUAGE_NONE, $params, variable_get('site_mail', NULL), TRUE);      
        
-}
+}*/
 
 /*
  * Implementation of hook_form_FORM_ID_alter
@@ -96,6 +97,80 @@ function crm_core_profile_notification_form_crm_core_profile_entry_form_alter(&$
 //  unset($form['#submit']);
 //  $form['#submit'] = $submit_handlers;
 //  $form['#submit'][] = 'crm_core_profile_notification_rules_submit';
+    $form['#validate'][] = 'crm_core_profile_notification_validate';
+    $form['#submit'][] = 'crm_core_profile_notification_submit';
+}
+
+function crm_core_profile_notification_validate($form, &$form_state) {
+  // form_set_error('aaa', 'bbb');  
+}
+
+function crm_core_profile_notification_submit($form, &$form_state) {
+  
+  $profile = $form_state['profile'];
+
+  $notification_settings = crm_core_profile_notification_load($profile['name']);
+  if ($notification_settings['status'] == 0) {
+    return;  
+  }
+
+  // tokenize data
+  $fields = unserialize($profile['fields']);
+  $data = array();
+  
+  // @feature: only fields available for tokenize are fields that are visible on the form, this means we can 
+  // only notify information submitted from the form
+  
+  // preparing contact fields to be tokenized
+  $contact = $form_state['saved_contact_id'];
+  foreach($fields['toggle'] as $field_name => $toggle) {
+    if ($toggle !== 0) {    
+      if (array_key_exists($field_name, $form_state['values'])) {
+        if (!empty($form_state['values'][$field_name][LANGUAGE_NONE])) {
+           $field_display = field_view_value('crm_core_contact', $contact, $field_name, $contact->{$field_name}[LANGUAGE_NONE][0]);
+           $field_display = strip_tags(render($field_display));
+
+           $data[$profile['bundle_type']][$field_name] = $field_display;
+        }
+      }
+//      if (array_key_exists($field_name, $form_state_values)) {
+//        if (!empty($form_state_values[$field_name][LANGUAGE_NONE]))
+//        $data[$profile['bundle_type']][$field_name] = implode(' ', $form_state_values[$field_name][LANGUAGE_NONE][0]);
+//      }
+    }  
+  }
+  
+  // preparing activity fields to be tokenized
+  if (module_exists('crm_core_profile_activity')) {
+    $activity = $form_state['crm_core_activity'];
+    $crm_core_profile_activity = crm_core_profile_activity_load($profile['name']);
+    if (!empty($crm_core_profile_activity)) {
+      $activity_fields = unserialize($crm_core_profile_activity['fields']);
+      foreach($activity_fields['toggle'] as $field_name => $toggle) {
+        if ($toggle !== 0) {
+          if (array_key_exists($field_name, $form_state['values']['activity'])) {
+            if (!empty($form_state['values']['activity'][$field_name][LANGUAGE_NONE])) {
+               $field_display = field_view_value('crm_core_activity', $activity, $field_name, $activity->{$field_name}[LANGUAGE_NONE][0]);
+               $field_display = strip_tags(render($field_display));
+                            
+               $data[$crm_core_profile_activity['bundle_type']][$field_name] = $field_display;
+            }  
+          }  
+        }  
+      }   
+    }   
+  }
+
+    $to = token_replace($notification_settings['recipient'], $data);
+    if (isset($notification_settings['bcc'])) {
+      $params['bcc'] = token_replace($notification_settings['bcc'], $data);
+    }
+    $params['subject'] = token_replace($notification_settings['subject'], $data);
+    $params['body'] = token_replace($notification_settings['body'], $data);
+    
+    drupal_mail('crm_core_profile_notification', 'crm_core_profile_notification', $to, LANGUAGE_NONE, $params, variable_get('site_mail', NULL), TRUE);  
+  
+      
 }
 
 /*
@@ -105,7 +180,7 @@ function crm_core_profile_notification_form_crm_core_profile_entry_form_alter(&$
  */
 function crm_core_profile_notification_rules_submit($form, &$form_state) {
  $crm_core_profile = $form_state['profile'];
- $crm_core_contact = $form_state['contact'];
+ $crm_core_contact = crm_core_contact_load($form_state['saved_contact_id']);
  if (module_exists('crm_core_profile_activity')) {
    $crm_core_profile_activity = crm_core_profile_activity_load($crm_core_profile['name']);
    if (!empty($crm_core_profile_activity)) {

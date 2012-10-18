@@ -9,7 +9,6 @@
  * 
  */
 function crm_core_profile_entry_form($form, &$form_state, $profile) {
-
   drupal_set_title($profile['label']);
 
   $form_state['profile'] = $profile;
@@ -25,63 +24,74 @@ function crm_core_profile_entry_form($form, &$form_state, $profile) {
   
   // we have to use the list of fields from the contact bundle rather than from the profile settings because new field(s)
   // may be added to the contact bundle
-   $profile_fields = unserialize($profile['fields']);
-   $profile_fields_visibility = $profile_fields['toggle'];  
-   $contact_fields = field_info_instances('crm_core_contact',$profile['bundle_type']);
-   $contact_fields = array_keys($contact_fields);
-   foreach ($contact_fields as $field_name) {
-     if (!array_key_exists($field_name, $profile_fields_visibility)) {
-        $profile_fields_visibility[$field_name] = 0; 
-      }  
-   }
-   
-  // handle anonymous users
-  if ($user->uid === 0) {
-     $contact = new stdClass();
-     $contact->type = $profile['bundle_type'];
-     $contact->uid = 1;       
+  $profile_fields = unserialize($profile['fields']);
+  $profile_fields_visibility = $profile_fields['toggle'];
+  $contact_fields = field_info_instances('crm_core_contact',$profile['bundle_type']);
+  $contact_fields = array_keys($contact_fields);
+  foreach ($contact_fields as $field_name) {
+    if (!array_key_exists($field_name, $profile_fields_visibility)) {
+      $profile_fields_visibility[$field_name] = 0;
+    }
   }
-  else {
-    if (module_exists('crm_user_sync')) {
-      $related_contact = _crm_user_sync_get_related_entity('user', $user->uid, 'crm_user_sync'); 
-      if (!empty($related_contact)) {
-        $contact = $related_contact;  
+  $actions = crm_core_profile_get_create_contact_actions($profile);
+  $contact = null;
+  foreach ($actions as $action => $value) {
+    switch ($action) {
+      case 'new':
+        $contact = new stdClass();
+        $contact->type = $profile['bundle_type'];
+        $contact->uid = 1;
+        $contact->bundle = $profile['bundle_type'];
+        break;
+      case 'existing':
+        if (module_exists('crm_user_sync')) {
+          $contact = _crm_user_sync_get_related_entity('user', $user->uid, 'crm_user_sync');
+        }
+        break;
+      case 'url':
+        if (!empty($_GET['contact_id'])) {
+          $contact = crm_core_contact_load($_GET['contact_id']);
+        }
+        break;
+      case 'duplicate':
+        // @todo: find duplicate
+        break;
+    }
+
+    if (!empty($contact)) {
+      if ($contact->type == $profile['bundle_type']) {
+        break;
       }
       else {
-      // @todo: user is logged in but does not have an associated contact record (crm_user_sync is enabled)
-      $contact = crm_user_sync_sync($user);
-      } 
+        $contact = FALSE;
+        continue;
+      }
     }
-    else {
-      $contact = new stdClass();
-      $contact->type = $profile['bundle_type'];
-      $contact->uid = 1;       
+  }
+
+  $form_state['contact'] = $contact;
+  field_attach_form('crm_core_contact', $contact, $form, $form_state);
+  foreach ($profile_fields_visibility as $field_name => $visibility) {
+    if ($visibility === 0) {
+      $form[$field_name]['#access'] = FALSE;
+    }
+  }
+
+  // getting the weight of each element from settings
+  // bug: submit button floats above the rest of the form elements
+  if (array_key_exists('weight', $profile_fields)) {
+    foreach ($profile_fields['weight'] as $field_name => $value) {
+      $form[$field_name]['#weight'] = $value['weight'];
     }  
   }
-  
-  $form_state['contact'] = $contact;    
-   field_attach_form('crm_core_contact', $contact, $form, $form_state); 
-   foreach ($profile_fields_visibility as $field_name => $visibility) {
-     if ($visibility === 0) {
-       $form[$field_name]['#access'] = FALSE; 
-     }
-   }
 
-    // getting the weight of each element from settings
-    // bug: submit button floats above the rest of the form elements
-   if (array_key_exists('weight', $profile_fields)) {
-     foreach ($profile_fields['weight'] as $field_name => $value) {
-       $form[$field_name]['#weight'] = $value['weight'];  
-     }  
-   }
-      
-   $form['submit'] = array(
-     '#type' => 'submit',
-     '#value' => t('Submit'),
-     '#weight' => 99,
-   );
-        
-   return $form;
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+    '#weight' => 99,
+  );
+  
+  return $form;
 }
 
 /**
@@ -90,11 +100,15 @@ function crm_core_profile_entry_form($form, &$form_state, $profile) {
 function theme_crm_core_profile_entry_form($variables) {
   $form = $variables['form'];
   
-   $profile = crm_core_profile_load($form['profile_name']['#value']);
-   $fields = unserialize($profile['fields']);
+  $profile = crm_core_profile_load($form['profile_name']['#value']);
+  $fields = unserialize($profile['fields']);
   $render_fields = array();
+  if (!isset($fields['weight']) || !array_key_exists('weight', $fields)) {
+    return;  
+  }
+  
   foreach($fields['weight'] as $field => $weight) {
-      $render_fields[$weight['weight']['weight']] = $field;  
+    $render_fields[$weight['weight']['weight']] = $field;
   } 
 
   // call others to add fields to the render fields array in weighted order before we sort the whole render
@@ -125,9 +139,8 @@ function theme_crm_core_profile_entry_form($variables) {
  */
 function crm_core_profile_entry_form_validate($form, &$form_state) {
   // additional validition can be handled here
-   $contact = $form_state['contact'];
-   field_attach_form_validate('crm_core_contact', $contact, $form, $form_state);
-
+  $contact = $form_state['contact'];
+  field_attach_form_validate('crm_core_contact', $contact, $form, $form_state);
 }
 
 /*
@@ -145,12 +158,25 @@ function crm_core_profile_entry_form_submit($form, &$form_state) {
   field_attach_submit('crm_core_contact', $contact, $form, $form_state);
   $saved_contact = crm_core_contact_save($contact);
   
-  // add this to the form_state values
-  $form_state['saved_contact_id'] = $saved_contact;
-  
   // fire another hook that carries the saved contact (contact_id) information, this can be used
   // by other modules to create activity or relationships   
   module_invoke_all('crm_core_profile_save_contact', $form_state['profile']['name'], $saved_contact);
+
+  if (module_exists('crm_user_sync')) {
+    $related_user = _crm_user_sync_get_related_entity('crm_core_contact', $contact->contact_id, 'crm_user_sync');
+    if (empty($related_user)) {
+      switch ($form_state['profile']['user_sync']) {
+        case 'current':
+          global $user;
+          $sync_contact = crm_user_sync_sync($user, $contact);
+          break;
+        case 'url':
+          $user = user_load($_GET['uid']);
+          $sync_contact = crm_user_sync_sync($user, $contact);
+          break;
+      }
+    }
+  }
 
   // rules integration  
   // This should be set from the form
@@ -159,7 +185,6 @@ function crm_core_profile_entry_form_submit($form, &$form_state) {
   if(!empty($form_state['profile']['message'])) {
     drupal_set_message(check_plain($form_state['profile']['message']));
   }
-  
 }
 
 /**
@@ -170,7 +195,6 @@ function crm_core_profile_entry_form_submit($form, &$form_state) {
  * If we are editing an existing form, it is the machine name 
  */
 function crm_core_profile_new_form($form, &$form_state, $profile) {
-  
   global $user;
   
   $form['is_new'] = array(
@@ -187,6 +211,10 @@ function crm_core_profile_new_form($form, &$form_state, $profile) {
     );  
   }
   else {
+    // profile is coming from ctools object, convert to array
+    if (is_object($profile)) {
+      $profile = (array) $profile;  
+    }
     drupal_set_title(t('Profile settings for @profile', array('@profile' => $profile['label'])));
     $form_state['profile'] = $profile;  
   }
@@ -201,12 +229,12 @@ function crm_core_profile_new_form($form, &$form_state, $profile) {
   );
 
   $field_options = array();
-  if (!empty($profile)) {
+  if (!empty($profile) && !isset($form_state['values']['bundle_type'])) {
     $form_state['values']['bundle_type'] = $profile['bundle_type'];  
   }
   
   if (!empty($form_state['values']['bundle_type'])) { 
-     foreach(field_info_instances('crm_core_contact', $form_state['values']['bundle_type']) as $field_name => $field) {
+    foreach(field_info_instances('crm_core_contact', $form_state['values']['bundle_type']) as $field_name => $field) {
       $field_options[$field_name] = $field['label'];
     }  
   }
@@ -234,15 +262,18 @@ function crm_core_profile_new_form($form, &$form_state, $profile) {
     '#options' => $options,
     // depends on the contact bundle chose, different fields will appear
     '#ajax' => array(
-      'callback' => 'crm_core_profile_new_form_ajax_callback',
-      'wrapper' => 'crm_core_profile_bundle_fields',
+      'callback' => 'crm_core_profile_new_form_bundle_type_ajax_callback',
      ),
      '#default_value' => (!empty($profile)) ? $profile['bundle_type'] : '',
   );
- 
+
   $fields_default = array();
   if (!empty($profile)) {
-    $fields_default = unserialize($profile['fields']);  
+    if (!is_array($profile['fields'])) {
+      $fields_default = unserialize($profile['fields']);  
+    } else {
+      $fields_default = $profile['fields'];
+    }
   }
 
   $form['fields'] = array(
@@ -259,6 +290,39 @@ function crm_core_profile_new_form($form, &$form_state, $profile) {
     '#suffix' => '</div>',
     '#default_value' => (!empty($fields_default['toggle'])) ? $fields_default['toggle'] : array(),
   );
+
+  $form['#tree'] = TRUE;
+
+  $create_contact_actions = crm_core_profile_get_create_contact_actions($profile);
+  $form['create_contact_actions'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Load contact sequence',
+    '#description' => 'Listed actions will be performed to get proper contact object.'
+  );
+  foreach ($create_contact_actions as $id => $action) {
+    $form['create_contact_actions'][$id]['label'] = array('#markup' => $action['label']);
+    $form['create_contact_actions'][$id]['weight'] = array(
+      '#type' => 'weight',
+      '#title' => t('Weight for @title', array('@title' => $action['label'])),
+      '#title_display' => 'invisible',
+      '#default_value' => $action['weight'],
+    );
+  }
+
+  if (module_exists('crm_user_sync')) {
+    $user_sync_options = array(
+      '' => t('Not provided'),
+      'current' => t('Logged in user'),
+      'url' => t('User from URL parameter (uid)')
+    );
+    $form['user_sync'] = array(
+      '#type' => 'select',
+      '#title' => t('User account to synchronize with'),
+      '#options' => $user_sync_options,
+      '#default_value' => (!empty($profile)) ? $profile['user_sync'] : '',
+      '#description' => t('This option will work only if provided user is not synchronized yet.')
+    );
+  }
 
   // if path module is enabled, user can also specify the path alias for this form
   // @todo
@@ -302,18 +366,40 @@ function crm_core_profile_new_form($form, &$form_state, $profile) {
     '#value' => (!empty($profile)) ? t('Save') : t('Create'),
     '#weight' => 999,
   );
-  
+
+   $form['#validate'][] = 'crm_core_profile_new_form_validate';
+   $form['#submit'][] = 'crm_core_profile_new_form_submit';
+ 
+  // add our own hook so that other modules cna add on to the configuration form
+  drupal_alter('crm_core_profile_new', $form, $form_state);
+
   return $form;
 }
 
 /**
  * Ajax callback
  */
-function crm_core_profile_new_form_ajax_callback($form, $form_state) {
-  return $form['fields'];
+function crm_core_profile_new_form_bundle_type_ajax_callback($form, $form_state) {
+
+  // run commands because the behaviour of bundle_type element may affect of many parts of the form
+  $commands = array();
+
+  // update the list of the fields
+  $commands[] = ajax_command_replace(
+    "#crm_core_profile_bundle_fields",
+    drupal_render($form['fields'])
+  );
+
+  // invoke other modules who wish to change the form on the element update
+  $modules_commands = module_invoke_all('crm_core_profile_new_form_bundle_type_ajax_callback', $form, $form_state);
+  foreach($modules_commands as $module_command) {
+    $commands[] = $module_command;
+  }
+
+  return array('#type' => 'ajax', '#commands' => $commands);
 }
 
-function crm_core_profile_new_form_machine_name_check($value) {}
+// function crm_core_profile_new_form_machine_name_check($value) {}
 
 /**
  * Validation callback
@@ -351,20 +437,23 @@ function crm_core_profile_new_form_validate($form, &$form_state) {
       form_set_error('label', 'A profile with the machine name already exists, please enter another name');
     }
   }
-  
 }
 
 /*
  * Submission callback
  */
 function crm_core_profile_new_form_submit($form, &$form_state) {
-  
   $record = $form_state['values'];
   unset($record['submit'], $record['form_build_id'], $record['form_token'], $record['form_id'], $record['op']);
   $record['redirect'] = ltrim($record['redirect'], '\/\\');
   
   if (isset($form_state['profile'])) {
-    $fields = unserialize($form_state['profile']['fields']);
+    if (!is_array($form_state['profile']['fields'])) {
+      $fields = unserialize($form_state['profile']['fields']);
+    } else {
+      $fields = $form_state['profile']['fields'];  
+    }
+    
     $record['fields']['weight'] = (isset($fields['weight'])) ? $fields['weight'] : array();
   }
   
@@ -382,19 +471,40 @@ function crm_core_profile_new_form_submit($form, &$form_state) {
     } 
     path_save($path);  
   }
-  
+
   crm_core_profile_save($record);
   
   $form_state['redirect'] = 'admin/structure/crm/profile';
   drupal_set_message('Your profile has been successfully saved');
-    
+}
+
+function theme_crm_core_profile_new_form($variables) {
+  $form = $variables['form'];
+
+  $rows = array();
+  foreach (element_children($form['create_contact_actions']) as $id) {
+    $form['create_contact_actions'][$id]['weight']['#attributes']['class'] = array('text-format-order-weight');
+    $rows[] = array(
+      'data' => array(
+        drupal_render($form['create_contact_actions'][$id]['label']),
+        drupal_render($form['create_contact_actions'][$id]['weight']),
+      ),
+      'class' => array('draggable'),
+    );
+  }
+  $header = array(t('Action'), t('Weight'));
+  $form['create_contact_actions']['content']['#markup'] = theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('id' => 'text-format-order')));
+  $output = drupal_render_children($form);
+
+  drupal_add_tabledrag('text-format-order', 'order', 'sibling', 'text-format-order-weight');
+
+  return $output;
 }
 
 /**
  * Presents the form for profile deletion
  */
 function crm_core_profile_delete_form($form, &$form_state, $crm_core_profile) {
-  
   $form['name'] = array(
     '#type' => 'value',
     '#value' => $crm_core_profile['name'],
@@ -421,7 +531,6 @@ function crm_core_profile_delete_form_submit($form, &$form_state) {
  * Create a sorting table for saving the weight of each crm_core_profile fields
  */
 function crm_core_profile_weight_form($form, &$form_state, $crm_core_profile) {
-  
   $form['#tree'] = TRUE;
   
   $form_state['profile'] = $crm_core_profile;
@@ -438,32 +547,31 @@ function crm_core_profile_weight_form($form, &$form_state, $crm_core_profile) {
   
   $fields_toggle = array();
   // sort the toggles if weight has been assigned
-   foreach($fields['weight'] as $field_name => $value) {
-     $fields_toggle[$field_name] = $fields['toggle'][$field_name];
-   }
+  foreach($fields['weight'] as $field_name => $value) {
+    $fields_toggle[$field_name] = $fields['toggle'][$field_name];
+  }
   $fields_toggle = (!empty($fields_toggle)) ? $fields_toggle : $fields['toggle'];
   
   foreach($fields_toggle as $field_name => $value) {
-      if ($value !== 0) {
-        $field = field_info_instance('crm_core_contact', $field_name, $crm_core_profile['bundle_type']);
-        $form['weight'][$field_name]['label'] = array('#markup' => check_plain($field['label']));
-        $form['weight'][$field_name]['weight'] = array(
-         '#type' => 'weight',
-         '#title' => t('Weight for @title', array('@title' => $field['label'])),
-         '#title_display' => 'invisible',
-         '#default_value' => (array_key_exists($field_name, $fields['weight'])) ?  $fields['weight'][$field_name]['weight'] : -10,
-    );
+    if ($value !== 0) {
+      $field = field_info_instance('crm_core_contact', $field_name, $crm_core_profile['bundle_type']);
+      $form['weight'][$field_name]['label'] = array('#markup' => check_plain($field['label']));
+      $form['weight'][$field_name]['weight'] = array(
+        '#type' => 'weight',
+        '#title' => t('Weight for @title', array('@title' => $field['label'])),
+        '#title_display' => 'invisible',
+        '#default_value' => (array_key_exists($field_name, $fields['weight'])) ?  $fields['weight'][$field_name]['weight'] : -10,
+      );
     }
   }
-    
- $form['actions'] = array('#type' => 'actions');
+
+  $form['actions'] = array('#type' => 'actions');
   $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Save changes'));
   
   return $form;  
 }
 
 function crm_core_profile_weight_form_validate($form, &$form_state) {
-
  // form_set_error('aaa', 'bbb');
 }
 
@@ -474,21 +582,21 @@ function crm_core_profile_weight_form_validate($form, &$form_state) {
 function crm_core_profile_weight_form_submit($form, &$form_state) {
   $form_state['profile']['fields'] = unserialize($form_state['profile']['fields']);
 
-   foreach ($form_state['values']['weight'] as $field => $weight) {
-     if (array_key_exists($field, $form_state['profile']['fields']['toggle'])) {
-       if($form_state['profile']['fields']['toggle'][$field] !== 0) {
-         $sort_keys[$field] = $weight;
-       }  
-     }   
-   }
+  foreach ($form_state['values']['weight'] as $field => $weight) {
+    if (array_key_exists($field, $form_state['profile']['fields']['toggle'])) {
+      if($form_state['profile']['fields']['toggle'][$field] !== 0) {
+        $sort_keys[$field] = $weight;
+      }
+    } 
+  }
 
-   asort($sort_keys);
-   // unset($form_state['values']['weight']); 
-   foreach($sort_keys as $field_name => $weight) {
-     $weights[$field_name]['weight'] = $weight;   
-   }
-   
-   $form_state['profile']['fields']['weight'] = $weights; 
+  asort($sort_keys);
+  // unset($form_state['values']['weight']);
+  foreach($sort_keys as $field_name => $weight) {
+    $weights[$field_name]['weight'] = $weight;
+  }
+
+  $form_state['profile']['fields']['weight'] = $weights;
 
   crm_core_profile_save($form_state['profile']);
   
@@ -523,5 +631,49 @@ function theme_crm_core_profile_weight_form($variables) {
   drupal_add_tabledrag('crm-profile-field-order', 'order', 'sibling', 'crm-profile-field-order-weight');
   
   return $output;
+}
+
+/**
+ * Get load contact sequence.
+ */
+function crm_core_profile_get_create_contact_actions($profile) {
   
+  $actions = array();
+    
+  if (array_key_exists('create_contact_actions', $profile)) {
+    $p_actions = $profile['create_contact_actions'];  
+  }
+  $p_actions = null;
+  
+  $actions['url'] = array(
+    'weight' => isset($p_actions['url']) ? $p_actions['url']['weight'] : 10,
+    'label' => t('Load contact from URL parameter (contact_id)'),
+  );
+
+  if (module_exists('crm_user_sync')) {
+    $actions['existing'] = array(
+      'weight' => isset($p_actions['existing']) ? $p_actions['existing']['weight'] : 10,
+      'label' => t('Load contact associated with logged in user'),
+    );
+  }
+
+  $actions['duplicate'] = array(
+    'weight' => isset($p_actions['duplicate']) ? $p_actions['duplicate']['weight'] : 10,
+    'label' => t('Find duplicate contact (TODO)'),
+  );
+
+  $actions['new'] = array(
+    'weight' => isset($p_actions['new']) ? $p_actions['new']['weight'] : 10,
+    'label' => t('Create new contact'),
+  );
+
+  function weight_cmp($a, $b) {
+    if ($a['weight'] == $b['weight']) {
+      return 0;
+    }
+    return ($a['weight'] < $b['weight']) ? -1 : 1;
+  }
+  uasort($actions, 'weight_cmp');
+
+  return $actions;
 }

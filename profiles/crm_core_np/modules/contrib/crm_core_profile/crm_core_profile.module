@@ -17,6 +17,7 @@ function crm_core_profile_menu() {
   );
 
   // create or edit a profile
+  // @todo: delete menu item entry when ctools integration is complete
   $items['admin/structure/crm/profile/new'] = array(
     'title' => t('Add new profile form'),
     'page callback' => 'drupal_get_form',
@@ -26,6 +27,7 @@ function crm_core_profile_menu() {
     'type' => MENU_CALLBACK,
   );
   
+  // @todo: delete menu item entry when ctools integration is complete
   $items['admin/structure/crm/profile/%crm_core_profile'] = array(
     'title' => t('Edit Profile Form'),
     'page callback' => 'drupal_get_form',
@@ -35,6 +37,7 @@ function crm_core_profile_menu() {
     'type' => MENU_CALLBACK,
   );
   
+  // @todo: delete menu item entry when ctools integration is complete
   $items['admin/structure/crm/profile/%crm_core_profile/edit'] = array(
     'title' => t('Edit Profile Form'),
     'page callback' => 'drupal_get_form',
@@ -44,6 +47,7 @@ function crm_core_profile_menu() {
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   
+  // @todo: delete menu item entry when ctools integration is complete
   $items['admin/structure/crm/profile/%crm_core_profile/display'] = array(
     'title' => t('Fields display'),
     'page callback' => 'drupal_get_form',
@@ -53,6 +57,16 @@ function crm_core_profile_menu() {
     'type' => MENU_LOCAL_TASK,
   );
   
+  $items['admin/structure/crm/crm_core_profile/list/%crm_core_profile/display'] = array(
+    'title' => t('Fields display'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('crm_core_profile_weight_form', 5),
+    'access arguments' => array('create new crm core profile forms'),
+    'file' => 'crm_core_profile.forms.inc',
+    'type' => MENU_LOCAL_TASK,
+  );
+  
+  // @todo: delete menu item entry when ctools integration is complete
   $items['admin/structure/crm/profile/%crm_core_profile/delete'] = array(
     'title' => t('Delete Profile'),
     'page callback' => 'drupal_get_form',
@@ -98,6 +112,10 @@ function crm_core_profile_theme() {
       'render element' => 'form',
       'file' => 'crm_core_profile.forms.inc',
     ),
+    'crm_core_profile_new_form' => array(
+      'render element' => 'form',
+      'file' => 'crm_core_profile.forms.inc',
+    )
   );
 }
 
@@ -111,6 +129,107 @@ function crm_core_profile_views_api() {
     'path' => drupal_get_path('module', 'crm_core_profile') . '/includes/views',
   );
 }
+
+/**
+ * Implements of hook_ctools_plugin_api().
+ * Making crm_core_profile ctools exportable
+ */
+function crm_core_profile_ctools_plugin_api($owner,$api) {
+  if ($owner == 'crm_core_profile' && $api == 'default_crm_core_profile_presets') {
+    return array('version' => 1);
+  }  
+}
+
+/**
+ * Implements hook_schema_alter
+ */
+function crm_core_profile_schema_alter(&$schema) {
+  // altering the schema to add join to the table to allow crm core activity and additional data to be joined into the ctools exportable.
+  if (module_exists('crm_core_profile_activity')) {
+    $schema['crm_core_profile']['join'] = array(
+      'exportables' => array(
+        'table' => 'crm_core_profile_activity',
+        'left_key' => 'name',
+        'right_key' => 'activity_name',
+        // 'callback' => 'crm_core_profile_preset_query',
+        'load' => array(
+          'activity_bundle_type',
+          'activity_fields',
+          'activity_status',
+          'activity_created',
+        ),
+//         And finally you can define other tables to perform INNER JOINS
+//        'other_joins' => array(
+//           'table' => ...
+//        ),
+      ),
+    );
+    $schema['crm_core_profile']['join']['exportables']['fields'] = $schema['crm_core_profile_activity']['fields'];
+    unset($schema['crm_core_profile']['join']['exportables']['fields']['activity_name']);
+  }
+}
+
+/**
+ * Overriding the ctools_crud_load
+ */
+function crm_core_profile_presets_load($name) {
+  // Use CTools export API to fetch this preset.
+  $result = ctools_export_load_object('crm_core_profile', 'names', array($name));  
+  
+  if (!array_key_exists($name, $result)) {
+    return;
+  }
+  
+  foreach ($result[$name] as $key => $value) {
+    $prefix = substr($key, 0, strpos($key, '_'));
+    if ($prefix == 'activity') {
+      $result[$name]->activity[$key] = $result[$name]->{$key};
+      // unset($result[$name]->{$key});  
+    }  
+  }
+    
+  return $result[$name];    
+}
+
+/**
+ * Overriding the ctools_crud_save
+ */
+function crm_core_profile_presets_save($object) {
+  // do nothing??
+  return TRUE;
+}
+
+/**
+ * Implements hook_default_crm_core_profile_preset
+ * (Provide an example crm core profile form)
+ */
+function crm_core_profile_default_crm_core_profile_presets() {
+  $export = array();
+
+  $preset = new stdClass();
+  $preset->api_version = 1;
+  $preset->name = 'crm_core_profile_test';
+  $preset->label = 'Sample CRM Core Profile';
+  $preset->block = 0;
+  $preset->message = 'Thank you for submitting the form';
+  $preset->status = 1;
+  $preset->uid = 1;  
+  
+  $export['crm_core_profile_test'] = $preset;
+
+  return $export;
+}
+
+/**
+ * Implements of hook_ctools_plugin_directory.
+ */
+function crm_core_profile_ctools_plugin_directory($module, $type) {
+  // Load the export_ui plugin.
+  if ($type =='export_ui') {
+    return 'plugins/export_ui';
+  }
+}
+
 
 /**
  * hook_block_info
@@ -129,15 +248,15 @@ function crm_core_profile_block_info() {
       'value' => 1,
     ),
   );
+
   $profiles = crm_core_profile_load_all($conditions);
   foreach($profiles as $profile) {
-     
-     // block delta is limited to 32 characters
-     $delta = 'ccp_' . $profile['name'];
-     $blocks[$delta] = array(
-       'info' => t('CRM Core Profile: @profile', array('@profile' => $profile['label'])),
-       'cache' => DRUPAL_NO_CACHE, 
-     ); 
+    // block delta is limited to 32 characters
+    $delta = 'ccp_' . $profile['name'];
+    $blocks[$delta] = array(
+      'info' => t('CRM Core Profile: @profile', array('@profile' => $profile['label'])),
+      'cache' => DRUPAL_NO_CACHE,
+    ); 
   }   
   return $blocks;
 }
@@ -146,7 +265,6 @@ function crm_core_profile_block_info() {
  * hook_block_view
  */
 function crm_core_profile_block_view($delta) {
-  
   // extract the profile machine name from the block delta
   // theming is still needed
   $name = substr($delta, 4);
@@ -172,6 +290,7 @@ function crm_core_profile_main() {
  */
 function crm_core_profile_save($record) {
   $crm_core_profile = crm_core_profile_load($record['name']);
+  $record['create_contact_actions'] = serialize($record['create_contact_actions']);
   if (!empty($crm_core_profile)) {
     drupal_write_record('crm_core_profile', $record, 'name');  
   } 
@@ -184,11 +303,10 @@ function crm_core_profile_save($record) {
  * Loads a profile form entry
  */
 function crm_core_profile_load($machine_name) {
-  
   $data = array();
   $query = db_select('crm_core_profile', 'p')
-  ->fields('p')
-  ->condition('name', $machine_name);
+    ->fields('p')
+    ->condition('name', $machine_name);
 
   $result = $query->execute();
   $data = $result->fetchAssoc();
@@ -202,7 +320,7 @@ function crm_core_profile_load($machine_name) {
 function crm_core_profile_load_all($conditions = array()) {
   $data = array();
   $query = db_select('crm_core_profile', 'p')
-  ->fields('p');
+    ->fields('p');
   
   if (!empty($conditions)) {
     foreach($conditions as $condition) {
@@ -212,6 +330,7 @@ function crm_core_profile_load_all($conditions = array()) {
       $query->condition($condition['field'], $condition['value'], $condition['operator']);
     }  
   }
+
   $result = $query->execute();
   while($record = $result->fetchAssoc()) {
     $data[] = $record;  
@@ -224,12 +343,198 @@ function crm_core_profile_load_all($conditions = array()) {
  * Delete a profile form
  */
 function crm_core_profile_delete($machine_name) {
-  
   // letting other modules know that we are deleting the profile
   module_invoke_all('crm_core_profile_delete', $machine_name);
   
   db_delete('crm_core_profile')
-  ->condition('name', $machine_name)
-  ->execute();
+    ->condition('name', $machine_name)
+    ->execute();
+}
+
+function _crm_core_profile_presets_load($table, $type = 'all', $args = array()) {
+  $cache = &drupal_static(__FUNCTION__);
+  $cache_table_exists = &drupal_static(__FUNCTION__ . '_table_exists', array());
+  $cached_database = &drupal_static('ctools_export_load_object_all');
+
+  if (!array_key_exists($table, $cache_table_exists)) {
+    $cache_table_exists[$table] = db_table_exists($table);
+  }
+
+  $schema = ctools_export_get_schema($table);
+  if (empty($schema) || !$cache_table_exists[$table]) {
+    return array();
+  }
+
+  $export = $schema['export'];
+
+  if (!isset($cache[$table])) {
+    $cache[$table] = array();
+  }
+
+  // If fetching all and cached all, we've done so and we are finished.
+  if ($type == 'all' && !empty($cached_database[$table])) {
+    return $cache[$table];
+  }
+
+  $return = array();
+
+  // Don't load anything we've already cached.
+  if ($type == 'names' && !empty($args)) {
+    foreach ($args as $id => $name) {
+      if (isset($cache[$table][$name])) {
+        $return[$name] = $cache[$table][$name];
+        unset($args[$id]);
+      }
+    }
+
+    // If nothing left to load, return the result.
+    if (empty($args)) {
+      return $return;
+    }
+  }
+
+  // Build the query
+  $query = db_select($table, 't__0')->fields('t__0');
+  $alias_count = 1;
+  if (!empty($schema['join'])) {
+    foreach ($schema['join'] as $join_key => $join) {
+      if ($join_schema = drupal_get_schema($join['table'])) {
+        $query->join($join['table'], 't__' . $alias_count, 't__0.' . $join['left_key'] . ' = ' . 't__' . $alias_count . '.' . $join['right_key']);
+        
+       $combined_fields = array_keys($join_schema['fields']);
+       foreach ($combined_fields as $field) {
+         $query->addField('t__1', $field, 'activity_' . $field); 
+       }
+          
+        // $query->fields('t__' . $alias_count);
+        $alias_count++;
+
+        // Allow joining tables to alter the query through a callback.
+        if (isset($join['callback']) && function_exists($join['callback'])) {
+          $join['callback']($query, $schema, $join_schema);
+        }
+      }
+    }
+  }
   
+  $conditions = array();
+  $query_args = array();
+
+  // If they passed in names, add them to the query.
+  if ($type == 'names') {
+    $query->condition('t__0.' . $export['key'], $args, 'IN');
+  }
+  else if ($type == 'conditions') {
+    foreach ($args as $key => $value) {
+      if (isset($schema['fields'][$key])) {
+        $query->condition($key, $value);
+      }
+    }
+  }
+
+  $result = $query->execute();
+ 
+  $status = variable_get($export['status'], array());
+  // Unpack the results of the query onto objects and cache them.
+  foreach ($result as $data) {
+    if (isset($schema['export']['object factory']) && function_exists($schema['export']['object factory'])) {
+      $object = $schema['export']['object factory']($schema, $data);
+    }
+    else {
+      $object = _ctools_export_unpack_object($schema, $data, $export['object']);
+      dpm($object);
+    }
+    $object->table = $table;
+    $object->{$export['export type string']} = t('Normal');
+    $object->export_type = EXPORT_IN_DATABASE;
+    // Determine if default object is enabled or disabled.
+    if (isset($status[$object->{$export['key']}])) {
+      $object->disabled = $status[$object->{$export['key']}];
+    }
+
+    $cache[$table][$object->{$export['key']}] = $object;
+    if ($type == 'conditions') {
+      $return[$object->{$export['key']}] = $object;
+    }
+  }
+ 
+  // Load subrecords.
+  if (isset($export['subrecords callback']) && function_exists($export['subrecords callback'])) {
+    $export['subrecords callback']($cache[$table]);
+  }
+
+  if ($type == 'names' && !empty($args) && !empty($export['cache defaults'])) {
+    $defaults = _ctools_export_get_some_defaults($table, $export, $args);
+  }
+  else {
+    $defaults = _ctools_export_get_defaults($table, $export);
+  }
+
+  if ($defaults) {
+    foreach ($defaults as $object) {
+      if ($type == 'conditions') {
+        // if this does not match all of our conditions, skip it.
+        foreach ($args as $key => $value) {
+          if (!isset($object->$key)) {
+            continue 2;
+          }
+          if (is_array($value)) {
+            if (!in_array($object->$key, $value)) {
+              continue 2;
+            }
+          }
+          else if ($object->$key != $value) {
+            continue 2;
+          }
+        }
+      }
+      else if ($type == 'names') {
+        if (!in_array($object->{$export['key']}, $args)) {
+          continue;
+        }
+      }
+
+      // Determine if default object is enabled or disabled.
+      if (isset($status[$object->{$export['key']}])) {
+        $object->disabled = $status[$object->{$export['key']}];
+      }
+
+      if (!empty($cache[$table][$object->{$export['key']}])) {
+        $cache[$table][$object->{$export['key']}]->{$export['export type string']} = t('Overridden');
+        $cache[$table][$object->{$export['key']}]->export_type |= EXPORT_IN_CODE;
+        $cache[$table][$object->{$export['key']}]->export_module = isset($object->export_module) ? $object->export_module : NULL;
+        if ($type == 'conditions') {
+          $return[$object->{$export['key']}] = $cache[$table][$object->{$export['key']}];
+        }
+      }
+      else {
+        $object->{$export['export type string']} = t('Default');
+        $object->export_type = EXPORT_IN_CODE;
+        $object->in_code_only = TRUE;
+        $object->table = $table;
+
+        $cache[$table][$object->{$export['key']}] = $object;
+        if ($type == 'conditions') {
+          $return[$object->{$export['key']}] = $object;
+        }
+      }
+    }
+  }
+
+  // If fetching all, we've done so and we are finished.
+  if ($type == 'all') {
+    $cached_database[$table] = TRUE;
+    return $cache[$table];
+  }
+
+  if ($type == 'names') {
+    foreach ($args as $name) {
+      if (isset($cache[$table][$name])) {
+        $return[$name] = $cache[$table][$name];
+      }
+    }
+  }
+
+  // For conditions,
+  return $return;  
 }

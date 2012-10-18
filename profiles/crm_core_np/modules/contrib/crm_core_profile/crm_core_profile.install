@@ -6,6 +6,21 @@
 function crm_core_profile_schema() {
   $schema['crm_core_profile'] = array(
     'description' => 'Stores CRM Core Profile form information',
+    'export' => array(
+      'key' => 'name',
+      'key name' => 'Name',
+      'primary key' => 'name',
+      'identifier' => 'preset',
+      'default hook' => 'default_crm_core_profile_presets',
+      'load callback' => 'crm_core_profile_presets_load',
+      'save callback' => 'crm_core_profile_presets_save',
+      'api' => array(
+        'owner' => 'crm_core_profile',
+        'api' => 'default_crm_core_profile_presets',
+        'minimum_version' => 1,
+        'current_version' => 1,   
+      ),  
+    ),
     'fields' => array(
       'name' => array(
         'description' => 'The machine name of the profile form',
@@ -31,7 +46,7 @@ function crm_core_profile_schema() {
         'size' => 'big',
         'serialize' => TRUE,
         'description' => 'A serialized array of the fields that will be used on the form',
-    ),
+      ),
       'block' => array(
         'description' => 'If a block should be generated from this profile form',
         'type' => 'int',
@@ -76,9 +91,58 @@ function crm_core_profile_schema() {
         'not null' => FALSE,
         'default' => 0,
       ),
-  ),
+      'create_contact_actions' => array(
+        'description' => 'Load contact sequence',
+        'type' => 'blob',
+        'size' => 'big',
+        'serialize' => TRUE,
+        'not null' => FALSE,
+      ),
+      'user_sync' => array(
+        'description' => 'User synchronization settings',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'default' => '',
+      ),
+    ),
     'primary key' => array('name'),
   );
 
   return $schema;
+}
+
+/**
+ * Add load contact sequence field.
+ *
+ * Implements hook_update_N().
+ */
+function crm_core_profile_update_7001(&$sandbox) {
+  db_add_field('crm_core_profile', 'create_contact_actions', array(
+    'description' => 'Load contact sequence',
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => FALSE,
+    'default' => '',
+  ));
+
+  db_add_field('crm_core_profile', 'user_sync', array(
+    'description' => 'User synchronization settings',
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => FALSE,
+    'default' => '',
+  ));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * @todo: change create_contact_actions to a blog field for storage and serialization
+ */
+function crm_core_profile_update_7002(&$sandbox) {
+  // alter the DB field to blob
+  db_change_field('crm_core_profile', 'create_contact_actions', 'create_contact_actions',
+    array('type' => 'blob', 'size' => 'big', 'serialize' => TRUE, 'not null' => TRUE)
+  );
 }

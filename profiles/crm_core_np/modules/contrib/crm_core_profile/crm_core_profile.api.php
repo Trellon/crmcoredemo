@@ -78,3 +78,17 @@ function hook_crm_core_profile_delete($machine_name) {
     ->condition('name', $machine_name)
     ->execute();  
 }
+
+/**
+ * Update administrative form with ajax on contact bundle type element update
+ *
+ * @return ajax_commands array.
+ */
+function hook_crm_core_profile_new_form_bundle_type_ajax_callback() {
+  $html = drupal_render($form['relation']['bundle_type']);
+  $commands[] = ajax_command_replace(
+    '#crm-core-profile-relation-bundle-type',
+    $html
+  );
+  return $commands;
+}

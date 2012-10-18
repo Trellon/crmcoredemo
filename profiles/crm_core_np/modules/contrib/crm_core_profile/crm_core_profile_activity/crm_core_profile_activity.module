@@ -3,19 +3,18 @@
 /**
  * Implements hook_form_FORM_ID_alter
  */
-function crm_core_activity_form_crm_core_profile_entry_form_alter(&$form, &$form_state, $form_id) {
-  
+function crm_core_activity_form_crm_core_profile_entry_form_alter(&$form, &$form_state, $form_id) {  
   // here we plugin the activity field information
   $profile = $form_state['profile'];
-  
+
   // load the crm_core_profile activity fields information
   $crm_core_profile_activity = crm_core_profile_activity_load($profile['name']);
-  
+
   if (empty($crm_core_profile_activity)) {
     return;  
   }
-  
-  $fields = unserialize($crm_core_profile_activity['fields']);
+
+  $fields = unserialize($crm_core_profile_activity['activity_fields']);
   if (empty($fields)) {
     return;  
   }
@@ -26,14 +25,14 @@ function crm_core_activity_form_crm_core_profile_entry_form_alter(&$form, &$form
       $flag++;
     }
   }
-  
+
   if ($flag === 0) {
     return;  
   }
-  
+
   // we always create new activity
   $activity = new stdClass();
-  $activity->type = $crm_core_profile_activity['bundle_type'];
+  $activity->type = $crm_core_profile_activity['activity_bundle_type'];
     
   // placing the activity form information in its own container
   $form['activity'] = array(
@@ -41,24 +40,24 @@ function crm_core_activity_form_crm_core_profile_entry_form_alter(&$form, &$form
     '#tree' => TRUE,
     '#parents' => array('activity'),
   );
-  
+
   // crm_core_activity properties
   $form['activity']['type'] = array(
     '#type' => 'value',
     '#value' => $activity->type,
   );
-  
+
   // This title will later be changed
   $form['activity']['title'] = array(
     '#type' => 'value',
     '#value' => $activity->type,
   );
-  
+
   $form['activity']['uid'] = array(
     '#type' => 'value',
     '#value' => 1,
   );
-  
+
   // attach and show the activity fields
   // $fields = unserialize($crm_core_profile_activity['fields']);  
   field_attach_form('crm_core_activity', $activity, $form['activity'], $form_state); 
@@ -67,25 +66,25 @@ function crm_core_activity_form_crm_core_profile_entry_form_alter(&$form, &$form
       $form['activity'][$field_name]['#access'] = FALSE; 
     }
   }
-  
-   // getting the weight of each element from settings
-   if (array_key_exists('weight', $fields)) {
-     foreach ($fields['weight'] as $field_name => $value) {
-       $form['activity'][$field_name]['#weight'] = $value['weight'];  
-     }  
-   }
-     
+
+  // getting the weight of each element from settings
+  if (array_key_exists('weight', $fields)) {
+    foreach ($fields['weight'] as $field_name => $value) {
+      $form['activity'][$field_name]['#weight'] = $value['weight'];  
+    }  
+  }
+   
   // @todo: offer an alter hook before everything to allow changes to the activity property and field data information
-  
+
   // This alter function will be in the form of
   // hook_crm_core_profile_activity_alter
   // it will allow other modules to modify the activity form data
-    drupal_alter('crm_core_profile_activity', $form['activity'], $crm_core_profile_activity['name']);
-    // adding validation and submission handlers
-    
+  drupal_alter('crm_core_profile_activity', $form['activity'], $crm_core_profile_activity['activity_name']);
+  // adding validation and submission handlers
+
   $form['#validate'][] = 'crm_core_profile_activity_entry_validate';
   $form['#submit'][] = 'crm_core_profile_activity_entry_submit';
-  
+
   //dpm($form);
 }
 
@@ -96,15 +95,28 @@ function crm_core_activity_form_crm_core_profile_entry_form_alter(&$form, &$form
  */
 function crm_core_profile_activity_crm_core_profile_theme_alter(&$form, &$render_fields) {
   $profile_activity = crm_core_profile_activity_load($form['profile_name']['#value']);
-  
+
   if (empty($profile_activity)) {
     return; 
   }
-  
+
   $fields = unserialize($profile_activity['fields']);
-  foreach ($fields['weight'] as $field => $weight) {
-      $render_fields[$weight['weight']['weight']] = "activity||" . $field;
-  } 
+
+  if (!array_key_exists('weight', $fields)) {
+    $i = count($render_fields);
+    foreach ($fields['toggle'] as $field => $toggle) {
+      if ($toggle !== 0) {
+        $render_fields[$i] = "activity||" . $field;
+        $i++;  
+      }
+    }    
+  }
+  else 
+  {
+    foreach ($fields['weight'] as $field => $weight) {
+        $render_fields[$weight['weight']['weight']] = "activity||" . $field;
+    }     
+  }
 }
 
 /**
@@ -119,17 +131,15 @@ function crm_core_profile_activity_entry_validate($form, &$form_state) {
  * Submission handler
  */
 function crm_core_profile_activity_entry_submit($form, &$form_state) {
-  
   // in order to create the activity, we need to have the contact id in the reference
   // this can be achieved in 2 ways
   // 1. From the new contact record created from the crm_core_profile
   // 2. From the contact record loaded from crm_core_profile
-  
   // (actually not) debug, the activity participant from 1
-  $form_state['values']['activity']['field_activity_participants'][LANGUAGE_NONE][0]['target_id'] = $form_state['saved_contact_id']->contact_id;
-  
+  $form_state['values']['activity']['field_activity_participants'][LANGUAGE_NONE][0]['target_id'] = $form_state['contact']->contact_id;
+
   $activity = (object) $form_state['values']['activity'];
-  
+
   if (!isset($activity->created)) {
     $activity->created = REQUEST_TIME;
   }
@@ -138,36 +148,34 @@ function crm_core_profile_activity_entry_submit($form, &$form_state) {
   // Notify field widgets.
   field_attach_submit('crm_core_activity', $activity, $form, $form_state);
   crm_core_activity_save($activity);  
-  
+
   // pass this down to other submission handlers
   $form_state['crm_core_activity'] = $activity;
 }
 
-
-
 /**
- * Implements hook_form_FORM_ID_alter
+ * Implements hook_crm_core_profile_new_alter
+ *
  */
-function crm_core_activity_form_crm_core_profile_new_form_alter(&$form, &$form_state, $form_id) {
-  
+function crm_core_activity_crm_core_profile_new_alter(&$form, &$form_state) {
   // if the core profile form is not new
   $profile = array();
   if (array_key_exists('profile', $form_state)) {
    $profile = $form_state['profile'];
   }
-  
+
   // saved profile loaded, just adding activity parts
-   if (!empty($profile)) {
-     $crm_core_profile_activity = crm_core_profile_activity_load($profile['name']);
-     $form_state['crm_core_profile_activity'] = $crm_core_profile_activity;     
-   }
-   
-    // select bundles from the CRM
+  if (!empty($profile)) {
+    $crm_core_profile_activity = crm_core_profile_activity_load($profile['name']);
+    $form_state['crm_core_profile_activity'] = $crm_core_profile_activity;     
+  }
+
+  // select bundles from the CRM
   $options = array('' => t('--Select--'));
   foreach(crm_core_activity_types() as $type => $activity_type) {
     $options[$type] = $activity_type->label;  
   }
-  
+
   $form['activity'] = array(
     '#tree' => TRUE,
     '#title' => t('Activity Information'),
@@ -176,19 +184,17 @@ function crm_core_activity_form_crm_core_profile_new_form_alter(&$form, &$form_s
     '#collapsible' => TRUE, 
     '#collapsed' => FALSE,
   );
-  
+
   if (empty($profile)) {
-    $form['activity']['created'] = array(
+    $form['activity']['activity_created'] = array(
       '#type' => 'value',
       '#value' => time(),
     );
   }
-  
-  
+
   // copy the machine name form the main name
   // $form['activity']['name'] = $form['name'];
-  
-  $form['activity']['bundle_type'] = array(
+  $form['activity']['activity_bundle_type'] = array(
     '#type' => 'select',
     '#title' => t('Select the activity type below:'),
     '#options' => $options,
@@ -197,32 +203,32 @@ function crm_core_activity_form_crm_core_profile_new_form_alter(&$form, &$form_s
       'callback' => 'crm_core_profile_activity_ajax_callback',
       'wrapper' => 'crm_core_profile_activity_bundle_fields',
      ),
-     '#default_value' => (isset($crm_core_profile_activity)) ? $crm_core_profile_activity['bundle_type'] : '',
+     '#default_value' => (isset($crm_core_profile_activity)) ? $crm_core_profile_activity['activity_bundle_type'] : '',
   );
 
   $field_options = array();
-  
-  if (!empty($crm_core_profile_activity)) {
-    $form_state['values']['activity']['bundle_type'] = $crm_core_profile_activity['bundle_type'];  
+
+  if (!empty($crm_core_profile_activity) && !isset($form_state['values']['activity']['activity_bundle_type'])) {
+    $form_state['values']['activity']['activity_bundle_type'] = $crm_core_profile_activity['activity_bundle_type'];  
   }
-    
-  if (!empty($form_state['values']['activity']['bundle_type'])) { 
-     foreach(field_info_instances('crm_core_activity', $form_state['values']['activity']['bundle_type']) as $field_name => $field) {
+  
+  if (!empty($form_state['values']['activity']['activity_bundle_type'])) { 
+     foreach(field_info_instances('crm_core_activity', $form_state['values']['activity']['activity_bundle_type']) as $field_name => $field) {
       $field_options[$field_name] = $field['label'];
     }  
   }
   
   $fields_default = array();
   if (!empty($crm_core_profile_activity)) {
-    $fields_default = unserialize($crm_core_profile_activity['fields']);  
+    $fields_default = unserialize($crm_core_profile_activity['activity_fields']);  
   }
-  
-  $form['activity']['fields'] = array(
+   
+  $form['activity']['activity_fields'] = array(
     '#type' => 'container',
     '#tree' => TRUE,
   );
-  
-  $form['activity']['fields']['toggle'] = array(
+
+  $form['activity']['activity_fields']['toggle'] = array(
     '#type' => 'checkboxes',
     '#title' => 'Field selection',
     '#options' => $field_options,
@@ -235,44 +241,42 @@ function crm_core_activity_form_crm_core_profile_new_form_alter(&$form, &$form_s
   // adding validation and submission handlers
   $form['#validate'][] = 'crm_core_profile_activity_form_validate';
   $form['#submit'][] = 'crm_core_profile_activity_form_submit';
-  
 }
 
 /**
  * Form validation handler
  */
 function crm_core_profile_activity_form_validate($form, &$form_state) {
-//  dpm($form_state['profile']);
-//  dpm($form_state['values']['activity']);
-//  dpm($form_state['crm_core_profile_activity']);
-
- // form_set_error('aaa', 'bbb');
+  // dpm($form_state['profile']);
+  // dpm($form_state['values']['activity']);
+  // dpm($form_state['crm_core_profile_activity']);
+  // form_set_error('aaa', 'bbb');
 }
 
 /**
  * Form submission handler
  */
 function crm_core_profile_activity_form_submit($form, &$form_state) {
-  $form_state['values']['activity']['name'] = $form_state['values']['name'];  
+  $form_state['values']['activity']['activity_name'] = $form_state['values']['name'];  
   $activity = $form_state['values']['activity'];
 
   // we always check the toggle for activity bundle and at least 1 field is toggled to save the activity field
   $count = 0;
-  foreach($activity['fields']['toggle'] as $toggle) {
+  foreach($activity['activity_fields']['toggle'] as $toggle) {
     if ($toggle === 0) {
       $count++;
     }  
   }
   
-  if (!isset($activity['bundle_type'])) {
+  if (!isset($activity['activity_bundle_type'])) {
     return;  
   }
-  if ($count == count($activity['fields']['toggle'])) {
+  if ($count == count($activity['activity_fields']['toggle'])) {
     return;  
   }
   if (!empty($form_state['crm_core_profile_activity'])) {
-    $fields = unserialize($form_state['crm_core_profile_activity']['fields']);
-    $activity['fields']['weight'] = (isset($fields['weight'])) ? $fields['weight'] : array();    
+    $fields = unserialize($form_state['crm_core_profile_activity']['activity_fields']);
+    $activity['activity_fields']['weight'] = (isset($fields['weight'])) ? $fields['weight'] : array();    
   }
       
   crm_core_profile_activity_save($activity);
@@ -297,7 +301,7 @@ function crm_core_profile_activity_form_crm_core_profile_weight_form_alter(&$for
     return;  
   }
   
-  $fields = unserialize($crm_core_profile_activity['fields']);
+  $fields = unserialize($crm_core_profile_activity['activity_fields']);
   
   $fields['weight'] = (isset($fields['weight'])) ? $fields['weight'] : array();
 
@@ -310,7 +314,7 @@ function crm_core_profile_activity_form_crm_core_profile_weight_form_alter(&$for
 
   foreach ($fields_toggle as $field_name => $visibility) {
     if ($visibility !== 0) {
-        $field = field_info_instance('crm_core_activity', $field_name, $crm_core_profile_activity['bundle_type']);
+        $field = field_info_instance('crm_core_activity', $field_name, $crm_core_profile_activity['activity_bundle_type']);
         $form['weight'][$field_name]['label'] = array('#markup' => check_plain($field['label']));
         $form['weight'][$field_name]['weight'] = array(
          '#type' => 'weight',
@@ -355,7 +359,7 @@ function crm_core_profile_activity_weight_form_validate($form, &$form_state) {
 function crm_core_profile_activity_weight_form_submit($form, &$form_state) {
 
   $crm_core_profile_activity = $form_state['crm_core_profile_activity'];
-  $activity_fields = unserialize($crm_core_profile_activity['fields']);
+  $activity_fields = unserialize($crm_core_profile_activity['activity_fields']);
 
   // save the weight order (just for activity fields)
    foreach ($form_state['values']['weight'] as $field => $weight) {
@@ -374,7 +378,7 @@ function crm_core_profile_activity_weight_form_submit($form, &$form_state) {
    }
    
    $activity_fields['weight'] = $weights;
-   $crm_core_profile_activity['fields'] = $activity_fields;
+   $crm_core_profile_activity['activity_fields'] = $activity_fields;
    
    crm_core_profile_activity_save($crm_core_profile_activity);
 }
@@ -383,9 +387,9 @@ function crm_core_profile_activity_weight_form_submit($form, &$form_state) {
  * Saves a profile form activity entry
  */
 function crm_core_profile_activity_save($record) {
-  $crm_core_profile_activity = crm_core_profile_activity_load($record['name']);
+  $crm_core_profile_activity = crm_core_profile_activity_load($record['activity_name']);
   if (!empty($crm_core_profile_activity)) {
-    drupal_write_record('crm_core_profile_activity', $record, 'name');  
+    drupal_write_record('crm_core_profile_activity', $record, 'activity_name');  
   } 
   else {
     drupal_write_record('crm_core_profile_activity', $record);
@@ -400,7 +404,7 @@ function crm_core_profile_activity_load($machine_name) {
   $data = array();
   $query = db_select('crm_core_profile_activity', 'pa')
   ->fields('pa')
-  ->condition('name', $machine_name);
+  ->condition('activity_name', $machine_name);
 
   $result = $query->execute();
   $data = $result->fetchAssoc();
@@ -413,7 +417,7 @@ function crm_core_profile_activity_load($machine_name) {
  */
 function crm_core_profile_activity_crm_core_profile_delete($machine_name) {
   db_delete('crm_core_profile_activity')
-  ->condition('name', $machine_name)
+  ->condition('activity_name', $machine_name)
   ->execute();
 }
 
@@ -422,5 +426,5 @@ function crm_core_profile_activity_crm_core_profile_delete($machine_name) {
  * Ajax callback
  */
 function crm_core_profile_activity_ajax_callback($form, &$form_state) {
-  return $form['activity']['fields'];
+  return $form['activity']['activity_fields'];
 }
