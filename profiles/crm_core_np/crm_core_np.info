@@ -18,6 +18,8 @@ dependencies[] = dblog
 dependencies[] = field_ui
 dependencies[] = file
 dependencies[] = search
+dependencies[] = strongarm
+
 
 ; Install CRM Core dependencies.
 dependencies[] = addressfield
