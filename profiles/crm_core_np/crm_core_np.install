@@ -69,46 +69,6 @@ function crm_core_np_install() {
   }
   $query->execute();
 
-//   $field = array(
-//     'field_name' => 'field_' . $vocabulary->machine_name,
-//     'type' => 'taxonomy_term_reference',
-//     // Set cardinality to unlimited for tagging.
-//     'cardinality' => FIELD_CARDINALITY_UNLIMITED,
-//     'settings' => array(
-//       'allowed_values' => array(
-//         array(
-//           'vocabulary' => $vocabulary->machine_name,
-//           'parent' => 0,
-//         ),
-//       ),
-//     ),
-//   );
-//   field_create_field($field);
-
-//   $instance = array(
-//     'field_name' => 'field_' . $vocabulary->machine_name,
-//     'entity_type' => 'node',
-//     'label' => 'Tags',
-//     'bundle' => 'article',
-//     'description' => $vocabulary->help,
-//     'widget' => array(
-//       'type' => 'taxonomy_autocomplete',
-//       'weight' => -4,
-//     ),
-//     'display' => array(
-//       'default' => array(
-//         'type' => 'taxonomy_term_reference_link',
-//         'weight' => 10,
-//       ),
-//       'teaser' => array(
-//         'type' => 'taxonomy_term_reference_link',
-//         'weight' => 10,
-//       ),
-//     ),
-//   );
-//   field_create_instance($instance);
-
-
   // Create an image field named "Image", enabled for the 'article' content type.
   // Many of the following values will be defaulted, they're included here as an illustrative examples.
   // See http://api.drupal.org/api/function/field_create_field/7
