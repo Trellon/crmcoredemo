@@ -39,7 +39,6 @@ features[field][] = crm_core_activity-event_registration-field_registration_stat
 features[field][] = node-event-body
 features[field][] = node-event-field_crmer_address
 features[field][] = node-event-field_crmer_event_date
-features[field][] = node-event-field_crmer_event_phone
 features[field][] = node-event-field_crmer_registration
 features[node][] = event
 features[variable][] = comment_anonymous_event
