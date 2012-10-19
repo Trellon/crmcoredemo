@@ -31,5 +31,12 @@ function crm_core_demo_settings_strongarm() {
   $strongarm->value = 'M j Y - g:ia';
   $export['date_format_short'] = $strongarm;
 
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'date_format_slim';
+  $strongarm->value = 'm/d/y';
+  $export['date_format_slim'] = $strongarm;
+
   return $export;
 }
