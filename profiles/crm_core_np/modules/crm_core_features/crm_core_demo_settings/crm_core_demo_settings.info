@@ -7,7 +7,3 @@ dependencies[] = ctools
 dependencies[] = strongarm
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:1
-features[variable][] = date_format_long
-features[variable][] = date_format_medium
-features[variable][] = date_format_short
-features[variable][] = date_format_slim

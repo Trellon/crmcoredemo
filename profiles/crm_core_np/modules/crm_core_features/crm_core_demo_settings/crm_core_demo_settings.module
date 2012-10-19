@@ -5,3 +5,25 @@
  */
 
 include_once 'crm_core_demo_settings.features.inc';
+
+/**
+ * Implements hook_date_formats().
+ */
+function crm_core_demo_settings_date_formats() {
+  return array(
+    array(
+      'type' => 'date_format_slim',
+      'format' => 'm/d/y',
+      'locales' => array(),
+    ),
+  );
+}
+
+/**
+ * Implements hook_date_format_types().
+ */
+function crm_core_demo_settings_date_format_types() {
+  return array(
+    'date_format_slim' => t('Slim'),
+  );
+}
