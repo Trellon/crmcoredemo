@@ -664,7 +664,7 @@ function crm_core_event_registration_field_default_fields() {
             'trim_length' => 600,
           ),
           'type' => 'text_summary_or_trimmed',
-          'weight' => 0,
+          'weight' => '1',
         ),
       ),
       'entity_type' => 'node',
@@ -737,7 +737,7 @@ function crm_core_event_registration_field_default_fields() {
           'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => 0,
+          'weight' => '4',
         ),
       ),
       'entity_type' => 'node',
@@ -817,10 +817,17 @@ function crm_core_event_registration_field_default_fields() {
           'weight' => 5,
         ),
         'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
+          'label' => 'hidden',
+          'module' => 'date',
+          'settings' => array(
+            'format_type' => 'long',
+            'fromto' => 'both',
+            'multiple_from' => '',
+            'multiple_number' => '',
+            'multiple_to' => '',
+          ),
+          'type' => 'date_default',
+          'weight' => '0',
         ),
       ),
       'entity_type' => 'node',
@@ -885,7 +892,7 @@ function crm_core_event_registration_field_default_fields() {
           'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => 0,
+          'weight' => '2',
         ),
       ),
       'entity_type' => 'node',
@@ -1149,86 +1156,6 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-event-field_crmer_images'.
-  $fields['node-event-field_crmer_images'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '-1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_crmer_images',
-      'foreign keys' => array(
-        'fid' => array(
-          'columns' => array(
-            'fid' => 'fid',
-          ),
-          'table' => 'file_managed',
-        ),
-      ),
-      'indexes' => array(
-        'fid' => array(
-          0 => 'fid',
-        ),
-      ),
-      'locked' => '0',
-      'module' => 'image',
-      'settings' => array(
-        'default_image' => 0,
-        'uri_scheme' => 'public',
-      ),
-      'translatable' => '0',
-      'type' => 'image',
-    ),
-    'field_instance' => array(
-      'bundle' => 'event',
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'image',
-          'settings' => array(
-            'image_link' => '',
-            'image_style' => '',
-          ),
-          'type' => 'image',
-          'weight' => 1,
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'field_crmer_images',
-      'label' => 'Event Images',
-      'required' => 0,
-      'settings' => array(
-        'alt_field' => 0,
-        'default_image' => 0,
-        'file_directory' => '',
-        'file_extensions' => 'png gif jpg jpeg',
-        'max_filesize' => '',
-        'max_resolution' => '',
-        'min_resolution' => '',
-        'title_field' => 0,
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'image',
-        'settings' => array(
-          'preview_image_style' => 'thumbnail',
-          'progress_indicator' => 'throbber',
-        ),
-        'type' => 'image_image',
-        'weight' => '-3',
-      ),
-    ),
-  );
-
   // Exported field: 'node-event-field_crmer_registration'.
   $fields['node-event-field_crmer_registration'] = array(
     'field_config' => array(
@@ -1273,10 +1200,10 @@ function crm_core_event_registration_field_default_fields() {
           'weight' => 4,
         ),
         'teaser' => array(
-          'label' => 'above',
+          'label' => 'hidden',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => 0,
+          'weight' => '3',
         ),
       ),
       'entity_type' => 'node',
@@ -1296,89 +1223,6 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-event-field_crmer_website'.
-  $fields['node-event-field_crmer_website'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_crmer_website',
-      'foreign keys' => array(),
-      'indexes' => array(),
-      'locked' => '0',
-      'module' => 'link',
-      'settings' => array(
-        'attributes' => array(
-          'class' => '',
-          'rel' => '',
-          'target' => 'default',
-        ),
-        'display' => array(
-          'url_cutoff' => 80,
-        ),
-        'enable_tokens' => 1,
-        'title' => 'optional',
-        'title_maxlength' => 128,
-        'title_value' => '',
-        'url' => 0,
-      ),
-      'translatable' => '0',
-      'type' => 'link_field',
-    ),
-    'field_instance' => array(
-      'bundle' => 'event',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'link',
-          'settings' => array(),
-          'type' => 'link_default',
-          'weight' => 3,
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'field_crmer_website',
-      'label' => 'Website',
-      'required' => 0,
-      'settings' => array(
-        'attributes' => array(
-          'class' => '',
-          'configurable_title' => 0,
-          'rel' => '',
-          'target' => 'default',
-          'title' => '',
-        ),
-        'display' => array(
-          'url_cutoff' => '80',
-        ),
-        'enable_tokens' => 1,
-        'title' => 'optional',
-        'title_maxlength' => '128',
-        'title_value' => '',
-        'url' => 0,
-        'user_register_form' => FALSE,
-        'validate_url' => 1,
-      ),
-      'widget' => array(
-        'active' => 0,
-        'module' => 'link',
-        'settings' => array(),
-        'type' => 'link_field',
-        'weight' => '-1',
-      ),
-    ),
-  );
-
   // Translatables
   // Included for use with string extractors like potx.
   t('Address');
@@ -1386,7 +1230,6 @@ function crm_core_event_registration_field_default_fields() {
   t('Date');
   t('Event');
   t('Event Date');
-  t('Event Images');
   t('Event Summary');
   t('Event Type');
   t('Notes');
@@ -1399,7 +1242,6 @@ function crm_core_event_registration_field_default_fields() {
   t('The order associated with this event registration if the event type was paid');
   t('The registration role for the given user');
   t('The status of this registration');
-  t('Website');
 
   return $fields;
 }
