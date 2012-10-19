@@ -76,6 +76,8 @@ dependencies[] = commerce_payment
 dependencies[] = authnet_arb
 dependencies[] = commerce_authnet
 
+dependencies[] = calendar
+
 ; Install CRM Core Contrib modules
 dependencies[] = crm_core_profile
 dependencies[] = crm_core_profile_activity
