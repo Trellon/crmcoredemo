@@ -41,7 +41,6 @@ features[field][] = node-event-field_crmer_address
 features[field][] = node-event-field_crmer_event_date
 features[field][] = node-event-field_crmer_event_phone
 features[field][] = node-event-field_crmer_registration
-features[field][] = node-event-field_crmer_website
 features[node][] = event
 features[variable][] = comment_anonymous_event
 features[variable][] = comment_default_mode_event
