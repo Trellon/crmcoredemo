@@ -37,7 +37,7 @@ function crm_core_event_registration_ctools_plugin_api() {
  */
 function crm_core_event_registration_node_info() {
   $items = array(
-    'crm_core_event' => array(
+    'event' => array(
       'name' => t('Event'),
       'base' => 'node_content',
       'description' => t('An content that represents an event with its associated information'),

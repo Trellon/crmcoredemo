@@ -615,8 +615,8 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-crm_core_event-body'.
-  $fields['node-crm_core_event-body'] = array(
+  // Exported field: 'node-event-body'.
+  $fields['node-event-body'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
@@ -645,7 +645,7 @@ function crm_core_event_registration_field_default_fields() {
       'type' => 'text_with_summary',
     ),
     'field_instance' => array(
-      'bundle' => 'crm_core_event',
+      'bundle' => 'event',
       'default_value' => NULL,
       'deleted' => '0',
       'description' => '',
@@ -689,8 +689,8 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-crm_core_event-field_crmer_address'.
-  $fields['node-crm_core_event-field_crmer_address'] = array(
+  // Exported field: 'node-event-field_crmer_address'.
+  $fields['node-event-field_crmer_address'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
@@ -706,10 +706,10 @@ function crm_core_event_registration_field_default_fields() {
       'type' => 'addressfield',
     ),
     'field_instance' => array(
-      'bundle' => 'crm_core_event',
+      'bundle' => 'event',
       'default_value' => array(
         0 => array(
-          'element_key' => 'node|crm_core_event|field_crmer_address|und|0',
+          'element_key' => 'node|event|field_crmer_address|und|0',
           'thoroughfare' => '',
           'premise' => '',
           'locality' => '',
@@ -766,8 +766,8 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-crm_core_event-field_crmer_event_date'.
-  $fields['node-crm_core_event-field_crmer_event_date'] = array(
+  // Exported field: 'node-event-field_crmer_event_date'.
+  $fields['node-event-field_crmer_event_date'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
@@ -797,7 +797,7 @@ function crm_core_event_registration_field_default_fields() {
       'type' => 'datetime',
     ),
     'field_instance' => array(
-      'bundle' => 'crm_core_event',
+      'bundle' => 'event',
       'deleted' => '0',
       'description' => '',
       'display' => array(
@@ -849,8 +849,8 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-crm_core_event-field_crmer_event_phone'.
-  $fields['node-crm_core_event-field_crmer_event_phone'] = array(
+  // Exported field: 'node-event-field_crmer_event_phone'.
+  $fields['node-event-field_crmer_event_phone'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
@@ -868,7 +868,7 @@ function crm_core_event_registration_field_default_fields() {
       'type' => 'phone_number',
     ),
     'field_instance' => array(
-      'bundle' => 'crm_core_event',
+      'bundle' => 'event',
       'deleted' => '0',
       'description' => '',
       'display' => array(
@@ -1147,8 +1147,8 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-crm_core_event-field_crmer_images'.
-  $fields['node-crm_core_event-field_crmer_images'] = array(
+  // Exported field: 'node-event-field_crmer_images'.
+  $fields['node-event-field_crmer_images'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '-1',
@@ -1178,7 +1178,7 @@ function crm_core_event_registration_field_default_fields() {
       'type' => 'image',
     ),
     'field_instance' => array(
-      'bundle' => 'crm_core_event',
+      'bundle' => 'event',
       'deleted' => '0',
       'description' => '',
       'display' => array(
@@ -1227,8 +1227,8 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-crm_core_event-field_crmer_registration'.
-  $fields['node-crm_core_event-field_crmer_registration'] = array(
+  // Exported field: 'node-event-field_crmer_registration'.
+  $fields['node-event-field_crmer_registration'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
@@ -1254,7 +1254,7 @@ function crm_core_event_registration_field_default_fields() {
       'type' => 'list_text',
     ),
     'field_instance' => array(
-      'bundle' => 'crm_core_event',
+      'bundle' => 'event',
       'default_value' => array(
         0 => array(
           'value' => 'None',
@@ -1294,8 +1294,8 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-crm_core_event-field_crmer_website'.
-  $fields['node-crm_core_event-field_crmer_website'] = array(
+  // Exported field: 'node-event-field_crmer_website'.
+  $fields['node-event-field_crmer_website'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
@@ -1325,7 +1325,7 @@ function crm_core_event_registration_field_default_fields() {
       'type' => 'link_field',
     ),
     'field_instance' => array(
-      'bundle' => 'crm_core_event',
+      'bundle' => 'event',
       'default_value' => NULL,
       'deleted' => '0',
       'description' => '',
