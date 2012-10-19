@@ -838,8 +838,8 @@ function crm_core_event_registration_field_default_fields() {
         'active' => 1,
         'module' => 'date',
         'settings' => array(
-          'increment' => '15',
-          'input_format' => 'm/d/Y - H:i:s',
+          'increment' => '5',
+          'input_format' => 'm/d/Y - g:i:sa',
           'input_format_custom' => '',
           'label_position' => 'above',
           'text_parts' => array(),
