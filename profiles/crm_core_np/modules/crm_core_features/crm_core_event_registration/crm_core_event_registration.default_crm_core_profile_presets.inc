@@ -21,6 +21,7 @@ function crm_core_event_registration_default_crm_core_profile_presets() {
       'contact_name' => 'contact_name',
       'contact_image' => 0,
     ),
+    'weight' => array(),
   );
   $preset->block = FALSE;
   $preset->path = '';
@@ -28,19 +29,25 @@ function crm_core_event_registration_default_crm_core_profile_presets() {
   $preset->message = '';
   $preset->status = TRUE;
   $preset->uid = 1;
-  $preset->created = 1350567778;
-  $preset->create_contact_actions = 'a:3:{s:3:"new";a:1:{s:6:"weight";s:2:"10";}s:9:"duplicate";a:1:{s:6:"weight";s:2:"10";}s:3:"url";a:1:{s:6:"weight";s:2:"10";}}';
-  $preset->user_sync = '';
+  $preset->created = 0;
+  $preset->create_contact_actions = 'a:4:{s:3:"new";a:1:{s:6:"weight";s:2:"10";}s:9:"duplicate";a:1:{s:6:"weight";s:2:"10";}s:8:"existing";a:1:{s:6:"weight";s:2:"10";}s:3:"url";a:1:{s:6:"weight";s:2:"10";}}';
+  $preset->user_sync = 'current';
   $preset->activity_bundle_type = 'event_registration';
   $preset->activity_fields = array(
     'toggle' => array(
       'field_activity_notes' => 'field_activity_notes',
       'field_activity_participants' => 0,
       'field_activity_date' => 0,
+      'field_registration_attendee' => 0,
+      'field_registration_event' => 0,
+      'field_registration_event_type' => 0,
+      'field_registration_order' => 0,
+      'field_registration_role' => 0,
+      'field_registration_status' => 0,
     ),
   );
   $preset->activity_status = TRUE;
-  $preset->activity_created = 1350567779;
+  $preset->activity_created = 0;
   $export['event_registration'] = $preset;
 
   return $export;
