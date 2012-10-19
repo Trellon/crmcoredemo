@@ -1,7 +1,7 @@
 name = CRM Core Demo Settings
 description = Stores preconfigured 
 core = 7.x
-package = Features
+package = CRM Core
 dependencies[] = ctools
 dependencies[] = strongarm
 features[ctools][] = strongarm:strongarm:1
