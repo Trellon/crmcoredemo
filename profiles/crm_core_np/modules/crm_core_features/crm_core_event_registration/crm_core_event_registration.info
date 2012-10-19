@@ -67,3 +67,4 @@ features[views_view][] = crm_core_events_admin
 features[views_view][] = crm_core_events_calendar
 features[views_view][] = event_registration_reports
 features[views_view][] = event_registration_reports_content_
+features[views_view][] = upcoming_events
