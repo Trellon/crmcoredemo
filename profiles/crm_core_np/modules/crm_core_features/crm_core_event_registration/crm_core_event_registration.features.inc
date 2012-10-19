@@ -33,6 +33,13 @@ function crm_core_event_registration_ctools_plugin_api() {
 }
 
 /**
+ * Implements hook_views_api().
+ */
+function crm_core_event_registration_views_api() {
+  return array("version" => "3.0");
+}
+
+/**
  * Implements hook_node_info().
  */
 function crm_core_event_registration_node_info() {
