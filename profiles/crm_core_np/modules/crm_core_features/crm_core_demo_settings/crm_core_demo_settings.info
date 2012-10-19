@@ -1,0 +1,11 @@
+name = CRM Core Demo Settings
+description = Stores preconfigured 
+core = 7.x
+package = Features
+dependencies[] = ctools
+dependencies[] = strongarm
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:1
+features[variable][] = date_format_long
+features[variable][] = date_format_medium
+features[variable][] = date_format_short
