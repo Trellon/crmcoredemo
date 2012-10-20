@@ -1,0 +1,97 @@
+<?php
+/**
+ * @file
+ * Code for the CRM Core Event Registration feature.
+ */
+
+/**
+ * Implements hook_install
+ */
+function crm_core_event_registration_install() {
+  
+  // dumping the crm core profile form in manually  
+  $event_registration_record = array(
+    'name' => 'event_registration',
+    'label' => t('Event Registration'),
+    'bundle_type' => 'individual',
+    'block' => 0,
+    'status' => 1,
+    'uid' => 1,
+    'created' => time(),
+    'user_sync' => 'current',
+    'fields' => array(
+      'toggle' => array(
+            'contact_name' => 'contact_name',
+            'field_contact_email' => 'field_contact_email',
+            'contact_image' => 0,
+            'field_billing_address' => 0, 
+        ),
+       'weight' => array(
+         'contact_name' => array(
+           'weight' => array(
+             'weight' => -10,
+           ),
+        ),     
+          'field_contact_email' => array(
+            'weight' => array(
+              'weight' => -9,
+            ),
+          ),
+       ),
+     ),
+     'create_contact_actions' => array(
+        'new' => array(
+          'weight' => 10,
+        ), 
+        'existing' => array(
+          'weight' => 10,
+        ),
+        'url' => array(
+          'weight' => 10,
+        ),
+     ),      
+  );
+  
+  crm_core_profile_save($event_registration_record);
+  
+  $event_registration_activity_record = array(
+    'name' => 'event_registration',
+    'bundle_type' => 'event_registration',
+    'status' => 1,
+    'created' => time(),
+    'fields' => array(
+      'toggle' => array(
+        'field_activity_notes' => 'field_activity_notes',
+        'field_activity_participants' => 0,
+        'field_activity_date' => 0,
+        'field_registration_attendee' => 0,
+        'field_registration_event' => 0,
+        'field_registration_event_type' => 0,
+        'field_registration_order' => 0,
+        'field_registration_role' => 0,
+        'field_registration_status' => 0,
+      ),
+      'weight' => array(
+        'field_activity_notes' => array(
+          'weight' => array(
+            'weight' => -8,
+          ),
+         ),
+       ),  
+    ),
+    'create_activity_actions' => array(
+      'new' => array(
+        'weight' => 10.
+      ),
+      'recent' => array(
+        'weight' => 10,
+      ),
+      'url' => array(
+        'weight' => 10,
+      ),
+    ),  
+  );
+  
+  crm_core_profile_activity_save($event_registration_activity_record);
+  
+}

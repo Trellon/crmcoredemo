@@ -32,7 +32,7 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '20';
   $handler->display->display_options['style_plugin'] = 'table';
-  /* Relationship: Entity Reference: Referencing entity */
+  /* Relationship: Broken/missing handler */
   $handler->display->display_options['relationships']['reverse_field_registration_event_crm_core_activity']['id'] = 'reverse_field_registration_event_crm_core_activity';
   $handler->display->display_options['relationships']['reverse_field_registration_event_crm_core_activity']['table'] = 'node';
   $handler->display->display_options['relationships']['reverse_field_registration_event_crm_core_activity']['field'] = 'reverse_field_registration_event_crm_core_activity';
@@ -85,7 +85,7 @@ function crm_core_event_registration_views_default_views() {
     ),
   );
   $handler->display->display_options['fields']['field_crmer_address']['group_column'] = 'entity_id';
-  /* Field: SUM(CRM Activity: Number of Attendees) */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_registration_attendee']['id'] = 'field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['table'] = 'field_data_field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['field'] = 'field_registration_attendee';
@@ -95,10 +95,6 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['field_registration_attendee']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['field_registration_attendee']['alter']['text'] = '[field_registration_attendee] Registered';
   $handler->display->display_options['fields']['field_registration_attendee']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_registration_attendee']['settings'] = array(
-    'thousand_separator' => '',
-    'prefix_suffix' => 1,
-  );
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
@@ -370,7 +366,7 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['relationships']['field_activity_participants_target_id']['table'] = 'field_data_field_activity_participants';
   $handler->display->display_options['relationships']['field_activity_participants_target_id']['field'] = 'field_activity_participants_target_id';
   $handler->display->display_options['relationships']['field_activity_participants_target_id']['label'] = 'Event registrant';
-  /* Relationship: Entity Reference: Referenced Entity */
+  /* Relationship: Broken/missing handler */
   $handler->display->display_options['relationships']['field_registration_event_target_id']['id'] = 'field_registration_event_target_id';
   $handler->display->display_options['relationships']['field_registration_event_target_id']['table'] = 'field_data_field_registration_event';
   $handler->display->display_options['relationships']['field_registration_event_target_id']['field'] = 'field_registration_event_target_id';
@@ -419,16 +415,12 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['field_contact_email']['relationship'] = 'field_activity_participants_target_id';
   $handler->display->display_options['fields']['field_contact_email']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_contact_email']['type'] = 'email_plain';
-  /* Field: CRM Activity: Number of Attendees */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_registration_attendee']['id'] = 'field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['table'] = 'field_data_field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['field'] = 'field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['label'] = 'Attendees';
   $handler->display->display_options['fields']['field_registration_attendee']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_registration_attendee']['settings'] = array(
-    'thousand_separator' => ' ',
-    'prefix_suffix' => 1,
-  );
   /* Field: View */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
@@ -549,7 +541,7 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '25';
   $handler->display->display_options['style_plugin'] = 'table';
-  /* Relationship: Event Registration */
+  /* Relationship: Broken/missing handler */
   $handler->display->display_options['relationships']['reverse_field_registration_event_crm_core_activity']['id'] = 'reverse_field_registration_event_crm_core_activity';
   $handler->display->display_options['relationships']['reverse_field_registration_event_crm_core_activity']['table'] = 'node';
   $handler->display->display_options['relationships']['reverse_field_registration_event_crm_core_activity']['field'] = 'reverse_field_registration_event_crm_core_activity';
@@ -605,7 +597,7 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['field_crmer_registration']['field'] = 'field_crmer_registration';
   $handler->display->display_options['fields']['field_crmer_registration']['label'] = '';
   $handler->display->display_options['fields']['field_crmer_registration']['element_label_colon'] = FALSE;
-  /* Field: COUNT(CRM Activity: Number of Attendees) */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_registration_attendee']['id'] = 'field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['table'] = 'field_data_field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['field'] = 'field_registration_attendee';
@@ -615,7 +607,6 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['field_registration_attendee']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['field_registration_attendee']['alter']['text'] = '[field_registration_attendee-value] Registered';
   $handler->display->display_options['fields']['field_registration_attendee']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_registration_attendee']['separator'] = ', ';
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
@@ -654,7 +645,7 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
   $handler->display->display_options['empty']['area_text_custom']['field'] = 'area_text_custom';
   $handler->display->display_options['empty']['area_text_custom']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area_text_custom']['content'] = '<div class="message warning">There is currently no event created in the system</div>';
+  $handler->display->display_options['empty']['area_text_custom']['content'] = '<div class="messages warning">There is currently no event created in the system</div>';
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
@@ -706,7 +697,7 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['field_crmer_registration']['field'] = 'field_crmer_registration';
   $handler->display->display_options['fields']['field_crmer_registration']['label'] = '';
   $handler->display->display_options['fields']['field_crmer_registration']['element_label_colon'] = FALSE;
-  /* Field: COUNT(CRM Activity: Number of Attendees) */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_registration_attendee']['id'] = 'field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['table'] = 'field_data_field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['field'] = 'field_registration_attendee';
@@ -716,7 +707,6 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['field_registration_attendee']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['field_registration_attendee']['alter']['text'] = '[field_registration_attendee] Registered';
   $handler->display->display_options['fields']['field_registration_attendee']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_registration_attendee']['separator'] = ', ';
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
@@ -761,7 +751,7 @@ function crm_core_event_registration_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Field: COUNT(CRM Activity: Number of Attendees) */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_registration_attendee']['id'] = 'field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['table'] = 'field_data_field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['field'] = 'field_registration_attendee';
@@ -771,7 +761,6 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['field_registration_attendee']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['field_registration_attendee']['alter']['text'] = '[field_registration_attendee] Registered';
   $handler->display->display_options['fields']['field_registration_attendee']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_registration_attendee']['separator'] = ', ';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Nid */
   $handler->display->display_options['arguments']['nid']['id'] = 'nid';

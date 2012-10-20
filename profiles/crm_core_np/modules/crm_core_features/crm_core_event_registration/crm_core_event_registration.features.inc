@@ -23,10 +23,6 @@ function crm_core_event_registration_default_crm_core_activity_type() {
  */
 function crm_core_event_registration_ctools_plugin_api() {
   list($module, $api) = func_get_args();
-  if ($module == "crm_core_profile" && $api == "default_crm_core_profile_presets") {
-    return array("version" => "1");
-  }
-  list($module, $api) = func_get_args();
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
