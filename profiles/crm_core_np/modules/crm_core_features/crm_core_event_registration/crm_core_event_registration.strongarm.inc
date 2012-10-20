@@ -69,6 +69,13 @@ function crm_core_event_registration_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'crm_core_event_registration_form_visibility';
+  $strongarm->value = '1';
+  $export['crm_core_event_registration_form_visibility'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'crm_core_event_registration_product';
   $strongarm->value = '';
   $export['crm_core_event_registration_product'] = $strongarm;
