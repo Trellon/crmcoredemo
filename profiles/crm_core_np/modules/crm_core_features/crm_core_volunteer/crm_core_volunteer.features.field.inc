@@ -166,6 +166,9 @@ function crm_core_volunteer_field_default_fields() {
       'field_name' => 'field_activity_participants',
       'foreign keys' => array(),
       'indexes' => array(
+        'target_entity' => array(
+          1 => 'target_id',
+        ),
         'target_id' => array(
           0 => 'target_id',
         ),
@@ -228,7 +231,14 @@ function crm_core_volunteer_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_volunteer_opportunity',
-      'foreign keys' => array(),
+      'foreign keys' => array(
+        'node' => array(
+          'columns' => array(
+            'target_id' => 'nid',
+          ),
+          'table' => 'node',
+        ),
+      ),
       'indexes' => array(
         'target_id' => array(
           0 => 'target_id',

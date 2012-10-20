@@ -80,7 +80,7 @@ function crm_core_demo_settings_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'image_image',
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
@@ -247,7 +247,7 @@ Prof.',
         'module' => 'name',
         'settings' => array(),
         'type' => 'name_widget',
-        'weight' => '0',
+        'weight' => 0,
       ),
     ),
   );
