@@ -599,7 +599,14 @@ function crm_core_donation_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_donation_order',
-      'foreign keys' => array(),
+      'foreign keys' => array(
+        'commerce_order' => array(
+          'columns' => array(
+            'target_id' => 'order_id',
+          ),
+          'table' => 'commerce_order',
+        ),
+      ),
       'indexes' => array(
         'target_id' => array(
           0 => 'target_id',
