@@ -5,7 +5,6 @@
  */
 
 include_once('crm_core_event_registration.features.inc');
-
 include_once('crm_core_event_registration.userpoints.inc');
 
 /**
@@ -63,6 +62,7 @@ function crm_core_event_registration_theme($existing, $type, $theme, $path) {
  * Adding an event registration link on the event pages
  */
 function crm_core_event_registration_node_view($node, $view_mode) {
+      
     // @todo: be able to configure the weight of the registration link
     if ($node->type == variable_get('crm_core_event_registration_content_type', '')) {
       $crm_core_profile_event = variable_get('crm_core_event_registration_profile', '');
@@ -105,11 +105,24 @@ function crm_core_event_registration_node_view($node, $view_mode) {
          );
            return;
        }
+      
+       // display registration button or form
+       if (variable_get('crm_core_event_registration_form_visibility', 1) == 1) {
+         $crm_core_profile = crm_core_profile_load($crm_core_profile_event);
+         
+         if (!empty($crm_core_profile)) {
+           $node->content['crm_core_event_reg_form'] = crm_core_event_registration_attachment_form($node, $crm_core_profile); 
+           drupal_set_title($node->title);
+           unset($node->content['crm_core_event_reg_form']['event']);
+         }
 
-       // display registration button
-       $node->content['crm_core_event_reg_link'] = array(
-         '#markup' => l('<span>Register</span>', 'node/' . $node->nid . '/register/' . $crm_core_profile_event, array('html' => TRUE, 'attributes' => array('class' => array('crm_core_event_reg_link')))),
-       );
+       } else {
+         $node->content['crm_core_event_reg_link'] = array(
+           '#markup' => l('<span>Register</span>', 'node/' . $node->nid . '/register/' . $crm_core_profile_event, array('html' => TRUE, 'attributes' => array('class' => array('crm_core_event_reg_link')))),
+         );         
+       }     
+       
+
     }
 }
 
@@ -260,7 +273,15 @@ function crm_core_event_registration_form_crm_core_profile_entry_form_alter(&$fo
     }
     // free product, we are done
     else {
-      $form_state['profile']['redirect'] = drupal_get_path_alias('node/' . $node->nid);
+      $form['submit']['#value'] = t('Register');
+      
+      // if redirect path is set on the node, we go there, otherwise we will go back to the event node
+      if (!empty($node->field_crmer_redirect_path[LANGUAGE_NONE])) {
+         $form_state['profile']['redirect'] = $node->field_crmer_redirect_path[LANGUAGE_NONE][0]['url'];
+      } else {
+        $form_state['profile']['redirect'] = drupal_get_path_alias('node/' . $node->nid);
+      }
+      
       $form['#submit'][] = 'crm_core_event_registration_profile_form_submit';
     }
   }
@@ -278,10 +299,7 @@ function crm_core_event_registration_crm_core_profile_theme_alter(&$form, &$rend
 /**
  * Validation handler
  */
-function crm_core_event_registration_checkout_validate($form, &$form_state) {
-
-  // form_set_error('aaa', 'bbb');
-}
+function crm_core_event_registration_checkout_validate($form, &$form_state) {}
 
 /**
  * Paid event registration submission handler
@@ -398,6 +416,20 @@ function crm_core_event_registration_config($form, &$form_state) {
     '#default_value' => variable_get('crm_core_event_registration_content_type', 'page'),
     '#required' => TRUE,
   );
+  
+  // select the content type for the component
+  $form['content']['crm_core_event_registration_form_visibility'] = array(
+    '#type' => 'select',
+    '#title' => 'Registration mode',
+    '#options' => array(
+      0 => t('On a separate page'),
+      1 => t('On the event page'),
+    ),
+    '#description' => t('How will the event registration form be displayed?'),
+    '#default_value' => variable_get('crm_core_event_registration_form_visibility', 1),
+    '#required' => TRUE,
+  );
+  
 
   // Getting the registration type field from the content type
   $event_content_type = variable_get('crm_core_event_registration_content_type', 'page');
@@ -469,21 +501,6 @@ function crm_core_event_registration_config($form, &$form_state) {
   $event_profile = variable_get('crm_core_event_registration_profile', '');
   if ($event_profile != '') {
      $field_options = array('' => t('--Select--'));
-     // load the crm_core_profile activity info
-//     $crm_core_profile_activity = crm_core_profile_activity_load($event_profile);
-//     foreach(field_info_instances('crm_core_activity', $crm_core_profile_activity['bundle_type']) as $field_name => $field) {
-//      $field_options[$field_name] = $field['label'];
-//    }
-
-       // profile we will use to attach to the event
-//       $form['crm']['crm_core_event_registration_event_ref'] = array(
-//         '#type' => 'select',
-//         '#title' => 'Select the activity reference field to use for the event',
-//         '#options' => $field_options,
-//         '#description' => t('The activity field should usually be a entity reference field to the event content type'),
-//         '#default_value' => variable_get('crm_core_event_registration_event_ref', ''),
-//       );
-
   }
 
   $form['crm_core_event_registration_redirect_message'] = array(
