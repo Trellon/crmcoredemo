@@ -172,6 +172,10 @@ function _crm_core_np_features() {
   $t = get_t();
 
   return array(
+      'crm_core_blog' => array(
+        'title' => $t('CRM Core Blog'),
+        'description' => $t('CRM Core blog provides blog by author and a user comment report'),
+      ),
       'crm_core_donation' => array(
         'title' => $t('CRM Core Donation'),
         'description' => $t('CRM Core Donation allows the creation of one step donation pages, Personal donation pages (PDP) payment integration, recurring payments, leaderboards and so much more'),
