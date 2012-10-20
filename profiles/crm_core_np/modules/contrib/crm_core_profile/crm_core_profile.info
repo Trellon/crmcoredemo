@@ -14,10 +14,15 @@ dependencies[] = crm_core_contact
 
 ; Contrib Dependencies
 dependencies[] = views
-dependencies[] = ctools
 ;dependencies[] = og
 
 ; =======================
 ; Module Files
 ; =======================
-files[] = plugins/export_ui/crm_core_profile_ctools_export_ui.inc
+
+; Information added by drupal.org packaging script on 2012-10-17
+version = "7.x-1.0-alpha1+12-dev"
+core = "7.x"
+project = "crm_core_profile"
+datestamp = "1350434661"
+

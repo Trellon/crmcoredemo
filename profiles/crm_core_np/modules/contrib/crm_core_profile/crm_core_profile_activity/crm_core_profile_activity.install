@@ -6,46 +6,48 @@
 function crm_core_profile_activity_schema() {
   $schema['crm_core_profile_activity'] = array(
     'description' => 'Stores CRM Core Profile Activity form information',
-    'export' => array(
-      'key' => 'activity_name',
-      'key name' => 'Name',
-      'primary key' => 'activity_name',
-    ),
     'fields' => array(
-      'activity_name' => array(
+      'name' => array(
         'description' => 'The machine name of the profile form, primary and foreign key',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
       ),
-      'activity_bundle_type' => array(
+      'bundle_type' => array(
         'description' => 'The machine-readable name of this bundle_type.',
         'type' => 'varchar',
         'length' => 128,
         'not null' => TRUE,
       ),
-      'activity_fields' => array(
+      'fields' => array(
         'type' => 'blob',
         'not null' => FALSE,
         'size' => 'big',
         'serialize' => TRUE,
         'description' => 'A serialized array of the fields that will be used on the form',
     ),
-      'activity_status' => array(
+      'status' => array(
         'description' => 'The status of the profile form, defaults to active',
         'type' => 'int',
         'not null' => FALSE,
         'default' => 1,
         'size' => 'tiny',
       ),
-      'activity_created' => array(
+      'created' => array(
         'description' => 'Timestamp of when the profile form is created',
         'type' => 'int',
         'not null' => FALSE,
         'default' => 0,
       ),
+      'create_activity_actions' => array(
+        'description' => 'Load activity sequence',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'default' => '',
+      ),
   ),
-    'primary key' => array('activity_name'),
+    'primary key' => array('name'),
   );
 
   return $schema;
@@ -54,58 +56,14 @@ function crm_core_profile_activity_schema() {
 /**
  * Add load contact sequence field.
  *
- * Change database fields with prefix activity_
+ * Implements hook_update_N().
  */
 function crm_core_profile_activity_update_7001(&$sandbox) {
-  // change all the field names
-  // alter the DB field to blob
-  db_drop_primary_key('crm_core_profile_activity');
-  
-  db_change_field('crm_core_profile_activity', 'name', 'activity_name',
-    array(
-        'description' => 'The machine name of the profile form, primary and foreign key',
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-      ),
-      array('primary key' => array('activity_name'))
-  );
-  
-  db_change_field('crm_core_profile_activity', 'bundle_type', 'activity_bundle_type',
-     array(
-       'description' => 'The machine-readable name of this bundle_type.',
-       'type' => 'varchar',
-       'length' => 128,
-       'not null' => TRUE,
-     )  
-  );
-  
-  db_change_field('crm_core_profile_activity', 'fields', 'activity_fields',
-    array(
-      'type' => 'blob',
-      'not null' => FALSE,
-      'size' => 'big',
-      'serialize' => TRUE,
-      'description' => 'A serialized array of the fields that will be used on the form',
-    ) 
-  );
-  
-  db_change_field('crm_core_profile_activity', 'status', 'activity_status',
-    array(
-      'description' => 'The status of the profile form, defaults to active',
-      'type' => 'int',
-      'not null' => FALSE,
-      'default' => 1,
-      'size' => 'tiny',
-    )
-  );
-  
-  db_change_field('crm_core_profile_activity', 'created', 'activity_created',
-    array(
-      'description' => 'Timestamp of when the profile form is created',
-      'type' => 'int',
-      'not null' => FALSE,
-      'default' => 0,
-    )
-  );
+  db_add_field('crm_core_profile_activity', 'create_activity_actions', array(
+    'description' => 'Load activity sequence',
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => FALSE,
+    'default' => '',
+  ));
 }
