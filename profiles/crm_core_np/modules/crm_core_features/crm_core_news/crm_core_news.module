@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CRM Core News feature.
+ */
+
+include_once 'crm_core_news.features.inc';
