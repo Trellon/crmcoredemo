@@ -87,6 +87,7 @@ dependencies[] = crm_core_profile_notification
 dependencies[] = crm_core_demo_settings
 
 ; Install non essential modules.
+dependencies[] = diff
 dependencies[] = rules
 dependencies[] = rules_admin
 
