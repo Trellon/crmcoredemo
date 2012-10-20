@@ -35,6 +35,30 @@ function crm_core_event_registration_menu() {
 }
 
 /**
+ * Implements hook_theme
+ */
+function crm_core_event_registration_theme($existing, $type, $theme, $path) {
+  
+  $path = drupal_get_path('module', 'crm_core_event_registration');
+  $theme_inc = 'theme.inc';
+  
+  return array(
+    'views_view__event_registration_reports__page' => array(
+      'template' => 'views-view--event-registration-reports--page',
+       'original hook' => 'views_view',
+       'path' => $path,
+       'preprocess functions' => array(
+         'template_preprocess',
+         'template_preprocess_views_view',
+         'crm_core_event_registration_reports_preprocess',
+      ),
+      'file' => $theme_inc, 
+    ),
+  );  
+
+}
+
+/**
  * implements hook_node_view
  * Adding an event registration link on the event pages
  */
