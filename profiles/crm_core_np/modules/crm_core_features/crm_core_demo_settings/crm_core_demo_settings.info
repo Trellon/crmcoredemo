@@ -16,3 +16,5 @@ features[field][] = crm_core_contact-individual-contact_image
 features[field][] = crm_core_contact-individual-contact_name
 features[field][] = crm_core_contact-individual-field_billing_address
 features[field][] = crm_core_contact-individual-field_contact_email
+features[variable][] = admin_theme
+features[variable][] = node_admin_theme
