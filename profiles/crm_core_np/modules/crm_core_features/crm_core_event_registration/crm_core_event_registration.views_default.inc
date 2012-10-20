@@ -493,6 +493,13 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['header']['view']['field'] = 'view';
   $handler->display->display_options['header']['view']['view_to_insert'] = 'event_registration_reports_content_:block_1';
   $handler->display->display_options['header']['view']['inherit_arguments'] = TRUE;
+  $handler->display->display_options['defaults']['empty'] = FALSE;
+  /* No results behavior: Global: Unfiltered text */
+  $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
+  $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
+  $handler->display->display_options['empty']['area_text_custom']['field'] = 'area_text_custom';
+  $handler->display->display_options['empty']['area_text_custom']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area_text_custom']['content'] = '<div class="messages warning">There is currently no one registered to this event.</div> ';
   $handler->display->display_options['path'] = 'admin/crm/report/event/registration/%';
   $handler->display->display_options['menu']['title'] = 'Event Registration Reports';
   $handler->display->display_options['menu']['weight'] = '0';
@@ -505,6 +512,13 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'views_data_export_csv';
+  $handler->display->display_options['style_options']['provide_file'] = 1;
+  $handler->display->display_options['style_options']['parent_sort'] = 0;
+  $handler->display->display_options['style_options']['quote'] = 1;
+  $handler->display->display_options['style_options']['trim'] = 0;
+  $handler->display->display_options['style_options']['replace_newlines'] = 0;
+  $handler->display->display_options['style_options']['header'] = 1;
+  $handler->display->display_options['defaults']['empty'] = FALSE;
   $handler->display->display_options['path'] = 'admin/crm/report/event/registration/%/export';
   $handler->display->display_options['displays'] = array(
     'page' => 'page',
@@ -591,20 +605,17 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['field_crmer_registration']['field'] = 'field_crmer_registration';
   $handler->display->display_options['fields']['field_crmer_registration']['label'] = '';
   $handler->display->display_options['fields']['field_crmer_registration']['element_label_colon'] = FALSE;
-  /* Field: SUM(CRM Activity: Number of Attendees) */
+  /* Field: COUNT(CRM Activity: Number of Attendees) */
   $handler->display->display_options['fields']['field_registration_attendee']['id'] = 'field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['table'] = 'field_data_field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['field'] = 'field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['relationship'] = 'reverse_field_registration_event_crm_core_activity';
-  $handler->display->display_options['fields']['field_registration_attendee']['group_type'] = 'sum';
+  $handler->display->display_options['fields']['field_registration_attendee']['group_type'] = 'count';
   $handler->display->display_options['fields']['field_registration_attendee']['label'] = '';
   $handler->display->display_options['fields']['field_registration_attendee']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['field_registration_attendee']['alter']['text'] = '[field_registration_attendee-value] Registered';
   $handler->display->display_options['fields']['field_registration_attendee']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_registration_attendee']['settings'] = array(
-    'thousand_separator' => ' ',
-    'prefix_suffix' => 1,
-  );
+  $handler->display->display_options['fields']['field_registration_attendee']['separator'] = ', ';
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
@@ -637,6 +648,84 @@ function crm_core_event_registration_views_default_views() {
   /* Display: Event List */
   $handler = $view->new_display('page', 'Event List', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['empty'] = FALSE;
+  /* No results behavior: Global: Unfiltered text */
+  $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
+  $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
+  $handler->display->display_options['empty']['area_text_custom']['field'] = 'area_text_custom';
+  $handler->display->display_options['empty']['area_text_custom']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area_text_custom']['content'] = '<div class="message warning">There is currently no event created in the system</div>';
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Nid */
+  $handler->display->display_options['fields']['nid']['id'] = 'nid';
+  $handler->display->display_options['fields']['nid']['table'] = 'node';
+  $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid']['label'] = '';
+  $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  /* Field: Content: Event Date */
+  $handler->display->display_options['fields']['field_crmer_event_date']['id'] = 'field_crmer_event_date';
+  $handler->display->display_options['fields']['field_crmer_event_date']['table'] = 'field_data_field_crmer_event_date';
+  $handler->display->display_options['fields']['field_crmer_event_date']['field'] = 'field_crmer_event_date';
+  $handler->display->display_options['fields']['field_crmer_event_date']['label'] = '';
+  $handler->display->display_options['fields']['field_crmer_event_date']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_crmer_event_date']['settings'] = array(
+    'format_type' => 'slim',
+    'fromto' => 'both',
+    'multiple_number' => '',
+    'multiple_from' => '',
+    'multiple_to' => '',
+  );
+  /* Field: Content: Address */
+  $handler->display->display_options['fields']['field_crmer_address']['id'] = 'field_crmer_address';
+  $handler->display->display_options['fields']['field_crmer_address']['table'] = 'field_data_field_crmer_address';
+  $handler->display->display_options['fields']['field_crmer_address']['field'] = 'field_crmer_address';
+  $handler->display->display_options['fields']['field_crmer_address']['label'] = '';
+  $handler->display->display_options['fields']['field_crmer_address']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_crmer_address']['alter']['text'] = '[field_crmer_address-locality], [field_crmer_address-administrative_area]';
+  $handler->display->display_options['fields']['field_crmer_address']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_crmer_address']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_crmer_address']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  $handler->display->display_options['fields']['field_crmer_address']['group_column'] = 'entity_id';
+  /* Field: Content: Registration */
+  $handler->display->display_options['fields']['field_crmer_registration']['id'] = 'field_crmer_registration';
+  $handler->display->display_options['fields']['field_crmer_registration']['table'] = 'field_data_field_crmer_registration';
+  $handler->display->display_options['fields']['field_crmer_registration']['field'] = 'field_crmer_registration';
+  $handler->display->display_options['fields']['field_crmer_registration']['label'] = '';
+  $handler->display->display_options['fields']['field_crmer_registration']['element_label_colon'] = FALSE;
+  /* Field: COUNT(CRM Activity: Number of Attendees) */
+  $handler->display->display_options['fields']['field_registration_attendee']['id'] = 'field_registration_attendee';
+  $handler->display->display_options['fields']['field_registration_attendee']['table'] = 'field_data_field_registration_attendee';
+  $handler->display->display_options['fields']['field_registration_attendee']['field'] = 'field_registration_attendee';
+  $handler->display->display_options['fields']['field_registration_attendee']['relationship'] = 'reverse_field_registration_event_crm_core_activity';
+  $handler->display->display_options['fields']['field_registration_attendee']['group_type'] = 'count';
+  $handler->display->display_options['fields']['field_registration_attendee']['label'] = '';
+  $handler->display->display_options['fields']['field_registration_attendee']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_registration_attendee']['alter']['text'] = '[field_registration_attendee] Registered';
+  $handler->display->display_options['fields']['field_registration_attendee']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_registration_attendee']['separator'] = ', ';
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = '';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = 'View Registrations';
+  $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'admin/crm/report/event/registration/[nid]';
+  $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   $handler->display->display_options['path'] = 'admin/crm/report/event/registration';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Event Registrations';
@@ -666,26 +755,23 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['field_crmer_event_date']['label'] = 'Date';
   $handler->display->display_options['fields']['field_crmer_event_date']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_crmer_event_date']['settings'] = array(
-    'format_type' => 'event_date',
+    'format_type' => 'slim',
     'fromto' => 'both',
     'multiple_number' => '',
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Field: SUM(CRM Activity: Number of Attendees) */
+  /* Field: COUNT(CRM Activity: Number of Attendees) */
   $handler->display->display_options['fields']['field_registration_attendee']['id'] = 'field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['table'] = 'field_data_field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['field'] = 'field_registration_attendee';
   $handler->display->display_options['fields']['field_registration_attendee']['relationship'] = 'reverse_field_registration_event_crm_core_activity';
-  $handler->display->display_options['fields']['field_registration_attendee']['group_type'] = 'sum';
+  $handler->display->display_options['fields']['field_registration_attendee']['group_type'] = 'count';
   $handler->display->display_options['fields']['field_registration_attendee']['label'] = 'Registered Attendees';
   $handler->display->display_options['fields']['field_registration_attendee']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_registration_attendee']['alter']['text'] = '[field_registration_attendee-value] Registered';
+  $handler->display->display_options['fields']['field_registration_attendee']['alter']['text'] = '[field_registration_attendee] Registered';
   $handler->display->display_options['fields']['field_registration_attendee']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_registration_attendee']['settings'] = array(
-    'thousand_separator' => ' ',
-    'prefix_suffix' => 1,
-  );
+  $handler->display->display_options['fields']['field_registration_attendee']['separator'] = ', ';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Nid */
   $handler->display->display_options['arguments']['nid']['id'] = 'nid';
