@@ -75,6 +75,7 @@ dependencies[] = commerce_payment
 
 dependencies[] = authnet_arb
 dependencies[] = commerce_authnet
+dependencies[] = commerce_node_product
 
 dependencies[] = calendar
 

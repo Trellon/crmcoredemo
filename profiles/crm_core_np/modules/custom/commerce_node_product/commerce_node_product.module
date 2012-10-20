@@ -1,0 +1,220 @@
+<?php
+/**
+ * @file
+ * Implement sf_product_event module feature.
+ *
+ * This module is developed and maintaining by Trellon LLC, by Vladyslav Bogatyrov.
+ *
+ * To Trellonauts:
+ *   Hi Team!
+ *   I am going to make this module a contributed one when it would be ready.
+ *   So if you have a suggestions or updating the code, please ping me - let's make it better
+ *   and contribute it together!
+ *   Thanks!
+ */
+
+// Testing:
+//   check deleting entities
+
+/*
+ * hook_entity_presave implementation
+ *
+ * a replacement for node_presave
+ */
+function commerce_node_product_entity_presave($entity, $type) { 
+  
+  if (!commerce_node_product_entity_allow_sync($entity, $type)) {
+    return;
+  }
+
+  $product_fields = commerce_node_product_get_reference_fields ($entity, $type);
+  foreach ($product_fields as $product_field) {
+    $hooks_sync_allow = module_invoke_all('commerce_node_product_allow_sync', $entity, $type, $product_field);
+    if (in_array(FALSE, $hooks_sync_allow)) {
+      return;
+    }
+    if ($entity->is_new) {
+      commerce_node_product_attach_new($entity, $type, $product_field);
+    } elseif (commerce_node_product_attach_empty($entity, $type, $product_field)) {
+      commerce_node_product_attach_new($entity, $type, $product_field);
+    } else {
+      commerce_node_product_attach_update($entity, $type, $product_field);
+    }
+  }
+}
+
+function commerce_node_product_entity_delete($entity, $type) {
+  if (!commerce_node_product_entity_allow_sync($entity, $type)) {
+    return;
+  }
+
+  $product_reference_fields = commerce_node_product_get_reference_fields ($entity, $type);
+  foreach ($product_reference_fields as $product_field) {
+    if (!commerce_node_product_attach_empty($entity, $type, $product_field)) {
+      $product = commerce_product_load($entity->{$product_field}[LANGUAGE_NONE][0]['product_id']);
+      $product->status = 0;
+      commerce_product_save($product);
+    }
+  }
+}
+
+function commerce_node_product_attach_new($entity, $type, $fieldname) {
+  // Create a product.
+  $product = commerce_product_new(commerce_node_product_get_type($entity, $type, $fieldname));
+  commerce_node_product_populate($product, $entity, $type, $fieldname);
+  commerce_product_save($product);
+
+  // update an entity with a reference to newly created product.
+  $entity->{$fieldname}[LANGUAGE_NONE][0]['product_id'] = $product->product_id;
+}
+
+function commerce_node_product_attach_update($entity, $type, $product_field) {
+  if(empty($entity->{$product_field}[LANGUAGE_NONE])) {
+    return FALSE;
+  }
+  
+  $product = commerce_product_load($entity->{$product_field}[LANGUAGE_NONE][0]['product_id']);
+  if(empty($product)) {
+    return FALSE;
+  }
+
+  commerce_node_product_populate($product, $entity, $type, $product_field);
+
+  commerce_product_save($product);
+
+}
+
+function commerce_node_product_populate($product, $entity, $type, $product_fieldname) {
+  $settings = commerce_node_product_settings();
+
+  $bundle = commerce_node_product_entity_get_bundle($entity, $type);
+
+  $new_sku = drupal_clean_css_identifier(
+      token_replace($settings[$type][$bundle][$product_fieldname]['product_sku'],
+        array($type => $entity)));
+
+  if (empty($product->product_id)) {
+    $product->sku = commerce_node_product_unquiquize_sku($new_sku);
+  } else {
+    // ToDo: here we comparing $new_sku that never indclides a unique suffix
+    // with a existed sku that may inclide it.
+    // This is not right, and have to be reworked.
+    if ($product->sku != $new_sku) {
+      $product->sku = commerce_node_product_unquiquize_sku($new_sku);
+    }
+  }
+
+  if (!empty($settings[$type][$bundle][$product_fieldname]['product_title'])) {
+    $product->title = token_replace(
+      $settings[$type][$bundle][$product_fieldname]['product_title'],
+      array($type => $entity));
+  } else {
+    $product->title = ($type == 'node') ? $entity->title : rand();
+  }
+  
+  // ToDo: find a solution for not nodes entities for following line
+  $product->uid = ($type == 'node') ? $entity->uid : 1;
+
+  // ToDo: test it
+  $product->language = LANGUAGE_NONE;
+
+  $product->status = ($type == 'node') ? $entity->status : TRUE;
+
+  if (isset($settings[$type][$bundle][$product_fieldname]['sync_fields'])) {
+    foreach ($settings[$type][$bundle][$product_fieldname]['sync_fields'] as $source => $target) {
+      commerce_node_product_sync_fields($product, $entity, $type, $source, $target);
+    }
+  }
+}
+
+
+function commerce_node_product_entity_allow_sync($entity, $type) {
+  $settings = commerce_node_product_settings();
+  foreach ($settings as $settings_type => $bundles) {
+    if ($settings_type == $type) {
+      $bundle = commerce_node_product_entity_get_bundle($entity, $type);
+      if (isset ($bundles[$bundle])) {
+        return TRUE;
+      }
+    }
+  }
+  
+  return FALSE;
+}
+
+
+function commerce_node_product_get_type($entity, $type, $fieldname) {
+  $bundle = commerce_node_product_entity_get_bundle($entity, $type);
+  $product_fieldname_instance_info = field_info_instance($type, $fieldname, $bundle);
+  foreach ($product_fieldname_instance_info['settings']['referenceable_types'] as $product_type) {
+    if (!empty($product_type)) {
+      return $product_type;
+    }
+  }
+  return NULL;
+}
+
+
+function commerce_node_product_settings () {
+  $settings = &drupal_static(__FUNCTION__);
+  if (!isset($settings)) {
+    $cache = cache_get(__FUNCTION__);
+    if ($cache != FALSE) {
+      $settings = $cache->data;
+    } else {
+      $settings = module_invoke_all('commerce_node_product_settings');
+      cache_set(__FUNCTION__, $settings);
+    }
+  }
+  return $settings;
+}
+
+
+/*
+ * Populate a $target_product->$source_fieldname with a values from $source_entity->$source_fieldname
+ */
+function commerce_node_product_sync_fields($target_product, $source_entity, $source_entity_type, $source_fieldname, $target_fieldname) {
+  $source_values = field_get_items($source_entity_type, $source_entity, $source_fieldname);
+  $langcode = field_language($source_entity_type, $source_entity, $source_fieldname);
+  $target_product->{$target_fieldname}[$langcode] = $source_values;
+}
+
+
+function commerce_node_product_get_reference_fields($entity, $type) {
+  $settings = commerce_node_product_settings();
+  $bundle = commerce_node_product_entity_get_bundle($entity, $type);
+  foreach ($settings[$type][$bundle] as $fieldname => $sync_settings) {
+    $fields[] = $fieldname;
+  }
+  return $fields;
+}
+
+
+function commerce_node_product_entity_get_bundle($entity, $type) {
+  // ToDo: add caching here
+  $info = entity_get_info($type);
+  if (empty($info['entity keys']['bundle'])) {
+    return $type;
+  } else {
+    return $entity->{$info['entity keys']['bundle']};
+  }
+}
+
+
+function commerce_node_product_attach_empty($entity, $type, $fieldname) {
+  $items = field_get_items($type, $entity, $fieldname);
+  if ($items === FALSE) {
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}
+
+
+function commerce_node_product_unquiquize_sku($sku) {
+  if(!commerce_product_validate_sku_unique($sku, NULL)){
+    return commerce_node_product_unquiquize_sku($sku.'-'.rand());
+  } else {
+    return $sku;
+  }
+}

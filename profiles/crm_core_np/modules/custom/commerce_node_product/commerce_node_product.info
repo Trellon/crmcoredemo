@@ -1,0 +1,7 @@
+name = Commerce Node Product 
+description = "Create for each node of selected type a product and sync it's selected fields values."
+package = Trellon
+core = 7.x
+
+dependencies[] = commerce_product_reference
+dependencies[] = token
