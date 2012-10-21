@@ -148,7 +148,7 @@ function crm_core_news_field_default_fields() {
           'rows' => 5,
         ),
         'type' => 'text_textarea',
-        'weight' => 2,
+        'weight' => '2',
       ),
     ),
   );
@@ -217,7 +217,63 @@ function crm_core_news_field_default_fields() {
           'size' => 60,
         ),
         'type' => 'entityreference_autocomplete_tags',
-        'weight' => -4,
+        'weight' => '-4',
+      ),
+    ),
+  );
+
+  // Exported field: 'crm_core_activity-news_subscription-field_newsletter_action'.
+  $fields['crm_core_activity-news_subscription-field_newsletter_action'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_newsletter_action',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'subscribed' => 'Subscribed',
+          'unsubscribed' => 'Unsubscribed',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '0',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'news_subscription',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 4,
+        ),
+      ),
+      'entity_type' => 'crm_core_activity',
+      'field_name' => 'field_newsletter_action',
+      'label' => 'Newsletter Action',
+      'required' => FALSE,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '4',
       ),
     ),
   );
@@ -289,6 +345,7 @@ function crm_core_news_field_default_fields() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Date');
+  t('Newsletter Action');
   t('Newsletter Category');
   t('Notes');
   t('Participants');
