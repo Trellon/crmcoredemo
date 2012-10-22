@@ -5,3 +5,76 @@
  */
 
 include_once 'crm_core_news.features.inc';
+
+/**
+ * Implements hook_simplenews_subscribe_user().
+ */
+function crm_core_news_simplenews_subscribe_user($subscriber, $subscription) {
+  $contact = _crm_core_news_create_get_create_contact($subscriber->uid, $subscriber->mail);
+  _crm_core_news_create_subscription_activity($contact, $subscription->tid, TRUE);
+}
+
+/**
+ * Implements hook_simplenews_unsubscribe_user().
+ */
+function crm_core_news_simplenews_unsubscribe_user($subscriber, $subscription) {
+  $contact = _crm_core_news_create_get_create_contact($subscriber->uid, $subscriber->mail);
+  _crm_core_news_create_subscription_activity($contact, $subscription->tid, FALSE);
+}
+
+/**
+ * Returns found contact or created one.
+ */
+function _crm_core_news_create_get_create_contact($uid, $email) {
+  $contact_bundle = variable_get('crm_core_news_contact_bundle', 'individual');
+  $contact_email_field = variable_get('crm_core_news_contact_email_field', 'field_contact_email');
+
+  $contact = FALSE;
+    
+  // Try to get related contact for him
+  if (!empty($uid)) {
+    $contact = crm_user_sync_get_contact_from_uid($uid);
+  }
+
+  // Try to find contact by email
+  if (!$contact) {
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'crm_core_contact')
+      ->fieldCondition($contact_email_field, 'email', $email, '=')
+      ->execute();
+    if (!empty($result['crm_core_contact'])) {
+      $contact = reset($result['crm_core_contact']);
+      $contact = crm_core_contact_load($contact->contact_id);
+    }
+  }
+
+  // Try to create new contact
+  if (!$contact) {
+    $contact = entity_create('crm_core_contact', array('type' => $contact_bundle));
+    $contact->contact_name[LANGUAGE_NONE][0]['given'] = $email;
+    $contact->{$contact_email_field}[LANGUAGE_NONE][0]['email'] = $email;
+    crm_core_contact_save($contact);
+  }
+
+  return $contact;
+}
+
+/**
+ * Creates news subscription activity and returns it.
+ */
+function _crm_core_news_create_subscription_activity($contact, $categiry_tid, $subscribed = TRUE) {
+  $activity = entity_create('crm_core_activity', array('type' => 'news_subscription'));
+  $activity->title =  $subscribed ? t('Newsletter Subscription') : t('Subscription Cancellation');
+  $activity->field_activity_participants[LANGUAGE_NONE][0]['target_id'] =  $contact->contact_id;
+  $activity->field_activity_date[LANGUAGE_NONE][0] = array(
+    'value' => format_date(strtotime('now'), 'custom', 'Y-m-d H:i:s', 'UTC'),
+    'timezone' => 'UTC',  
+    'timezone_db' => 'UTC',
+  );
+  $activity->field_newsletter_category[LANGUAGE_NONE][0]['tid'] = $categiry_tid;
+  $activity->field_newsletter_action[LANGUAGE_NONE][0]['value'] = $subscribed ? 'subscribe' : 'unsubscribe';
+  crm_core_activity_save($activity);
+
+  return $activity;
+}
