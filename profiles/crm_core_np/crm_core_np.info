@@ -19,6 +19,7 @@ dependencies[] = field_ui
 dependencies[] = file
 dependencies[] = search
 dependencies[] = strongarm
+dependencies[] = libraries
 
 
 ; Install CRM Core dependencies.
@@ -91,6 +92,7 @@ dependencies[] = crm_core_demo_settings
 dependencies[] = diff
 dependencies[] = rules
 dependencies[] = rules_admin
+dependencies[] = twitter_bootstrap_ui
 
 ; System Requirements.
 php_memory_limit = 128M
