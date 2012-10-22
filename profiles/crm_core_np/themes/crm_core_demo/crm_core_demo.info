@@ -1,0 +1,7 @@
+
+name = CRM Core Demo theme
+description = Uses Twitter Bootstrap for a base
+version = 1.0
+core = 7.x
+
+base theme = twitter_bootstrap
