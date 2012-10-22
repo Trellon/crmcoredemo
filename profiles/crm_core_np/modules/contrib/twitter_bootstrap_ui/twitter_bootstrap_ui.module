@@ -1,0 +1,118 @@
+<?php
+
+/*
+ * @file
+ *
+ */
+
+function twitter_bootstrap_ui_requirements($phase) {
+  if ($phase == 'runtime') {
+	if(($library = libraries_detect('twitter_bootstrap')) && empty($library['installed'])) {
+  
+	  $targs = array(
+		'@library-filepath' => libraries_get_path($library['machine name']),
+	  );
+  
+	  $description = '<p>' .  $library['error message'] . '</p>';
+	  //$instructions .= '<p>' . t('Extract the archive and copy its contents into a new folder in the following location:<br /><code>@library-filepath</code>', $targs) . '</p>';
+	  //drupal_set_message($instructions);
+	  
+	  $requirements['twitter_bootstrap'] = array(
+		'title' => t('Twitter Bootstrap'), 
+		'value' => t($library['error message']), 
+		'severity' => REQUIREMENT_WARNING,
+		'description' => $description
+	  );
+	  
+	  return $requirements;
+	}
+  }
+}
+
+function twitter_bootstrap_ui_libraries_info() {
+  // The following is a full explanation of all properties. See below for more
+  // concrete example implementations.
+
+  // This array key lets Libraries API search for 'sites/all/libraries/example'
+  // directory, which should contain the entire, original extracted library.
+  $libraries['twitter_bootstrap'] = array(
+    // Only used in administrative UI of Libraries API.
+    'name' => 'Twitter Bootstrap',
+    'vendor url' => 'http://twitter.github.com',
+    'download url' => 'http://twitter.github.com/bootstrap/assets/bootstrap.zip',
+    // Optional: If, after extraction, the actual library files are contained in
+    // 'sites/all/libraries/example/lib', specify the relative path here.
+    //'path' => 'bootstrap',
+    // Optional: Define a custom version detection callback, if required.
+    #'version callback' => 'mymodule_get_version',
+    // Specify arguments for the version callback. By default,
+    // libraries_get_version() takes a named argument array:
+    'version arguments' => array(
+      'file' => 'css/bootstrap.css',
+      'pattern' => '/Bootstrap v(\d+)/',
+      'lines' => 3,
+      'cols' => 50,
+    ),
+    // Default list of files of the library to load. Important: Only specify
+    // third-party files belonging to the library here, not integration files of
+    // your module.
+    'files' => array(
+      // 'js' and 'css' follow the syntax of hook_library(), but file paths are
+      // relative to the library path.
+      'js' => array(
+        'js/bootstrap.js',
+      ),
+      'css' => array(
+        'css/bootstrap.css',
+      ),
+    ),
+    // Optional: Specify alternative variants of the library, if available.
+    'variants' => array(
+      // All properties defined for 'minified' override top-level properties.
+      'minified' => array(
+        'files' => array(
+		  'js' => array(
+			'js/bootstrap.min.js',
+		  ),
+		  'css' => array(
+			'css/bootstrap.min.css',
+		  ),
+        ),
+        //'variant callback' => 'mymodule_check_variant',
+        #'variant arguments' => array(
+         # 'variant' => 'minified',
+       # ),
+      ),
+    ),
+    // Optional, but usually required: Override top-level properties for later
+    // versions of the library. The properties of the minimum version that is
+    // matched override the top-level properties. Note:
+    // - When registering 'versions', it usually does not make sense to register
+    //   'files', 'variants', and 'integration files' on the top-level, as most
+    //   of those likely need to be different per version and there are no
+    //   defaults.
+    // - The array keys have to be strings, as PHP does not support floats for
+    //   array keys.
+    'versions' => array(
+      '2' => array(
+        'files' => array(
+		  'js' => array(
+			'js/bootstrap.js',
+		  ),
+		  'css' => array(
+			'css/bootstrap.css',
+		  ),
+        ),
+      ),
+    ),
+    // Optional: Register files to auto-load for your module. All files must be
+    // keyed by module, and follow the syntax of the 'files' property.
+    #'integration files' => array(
+    #  'mymodule' => array(
+    #    'js' => array('ex_lib.inc'),
+    #  ),
+    #),
+  );
+
+  return $libraries;
+}

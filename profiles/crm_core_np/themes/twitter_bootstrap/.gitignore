@@ -1,0 +1,3 @@
+lib/*
+!lib/README.txt
+bootstrap/*
