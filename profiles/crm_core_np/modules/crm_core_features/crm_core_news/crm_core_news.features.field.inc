@@ -240,8 +240,8 @@ function crm_core_news_field_default_fields() {
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
-          'subscribed' => 'Subscribed',
-          'unsubscribed' => 'Unsubscribed',
+          'subscribe' => 'Subscribe',
+          'unsubscribe' => 'Unsubscribe',
         ),
         'allowed_values_function' => '',
       ),
@@ -265,11 +265,12 @@ function crm_core_news_field_default_fields() {
       'entity_type' => 'crm_core_activity',
       'field_name' => 'field_newsletter_action',
       'label' => 'Newsletter Action',
-      'required' => FALSE,
+      'required' => 1,
       'settings' => array(
         'user_register_form' => FALSE,
       ),
       'widget' => array(
+        'active' => 1,
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_buttons',
@@ -329,11 +330,12 @@ function crm_core_news_field_default_fields() {
       'entity_type' => 'crm_core_activity',
       'field_name' => 'field_newsletter_category',
       'label' => 'Newsletter Category',
-      'required' => FALSE,
+      'required' => 1,
       'settings' => array(
         'user_register_form' => FALSE,
       ),
       'widget' => array(
+        'active' => 1,
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_buttons',
