@@ -654,7 +654,7 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
   $handler->display->display_options['empty']['area_text_custom']['field'] = 'area_text_custom';
   $handler->display->display_options['empty']['area_text_custom']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area_text_custom']['content'] = '<div class="message warning">There is currently no event created in the system</div>';
+  $handler->display->display_options['empty']['area_text_custom']['content'] = '<div class="messages warning">There is currently no event created in the system</div>';
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';

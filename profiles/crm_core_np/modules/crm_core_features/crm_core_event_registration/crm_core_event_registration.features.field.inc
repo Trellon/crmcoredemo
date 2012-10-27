@@ -1170,6 +1170,89 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
+  // Exported field: 'node-event-field_crmer_redirect_path'.
+  $fields['node-event-field_crmer_redirect_path'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_crmer_redirect_path',
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'locked' => '0',
+      'module' => 'link',
+      'settings' => array(
+        'attributes' => array(
+          'class' => '',
+          'rel' => '',
+          'target' => 'default',
+        ),
+        'display' => array(
+          'url_cutoff' => 80,
+        ),
+        'enable_tokens' => 1,
+        'title' => 'optional',
+        'title_maxlength' => 128,
+        'title_value' => '',
+        'url' => 0,
+      ),
+      'translatable' => '0',
+      'type' => 'link_field',
+    ),
+    'field_instance' => array(
+      'bundle' => 'event',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => 'When the event registration is completed, specify the url where it should redirect users to',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'link',
+          'settings' => array(),
+          'type' => 'link_default',
+          'weight' => 7,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_crmer_redirect_path',
+      'label' => 'Redirect URL',
+      'required' => 0,
+      'settings' => array(
+        'attributes' => array(
+          'class' => '',
+          'configurable_title' => 0,
+          'rel' => '',
+          'target' => 'default',
+          'title' => '',
+        ),
+        'display' => array(
+          'url_cutoff' => '80',
+        ),
+        'enable_tokens' => 1,
+        'title' => 'none',
+        'title_maxlength' => '128',
+        'title_value' => '',
+        'url' => 0,
+        'user_register_form' => FALSE,
+        'validate_url' => 1,
+      ),
+      'widget' => array(
+        'active' => 0,
+        'module' => 'link',
+        'settings' => array(),
+        'type' => 'link_field',
+        'weight' => '6',
+      ),
+    ),
+  );
+
   // Exported field: 'node-event-field_crmer_registration'.
   $fields['node-event-field_crmer_registration'] = array(
     'field_config' => array(
@@ -1250,12 +1333,14 @@ function crm_core_event_registration_field_default_fields() {
   t('Number of Attendees');
   t('Participants');
   t('Phone');
+  t('Redirect URL');
   t('Registration');
   t('Role');
   t('Status');
   t('The order associated with this event registration if the event type was paid');
   t('The registration role for the given user');
   t('The status of this registration');
+  t('When the event registration is completed, specify the url where it should redirect users to');
 
   return $fields;
 }
