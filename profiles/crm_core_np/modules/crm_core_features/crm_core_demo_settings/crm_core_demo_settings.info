@@ -20,4 +20,7 @@ features[field][] = crm_core_contact-individual-field_contact_email
 features[field][] = crm_core_contact-individual-field_contact_phone
 features[field][] = crm_core_contact-individual-field_contact_volunteer
 features[variable][] = admin_theme
+features[variable][] = date_format_long
+features[variable][] = date_format_medium
+features[variable][] = date_format_short
 features[variable][] = node_admin_theme
