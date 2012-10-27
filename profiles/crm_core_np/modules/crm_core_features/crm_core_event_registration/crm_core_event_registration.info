@@ -9,6 +9,7 @@ dependencies[] = addressfield
 dependencies[] = cck_phone
 dependencies[] = commerce_cart
 dependencies[] = commerce_checkout
+dependencies[] = commerce_node_product
 dependencies[] = crm_core_activity
 dependencies[] = crm_core_profile
 dependencies[] = crm_core_profile_activity

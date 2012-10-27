@@ -17,3 +17,30 @@ function crm_core_volunteer_default_crm_core_activity_type() {
   }');
   return $items;
 }
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function crm_core_volunteer_ctools_plugin_api() {
+  list($module, $api) = func_get_args();
+  if ($module == "strongarm" && $api == "strongarm") {
+    return array("version" => "1");
+  }
+}
+
+/**
+ * Implements hook_node_info().
+ */
+function crm_core_volunteer_node_info() {
+  $items = array(
+    'volunteer_opportunity' => array(
+      'name' => t('Volunteer opportunity'),
+      'base' => 'node_content',
+      'description' => t('A volunteer opportunity that users can commit or register to perform'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+  );
+  return $items;
+}

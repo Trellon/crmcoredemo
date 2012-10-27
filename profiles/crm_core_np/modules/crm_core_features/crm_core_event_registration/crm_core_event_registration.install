@@ -25,6 +25,8 @@ function crm_core_event_registration_install() {
             'field_contact_email' => 'field_contact_email',
             'contact_image' => 0,
             'field_billing_address' => 0, 
+            'field_contact_volunteer' => 0,
+            'field_contact_phone' => 0,
         ),
        'weight' => array(
          'contact_name' => array(
