@@ -37,10 +37,10 @@ function crm_core_event_registration_menu() {
  * Implements hook_theme
  */
 function crm_core_event_registration_theme($existing, $type, $theme, $path) {
-  
+
   $path = drupal_get_path('module', 'crm_core_event_registration');
   $theme_inc = 'theme.inc';
-  
+
   return array(
     'views_view__event_registration_reports__page' => array(
       'template' => 'views-view--event-registration-reports--page',
@@ -51,9 +51,9 @@ function crm_core_event_registration_theme($existing, $type, $theme, $path) {
          'template_preprocess_views_view',
          'crm_core_event_registration_reports_preprocess',
       ),
-      'file' => $theme_inc, 
+      'file' => $theme_inc,
     ),
-  );  
+  );
 
 }
 
@@ -62,7 +62,7 @@ function crm_core_event_registration_theme($existing, $type, $theme, $path) {
  * Adding an event registration link on the event pages
  */
 function crm_core_event_registration_node_view($node, $view_mode) {
-      
+
     // @todo: be able to configure the weight of the registration link
     if ($node->type == variable_get('crm_core_event_registration_content_type', '')) {
       
@@ -113,9 +113,10 @@ function crm_core_event_registration_node_view($node, $view_mode) {
        // display registration button or form
        if (variable_get('crm_core_event_registration_form_visibility', 1) == 1) {
          $crm_core_profile = crm_core_profile_load($crm_core_profile_event);
-         
+
          if (!empty($crm_core_profile)) {
-           $node->content['crm_core_event_reg_form'] = crm_core_event_registration_attachment_form($node, $crm_core_profile); 
+           $node->content['crm_core_event_reg_form'] = crm_core_event_registration_attachment_form($node, $crm_core_profile);
+           $node->content['crm_core_event_reg_form']['#weight'] = 999;
            drupal_set_title($node->title);
            unset($node->content['crm_core_event_reg_form']['event']);
          }
@@ -123,9 +124,9 @@ function crm_core_event_registration_node_view($node, $view_mode) {
        } else {
          $node->content['crm_core_event_reg_link'] = array(
            '#markup' => l('<span>Register</span>', 'node/' . $node->nid . '/register/' . $crm_core_profile_event, array('html' => TRUE, 'attributes' => array('class' => array('crm_core_event_reg_link')))),
-         );         
-       }     
-       
+         );
+       }
+
 
     }
 }
@@ -278,14 +279,14 @@ function crm_core_event_registration_form_crm_core_profile_entry_form_alter(&$fo
     // free product, we are done
     else {
       $form['submit']['#value'] = t('Register');
-      
+
       // if redirect path is set on the node, we go there, otherwise we will go back to the event node
       if (!empty($node->field_crmer_redirect_path[LANGUAGE_NONE])) {
          $form_state['profile']['redirect'] = $node->field_crmer_redirect_path[LANGUAGE_NONE][0]['url'];
       } else {
         $form_state['profile']['redirect'] = drupal_get_path_alias('node/' . $node->nid);
       }
-      
+
       $form['#submit'][] = 'crm_core_event_registration_profile_form_submit';
     }
   }
@@ -420,7 +421,7 @@ function crm_core_event_registration_config($form, &$form_state) {
     '#default_value' => variable_get('crm_core_event_registration_content_type', 'page'),
     '#required' => TRUE,
   );
-  
+
   // select the content type for the component
   $form['content']['crm_core_event_registration_form_visibility'] = array(
     '#type' => 'select',
@@ -433,7 +434,7 @@ function crm_core_event_registration_config($form, &$form_state) {
     '#default_value' => variable_get('crm_core_event_registration_form_visibility', 1),
     '#required' => TRUE,
   );
-  
+
 
   // Getting the registration type field from the content type
   $event_content_type = variable_get('crm_core_event_registration_content_type', 'page');
