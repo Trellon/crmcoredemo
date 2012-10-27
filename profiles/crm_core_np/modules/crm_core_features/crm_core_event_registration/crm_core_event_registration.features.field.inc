@@ -10,6 +10,144 @@
 function crm_core_event_registration_field_default_fields() {
   $fields = array();
 
+  // Exported field: 'commerce_product-event_registration-commerce_price'.
+  $fields['commerce_product-event_registration-commerce_price'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(
+        0 => 'commerce_product',
+      ),
+      'field_name' => 'commerce_price',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'currency_price' => array(
+          0 => 'amount',
+          1 => 'currency_code',
+        ),
+      ),
+      'locked' => '1',
+      'module' => 'commerce_price',
+      'settings' => array(),
+      'translatable' => '0',
+      'type' => 'commerce_price',
+    ),
+    'field_instance' => array(
+      'bundle' => 'event_registration',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'commerce_line_item_display' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => 'calculated_sell_price',
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+        'default' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => 'calculated_sell_price',
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+        'full' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => 'calculated_sell_price',
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+        'line_item' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => 'calculated_sell_price',
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+        'node_full' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => 'calculated_sell_price',
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+        'node_rss' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => 'calculated_sell_price',
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+        'node_search_index' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => 'calculated_sell_price',
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+        'node_search_result' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => 'calculated_sell_price',
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+        'node_teaser' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => 'calculated_sell_price',
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+        'token' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => 'calculated_sell_price',
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'commerce_product',
+      'field_name' => 'commerce_price',
+      'label' => 'Price',
+      'required' => TRUE,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'module' => 'commerce_price',
+        'settings' => array(
+          'currency_code' => 'default',
+        ),
+        'type' => 'commerce_price_full',
+        'weight' => 0,
+      ),
+    ),
+  );
+
   // Exported field: 'crm_core_activity-event_registration-field_activity_date'.
   $fields['crm_core_activity-event_registration-field_activity_date'] = array(
     'field_config' => array(
@@ -1253,6 +1391,144 @@ function crm_core_event_registration_field_default_fields() {
     ),
   );
 
+  // Exported field: 'node-event-field_crmer_reg_price'.
+  $fields['node-event-field_crmer_reg_price'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_crmer_reg_price',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'currency_price' => array(
+          0 => 'amount',
+          1 => 'currency_code',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'commerce_price',
+      'settings' => array(),
+      'translatable' => '0',
+      'type' => 'commerce_price',
+    ),
+    'field_instance' => array(
+      'bundle' => 'event',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => 'Enter the event registration admission, if 0 or empty the event will be a free event',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => NULL,
+          'settings' => array(),
+          'type' => 'commerce_price_default',
+          'weight' => 8,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_crmer_reg_price',
+      'label' => 'Registration Price',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'commerce_price',
+        'settings' => array(
+          'currency_code' => 'USD',
+        ),
+        'type' => 'commerce_price_simple',
+        'weight' => '7',
+      ),
+    ),
+  );
+
+  // Exported field: 'node-event-field_crmer_reg_product'.
+  $fields['node-event-field_crmer_reg_product'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_crmer_reg_product',
+      'foreign keys' => array(
+        'product_id' => array(
+          'columns' => array(
+            'product_id' => 'product_id',
+          ),
+          'table' => 'commerce_product',
+        ),
+      ),
+      'indexes' => array(
+        'product_id' => array(
+          0 => 'product_id',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'commerce_product_reference',
+      'settings' => array(),
+      'translatable' => '0',
+      'type' => 'commerce_product_reference',
+    ),
+    'field_instance' => array(
+      'bundle' => 'event',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'commerce_cart',
+          'settings' => array(
+            'combine' => TRUE,
+            'default_quantity' => 1,
+            'line_item_type' => 'product',
+            'show_quantity' => FALSE,
+          ),
+          'type' => 'commerce_cart_add_to_cart_form',
+          'weight' => 9,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_crmer_reg_product',
+      'label' => 'Event Product',
+      'required' => 0,
+      'settings' => array(
+        'field_injection' => 1,
+        'referenceable_types' => array(
+          'event_registration' => 'event_registration',
+          'product' => 0,
+        ),
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'commerce_product_reference',
+        'settings' => array(
+          'autocomplete_match' => 'contains',
+          'autocomplete_path' => 'commerce_product/autocomplete',
+          'size' => '60',
+        ),
+        'type' => 'commerce_product_reference_autocomplete',
+        'weight' => '8',
+      ),
+    ),
+  );
+
   // Exported field: 'node-event-field_crmer_registration'.
   $fields['node-event-field_crmer_registration'] = array(
     'field_config' => array(
@@ -1325,16 +1601,20 @@ function crm_core_event_registration_field_default_fields() {
   t('Address');
   t('Admission');
   t('Date');
+  t('Enter the event registration admission, if 0 or empty the event will be a free event');
   t('Event');
   t('Event Date');
+  t('Event Product');
   t('Event Summary');
   t('Event Type');
   t('Notes');
   t('Number of Attendees');
   t('Participants');
   t('Phone');
+  t('Price');
   t('Redirect URL');
   t('Registration');
+  t('Registration Price');
   t('Role');
   t('Status');
   t('The order associated with this event registration if the event type was paid');

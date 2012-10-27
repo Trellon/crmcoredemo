@@ -5,6 +5,22 @@
  */
 
 /**
+ * Implements hook_commerce_product_default_types().
+ */
+function crm_core_event_registration_commerce_product_default_types() {
+  $items = array(
+    'event_registration' => array(
+      'type' => 'event_registration',
+      'name' => 'Event Registration',
+      'description' => '',
+      'help' => '',
+      'revision' => '1',
+    ),
+  );
+  return $items;
+}
+
+/**
  * Implements hook_default_crm_core_activity_type().
  */
 function crm_core_event_registration_default_crm_core_activity_type() {
