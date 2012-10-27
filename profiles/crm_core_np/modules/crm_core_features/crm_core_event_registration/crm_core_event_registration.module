@@ -390,7 +390,7 @@ function crm_core_event_registration_commerce_checkout_pane_info_alter(&$checkou
  * Submission handler for free event registration
  */
 function crm_core_event_registration_profile_form_submit($form, &$form_state) {
-  $message = variable_get('crm_core_event_registration_redirect_message', 'Thank you for register for the event. You will be notified shortly.');
+  $message = variable_get('crm_core_event_registration_redirect_message', 'Thank you for registering. You will receive a confirmation e-mail shortly.');
   drupal_set_message($message);
 }
 

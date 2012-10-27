@@ -949,7 +949,7 @@ function crm_core_donation_field_default_fields() {
   t('CC Last 4');
   t('Campaign');
   t('Date');
-  t('Dedication Email');
+  t('Dedication E-mail');
   t('Dedication Name');
   t('Dedication Type');
   t('Enter the code if this donation comes from a specific marketing campaign');

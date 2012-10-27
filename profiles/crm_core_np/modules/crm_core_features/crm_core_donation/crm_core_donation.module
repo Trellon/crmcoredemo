@@ -13,7 +13,7 @@ module_load_include('inc', 'crm_core_profile', 'crm_core_profile.forms');
  * Implements hook_menu
  */
 function crm_core_donation_menu() {
-  
+
   // default path for donation pages
   $items['donation_pages/%'] = array(
     'title' => 'Donate today',
@@ -23,7 +23,7 @@ function crm_core_donation_menu() {
     'file' => 'crm_core_donation.pages.inc',
     'type' => MENU_CALLBACK,
   );
-  
+
   // donation widgets
   $items['donation_widgets/%'] = array(
     'title' => 'Donation widget',
@@ -32,8 +32,8 @@ function crm_core_donation_menu() {
     'access arguments' => array('access crm core donation page'),
     'file' => 'crm_core_donation.widget.inc',
     'type' => MENU_CALLBACK,
-  );        
-  
+  );
+
   $items['admin/structure/crm/donation/config'] = array(
     'title' => t('Donation settings'),
     'page callback' => 'drupal_get_form',
@@ -41,7 +41,7 @@ function crm_core_donation_menu() {
     'access arguments' => array('administer crm core donation'),
     'type' => MENU_LOCAL_TASK,
   );
-  
+
   $items['admin/structure/crm/donation/%'] = array(
     'title' => 'Edit donation page',
     'page callback' => 'drupal_get_form',
@@ -50,7 +50,7 @@ function crm_core_donation_menu() {
     'file' => 'crm_core_donation.pages.inc',
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['admin/structure/crm/donation/%/delete'] = array(
     'title' => 'Delete donation page',
     'page callback' => 'drupal_get_form',
@@ -59,7 +59,7 @@ function crm_core_donation_menu() {
     'file' => 'crm_core_donation.pages.inc',
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['admin/structure/crm/donation/new'] = array(
     'title' => 'Create new donation page',
     'page callback' => 'drupal_get_form',
@@ -68,7 +68,7 @@ function crm_core_donation_menu() {
     'file' => 'crm_core_donation.pages.inc',
     'type' => MENU_LOCAL_TASK,
   );
-  
+
   // personal donation page
   $items['user/%user/pdp/settings'] = array(
     'title' => 'Settings',
@@ -94,8 +94,8 @@ function crm_core_donation_menu() {
     'access arguments' => array('create crm core donation PDP'),
     'type' => MENU_LOCAL_TASK,
   );
-  
-  return $items;  
+
+  return $items;
 }
 
 /**
@@ -140,7 +140,7 @@ function crm_core_donation_commerce_line_item_type_info() {
   $line_item_types['crm_core_donation'] = array(
     'name' => t('CRM Core Donation'),
     'description' => t('A CRM Core Donation'),
-    'product' => FALSE,    
+    'product' => FALSE,
     'add_form_submit_value' => t('Add donation'),
     'callbacks' => array(
       'configuration' => '_crm_core_donation_line_item_configuration',
@@ -156,22 +156,22 @@ function crm_core_donation_commerce_line_item_type_info() {
 /**
  * Dispatch (callback) menu items for PDP
  *
- * @params 
+ * @params
  *
- * (stdClass) $arg_user - $user object 
+ * (stdClass) $arg_user - $user object
  * (string) $render - edit/view
- *     
+ *
  * @return
  *
  * A personal donation settings form
- * A personal donation page        
+ * A personal donation page
  */
 function crm_core_donation_pdp($arg_user, $render = 'view') {
   // check for PDP settings
   if (variable_get('crm_core_donation_pdp', 1) == 0) {
-    return;  
+    return;
   }
-  
+
   $crm_core_profile = variable_get('crm_core_donation_profile', '');
   if ($crm_core_profile != '') {
     module_load_include('inc', 'crm_core_profile', 'crm_core_profile.forms');
@@ -182,19 +182,19 @@ function crm_core_donation_pdp($arg_user, $render = 'view') {
     ->fields('p')
     ->condition('pdp', 1)
     ->condition('uid', $arg_user->uid);
-  
+
     $result = $query->execute();
     $donation_page = $result->fetchAssoc();
-    
+
     switch($render) {
       case 'view':
       default:
         if (empty($donation_page)) {
           $link = l('click here', 'user/' . $arg_user->uid . '/pdp/settings');
-          return '<div class="messages status">You have not created a personal donation page yet, ' . $link . ' to create it</div>';  
-        }        
+          return '<div class="messages status">You have not created a personal donation page yet, ' . $link . ' to create it</div>';
+        }
         $donation_profile['donation_page'] = $donation_page;
-        return drupal_get_form('crm_core_profile_entry_form', $donation_profile);      
+        return drupal_get_form('crm_core_profile_entry_form', $donation_profile);
       break;
       case 'edit':
         module_load_include('inc', 'crm_core_donation', 'crm_core_donation.pages');
@@ -202,10 +202,10 @@ function crm_core_donation_pdp($arg_user, $render = 'view') {
           return drupal_get_form('crm_core_donation_page_form', null, TRUE);
         }
         return drupal_get_form('crm_core_donation_page_form', $donation_page['id'], TRUE);
-      break;  
+      break;
     }
   }
-  return drupal_access_denied();    
+  return drupal_access_denied();
 }
 
 
@@ -223,40 +223,40 @@ function crm_core_donation_page_callback($id) {
   if ($crm_core_profile != '') {
     module_load_include('inc', 'crm_core_profile', 'crm_core_profile.forms');
     $donation_profile = crm_core_profile_load($crm_core_profile);
-    
+
     $donation_page = crm_core_donation_page_load($id);
     if (empty($donation_page)) {
-      return drupal_access_denied();  
+      return drupal_access_denied();
     }
-    
+
     if ($donation_page['status'] == 0) {
-      return drupal_access_denied();  
+      return drupal_access_denied();
     }
-    
+
     $donation_profile['donation_page'] = $donation_page;
     return drupal_get_form('crm_core_profile_entry_form', $donation_profile);
   }
-  return drupal_access_denied();    
+  return drupal_access_denied();
 }
 
 /**
  * Configuration form
  */
 function crm_core_donation_config($form, &$form_state) {
-    
+
   $form['crm'] = array(
-    '#type' => 'fieldset', 
-    '#title' => t('CRM Settings'),   
-    '#collapsible' => TRUE,  
+    '#type' => 'fieldset',
+    '#title' => t('CRM Settings'),
+    '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
-   
+
   $crm_core_profiles = crm_core_profile_load_all();
   $profile_options = array('' => t('--Select--'));
   foreach($crm_core_profiles as $crm_core_profile) {
-    $profile_options[$crm_core_profile['name']] = $crm_core_profile['label'];  
+    $profile_options[$crm_core_profile['name']] = $crm_core_profile['label'];
   }
-  
+
   // profile we will use to attach to the event
   $form['crm']['crm_core_donation_profile'] = array(
     '#type' => 'select',
@@ -265,14 +265,14 @@ function crm_core_donation_config($form, &$form_state) {
     '#default_value' => variable_get('crm_core_donation_profile', ''),
     '#required' => TRUE,
   );
-  
+
   // the billing address we need to map
   $profile_name = variable_get('crm_core_donation_profile', '');
   if ($profile_name != '') {
-    
+
     $options = array('' => t('--select--'));
     $options = crm_core_donation_fields($profile_name);
-    
+
     $form['crm']['crm_core_donation_billing_address'] = array(
       '#type' => 'select',
       '#title' => 'Billing address field',
@@ -280,39 +280,39 @@ function crm_core_donation_config($form, &$form_state) {
       '#options' => $options,
       '#default_value' => variable_get('crm_core_donation_billing_address', ''),
       '#required' => TRUE,
-    );  
+    );
   }
-  
+
   $form['crm_core_donation_pdp'] = array(
     '#type' => 'checkbox',
     '#title' => 'Enable personal donation pages',
     '#default_value' => variable_get('crm_core_donation_pdp', 1),
-  );   
-  
+  );
+
   $form['IMO'] = array(
-    '#type' => 'fieldset', 
-    '#title' => t('Dedication notification settings'),   
-    '#collapsible' => TRUE,  
+    '#type' => 'fieldset',
+    '#title' => t('Dedication notification settings'),
+    '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
-  
+
   $form['IMO']['crm_core_donation_imo_message'] = array(
-    '#type' => 'textarea', 
-    '#title' => t('Dedication email message'),
-    '#description' => t('The message you would like to send to the person you are honoring or dedicating, the following replacement values are available: !donor_name, !dedicant_name, !dedication_type, !donation_amount.'),   
-    '#collapsible' => TRUE,  
+    '#type' => 'textarea',
+    '#title' => t('Dedication e-mail message'),
+    '#description' => t('The message you would like to send to the person you are honoring or dedicating, the following replacement values are available: !donor_name, !dedicant_name, !dedication_type, !donation_amount.'),
+    '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#default_value' => variable_get('crm_core_donation_imo_message', '')
   );
-    
+
   $form['crm_core_donation_redirect_message'] = array(
     '#type' => 'textarea',
     '#title' => 'redirect message',
     '#description' => 'When someone successfully makes a donation, this message will be shown',
     '#default_value' => variable_get('crm_core_donation_redirect_message', 'Thank you for your donation'),
   );
-  
-  return system_settings_form($form);  
+
+  return system_settings_form($form);
 }
 
 /*
@@ -320,48 +320,48 @@ function crm_core_donation_config($form, &$form_state) {
  * send IHO/IMO email
  */
 function crm_core_donation_crm_core_profile_save($profile, $form_state_values) {
-  
+
   if ($profile['name'] != 'donation') {
-    return;  
+    return;
   }
-  
+
   $v = $form_state_values;
   $dedication_type = $v['activity']['field_donation_dedication_type'][LANGUAGE_NONE][0]['value'];
   if (!isset($dedication_type) || !$dedication_type) {
-    return;  
+    return;
   }
-  
+
   $dedicant_email = $v['activity']['field_donation_dedication_email'][LANGUAGE_NONE][0]['email'];
   if ( !isset($dedicant_email) || $dedicant_email == '') {
-    return;  
+    return;
   }
-    
+
   $type = '';
   switch($dedication_type) {
     case 'IHO':
     default:
-      $type = 'in honor of'; 
+      $type = 'in honor of';
     break;
     case 'IMO':
       $type = 'in memory of';
-    break; 
+    break;
     case 'OBO':
       $type = 'on behalf of';
     break;
   }
-  
+
   $replacement = array(
     '!donor_name' => implode(' ', $v['contact_name'][LANGUAGE_NONE][0]),
     '!dedicant_name' => $v['activity']['field_donation_dedication_name'][LANGUAGE_NONE][0]['value'],
     '!dedication_type' => $type,
-    '!donation_amount' => $v['activity']['field_donation_amounts'][LANGUAGE_NONE][0]['value'], 
+    '!donation_amount' => $v['activity']['field_donation_amounts'][LANGUAGE_NONE][0]['value'],
   );
 
     $params['subject'] = t('!dedicant_name has made a donation !dedication_type of you', $replacement);
     $params['body'] = t(variable_get('crm_core_donation_imo_message', ''), $replacement);
     $params['bcc'] = '';
-    
-    drupal_mail('crm_core_profile_notification', 'crm_core_profile_notification', $dedicant_email, LANGUAGE_NONE, $params, variable_get('site_mail', NULL), TRUE);   
+
+    drupal_mail('crm_core_profile_notification', 'crm_core_profile_notification', $dedicant_email, LANGUAGE_NONE, $params, variable_get('site_mail', NULL), TRUE);
 }
 
 /**
@@ -375,10 +375,10 @@ function crm_core_donation_fields($profile_name) {
     if ($toggle !== 0) {
       // need to get the label for the field
       $info = field_info_instance('crm_core_contact', $_field, $crm_core_profile['bundle_type']);
-      $data[$_field] = $info['label'];  
-    }  
+      $data[$_field] = $info['label'];
+    }
   }
-      
+
   return $data;
 }
 
@@ -388,7 +388,7 @@ function crm_core_donation_fields($profile_name) {
 function crm_core_donation_form_theme_preprocess(&$variables) {
   drupal_add_css(drupal_get_path('module', 'crm_core_donation') . '/crm_core_donation.css');
   drupal_add_js(drupal_get_path('module', 'crm_core_donation') . '/crm_core_donation.js');
-    
+
   $form = $variables['form'];
 
   // load the profile and get the contact fields
@@ -397,10 +397,10 @@ function crm_core_donation_form_theme_preprocess(&$variables) {
   $contact_fields = array();
   foreach($fields['toggle'] as $field_name => $toggle) {
     if ($toggle !== 0) {
-      $contact_fields[] = $field_name;  
-    }  
+      $contact_fields[] = $field_name;
+    }
   }
-  
+
   $variables['message'] = drupal_render($form['message']);
   $variables['header'] = drupal_render($form['header']);
 //  $form['activity']['field_donation_amounts']['#access'] = FALSE;
@@ -413,7 +413,7 @@ function crm_core_donation_form_theme_preprocess(&$variables) {
      '#children' => drupal_render($form['activity']['field_donation_amounts']),
    );
    $variables['amount'] = drupal_render($amount_field_set);
-   
+
   // dedication
   $dedication = drupal_render($form['activity']['field_donation_dedication_type']);
   // $dedication = drupal_render($form['field_donation_dedication_type']);
@@ -423,46 +423,46 @@ function crm_core_donation_form_theme_preprocess(&$variables) {
   $dedication .= drupal_render($form['activity']['field_donation_dedication_email']);
   $dedication .= drupal_render($form['field_donation_dedication_email']);
   $dedication .= '</div>';
-  
+
    $dedication_field_set = array(
      '#type' => 'fieldset',
      '#title' => 'Dedication',
      '#children' => $dedication,
    );
-   
-   $variables['dedication'] = drupal_render($dedication_field_set); 
-  
+
+   $variables['dedication'] = drupal_render($dedication_field_set);
+
    // billing information
    $contact ='';
      if (!empty($contact_fields)) {
        foreach ($contact_fields as $field) {
-         $contact .= drupal_render($form[$field]);  
-       }  
+         $contact .= drupal_render($form[$field]);
+       }
      }
-     
+
     $contact_field_set = array(
       '#type' => 'fieldset',
       '#title' => 'Billing Information',
       '#children' => $contact,
     );
-   
+
    $variables['billing'] = drupal_render($contact_field_set);
-    
+
   // payment information
   $payment_field_set = array(
     '#type' => 'fieldset',
     '#title' => 'Payment Information',
     '#children' => drupal_render($form['commerce_payment']),
   );
-  
-  
+
+
    $variables['payment'] = drupal_render($payment_field_set);
-  
+
   // remains
-  $variables['submit'] = drupal_render($form['submit']); 
+  $variables['submit'] = drupal_render($form['submit']);
   $variables['footer'] = drupal_render($form['footer']);
   $variables['rest'] = drupal_render_children($form);
-  
+
 }
 
 /**
@@ -471,56 +471,56 @@ function crm_core_donation_form_theme_preprocess(&$variables) {
 function crm_core_donation_form_crm_core_profile_entry_form_alter(&$form, &$form_state, $form_id) {
   // adding additional classes
   $profile = $form_state['profile'];
-  
+
   // making sure we are on the correct profile
   if ($profile['name'] != variable_get('crm_core_donation_profile', '')) {
-    return;  
-  }    
+    return;
+  }
   if (empty($form['#attributes']['class'])) {
     $form['#attributes']['class'] = array('crm_core_donation_form');
   }
   else {
     $form['#attributes']['class'] += array('crm_core_donation_form');
   }
-  
+
   $donation_page = $profile['donation_page'];
   $form_state['donation_page'] = $donation_page;
   if ($donation_page['title'] != '') {
     drupal_set_title($donation_page['title']);
   }
-    
+
   if ($donation_page['pdp'] == 1) {
-    $user = menu_get_object('user');    
+    $user = menu_get_object('user');
     if (!empty($user)) {
       $form['message'] = array(
         '#prefix' => '<div class="messages warning">',
         '#suffix' => '</div>',
         '#markup' => 'You can view your live donation page ' . l('here', 'donation_pages/' . $donation_page['id']),
       );
-    }  
+    }
   }
-  
+
   $header = unserialize($donation_page['header']);
   $footer = unserialize($donation_page['footer']);
   $form['header'] = array(
     '#markup' => $header['value'],
   );
-  
+
   $form['footer'] = array(
     '#markup' => $footer['value'],
   );
-  
+
   // set campaign (the donation page id)
   $form['activity']['field_donation_campaign'][LANGUAGE_NONE][0]['value']['#default_value'] = $donation_page['id'];
-  
+
   // preset an amount on the donation form according to get
   $amount_set = array_keys($form['activity']['field_donation_amounts'][LANGUAGE_NONE]['#options']);
   if (isset($_GET['amount'])) {
     if (in_array($_GET['amount'], $amount_set)) {
         $form['activity']['field_donation_amounts'][LANGUAGE_NONE]['#default_value']['value'] = check_plain($_GET['amount']);
-    }  
+    }
   }
-    
+
   // set amount
 //  $amounts = unserialize($donation_page['amounts']);
 //  if ($amounts != '') {
@@ -535,11 +535,11 @@ function crm_core_donation_form_crm_core_profile_entry_form_alter(&$form, &$form
 
   $checkout_pane = commerce_checkout_panes(array('pane_id' => 'commerce_payment'));
   $checkout_pane = array_pop($checkout_pane);
-    
+
   $form_state['checkout_pane'] = $checkout_pane;
-  
+
   module_load_include('inc', 'commerce_payment', 'includes/commerce_payment.checkout_pane');
-  
+
   //attach an order if it was not attached before
   if (!isset($form_state['order'])) {
     global $user;
@@ -550,27 +550,27 @@ function crm_core_donation_form_crm_core_profile_entry_form_alter(&$form, &$form
   } else {
     $order = $form_state['order'];
   }
- 
+
   // set default payment method for the donation page
   $data = unserialize($donation_page['data']);
   if (!empty($data)) {
     if (array_key_exists('payment_method', $data)) {
        if ($data['payment_method'] != '') {
          $order->data['payment_method'] = $data['payment_method'];
-       }  
+       }
     }
-  } 
-   
+  }
+
   $form['commerce_payment'] = commerce_payment_pane_checkout_form($form, $form_state, $checkout_pane, $order);
-  
+
   $form['commerce_payment']['#tree'] = TRUE;
-     
+
   $form['submit']['#value'] = t('donate');
-  
+
   $form['#theme'] = 'crm_core_donation';
   $form['#validate'][] = 'crm_core_donation_form_validate';
   $form['#submit'][] = 'crm_core_donation_form_submit';
-    
+
 }
 
 
@@ -582,7 +582,7 @@ function crm_core_donation_form_validate($form, &$form_state) {
     $order = $form_state['order'];
     commerce_order_save($order);
   }
-  
+
   // renew lineitems if amount is set
   if (isset($form_state['values']['field_donation_amounts'])) {
     $amount = $form_state['values']['field_donation_amounts'][LANGUAGE_NONE][0]['value'] * 100;
@@ -610,9 +610,9 @@ function crm_core_donation_form_validate($form, &$form_state) {
     $order_wrapper->commerce_line_items[] = $line_item;
     commerce_order_save($order);
   }
-  
+
   $form_state['order'] = $order;
-  
+
   // call payment method validator
   module_load_include('inc', 'commerce_payment', 'includes/commerce_payment.checkout_pane');
   return commerce_payment_pane_checkout_form_validate($form, $form_state, $form_state['checkout_pane'], $order);
@@ -623,7 +623,7 @@ function crm_core_donation_form_submit($form, &$form_state) {
   if (isset($form_state['values']['commerce_payment']['payment_details']['credit_card'])) {
     $credit_card = $form_state['values']['commerce_payment']['payment_details']['credit_card'];
   }
-  
+
   // attach to order contact, donation page and activity id's
   $form_state['order']->data['crm_core_donation']['contact']['contact_id'] = $form_state['contact']->contact_id;
   $form_state['order']->data['crm_core_donation']['donation_page_submission_activity']['activity_id'] =
@@ -632,7 +632,7 @@ function crm_core_donation_form_submit($form, &$form_state) {
 
   // create and attach commerce_customer profile to an order
   _crm_core_donation_commerce_attach_profile($order, $form_state);
-  
+
   // fill a created activity with a values
   $activity_id = $form_state['crm_core_activity']->activity_id;
   $activity = crm_core_activity_load($activity_id);
@@ -663,7 +663,7 @@ function crm_core_donation_form_submit($form, &$form_state) {
     if (!$recurring_payment_method) {
       commerce_order_status_update($order, 'checkout_complete');
     }
-    
+
     // set an activity status
     if ($recurring_payment_method) {
       $activity->field_donation_status[LANGUAGE_NONE][0]['value'] = 'refund';
@@ -681,7 +681,7 @@ function crm_core_donation_form_submit($form, &$form_state) {
   $form_state['order'] = $order;
   commerce_order_save($order);
   crm_core_activity_save($activity);
-  
+
 }
 
 /**
@@ -692,17 +692,17 @@ function _crm_core_donation_commerce_order_save($amount, $user) {
  // Create the new order in checkout; you might also check first to
   // see if your user already has an order to use instead of a new one.
   $order = commerce_order_new($user->uid, 'checkout_checkout');
-  
+
   commerce_order_save($order);
 
   $line_item = _crm_core_donation_line_item_new($amount, $order->order_id);
-  
+
   commerce_line_item_save($line_item);
-  
+
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
   $order_wrapper->commerce_line_items[] = $line_item;
-  
-  commerce_order_save($order);  
+
+  commerce_order_save($order);
 
   return $order;
 }
@@ -723,7 +723,7 @@ function _crm_core_donation_line_item_new($amount, $order_id = 0, $currency_code
   $line_item->commerce_unit_price = array(
     LANGUAGE_NONE => array(
       '0' => array(
-        'amount' => $amount, 
+        'amount' => $amount,
         'currency_code' => $currency_code,
      ),
     )
@@ -768,7 +768,7 @@ function _crm_core_donation_line_item_add_form_submit(&$line_item, $element, &$f
 
   $line_item->commerce_unit_price = array('und' => array(
     '0' => array(
-      'amount' => $amount, 
+      'amount' => $amount,
       'currency_code' => $currency_code)
   ));
 
@@ -868,7 +868,7 @@ function crm_core_donation_authnet_arb_silentpost ($post) {
   $donation_activity_profile = crm_core_profile_activity_load($crm_core_profile);
   $donation_activity_profile_fields = unserialize($donation_activity_profile['fields']);
   $activity_fields_to_copy = array_filter($donation_activity_profile_fields['toggle']);
-  
+
   foreach ($activity_fields_to_copy as $fieldname) {
     $activity->{$fieldname} = $donation_page_submission_activity->{$fieldname};
   }
@@ -901,8 +901,8 @@ function crm_core_donation_authnet_arb_silentpost ($post) {
 
     // set an activity status to 'complete'
     $activity->field_donation_status[LANGUAGE_NONE][0]['value'] = 'complete';
-    
-    
+
+
   } else {
 
     // set an activity status to 'declined'
@@ -920,7 +920,7 @@ function crm_core_donation_authnet_arb_silentpost ($post) {
  * @depcreated: using a template right now
  */
 function crm_core_donation_form_theme($variables) {
-    
+
   $form = $variables['form'];
   // load the profile and get the contact fields
   $crm_core_profile = crm_core_profile_load($form['profile_name']['#value']);
@@ -928,79 +928,79 @@ function crm_core_donation_form_theme($variables) {
   $contact_fields = array();
   foreach($fields['toggle'] as $field_name => $toggle) {
     if ($toggle !== 0) {
-      $contact_fields[] = $field_name;  
-    }  
+      $contact_fields[] = $field_name;
+    }
   }
   $output = '';
-  
+
   $output .= drupal_render($form['message']);
-  
+
   $output .= '<div id="donation_header">';
   $output .= drupal_render($form['header']);
   $output .= '</div>';
-  
+
   // amounts
   $output .= '<div id="amounts">';
-  
+
    $amount_field_set = array(
      '#type' => 'fieldset',
      '#title' => 'Donation amount',
      '#children' => drupal_render($form['activity']['field_donation_amounts']),
    );
-   
+
    $output .= drupal_render($amount_field_set);
-  
+
   $output .= '</div>';
-  
+
   // dedication
   $output .= '<div id="dedication">';
   $dedication = drupal_render($form['activity']['field_donation_dedication_type']);
-  
+
   $dedication .= '<div id="dedication_info">';
   $dedication .= drupal_render($form['activity']['field_donation_dedication_name']);
   $dedication .= drupal_render($form['activity']['field_donation_dedication_email']);
   $dedication .= '</div>';
-  
+
    $dedication_field_set = array(
      '#type' => 'fieldset',
      '#title' => 'Dedication',
      '#children' => $dedication,
    );
-   
+
    $output .= drupal_render($dedication_field_set);
-  
+
    $output .= '</div>';
-  
+
   // contact information
   $output .= '<div id="billing">';
   $contact ='';
     if (!empty($contact_fields)) {
       foreach ($contact_fields as $field) {
-        $contact .= drupal_render($form[$field]);  
-      }  
+        $contact .= drupal_render($form[$field]);
+      }
     }
-    
+
    $contact_field_set = array(
      '#type' => 'fieldset',
      '#title' => 'Billing Information',
      '#children' => $contact,
    );
-  
+
   $output .= drupal_render($contact_field_set);
-    
+
   $output .= '</div>';
-  
+
   // payment information
   $output .= '<div id="payment">';
     $output .= drupal_render($form['payment']);
   $output .= '</div>';
-  
+
   $output .= drupal_render($form['submit']);
-  
+
   $output .= '<div id="donation_footer">';
   $output .= drupal_render($form['footer']);
   $output .= '</div>';
-  
+
   // $output .= drupal_render($form['submit']);
   $output .= drupal_render_children($form);
   return $output;
@@ -1054,7 +1054,7 @@ function crm_core_donation_views_data() {
       'handler' => 'views_handler_argument_string',
     ),
   );
-  
+
   $data['crm_core_donation_page']['title'] = array(
     'title' => t('Donation page title'),
     'help' => t('Title of the donation page'),
@@ -1072,7 +1072,7 @@ function crm_core_donation_views_data() {
       'handler' => 'views_handler_argument_string',
     ),
   );
-  
+
   $data['crm_core_donation_page']['path'] = array(
     'title' => t('Path'),
     'help' => t('The site path to the donation page'),
@@ -1090,7 +1090,7 @@ function crm_core_donation_views_data() {
       'handler' => 'views_handler_argument_string',
     ),
   );
-  
+
   $data['crm_core_donation_page']['header'] = array(
     'title' => t('Header'),
     'help' => t('The donation page header message'),
@@ -1099,7 +1099,7 @@ function crm_core_donation_views_data() {
       'click sortable' => FALSE,
     ),
   );
-  
+
   $data['crm_core_donation_page']['status'] = array(
     'title' => t('Status'),
     'help' => t('Status of a donation page'),
@@ -1117,7 +1117,7 @@ function crm_core_donation_views_data() {
       'handler' => 'views_handler_argument_numeric',
     ),
   );
-  
+
   $data['crm_core_donation_page']['uid'] = array(
     'title' => t('Donation Page Owner'),
     'help' => t('User UID of the donation page owner'),
@@ -1141,7 +1141,7 @@ function crm_core_donation_views_data() {
       'label' => t('Donation page creator'),
     ),
   );
-  
+
   $data['crm_core_donation_page']['pdp'] = array(
     'title' => t('Personal donation page'),
     'help' => t('If this is a personal donation page'),
@@ -1159,7 +1159,7 @@ function crm_core_donation_views_data() {
       'handler' => 'views_handler_argument_numeric',
     ),
   );
-  
+
 
   $data['crm_core_donation_page']['created'] = array(
     'title' => t('Created date'),
@@ -1175,6 +1175,6 @@ function crm_core_donation_views_data() {
       'handler' => 'views_handler_filter_date',
     ),
   );
-  
+
   return $data;
 }

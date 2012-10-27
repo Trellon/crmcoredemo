@@ -47,7 +47,7 @@ function crm_core_news_node_info() {
     'simplenews' => array(
       'name' => t('Simplenews newsletter'),
       'base' => 'node_content',
-      'description' => t('A newsletter issue to be sent to subscribed email addresses.'),
+      'description' => t('A newsletter issue to be sent to subscribed e-mail addresses.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
