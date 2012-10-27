@@ -258,17 +258,23 @@ function crm_core_event_registration_form_crm_core_profile_entry_form_alter(&$fo
       '#markup' => $event_teaser,
     );
 
+    // making sure there is a referenced product and the registration price is not 0
+    // if these conditions are met, we will create a multi-step form for checkout
     if ($event_product_field != '') {
       if (!empty($node->{$event_product_field})) {
-        $product_id = $node->{$event_product_field}[LANGUAGE_NONE][0]['product_id'];
-        $form['product_id'] = array(
-          '#type' => 'value',
-          '#value' => $product_id,
-        );
-
-         $form['submit']['#value'] = t('Continue to next step');
-         $form['#validate'][] = 'crm_core_event_registration_checkout_validate';
-         $form['#submit'][] = 'crm_core_event_registration_checkout_submit';
+        if (!empty($node->field_crmer_reg_price[LANGUAGE_NONE])) {
+            if ($node->field_crmer_reg_price[LANGUAGE_NONE][0]['amount'] != 0) {
+              $product_id = $node->{$event_product_field}[LANGUAGE_NONE][0]['product_id'];
+              $form['product_id'] = array(
+                '#type' => 'value',
+                '#value' => $product_id,
+              );
+      
+               $form['submit']['#value'] = t('Continue to next step');
+               $form['#validate'][] = 'crm_core_event_registration_checkout_validate';
+               $form['#submit'][] = 'crm_core_event_registration_checkout_submit';              
+            }
+        }
       }
     }
     // free product, we are done
