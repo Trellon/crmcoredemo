@@ -269,10 +269,10 @@ function crm_core_event_registration_form_crm_core_profile_entry_form_alter(&$fo
                 '#type' => 'value',
                 '#value' => $product_id,
               );
-      
+
                $form['submit']['#value'] = t('Continue to next step');
                $form['#validate'][] = 'crm_core_event_registration_checkout_validate';
-               $form['#submit'][] = 'crm_core_event_registration_checkout_submit';              
+               $form['#submit'][] = 'crm_core_event_registration_checkout_submit';
             }
         }
       }
@@ -588,7 +588,10 @@ function crm_core_event_registration_form_event_node_form_alter (&$form, $form_s
  */
 function crm_core_event_registration_form_commerce_cart_add_to_cart_form_alter (&$form, $form_state) {
   // override 'Add to cart' to 'Register for event'
-  $price = $form['line_item_fields']['commerce_unit_price'][LANGUAGE_NONE][0]['data']['#default_value']['components'][0]['price']['amount'];
+  $price = 0;
+  if (isset($form['line_item_fields']['commerce_unit_price'][LANGUAGE_NONE][0]['data']['#default_value']['components'][0]['price']['amount'])) {
+    $price = $form['line_item_fields']['commerce_unit_price'][LANGUAGE_NONE][0]['data']['#default_value']['components'][0]['price']['amount'];
+  }
   $label = (empty($price)) ? t('Register For Free') : t('Buy Tickets');
   $form['submit']['#value'] = $label;
 }
