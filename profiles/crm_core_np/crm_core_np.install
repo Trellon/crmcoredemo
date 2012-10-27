@@ -10,7 +10,7 @@
 function crm_core_np_install() {
 
   // Enable some standard blocks.
-  $default_theme = variable_get('theme_default', 'bartik');
+  $default_theme = variable_get('theme_default', 'twitter_bootstrap');
   $values = array(
     array(
       'module' => 'system',
@@ -158,13 +158,13 @@ function crm_core_np_install_tasks() {
       'display' => TRUE,
       'display_name' => 'Install CRM Core features',
     ),
-    
+
     '_crm_core_np_set_theme_form' => array(
       'type' => 'form',
       'display' => TRUE,
       'display_name' => 'Select a theme',
     ),
-    
+
   );
   return $tasks;
 }
@@ -238,18 +238,15 @@ function _crm_core_np_features_form_submit($form, &$form_state) {
     }
   }
 
-//   features_install_modules($modules);
   module_enable($modules);
 }
 
 
 function _crm_core_np_set_theme_form($form, &$form_state) {
 
-
   $enable = array(
     'theme_default' => 'twitter_bootstrap',
     'admin_theme' => 'seven',
-    //'zen'
   );
   theme_enable($enable);
 
@@ -259,15 +256,12 @@ function _crm_core_np_set_theme_form($form, &$form_state) {
     }
   }
 
+  $themes = array();
+  $system_themes = system_rebuild_theme_data();
 
-  $themes = array(
-    'default' => st('Twitter Bootstrap'),
-    'Bartik' => st('Bartik'),
-    'stark' => st('Stark'),
-    'garland' => st('Garland'),
-    'seven' => st('Seven'),
-    // 'corolla' => st('Corolla'),
-  );
+  foreach ($system_themes as $name => $theme) {
+    $themes[$name] = $theme->info['name'];
+  }
 
   $form = array();
   $form['theme'] = array(
@@ -279,7 +273,7 @@ function _crm_core_np_set_theme_form($form, &$form_state) {
     '#type' => 'radios',
     '#title' => st('Default theme'),
     '#options' => $themes,
-    '#default_value' => 'default',
+    '#default_value' => 'twitter_bootstrap',
   );
     $form['theme']['submit'] = array(
     '#type' => 'submit',
@@ -292,15 +286,12 @@ function _crm_core_np_set_theme_form_submit($form, &$form_state) {
 
   $theme = $form_state['values']['default_theme'];
 
-  if ($theme == 'default') {
+  if ($theme == 'twitter_bootstrap') {
     return;
   }
 
   theme_enable (array($theme));
 
-    // Set the default theme.
+  // Set the default theme.
   variable_set('theme_default', $theme);
-
-  // Disable the default Bartik theme
-  theme_disable(array('bartik'));
 }
