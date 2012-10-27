@@ -133,7 +133,7 @@ function crm_core_demo_settings_field_default_fields() {
           'generational' => 'generational',
           'given' => 'given',
           'middle' => 0,
-          'title' => 0,
+          'title' => 'title',
         ),
         'generational_options' => '-- --
 Jr.
