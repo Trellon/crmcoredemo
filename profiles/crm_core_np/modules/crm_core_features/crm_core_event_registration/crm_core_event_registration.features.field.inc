@@ -1415,7 +1415,7 @@ function crm_core_event_registration_field_default_fields() {
       'bundle' => 'event',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => 'Enter the event registration admission, if 0 or empty the event will be a free event',
+      'description' => 'Enter the event registration admission price, if 0 or empty the event will be a free admission',
       'display' => array(
         'default' => array(
           'label' => 'inline',
@@ -1597,7 +1597,7 @@ function crm_core_event_registration_field_default_fields() {
   t('Address');
   t('Admission');
   t('Date');
-  t('Enter the event registration admission, if 0 or empty the event will be a free event');
+  t('Enter the event registration admission price; if 0 or empty the event will be a free admission');
   t('Event');
   t('Event Date');
   t('Event Product');
