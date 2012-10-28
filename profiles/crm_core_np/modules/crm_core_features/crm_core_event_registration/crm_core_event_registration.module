@@ -85,8 +85,6 @@ function crm_core_event_registration_node_view($node, $view_mode) {
     }
   }
 
-  drupal_add_css(drupal_get_path('module', 'crm_core_event_registration') . '/crm_core_event_registration.css');
-
   // user has no access to register for event
   if (!user_access('crm_core register for events')) {
     if (!user_is_logged_in()) {
