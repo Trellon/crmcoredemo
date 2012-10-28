@@ -1,14 +1,17 @@
 <?php
+
 /**
  * @file
  * Code for the CRM Core Event Registration feature.
  * userpoints integration
  */
+
 define('USERPOINTS_EVENT_REGISTRATION', 'crm_core_event_registration');
 define('USERPOINTS_EVENT_REGISTRATION_TID', 'crm_core_event_registration_tid');
 define('USERPOINTS_EVENT_REGISTRATION_OPERATION', 'crm_core_event_registration_commit');
+
 /**
- * Implements hook_userpoints
+ * Implements hook_userpoints().
  */
 function crm_core_event_registration_userpoints($op, $params = array()) {
   switch ($op) {
@@ -28,7 +31,7 @@ function crm_core_event_registration_userpoints($op, $params = array()) {
         '#size'          => 5,
         '#maxlength'     => 5,
       );
-      
+
       $form[$group][USERPOINTS_EVENT_REGISTRATION_TID] = array(
       '#type'          => 'select',
       '#title'         => t('Category'),
@@ -37,9 +40,9 @@ function crm_core_event_registration_userpoints($op, $params = array()) {
       '#description'   => t('Points for event registration will be assigned to this category. You can modify what categories are available by modifying the <a href="!url">Userpoints taxonomy</a>.',
         array('!url' => url('admin/structure/taxonomy/userpoints'))),
       );
-      return $form;    
-    break;  
-  }  
+      return $form;
+    break;
+  }
 }
 
 /**
@@ -54,19 +57,19 @@ function crm_core_event_registration_userpoints_info() {
 }
 
 /**
- * Implements hook_entity_update
+ * Implements hook_entity_update().
  */
 function crm_core_event_registration_entity_update($entity, $type) {
   if (!module_exists('userpoints')) {
-    return;  
+    return;
   }
-  
+
   global $user;
   if ($type == 'crm_core_activity' && $entity->type == 'event_registration') {
     $status = (!empty($entity->field_registration_status[LANGUAGE_NONE][0]['value']))
       ? $entity->field_registration_status[LANGUAGE_NONE][0]['value']
       : 'none';
-    
+
     if ($status == 'registered') {
       $activity_user = crm_core_event_registration_userpoints_get_activity_user_to_award($entity);
       $points = crm_core_event_registration_userpoints_get_user_entity_awarded_points_sum($entity, $activity_user,
@@ -84,7 +87,8 @@ function crm_core_event_registration_entity_update($entity, $type) {
         $params['operation'] = USERPOINTS_EVENT_REGISTRATION_OPERATION;
         userpoints_userpointsapi($params);
       }
-    } elseif ($status == 'cancelled') {
+    }
+    elseif ($status == 'cancelled') {
       $activity_user = crm_core_event_registration_userpoints_get_activity_user_to_award($entity);
       $points = crm_core_event_registration_userpoints_get_user_entity_awarded_points_sum($entity, $activity_user,
         USERPOINTS_EVENT_REGISTRATION_OPERATION);
@@ -101,12 +105,12 @@ function crm_core_event_registration_entity_update($entity, $type) {
           userpoints_userpointsapi($params);
       }
     }
-  }  
+  }
 }
 
 
 /**
- * Implements hook_entity_insert
+ * Implements hook_entity_insert().
  */
 function crm_core_event_registration_entity_insert($entity, $type) {
   if (!module_exists('userpoints')) {
@@ -133,7 +137,7 @@ function crm_core_event_registration_entity_insert($entity, $type) {
 }
 
 /**
- * Return a user object that have to be awarded
+ * Return a user object that have to be awarded.
  *
  * @param object crm_core_activity entity
  *
@@ -147,8 +151,7 @@ function crm_core_event_registration_userpoints_get_activity_user_to_award($enti
     $contact_id = $entity->field_activity_participants[LANGUAGE_NONE][0]['target_id'];
     return _crm_user_sync_get_related_entity('crm_core_contact', $contact_id, 'crm_user_sync');
   }
-  else
-  {
+  else {
     global $user;
     return $user;
   }
@@ -156,7 +159,7 @@ function crm_core_event_registration_userpoints_get_activity_user_to_award($enti
 
 
 /**
- * Retrieve from a db a summary of awarded points for $user and $entity on specific $opareation type.
+ * Retrieve a summary of awarded points for $user and $entity on specific $operation type.
  *
  * @param object crm_core_activity entity
  *
@@ -166,7 +169,7 @@ function crm_core_event_registration_userpoints_get_activity_user_to_award($enti
  *
  * @return integer summ or FALSE
  */
-function crm_core_event_registration_userpoints_get_user_entity_awarded_points_sum ($entity, $activity_user, $operation) {
+function crm_core_event_registration_userpoints_get_user_entity_awarded_points_sum($entity, $activity_user, $operation) {
   $query = db_select('userpoints_txn')
     ->fields('userpoints_txn', array('points'));
   $query->condition('entity_id', $entity->activity_id)

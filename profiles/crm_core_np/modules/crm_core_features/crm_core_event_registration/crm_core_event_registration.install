@@ -5,14 +5,14 @@
  */
 
 /**
- * Implements hook_install
+ * Implements hook_install().
  */
 function crm_core_event_registration_install() {
-  
-  // dumping the crm core profile form in manually  
+
+  // dumping the crm core profile form in manually
   $event_registration_record = array(
     'name' => 'event_registration',
-    'label' => t('Event Registration'),
+    'label' => st('Event Registration'),
     'bundle_type' => 'individual',
     'block' => 0,
     'status' => 1,
@@ -21,41 +21,41 @@ function crm_core_event_registration_install() {
     'user_sync' => 'current',
     'fields' => array(
       'toggle' => array(
-            'contact_name' => 'contact_name',
-            'field_contact_email' => 'field_contact_email',
-            'contact_image' => 0,
-            'field_billing_address' => 0, 
-            'field_contact_volunteer' => 0,
-            'field_contact_phone' => 0,
+        'contact_name' => 'contact_name',
+        'field_contact_email' => 'field_contact_email',
+        'contact_image' => 0,
+        'field_billing_address' => 0,
+        'field_contact_volunteer' => 0,
+        'field_contact_phone' => 0,
+      ),
+      'weight' => array(
+        'contact_name' => array(
+          'weight' => array(
+            'weight' => -10,
+          ),
         ),
-       'weight' => array(
-         'contact_name' => array(
-           'weight' => array(
-             'weight' => -10,
-           ),
-        ),     
           'field_contact_email' => array(
             'weight' => array(
               'weight' => -9,
             ),
           ),
-       ),
-     ),
-     'create_contact_actions' => array(
-        'new' => array(
-          'weight' => 10,
-        ), 
-        'existing' => array(
-          'weight' => 10,
-        ),
-        'url' => array(
-          'weight' => 10,
-        ),
-     ),      
+      ),
+    ),
+    'create_contact_actions' => array(
+      'new' => array(
+        'weight' => 10,
+      ),
+      'existing' => array(
+        'weight' => 10,
+      ),
+      'url' => array(
+        'weight' => 10,
+      ),
+    ),
   );
-  
+
   crm_core_profile_save($event_registration_record);
-  
+
   $event_registration_activity_record = array(
     'name' => 'event_registration',
     'bundle_type' => 'event_registration',
@@ -78,8 +78,8 @@ function crm_core_event_registration_install() {
           'weight' => array(
             'weight' => -8,
           ),
-         ),
-       ),  
+        ),
+      ),
     ),
     'create_activity_actions' => array(
       'new' => array(
@@ -91,9 +91,9 @@ function crm_core_event_registration_install() {
       'url' => array(
         'weight' => 10,
       ),
-    ),  
+    ),
   );
-  
+
   crm_core_profile_activity_save($event_registration_activity_record);
-  
+
 }
