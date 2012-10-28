@@ -1342,7 +1342,7 @@ function crm_core_event_registration_field_default_fields() {
       'bundle' => 'event',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => 'When the event registration is completed, specify the url where it should redirect users to',
+      'description' => 'Specify the url for where users should be redirected to, when event registration is completed',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -1616,7 +1616,7 @@ function crm_core_event_registration_field_default_fields() {
   t('The order associated with this event registration if the event type was paid');
   t('The registration role for the given user');
   t('The status of this registration');
-  t('When the event registration is completed, specify the url where it should redirect users to');
+  t('Specify the url for where users should be redirected to, when event registration is completed');
 
   return $fields;
 }
