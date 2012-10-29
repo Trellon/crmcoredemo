@@ -215,6 +215,157 @@ function crm_core_event_registration_views_default_views() {
   $export['crm_core_events_calendar'] = $view;
 
   $view = new view();
+  $view->name = 'event_registration_by_contact';
+  $view->description = 'List of activities of the contact';
+  $view->tag = 'default';
+  $view->base_table = 'crm_core_activity';
+  $view->human_name = 'Event Registration by contact';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'Event Registration';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
+  $handler->display->display_options['style_plugin'] = 'table';
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['content'] = 'This contact has no activity, add an activity above.';
+  $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
+  /* Field: Global: View result counter */
+  $handler->display->display_options['fields']['counter']['id'] = 'counter';
+  $handler->display->display_options['fields']['counter']['table'] = 'views';
+  $handler->display->display_options['fields']['counter']['field'] = 'counter';
+  $handler->display->display_options['fields']['counter']['label'] = '';
+  $handler->display->display_options['fields']['counter']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['counter']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['counter']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['counter']['counter_start'] = '1';
+  /* Field: CRM Activity: Activity ID */
+  $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['label'] = '';
+  $handler->display->display_options['fields']['activity_id']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['activity_id']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['activity_id']['hide_alter_empty'] = FALSE;
+  /* Field: CRM Activity: Link */
+  $handler->display->display_options['fields']['view_crm_activity']['id'] = 'view_crm_activity';
+  $handler->display->display_options['fields']['view_crm_activity']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['view_crm_activity']['field'] = 'view_crm_activity';
+  $handler->display->display_options['fields']['view_crm_activity']['label'] = '';
+  $handler->display->display_options['fields']['view_crm_activity']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['view_crm_activity']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['view_crm_activity']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['view_crm_activity']['text'] = 'View';
+  /* Field: CRM Activity: Edit link */
+  $handler->display->display_options['fields']['edit_crm_activity']['id'] = 'edit_crm_activity';
+  $handler->display->display_options['fields']['edit_crm_activity']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['edit_crm_activity']['field'] = 'edit_crm_activity';
+  $handler->display->display_options['fields']['edit_crm_activity']['label'] = '';
+  $handler->display->display_options['fields']['edit_crm_activity']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['edit_crm_activity']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['edit_crm_activity']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['edit_crm_activity']['text'] = 'Edit';
+  $handler->display->display_options['fields']['edit_crm_activity']['redirect'] = 1;
+  /* Field: CRM Activity: Delete link */
+  $handler->display->display_options['fields']['delete_crm_activity']['id'] = 'delete_crm_activity';
+  $handler->display->display_options['fields']['delete_crm_activity']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['delete_crm_activity']['field'] = 'delete_crm_activity';
+  $handler->display->display_options['fields']['delete_crm_activity']['label'] = '';
+  $handler->display->display_options['fields']['delete_crm_activity']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['delete_crm_activity']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['delete_crm_activity']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['delete_crm_activity']['text'] = 'Delete';
+  $handler->display->display_options['fields']['delete_crm_activity']['redirect'] = 1;
+  /* Field: CRM Activity: Event */
+  $handler->display->display_options['fields']['field_registration_event']['id'] = 'field_registration_event';
+  $handler->display->display_options['fields']['field_registration_event']['table'] = 'field_data_field_registration_event';
+  $handler->display->display_options['fields']['field_registration_event']['field'] = 'field_registration_event';
+  $handler->display->display_options['fields']['field_registration_event']['settings'] = array(
+    'link' => 1,
+  );
+  /* Field: CRM Activity: Status */
+  $handler->display->display_options['fields']['field_registration_status']['id'] = 'field_registration_status';
+  $handler->display->display_options['fields']['field_registration_status']['table'] = 'field_data_field_registration_status';
+  $handler->display->display_options['fields']['field_registration_status']['field'] = 'field_registration_status';
+  /* Field: CRM Activity: Event Type */
+  $handler->display->display_options['fields']['field_registration_event_type']['id'] = 'field_registration_event_type';
+  $handler->display->display_options['fields']['field_registration_event_type']['table'] = 'field_data_field_registration_event_type';
+  $handler->display->display_options['fields']['field_registration_event_type']['field'] = 'field_registration_event_type';
+  /* Field: CRM Activity: Number of Attendees */
+  $handler->display->display_options['fields']['field_registration_attendee']['id'] = 'field_registration_attendee';
+  $handler->display->display_options['fields']['field_registration_attendee']['table'] = 'field_data_field_registration_attendee';
+  $handler->display->display_options['fields']['field_registration_attendee']['field'] = 'field_registration_attendee';
+  $handler->display->display_options['fields']['field_registration_attendee']['settings'] = array(
+    'thousand_separator' => ' ',
+    'prefix_suffix' => 1,
+  );
+  /* Field: CRM Activity: Admission */
+  $handler->display->display_options['fields']['field_registration_order']['id'] = 'field_registration_order';
+  $handler->display->display_options['fields']['field_registration_order']['table'] = 'field_data_field_registration_order';
+  $handler->display->display_options['fields']['field_registration_order']['field'] = 'field_registration_order';
+  $handler->display->display_options['fields']['field_registration_order']['settings'] = array(
+    'link' => 0,
+  );
+  /* Field: CRM Activity: Role */
+  $handler->display->display_options['fields']['field_registration_role']['id'] = 'field_registration_role';
+  $handler->display->display_options['fields']['field_registration_role']['table'] = 'field_data_field_registration_role';
+  $handler->display->display_options['fields']['field_registration_role']['field'] = 'field_registration_role';
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = 'Operations';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div class="ctools-no-js ctools-dropbutton ctools-button" id="ctools-button-[counter]">
+  <div class="ctools-link"><a href="#" class="ctools-twisty ctools-text">open</a></div>
+  <div class="ctools-content">
+  <ul>
+          <li>[view_crm_activity]</li>
+          <li>[edit_crm_activity]</li>
+          <li>[delete_crm_activity]</li>
+  </ul>
+  </div>
+  </div>';
+  /* Contextual filter: CRM Activity: Participants (field_activity_participants) */
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['id'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['table'] = 'field_data_field_activity_participants';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['field'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['default_action'] = 'not found';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['summary_options']['items_per_page'] = '25';
+  /* Filter criterion: CRM Activity: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'event_registration' => 'event_registration',
+  );
+
+  /* Display: Page */
+  $handler = $view->new_display('page', 'Page', 'page');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['path'] = 'crm/contact/%/activity/event_registration';
+  $handler->display->display_options['menu']['type'] = 'tab';
+  $handler->display->display_options['menu']['title'] = 'Event Registration';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['name'] = 'management';
+  $handler->display->display_options['menu']['context'] = 1;
+  $export['event_registration_by_contact'] = $view;
+
+  $view = new view();
   $view->name = 'event_registration_reports';
   $view->description = 'A quick report on registration';
   $view->tag = 'default';
@@ -493,6 +644,12 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['header']['view']['field'] = 'view';
   $handler->display->display_options['header']['view']['view_to_insert'] = 'event_registration_reports_content_:block_1';
   $handler->display->display_options['header']['view']['inherit_arguments'] = TRUE;
+  /* Header: Global: View area */
+  $handler->display->display_options['header']['view_1']['id'] = 'view_1';
+  $handler->display->display_options['header']['view_1']['table'] = 'views';
+  $handler->display->display_options['header']['view_1']['field'] = 'view';
+  $handler->display->display_options['header']['view_1']['view_to_insert'] = 'event_registration_reports:revenue_per_event';
+  $handler->display->display_options['header']['view_1']['inherit_arguments'] = TRUE;
   $handler->display->display_options['defaults']['empty'] = FALSE;
   /* No results behavior: Global: Unfiltered text */
   $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
@@ -677,6 +834,71 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['view_order']['field'] = 'view_order';
   $handler->display->display_options['fields']['view_order']['relationship'] = 'field_registration_order_target_id';
   $handler->display->display_options['path'] = 'admin/crm/report/event/revenue/%';
+
+  /* Display: Event Revenue Block */
+  $handler = $view->new_display('block', 'Event Revenue Block', 'revenue_per_event');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['group_by'] = FALSE;
+  $handler->display->display_options['group_by'] = TRUE;
+  $handler->display->display_options['defaults']['query'] = FALSE;
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['distinct'] = TRUE;
+  $handler->display->display_options['query']['options']['query_tags'] = array(
+    0 => 'Array',
+  );
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_registration_event_target_id']['id'] = 'field_registration_event_target_id';
+  $handler->display->display_options['relationships']['field_registration_event_target_id']['table'] = 'field_data_field_registration_event';
+  $handler->display->display_options['relationships']['field_registration_event_target_id']['field'] = 'field_registration_event_target_id';
+  $handler->display->display_options['relationships']['field_registration_event_target_id']['required'] = TRUE;
+  /* Relationship: Order */
+  $handler->display->display_options['relationships']['field_registration_order_target_id']['id'] = 'field_registration_order_target_id';
+  $handler->display->display_options['relationships']['field_registration_order_target_id']['table'] = 'field_data_field_registration_order';
+  $handler->display->display_options['relationships']['field_registration_order_target_id']['field'] = 'field_registration_order_target_id';
+  $handler->display->display_options['relationships']['field_registration_order_target_id']['ui_name'] = 'Order';
+  $handler->display->display_options['relationships']['field_registration_order_target_id']['label'] = 'Order';
+  /* Relationship: Line Item */
+  $handler->display->display_options['relationships']['commerce_line_items_line_item_id']['id'] = 'commerce_line_items_line_item_id';
+  $handler->display->display_options['relationships']['commerce_line_items_line_item_id']['table'] = 'field_data_commerce_line_items';
+  $handler->display->display_options['relationships']['commerce_line_items_line_item_id']['field'] = 'commerce_line_items_line_item_id';
+  $handler->display->display_options['relationships']['commerce_line_items_line_item_id']['relationship'] = 'field_registration_order_target_id';
+  $handler->display->display_options['relationships']['commerce_line_items_line_item_id']['ui_name'] = 'Line Item';
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Commerce Line item: Total */
+  $handler->display->display_options['fields']['commerce_total']['id'] = 'commerce_total';
+  $handler->display->display_options['fields']['commerce_total']['table'] = 'field_data_commerce_total';
+  $handler->display->display_options['fields']['commerce_total']['field'] = 'commerce_total';
+  $handler->display->display_options['fields']['commerce_total']['relationship'] = 'commerce_line_items_line_item_id';
+  $handler->display->display_options['fields']['commerce_total']['group_type'] = 'sum';
+  $handler->display->display_options['fields']['commerce_total']['label'] = 'Total Revenue';
+  $handler->display->display_options['fields']['commerce_total']['click_sort_column'] = 'amount';
+  $handler->display->display_options['fields']['commerce_total']['type'] = 'commerce_price_formatted_amount';
+  $handler->display->display_options['fields']['commerce_total']['settings'] = array(
+    'calculation' => FALSE,
+  );
+  $handler->display->display_options['fields']['commerce_total']['group_column'] = 'amount';
+  $handler->display->display_options['fields']['commerce_total']['group_columns'] = array(
+    'amount' => 'amount',
+  );
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['relationship'] = 'field_registration_event_target_id';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'not found';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
   $export['event_registration_reports'] = $view;
 
   $view = new view();

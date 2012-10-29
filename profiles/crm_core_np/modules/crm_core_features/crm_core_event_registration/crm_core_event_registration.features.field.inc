@@ -1597,7 +1597,7 @@ function crm_core_event_registration_field_default_fields() {
   t('Address');
   t('Admission');
   t('Date');
-  t('Enter the event registration admission price; if 0 or empty the event will be a free admission');
+  t('Enter the event registration admission price, if 0 or empty the event will be a free admission');
   t('Event');
   t('Event Date');
   t('Event Product');
@@ -1612,11 +1612,11 @@ function crm_core_event_registration_field_default_fields() {
   t('Registration');
   t('Registration Price');
   t('Role');
+  t('Specify the url for where users should be redirected to, when event registration is completed');
   t('Status');
   t('The order associated with this event registration if the event type was paid');
   t('The registration role for the given user');
   t('The status of this registration');
-  t('Specify the url for where users should be redirected to, when event registration is completed');
 
   return $fields;
 }
