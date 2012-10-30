@@ -53,6 +53,18 @@ function crm_core_event_registration_theme($existing, $type, $theme, $path) {
       ),
       'file' => $theme_inc,
     ),
+    'views_view__event_registration_reports__revenue_per_event' => array(
+      'template' => 'views-view--event-registration-reports--revenue-per-event',
+       'original hook' => 'views_view',
+       'path' => $path,
+       'preprocess functions' => array(
+         'template_preprocess',
+         'template_preprocess_views_view',
+         'crm_core_event_registration_reports_revenue_preprocess',
+      ),
+      'file' => $theme_inc,
+    ),
+    
   );
 
 }
