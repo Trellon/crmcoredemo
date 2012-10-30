@@ -1342,7 +1342,7 @@ function crm_core_event_registration_field_default_fields() {
       'bundle' => 'event',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => 'Specify the url where users should be redirected to, when event registration is completed',
+      'description' => 'Specify the url for where users should be redirected to, when event registration is completed',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -1413,9 +1413,17 @@ function crm_core_event_registration_field_default_fields() {
     ),
     'field_instance' => array(
       'bundle' => 'event',
-      'default_value' => NULL,
+      'default_value' => array(
+        0 => array(
+          'amount' => 0,
+          'currency_code' => 'USD',
+          'data' => array(
+            'components' => array(),
+          ),
+        ),
+      ),
       'deleted' => '0',
-      'description' => 'Enter the event registration admission price, if 0 or empty the event will be free admission',
+      'description' => 'Enter the event registration admission price, if 0 or empty the event will be a free admission',
       'display' => array(
         'default' => array(
           'label' => 'inline',
@@ -1436,7 +1444,7 @@ function crm_core_event_registration_field_default_fields() {
       'entity_type' => 'node',
       'field_name' => 'field_crmer_reg_price',
       'label' => 'Registration Price',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'user_register_form' => FALSE,
       ),
@@ -1597,7 +1605,7 @@ function crm_core_event_registration_field_default_fields() {
   t('Address');
   t('Admission');
   t('Date');
-  t('Enter the event registration admission price, if 0 or empty the event will be free admission');
+  t('Enter the event registration admission price, if 0 or empty the event will be a free admission');
   t('Event');
   t('Event Date');
   t('Event Product');
@@ -1612,7 +1620,7 @@ function crm_core_event_registration_field_default_fields() {
   t('Registration');
   t('Registration Price');
   t('Role');
-  t('Specify the url where users should be redirected to, when event registration is completed');
+  t('Specify the url for where users should be redirected to, when event registration is completed');
   t('Status');
   t('The order associated with this event registration if the event type was paid');
   t('The registration role for the given user');
