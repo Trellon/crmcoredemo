@@ -579,6 +579,18 @@ function crm_core_event_registration_commerce_node_product_settings() {
 }
 
 /**
+ * Implements hook_commerce_node_product_allow_sync
+ */
+function crm_core_event_registration_commerce_node_product_allow_sync($entity, $type, $product_field) {
+  // let's not sync the event if the registration price is at 0
+  if ($type == 'node' && $entity->type == 'event') {
+    if ($entity->field_crmer_reg_price[LANGUAGE_NONE][0]['amount'] == 0) {
+      return FALSE;     
+    }              
+  }    
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function crm_core_event_registration_form_event_node_form_alter(&$form, $form_state) {
