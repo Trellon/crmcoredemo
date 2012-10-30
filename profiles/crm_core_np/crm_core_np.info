@@ -65,6 +65,7 @@ dependencies[] = commerce_cart
 dependencies[] = commerce_checkout
 dependencies[] = commerce_ui
 dependencies[] = commerce_customer
+dependencies[] = commerce_customer_ui
 dependencies[] = commerce_order
 dependencies[] = commerce_product
 dependencies[] = commerce_product_pricing
