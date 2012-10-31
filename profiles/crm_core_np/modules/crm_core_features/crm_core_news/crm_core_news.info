@@ -16,6 +16,7 @@ dependencies[] = simplenews
 dependencies[] = strongarm
 dependencies[] = taxonomy
 dependencies[] = views
+dependencies[] = sharethis
 features[context][] = news_item_page
 features[context][] = news_list_page
 features[crm_core_activity_type][] = news_subscription
