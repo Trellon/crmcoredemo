@@ -1,0 +1,18 @@
+<?php
+/**
+ * @file
+ * Code for the CRM Core Subscriptions Report feature.
+ */
+
+include_once 'crm_core_subscriptions_report.features.inc';
+
+
+function crm_core_subscriptions_report_views_query_alter(&$view, &$query) {
+  if ($view->name == 'crm_subscriptions_report') {
+    $query->add_field(NULL, 'DATE_FORMAT(field_data_field_activity_date.field_activity_date_value, \'%Y %M\')', 'date_formatted');
+    $query->add_groupby('date_formatted');
+    $query->add_groupby('crm_core_activity.title');
+    $query->add_groupby('field_data_field_newsletter_category_field_newsletter_catego');
+//    print '<pre>'; print_r($query); exit;
+  }
+}

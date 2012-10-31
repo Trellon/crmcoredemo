@@ -1,0 +1,11 @@
+name = CRM Core Subscriptions Report
+core = 7.x
+package = CRM Core
+php = 5.2.4
+version = 7.x-1.0
+project = crm_core_subscriptions_report
+dependencies[] = crm_core_news
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:1
+features[views_view][] = crm_subscriptions_report
