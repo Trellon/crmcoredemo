@@ -13,6 +13,5 @@ function crm_core_subscriptions_report_views_query_alter(&$view, &$query) {
     $query->add_groupby('date_formatted');
     $query->add_groupby('crm_core_activity.title');
     $query->add_groupby('field_data_field_newsletter_category_field_newsletter_catego');
-//    print '<pre>'; print_r($query); exit;
   }
 }
