@@ -742,7 +742,7 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['nothing_2']['label'] = '';
   $handler->display->display_options['fields']['nothing_2']['alter']['text'] = '[nothing] / [nothing_1]';
   $handler->display->display_options['fields']['nothing_2']['element_label_colon'] = FALSE;
-  $handler->display->display_options['path'] = 'admin/crm/report/event/registration/%';
+  $handler->display->display_options['path'] = 'crm/reports/events/registrations/%';
   $handler->display->display_options['menu']['title'] = 'Event Registration Reports';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['name'] = 'management';
@@ -761,7 +761,7 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['style_options']['replace_newlines'] = 0;
   $handler->display->display_options['style_options']['header'] = 1;
   $handler->display->display_options['defaults']['empty'] = FALSE;
-  $handler->display->display_options['path'] = 'admin/crm/report/event/registration/%/export';
+  $handler->display->display_options['path'] = 'crm/reports/events/registrations/%/export';
   $handler->display->display_options['displays'] = array(
     'page' => 'page',
     'default' => 0,
@@ -833,7 +833,7 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['view_order']['table'] = 'commerce_order';
   $handler->display->display_options['fields']['view_order']['field'] = 'view_order';
   $handler->display->display_options['fields']['view_order']['relationship'] = 'field_registration_order_target_id';
-  $handler->display->display_options['path'] = 'admin/crm/report/event/revenue/%';
+  $handler->display->display_options['path'] = 'crm/reports/events/revenue/%';
 
   /* Display: Event Revenue Block */
   $handler = $view->new_display('block', 'Event Revenue Block', 'revenue_per_event');
@@ -998,7 +998,7 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['nothing']['label'] = '';
   $handler->display->display_options['fields']['nothing']['alter']['text'] = 'View Registrations';
   $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'admin/crm/report/event/registration/[nid]';
+  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'crm/reports/events/registrations/[nid]';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
@@ -1099,7 +1099,7 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['nothing']['label'] = '';
   $handler->display->display_options['fields']['nothing']['alter']['text'] = 'View Registrations';
   $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'admin/crm/report/event/registration/[nid]';
+  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'crm/reports/events/registrations/[nid]';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
@@ -1108,9 +1108,9 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['fields']['nothing_1']['label'] = '';
   $handler->display->display_options['fields']['nothing_1']['alter']['text'] = 'View Revenues';
   $handler->display->display_options['fields']['nothing_1']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'admin/crm/report/event/revenue/[nid]';
+  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'crm/reports/events/revenue/[nid]';
   $handler->display->display_options['fields']['nothing_1']['element_label_colon'] = FALSE;
-  $handler->display->display_options['path'] = 'admin/crm/report/event/registration';
+  $handler->display->display_options['path'] = 'crm/reports/events/registrations';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Event Registrations';
   $handler->display->display_options['menu']['weight'] = '0';
