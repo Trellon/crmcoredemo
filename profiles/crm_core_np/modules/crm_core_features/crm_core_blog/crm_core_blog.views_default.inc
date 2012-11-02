@@ -276,7 +276,7 @@ function crm_core_blog_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'admin/crm/report/blog/commenters';
+  $handler->display->display_options['path'] = 'crm/reports/blog/commenters';
   $export['crm_core_blog_comment_report'] = $view;
 
   return $export;
