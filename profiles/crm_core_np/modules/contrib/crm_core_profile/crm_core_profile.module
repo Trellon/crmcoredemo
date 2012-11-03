@@ -175,7 +175,7 @@ function crm_core_profile_main() {
  */
 function crm_core_profile_save($record) {
   $crm_core_profile = crm_core_profile_load($record['name']);
-  $record['create_contact_actions'] = serialize($record['create_contact_actions']);
+    
   if (!empty($crm_core_profile)) {
     drupal_write_record('crm_core_profile', $record, 'name');  
   } 
@@ -195,10 +195,6 @@ function crm_core_profile_load($machine_name) {
 
   $result = $query->execute();
   $data = $result->fetchAssoc();
-
-  if (empty($data)) return;
-
-  $data['create_contact_actions'] = unserialize($data['create_contact_actions']);
 
   return $data;  
 }
@@ -222,7 +218,7 @@ function crm_core_profile_load_all($conditions = array()) {
 
   $result = $query->execute();
   while($record = $result->fetchAssoc()) {
-    $data[] = $record;  
+    $data[$record['name']] = $record;  
   }
 
   return $data;    
@@ -238,4 +234,19 @@ function crm_core_profile_delete($machine_name) {
   db_delete('crm_core_profile')
     ->condition('name', $machine_name)
     ->execute();
+}
+
+/**
+ * Implements hook_features_api
+ */
+function crm_core_profile_features_api() {
+  return array(
+    'crm_core_profile' => array(
+      'name' => 'CRM Core Profile Form',
+      'default_hook' => 'crm_core_profile_default',
+      'default_file' => FEATURES_DEFAULTS_INCLUDED,
+      'feature_source' => TRUE,
+      'file' => drupal_get_path('module', 'crm_core_profile') . '/crm_core_profile.features.inc',
+    ),
+  );
 }

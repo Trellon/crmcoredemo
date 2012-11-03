@@ -228,6 +228,7 @@ function crm_core_activity_form_crm_core_profile_new_form_alter(&$form, &$form_s
   }
 
   // saved profile loaded, just adding activity parts
+  $crm_core_profile_activity = array();
   if (!empty($profile)) {
     $crm_core_profile_activity = crm_core_profile_activity_load($profile['name']);
     $form_state['crm_core_profile_activity'] = $crm_core_profile_activity;     
@@ -460,14 +461,37 @@ function crm_core_profile_activity_weight_form_submit($form, &$form_state) {
  */
 function crm_core_profile_activity_save($record) {
   $crm_core_profile_activity = crm_core_profile_activity_load($record['name']);
-  $record['create_activity_actions'] = serialize($record['create_activity_actions']);
-
   if (!empty($crm_core_profile_activity)) {
     drupal_write_record('crm_core_profile_activity', $record, 'name');  
   } 
   else {
     drupal_write_record('crm_core_profile_activity', $record);
   } 
+}
+
+/**
+ * Loads all profile activities
+ */
+function crm_core_profile_activity_load_all($conditions = array()) {
+  $data = array();
+  $query = db_select('crm_core_profile_activity', 'a')
+    ->fields('a');
+  
+  if (!empty($conditions)) {
+    foreach($conditions as $condition) {
+      if (!array_key_exists('operator', $condition)) {
+        $condition['operator'] = '=';  
+      }
+      $query->condition($condition['field'], $condition['value'], $condition['operator']);
+    }  
+  }
+
+  $result = $query->execute();
+  while($record = $result->fetchAssoc()) {
+    $data[$record['name']] = $record;  
+  }
+
+  return $data;    
 }
 
 /**
@@ -481,11 +505,6 @@ function crm_core_profile_activity_load($machine_name) {
 
   $result = $query->execute();
   $data = $result->fetchAssoc();
-
-  $actions = unserialize($data['create_activity_actions']);
-  if (!empty($actions)) {
-    $data['create_activity_actions'] = $actions;
-  }
 
   return $data;
 }
@@ -512,7 +531,14 @@ function crm_core_profile_activity_ajax_callback($form, &$form_state) {
 function crm_core_profile_activity_get_create_activity_actions($profile) {
   $actions = array();
 
-  $p_actions = empty($profile['create_activity_actions']) ? array() : $profile['create_activity_actions'];
+  $p_actions = array();
+  if (!empty($profile['create_activity_actions'])) {
+    if (is_array($profile['create_activity_actions'])) {
+      $p_actions = $profile['create_activity_actions'];  
+    } else {
+      $p_actions = unserialize($profile['create_activity_actions']);  
+    }
+  }
 
   $actions['url'] = array(
     'weight' => isset($p_actions['url']) ? $p_actions['url']['weight'] : 10,
