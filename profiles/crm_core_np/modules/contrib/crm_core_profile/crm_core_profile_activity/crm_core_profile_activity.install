@@ -41,10 +41,10 @@ function crm_core_profile_activity_schema() {
       ),
       'create_activity_actions' => array(
         'description' => 'Load activity sequence',
-        'type' => 'varchar',
-        'length' => 255,
+        'type' => 'blob',
+        'size' => 'big',
         'not null' => FALSE,
-        'default' => '',
+        'serialize' => TRUE,
       ),
   ),
     'primary key' => array('name'),
@@ -66,4 +66,15 @@ function crm_core_profile_activity_update_7001(&$sandbox) {
     'not null' => FALSE,
     'default' => '',
   ));
+}
+
+/**
+ * Change contact sequence field to blog.
+ *
+ * @todo: change create_contact_actions to a blob field for storage and serialization
+ */
+function crm_core_profile_activity_update_7002(&$sandbox) {
+  db_change_field('crm_core_profile_activity', 'create_activity_actions', 'create_activity_actions',
+    array('type' => 'blob', 'size' => 'big', 'serialize' => TRUE, 'not null' => TRUE)
+  );
 }

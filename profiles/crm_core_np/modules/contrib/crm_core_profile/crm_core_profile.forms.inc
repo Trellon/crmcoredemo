@@ -225,7 +225,7 @@ function crm_core_profile_new_form($form, &$form_state, $profile) {
   );
 
   $field_options = array();
-  if (!empty($profile)) {
+  if (!empty($profile) && !isset($form_state['values']['bundle_type'])) {
     $form_state['values']['bundle_type'] = $profile['bundle_type'];  
   }
   
@@ -265,7 +265,11 @@ function crm_core_profile_new_form($form, &$form_state, $profile) {
 
   $fields_default = array();
   if (!empty($profile)) {
-    $fields_default = unserialize($profile['fields']);  
+    if (!is_array($profile['fields'])) {
+      $fields_default = unserialize($profile['fields']);  
+    } else {
+      $fields_default = $profile['fields'];
+    }
   }
 
   $form['fields'] = array(
@@ -434,7 +438,12 @@ function crm_core_profile_new_form_submit($form, &$form_state) {
   $record['redirect'] = ltrim($record['redirect'], '\/\\');
   
   if (isset($form_state['profile'])) {
-    $fields = unserialize($form_state['profile']['fields']);
+    if (!is_array($form_state['profile']['fields'])) {
+      $fields = unserialize($form_state['profile']['fields']);
+    } else {
+      $fields = $form_state['profile']['fields'];  
+    }
+    
     $record['fields']['weight'] = (isset($fields['weight'])) ? $fields['weight'] : array();
   }
   
@@ -617,10 +626,17 @@ function theme_crm_core_profile_weight_form($variables) {
  * Get load contact sequence.
  */
 function crm_core_profile_get_create_contact_actions($profile) {
+       
   $actions = array();
-
-  $p_actions = empty($profile['create_contact_actions']) ? array() : $profile['create_contact_actions'];
-
+  
+  if (!empty($profile)) {
+    if (array_key_exists('create_contact_actions', $profile)) {
+      $p_actions = $profile['create_contact_actions'];  
+    }    
+  } else {
+    $p_actions = null;  
+  }
+    
   $actions['url'] = array(
     'weight' => isset($p_actions['url']) ? $p_actions['url']['weight'] : 10,
     'label' => t('Load contact from URL parameter (contact_id)'),
@@ -633,26 +649,30 @@ function crm_core_profile_get_create_contact_actions($profile) {
     );
   }
 
-  /*
   $actions['duplicate'] = array(
     'weight' => isset($p_actions['duplicate']) ? $p_actions['duplicate']['weight'] : 10,
     'label' => t('Find duplicate contact (TODO)'),
   );
-  */
 
   $actions['new'] = array(
     'weight' => isset($p_actions['new']) ? $p_actions['new']['weight'] : 10,
     'label' => t('Create new contact'),
   );
 
+
   uasort($actions, 'crm_core_profile_weight_cmp');
 
   return $actions;
 }
 
+/**
+ * Weight comparison function
+ */
 function crm_core_profile_weight_cmp($a, $b) {
   if ($a['weight'] == $b['weight']) {
     return 0;
   }
   return ($a['weight'] < $b['weight']) ? -1 : 1;
 }
+
+

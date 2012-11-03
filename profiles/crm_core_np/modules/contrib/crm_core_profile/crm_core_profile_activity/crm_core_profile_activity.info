@@ -18,9 +18,9 @@ core = "7.x"
 project = "crm_core_profile"
 datestamp = "1333502146"
 
-; Information added by drupal.org packaging script on 2012-10-17
-version = "7.x-1.0-alpha1+12-dev"
+; Information added by drupal.org packaging script on 2012-11-03
+version = "7.x-1.0-alpha1+17-dev"
 core = "7.x"
 project = "crm_core_profile"
-datestamp = "1350434661"
+datestamp = "1351903676"
 

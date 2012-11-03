@@ -78,10 +78,10 @@ function crm_core_profile_schema() {
       ),
       'create_contact_actions' => array(
         'description' => 'Load contact sequence',
-        'type' => 'varchar',
-        'length' => 255,
+        'type' => 'blob',
+        'size' => 'big',
+        'serialize' => TRUE,
         'not null' => FALSE,
-        'default' => '',
       ),
       'user_sync' => array(
         'description' => 'User synchronization settings',
@@ -118,4 +118,16 @@ function crm_core_profile_update_7001(&$sandbox) {
     'not null' => FALSE,
     'default' => '',
   ));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * @todo: change create_contact_actions to a blob field for storage and serialization
+ */
+function crm_core_profile_update_7002(&$sandbox) {
+  // alter the DB field to blob
+  db_change_field('crm_core_profile', 'create_contact_actions', 'create_contact_actions',
+    array('type' => 'blob', 'size' => 'big', 'serialize' => TRUE, 'not null' => TRUE)
+  );
 }
