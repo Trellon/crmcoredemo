@@ -78,3 +78,22 @@ function _crm_core_news_create_subscription_activity($contact, $categiry_tid, $s
 
   return $activity;
 }
+
+/**
+ * Implement hook_form_FORM_ID_alter
+ * Alter simplenews_subscriptions_multi_block_form form
+ */
+function crm_core_news_form_simplenews_subscriptions_multi_block_form_alter(&$form, &$form_state) {
+  $form['update']['#value'] = t('Sign Up');
+}
+
+/**
+ * Implement hook_block_view_MODULE_DELTA_alter()
+ * Alter 0 block of simplenews module
+ */
+function crm_core_news_block_view_simplenews_0_alter(&$data, $block) {
+  // Override default title
+  if(empty($block->title)) {
+    $data['subject'] = t('Sign Up for News Alerts');
+  }
+}
