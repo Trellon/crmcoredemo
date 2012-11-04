@@ -25,5 +25,7 @@ function crm_core_news_install() {
   foreach ($simplenews_default_settings as $name => $value) {
     variable_set($name, $value);
   }
-  
+
+  // Define simplenews block custom text variable with empty value
+  variable_set('simplenews_block_m_multiple', '');
 }
