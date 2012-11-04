@@ -23,8 +23,8 @@ function commerce_product_reference_field_views_data($field) {
   // Build an array of bundles the product reference field appears on.
   $bundles = array();
 
-  foreach ($field['bundles'] as $entity => $bundles) {
-    $bundles[] = $entity . ' (' . implode(', ', $bundles) . ')';
+  foreach ($field['bundles'] as $entity => $entity_bundles) {
+    $bundles[] = $entity . ' (' . implode(', ', $entity_bundles) . ')';
   }
 
   foreach ($data as $table_name => $table_data) {
@@ -32,7 +32,7 @@ function commerce_product_reference_field_views_data($field) {
       if (isset($field_data['filter']['field_name']) && $field_name != 'delta') {
         $data[$table_name][$field_name]['relationship'] = array(
           'title' => t('Referenced product'),
-          'help' => t('Appears in: @bundles', array('@bundles' => implode(', ', $bundles))),
+          'help' => t('Appears in: @bundles.', array('@bundles' => implode(', ', $bundles))),
           'base' => 'commerce_product',
           'base field' => 'product_id',
           'handler' => 'views_handler_relationship',
@@ -49,6 +49,28 @@ function commerce_product_reference_field_views_data($field) {
  * Implements hook_views_data_alter().
  */
 function commerce_product_reference_views_data_alter(&$data) {
+  // Add a node filter that filters by node types with product reference fields.
+  $data['node']['is_product_display'] = array(
+    'title' => t('Product display'),
+    'help' => t('Whether or not the content functions as a product display.'),
+    'real field' => 'type',
+    'filter' => array(
+      'handler' => 'commerce_product_reference_handler_filter_node_is_product_display',
+      'label' => t('Is a product display'),
+      'type' => 'yes-no',
+    ),
+  );
+
+  // Add the node filter that filters by node types with product reference fields.
+  $data['node']['product_display_node_type'] = array(
+    'title' => t('Product display content type'),
+    'help' => t('Filters by the content type but only shows product display content types as options.'),
+    'real field' => 'type',
+    'filter' => array(
+      'handler' => 'commerce_product_reference_handler_filter_node_type',
+    ),
+  );
+
   // Add the line item filter for filtering by line items of a product line item
   // type (based on $line_item_type['product']).
   $data['commerce_line_item']['product_line_item_type'] = array(

@@ -76,7 +76,7 @@ function commerce_payment_pane_checkout_form($form, &$form_state, $checkout_pane
 
     // Find the default payment method using either the preselected value stored
     // in the order / checkout pane or the first available method.
-    $pane_values = !empty($form_state['values']) ? $form_state['values'][$checkout_pane['pane_id']] : array();
+    $pane_values = !empty($form_state['values'][$checkout_pane['pane_id']]) ? $form_state['values'][$checkout_pane['pane_id']] : array();
 
     if (isset($pane_values['payment_method']) && isset($options[$pane_values['payment_method']])) {
       $default_value = $pane_values['payment_method'];
@@ -169,6 +169,13 @@ function commerce_payment_pane_checkout_form_validate($form, &$form_state, $chec
  * Payment pane: submit callback.
  */
 function commerce_payment_pane_checkout_form_submit($form, &$form_state, $checkout_pane, $order) {
+  // Check to make sure there are no validation issues with other form elements
+  // before executing payment method callbacks.
+  if (form_get_errors()) {
+    drupal_set_message(t('Your payment will not be processed until all errors on the page have been addressed.'), 'warning');
+    return FALSE;
+  }
+
   $pane_id = $checkout_pane['pane_id'];
 
   // Only submit if we actually had payment methods on the form.
@@ -186,6 +193,12 @@ function commerce_payment_pane_checkout_form_submit($form, &$form_state, $checko
         $payment_method = commerce_payment_method_instance_load($pane_values['payment_method']);
 
         if ($callback = commerce_payment_method_callback($payment_method, 'submit_form_submit')) {
+          // Initialize the payment details array to accommodate payment methods
+          // that don't add any additional details to the checkout pane form.
+          if (empty($pane_values['payment_details'])) {
+            $pane_values['payment_details'] = array();
+          }
+
           // If payment fails, rebuild the checkout form without progressing.
           if ($callback($payment_method, $pane_form['payment_details'], $pane_values['payment_details'], $order, $balance) === FALSE) {
             $form_state['rebuild'] = TRUE;
@@ -210,15 +223,22 @@ function commerce_payment_redirect_pane_checkout_form(&$form, &$form_state, $che
 
   // If the payment method doesn't exist or does not require a redirect...
   if (!$payment_method || !$payment_method['offsite']) {
+    if (!$payment_method) {
+      $log = t('Customer skipped the Payment page because no payment was required.');
+    }
+    else {
+      $log = t('Customer skipped the Payment page because payment was already submitted.');
+    }
+
     // Advance the customer to the next step of the checkout process.
-    commerce_payment_redirect_pane_next_page($order);
+    commerce_payment_redirect_pane_next_page($order, $log);
     drupal_goto(commerce_checkout_order_uri($order));
   }
 
   // If the user came to the cancel URL...
   if (arg(3) == 'back' && arg(4) == $order->data['payment_redirect_key']) {
     // Send the customer to the previous step of the checkout process.
-    commerce_payment_redirect_pane_previous_page($order);
+    commerce_payment_redirect_pane_previous_page($order, t('Customer canceled payment at the payment gateway.'));
     drupal_goto(commerce_checkout_order_uri($order));
   }
 
@@ -235,14 +255,14 @@ function commerce_payment_redirect_pane_checkout_form(&$form, &$form_state, $che
       }
 
       // Send the customer on to the next checkout page.
-      commerce_payment_redirect_pane_next_page($order);
+      commerce_payment_redirect_pane_next_page($order, t('Customer successfully submitted payment at the payment gateway.'));
       drupal_goto(commerce_checkout_order_uri($order));
     }
     else {
       // Otherwise display the failure message and send the customer back.
       drupal_set_message(t('Payment failed at the payment server. Please review your information and try again.'), 'error');
 
-      commerce_payment_redirect_pane_previous_page($order);
+      commerce_payment_redirect_pane_previous_page($order, t('Customer payment submission failed at the payment gateway.'));
       drupal_goto(commerce_checkout_order_uri($order));
     }
   }

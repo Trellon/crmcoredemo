@@ -14,8 +14,6 @@
  *     with only a product type defined.
  */
 function commerce_product_product_form($form, &$form_state, $product) {
-  $language = !empty($product->language) ? $product->language : LANGUAGE_NONE;
-
   // Ensure this include file is loaded when the form is rebuilt from the cache.
   $form_state['build_info']['files']['form'] = drupal_get_path('module', 'commerce_product') . '/includes/commerce_product.forms.inc';
 
@@ -42,7 +40,8 @@ function commerce_product_product_form($form, &$form_state, $product) {
 
   // Add the field related form elements.
   $form_state['commerce_product'] = $product;
-  field_attach_form('commerce_product', $product, $form, $form_state, $language);
+  $langcode = entity_language('commerce_product', $product);
+  field_attach_form('commerce_product', $product, $form, $form_state, $langcode);
 
   $form['status'] = array(
     '#type' => 'radios',
@@ -94,7 +93,7 @@ function commerce_product_product_form($form, &$form_state, $product) {
   // Simply use default language
   $form['language'] = array(
     '#type' => 'value',
-    '#value' => $language,
+    '#value' => $langcode,
   );
 
   // We add the form's #submit array to this button along with the actual submit
@@ -136,9 +135,21 @@ function commerce_product_product_form_validate($form, &$form_state) {
     form_set_error('sku', t('The SKU contains invalid tokens.'));
   }
   else {
-    // Ensure the proposed SKU is unique.
-    if (!commerce_product_validate_sku_unique($sku, $product->product_id)) {
-      form_set_error('sku', t('This SKU is already in use and must be unique. Please supply another value.'));
+    // Ensure the proposed SKU is unique or reused only during product updates.
+    $query = new EntityFieldQuery();
+
+    $query
+      ->entityCondition('entity_type', 'commerce_product')
+      ->propertyCondition('sku', $sku);
+
+    $result = $query->execute();
+
+    if (!empty($result)) {
+      $product_id = key($result['commerce_product']);
+
+      if ($product_id != $product->product_id) {
+        form_set_error('sku', t('This SKU is <a href="!url">already in use</a> and must be unique. Please supply another value.', array('!url' => url('admin/commerce/products/' . $product_id))));
+      }
     }
 
     // Validate the SKU for invalid characters.
