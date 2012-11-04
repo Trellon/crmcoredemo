@@ -196,6 +196,14 @@ function crm_core_profile_load($machine_name) {
   $result = $query->execute();
   $data = $result->fetchAssoc();
 
+  // Unserialize data
+  if (isset($data['create_contact_actions'])) {
+    $data['create_contact_actions'] = unserialize($data['create_contact_actions']);
+  }
+  if (isset($data['fields'])) {
+    $data['fields'] = unserialize($data['fields']);
+  }
+
   return $data;  
 }
 
@@ -218,6 +226,12 @@ function crm_core_profile_load_all($conditions = array()) {
 
   $result = $query->execute();
   while($record = $result->fetchAssoc()) {
+    if (isset($record['create_contact_actions'])) {
+      $record['create_contact_actions'] = unserialize($record['create_contact_actions']);
+    }
+    if (isset($record['fields'])) {
+      $record['fields'] = unserialize($record['fields']);
+    }
     $data[$record['name']] = $record;  
   }
 
