@@ -24,7 +24,7 @@ function crm_core_profile_entry_form($form, &$form_state, $profile) {
   
   // we have to use the list of fields from the contact bundle rather than from the profile settings because new field(s)
   // may be added to the contact bundle
-  $profile_fields = unserialize($profile['fields']);
+  $profile_fields = $profile['fields'];
   $profile_fields_visibility = $profile_fields['toggle'];
   $contact_fields = field_info_instances('crm_core_contact',$profile['bundle_type']);
   $contact_fields = array_keys($contact_fields);
@@ -101,7 +101,7 @@ function theme_crm_core_profile_entry_form($variables) {
   $form = $variables['form'];
   
   $profile = crm_core_profile_load($form['profile_name']['#value']);
-  $fields = unserialize($profile['fields']);
+  $fields = $profile['fields'];
   $render_fields = array();
   if (!isset($fields['weight']) || !array_key_exists('weight', $fields)) {
     return;  
@@ -266,7 +266,7 @@ function crm_core_profile_new_form($form, &$form_state, $profile) {
   $fields_default = array();
   if (!empty($profile)) {
     if (!is_array($profile['fields'])) {
-      $fields_default = unserialize($profile['fields']);  
+      $fields_default = $profile['fields'];
     } else {
       $fields_default = $profile['fields'];
     }
@@ -439,7 +439,7 @@ function crm_core_profile_new_form_submit($form, &$form_state) {
   
   if (isset($form_state['profile'])) {
     if (!is_array($form_state['profile']['fields'])) {
-      $fields = unserialize($form_state['profile']['fields']);
+      $fields = $form_state['profile']['fields'];
     } else {
       $fields = $form_state['profile']['fields'];  
     }
@@ -526,7 +526,7 @@ function crm_core_profile_weight_form($form, &$form_state, $crm_core_profile) {
   $form_state['profile'] = $crm_core_profile;
   
   // load all the fields from the crm core profile
-  $fields = unserialize($crm_core_profile['fields']);
+  $fields = $crm_core_profile['fields'];
   
   if (empty($fields)) {
     $form['weight'] = array();
@@ -569,8 +569,6 @@ function crm_core_profile_weight_form_validate($form, &$form_state) {
  * We use this to save the field weights
  */
 function crm_core_profile_weight_form_submit($form, &$form_state) {
-  $form_state['profile']['fields'] = unserialize($form_state['profile']['fields']);
-
   foreach ($form_state['values']['weight'] as $field => $weight) {
     if (array_key_exists($field, $form_state['profile']['fields']['toggle'])) {
       if($form_state['profile']['fields']['toggle'][$field] !== 0) {
@@ -631,12 +629,16 @@ function crm_core_profile_get_create_contact_actions($profile) {
   
   if (!empty($profile)) {
     if (array_key_exists('create_contact_actions', $profile)) {
-      $p_actions = $profile['create_contact_actions'];  
+      if (!is_array($profile['create_contact_actions'])) {
+        $profile['create_contact_actions'] = unserialize($profile['create_contact_actions']);  
+      }
+      $p_actions = $profile['create_contact_actions']; 
     }    
-  } else {
+  } 
+  else {
     $p_actions = null;  
   }
-    
+      
   $actions['url'] = array(
     'weight' => isset($p_actions['url']) ? $p_actions['url']['weight'] : 10,
     'label' => t('Load contact from URL parameter (contact_id)'),
