@@ -263,9 +263,6 @@ function commerce_product_ui_entity_info_alter(&$entity_info) {
   // Add callbacks and urls for administer translations.
   $entity_info['commerce_product']['translation']['entity_translation'] += array(
     'base path' => 'admin/commerce/products/%commerce_product',
-    'access callback' => 'commerce_product_entity_translation_tab_access',
-    'access arguments' => array(3),
-    'edit form' => TRUE,
   );
 
   // Expose the admin UI for product fields.
@@ -369,7 +366,7 @@ function commerce_product_ui_product_type_save($product_type, $configure = TRUE,
   // Rebuild the menu to add this product type's menu items.
   if (!$skip_reset) {
     commerce_product_types_reset();
-    menu_rebuild();
+    variable_set('menu_rebuild_needed', TRUE);
   }
 
   return $op;
@@ -396,7 +393,7 @@ function commerce_product_ui_product_type_delete($type, $skip_reset = FALSE) {
   // Rebuild the menu to get rid of this product type's menu items.
   if (!$skip_reset) {
     commerce_product_types_reset();
-    menu_rebuild();
+    variable_set('menu_rebuild_needed', TRUE);
   }
 
   // Notify the field API that this bundle has been destroyed.
@@ -444,18 +441,6 @@ function commerce_product_ui_forms($form_id, $args) {
 }
 
 /**
- * Implements hook_form_alter().
- */
-function commerce_product_ui_form_alter(&$form, &$form_state, $form_id) {
-  // On field administration forms for product types add a breadcrumb.
-  if (in_array($form_id, array('field_ui_field_overview_form', 'field_ui_display_overview_form'))) {
-    if ($form['#entity_type'] == 'commerce_product') {
-      commerce_product_ui_set_breadcrumb(TRUE);
-    }
-  }
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  *
  * The Product UI module instantiates the Product add/edit form at particular
@@ -465,36 +450,14 @@ function commerce_product_ui_form_alter(&$form, &$form_state, $form_id) {
  * @see commerce_product_ui_product_form()
  */
 function commerce_product_ui_form_commerce_product_ui_product_form_alter(&$form, &$form_state) {
+  $product = $form_state['commerce_product'];
+
   // Add a submit handler to the save button to add a redirect.
   $form['actions']['submit']['#submit'][] = 'commerce_product_ui_product_form_submit';
 
-  // If translation support is enabled, provide the suitable languages
-  if (module_exists('entity_translation') && entity_translation_enabled('commerce_product')) {
-    $translations = $form_state['commerce_product']->translations;
-
-    $form['language'] = array(
-      '#type' => 'select',
-      '#title' => t('Language'),
-      '#default_value' => (isset($form_state['commerce_product']->language) ? $form_state['commerce_product']->language : ''),
-      '#options' => array(LANGUAGE_NONE => t('Language neutral')) + locale_language_list('name'),
-      '#weight' => -10,
-    );
-
-    // Disable languages for existing translations, so it is not possible to
-    // switch this product to some language which is already in the translation set.
-    foreach ($translations->data as $langcode => $translation) {
-      if ($langcode != $translations->original) {
-        unset($form['language']['#options'][$langcode]);
-      }
-    }
-
-    // Since this function may change the language of the submitted form values,
-    // it has to be the first called.
-    array_unshift($form['actions']['submit']['#submit'], 'commerce_product_ui_product_form_translation_submit');
-  }
 
   // Add the save and continue button for new products.
-  if (empty($form_state['commerce_product']->product_id)) {
+  if (empty($product->product_id)) {
     $form['actions']['save_continue'] = array(
       '#type' => 'submit',
       '#value' => t('Save and add another'),
@@ -523,34 +486,6 @@ function commerce_product_ui_product_form_submit($form, &$form_state) {
   }
   elseif (arg(2) == 'products' && arg(3) == 'add') {
     $form_state['redirect'] = 'admin/commerce/products';
-  }
-}
-
-/**
- * Submit callback for commerce_product_ui_product_form().
- *
- * Checks if translation is enabled for the product and handles language changes.
- * Since this handler may change the language of submitted form values it should
- * be the first submit handler called.
- *
- * @see commerce_product_ui_form_commerce_product_ui_product_form_alter()
- */
-function commerce_product_ui_product_form_translation_submit($form, &$form_state) {
-  // Get an array of available languages.
-  $available_languages = field_content_languages();
-  list(, , $bundle) = entity_extract_ids('commerce_product', $form_state['commerce_product']);
-
-  foreach (field_info_instances('commerce_product', $bundle) as $instance) {
-    $field_name = $instance['field_name'];
-    $field = field_info_field($field_name);
-    $previous_language = $form[$field_name]['#language'];
-
-    // Handle a possible language change; new language values are inserted and
-    // the previous values are deleted.
-    if ($field['translatable'] && $previous_language != $form_state['values']['language']) {
-      $form_state['values'][$field_name][$form_state['values']['language']] = $form_state['commerce_product']->{$field_name}[$previous_language];
-      $form_state['values'][$field_name][$previous_language] = array();
-    }
   }
 }
 
@@ -593,18 +528,10 @@ function commerce_product_ui_views_api() {
  * @param $product_types
  *   TRUE or FALSE indicating whether or not the breadcrumb should include the
  *     product types administrative page.
+ *
+ * @deprecated since 7.x-1.4
  */
 function commerce_product_ui_set_breadcrumb($product_types = FALSE) {
-  $breadcrumb = array(
-    l(t('Home'), '<front>'),
-    l(t('Administration'), 'admin'),
-    l(t('Store'), 'admin/commerce'),
-    l(t('Products'), 'admin/commerce/products'),
-  );
-
-  if ($product_types) {
-    $breadcrumb[] = l(t('Product types'), 'admin/commerce/products/types');
-  }
-
-  drupal_set_breadcrumb($breadcrumb);
+  // This function used to manually set a breadcrumb that is now properly
+  // generated by Drupal itself.
 }
