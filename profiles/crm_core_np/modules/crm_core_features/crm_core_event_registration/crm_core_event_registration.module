@@ -64,7 +64,7 @@ function crm_core_event_registration_theme($existing, $type, $theme, $path) {
       ),
       'file' => $theme_inc,
     ),
-    
+
   );
 
 }
@@ -597,9 +597,9 @@ function crm_core_event_registration_commerce_node_product_allow_sync($entity, $
   // let's not sync the event if the registration price is at 0
   if ($type == 'node' && $entity->type == 'event') {
     if ($entity->field_crmer_reg_price[LANGUAGE_NONE][0]['amount'] == 0) {
-      return FALSE;     
-    }              
-  }    
+      return FALSE;
+    }
+  }
 }
 
 /**
@@ -649,9 +649,8 @@ function _crm_core_event_registration_check_event_order($node) {
       $states = commerce_order_statuses();
       $node->content['product_event_free_registration_link'] = array(
         '#type' => 'markup',
-        '#markup' => t('You already registered for event. The registration status is \'@status\'.',
-          array('@status' => $states[$orders[$line_item->order_id]->status]['title'])),
-        '#weight' => $node->content['field_crmer_reg_product']['#weight'],
+        '#markup' => t('You have already registered for event.'),
+        '#weight' => 999,
       );
       return;
     }
