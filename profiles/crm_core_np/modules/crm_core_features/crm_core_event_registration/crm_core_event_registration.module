@@ -12,7 +12,7 @@ include_once('crm_core_event_registration.userpoints.inc');
  */
 function crm_core_event_registration_menu() {
 
-  $items['crm/events/registration'] = array(
+  $items['admin/crm/events/registration'] = array(
     'title' => 'Event Registration Settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('crm_core_event_registration_config'),
