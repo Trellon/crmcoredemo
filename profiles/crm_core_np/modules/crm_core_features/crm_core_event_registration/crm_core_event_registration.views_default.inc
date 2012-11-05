@@ -130,7 +130,7 @@ function crm_core_event_registration_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['display_description'] = 'Administer CRM Core Events';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'admin/crm-core/events';
+  $handler->display->display_options['path'] = 'crm/events';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Events';
   $handler->display->display_options['menu']['name'] = 'management';
