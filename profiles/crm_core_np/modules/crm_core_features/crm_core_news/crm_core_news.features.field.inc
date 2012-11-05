@@ -148,7 +148,7 @@ function crm_core_news_field_default_fields() {
           'rows' => 5,
         ),
         'type' => 'text_textarea',
-        'weight' => '2',
+        'weight' => 2,
       ),
     ),
   );
@@ -217,7 +217,7 @@ function crm_core_news_field_default_fields() {
           'size' => 60,
         ),
         'type' => 'entityreference_autocomplete_tags',
-        'weight' => '-4',
+        'weight' => -4,
       ),
     ),
   );

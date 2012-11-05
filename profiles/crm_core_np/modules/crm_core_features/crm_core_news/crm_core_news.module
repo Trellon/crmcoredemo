@@ -30,7 +30,7 @@ function _crm_core_news_create_get_create_contact($uid, $email) {
   $contact_email_field = variable_get('crm_core_news_contact_email_field', 'field_contact_email');
 
   $contact = FALSE;
-    
+
   // Try to get related contact for him
   if (!empty($uid)) {
     $contact = crm_user_sync_get_contact_from_uid($uid);
@@ -69,7 +69,7 @@ function _crm_core_news_create_subscription_activity($contact, $categiry_tid, $s
   $activity->field_activity_participants[LANGUAGE_NONE][0]['target_id'] =  $contact->contact_id;
   $activity->field_activity_date[LANGUAGE_NONE][0] = array(
     'value' => format_date(strtotime('now'), 'custom', 'Y-m-d H:i:s', 'UTC'),
-    'timezone' => 'UTC',  
+    'timezone' => 'UTC',
     'timezone_db' => 'UTC',
   );
   $activity->field_newsletter_category[LANGUAGE_NONE][0]['tid'] = $categiry_tid;
@@ -95,5 +95,16 @@ function crm_core_news_block_view_simplenews_0_alter(&$data, $block) {
   // Override default title
   if(empty($block->title)) {
     $data['subject'] = t('Sign Up for News Alerts');
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function crm_core_news_views_query_alter(&$view, &$query) {
+  if ($view->name == 'crm_subscriptions_report' && $view->current_display == 'page') {
+    $query->add_field(NULL, 'DATE_FORMAT(field_data_field_activity_date.field_activity_date_value, \'%Y %M\')', 'date_formatted');
+    $query->add_groupby('date_formatted');
+    $query->add_groupby('crm_core_activity.title');
   }
 }
