@@ -1348,7 +1348,7 @@ function crm_core_event_registration_field_default_fields() {
           'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => '8',
+          'weight' => '9',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -1427,12 +1427,9 @@ function crm_core_event_registration_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'inline',
-          'module' => 'commerce_price',
-          'settings' => array(
-            'calculation' => FALSE,
-          ),
-          'type' => 'commerce_price_raw_amount',
-          'weight' => '5',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '6',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -1501,9 +1498,10 @@ function crm_core_event_registration_field_default_fields() {
             'default_quantity' => 1,
             'line_item_type' => 'product',
             'show_quantity' => FALSE,
+            'show_single_product_attributes' => FALSE,
           ),
           'type' => 'commerce_cart_add_to_cart_form',
-          'weight' => '6',
+          'weight' => '5',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -1574,7 +1572,7 @@ function crm_core_event_registration_field_default_fields() {
           'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => '7',
+          'weight' => '8',
         ),
         'teaser' => array(
           'label' => 'hidden',
