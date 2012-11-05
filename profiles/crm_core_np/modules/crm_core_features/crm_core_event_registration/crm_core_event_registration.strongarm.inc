@@ -158,13 +158,13 @@ function crm_core_event_registration_strongarm() {
       'display' => array(
         'product:sku' => array(
           'default' => array(
-            'weight' => '9',
+            'weight' => '10',
             'visible' => FALSE,
           ),
         ),
         'product:title' => array(
           'default' => array(
-            'weight' => '10',
+            'weight' => '11',
             'visible' => FALSE,
           ),
         ),
@@ -172,6 +172,12 @@ function crm_core_event_registration_strongarm() {
           'default' => array(
             'weight' => '4',
             'visible' => TRUE,
+          ),
+        ),
+        'product:status' => array(
+          'default' => array(
+            'weight' => '7',
+            'visible' => FALSE,
           ),
         ),
       ),
