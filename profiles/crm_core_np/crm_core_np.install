@@ -158,54 +158,48 @@ function crm_core_np_install_tasks() {
       'display' => TRUE,
       'display_name' => 'Install CRM Core features',
     ),
-
     '_crm_core_np_set_theme_form' => array(
       'type' => 'form',
       'display' => TRUE,
       'display_name' => 'Select a theme',
     ),
-
   );
   return $tasks;
 }
 
 function _crm_core_np_features() {
-
-  $t = get_t();
-
   return array(
-      'crm_core_blog' => array(
-        'title' => $t('CRM Core Blog'),
-        'description' => $t('CRM Core blog provides blog by author and a user comment report'),
-      ),
-      'crm_core_news' => array(
-        'title' => $t('CRM Core News'),
-        'description' => $t('CRM Core news provides a news content type and associated views and reports'),
-      ),
-      'crm_core_donation' => array(
-        'title' => $t('CRM Core Donation'),
-        'description' => $t('CRM Core Donation allows the creation of one step donation pages, Personal donation pages (PDP) payment integration, recurring payments, leaderboards and so much more'),
-      ),
-      'crm_core_event_registration' => array(
-        'title' => $t('CRM Core Event Registration'),
-        'description' => $t('CRM Core Event Registration allows the creation of event registration forms for paid and non-paid event types'),
-      ),
-      'crm_core_node_claim' => array(
-        'title' => $t('CRM Core Node Claim'),
-        'description' => $t('CRM Core Node Claim allows users to claim and take ownership of a content type'),
-      ),
-      'crm_core_volunteer' => array(
-        'title' => $t('CRM Core Volunteer'),
-        'description' => $t('CRM Core Volunteer allows signing up for volunteer opportunities'),
-       ),
-    );
+    'crm_core_blog' => array(
+      'title' => st('CRM Core Blog'),
+      'description' => st('CRM Core blog provides blog by author and a user comment report'),
+    ),
+    'crm_core_news' => array(
+      'title' => st('CRM Core News'),
+      'description' => st('CRM Core news provides a news content type and associated views and reports'),
+    ),
+    'crm_core_donation' => array(
+      'title' => st('CRM Core Donation'),
+      'description' => st('CRM Core Donation allows the creation of one step donation pages, Personal donation pages (PDP) payment integration, recurring payments, leaderboards and so much more'),
+    ),
+    'crm_core_event_registration' => array(
+      'title' => st('CRM Core Event Registration'),
+      'description' => st('CRM Core Event Registration allows the creation of event registration forms for paid and non-paid event types'),
+    ),
+    'crm_core_node_claim' => array(
+      'title' => st('CRM Core Node Claim'),
+      'description' => st('CRM Core Node Claim allows users to claim and take ownership of a content type'),
+    ),
+    'crm_core_volunteer' => array(
+      'title' => st('CRM Core Volunteer'),
+      'description' => st('CRM Core Volunteer allows signing up for volunteer opportunities'),
+     ),
+  );
 }
 
 /**
  * Install crm core features
  */
 function _crm_core_np_features_form($form, &$form_state) {
-
   $features = _crm_core_np_features();
 
   foreach ($features as $module => $info) {
@@ -216,7 +210,7 @@ function _crm_core_np_features_form($form, &$form_state) {
     );
   }
 
-    $form['features']['submit'] = array(
+  $form['features']['submit'] = array(
     '#type' => 'submit',
     '#value' => st('Next'),
   );
@@ -243,19 +237,6 @@ function _crm_core_np_features_form_submit($form, &$form_state) {
 
 
 function _crm_core_np_set_theme_form($form, &$form_state) {
-
-  $enable = array(
-    'theme_default' => 'twitter_bootstrap',
-    'admin_theme' => 'seven',
-  );
-  theme_enable($enable);
-
-  foreach ($enable as $var => $theme) {
-    if (!is_numeric($var)) {
-      variable_set($var, $theme);
-    }
-  }
-
   $themes = array();
   $system_themes = system_rebuild_theme_data();
 
@@ -283,15 +264,20 @@ function _crm_core_np_set_theme_form($form, &$form_state) {
 }
 
 function _crm_core_np_set_theme_form_submit($form, &$form_state) {
-
-  $theme = $form_state['values']['default_theme'];
-
-  if ($theme == 'twitter_bootstrap') {
-    return;
-  }
-
-  theme_enable (array($theme));
+  $selected_theme = $form_state['values']['default_theme'];
+  $themes = array('selected_theme' => $selected_theme);
+  theme_enable($themes);
 
   // Set the default theme.
-  variable_set('theme_default', $theme);
+  variable_set('theme_default', $selected_theme);
+
+  // Enable Events feature views.
+  // Avoids PHP notices from default fields not existing.
+  $views = crm_core_event_registration_views_default_views();
+  foreach ($views as $view) {
+    if ($view->disabled) {
+      $view->disabled = FALSE;
+      $view->save();
+    }
+  }
 }
