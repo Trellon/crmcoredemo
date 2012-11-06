@@ -14,7 +14,9 @@
       ele = jQuery(ele).parents(".select-or-other")[0];
     }
     if (jQuery(ele).find(".select-or-other-select option:selected[value=select_or_other], .select-or-other-select:checked[value=select_or_other]").length) {
-      jQuery(ele).find(".select-or-other-other").parent("div.form-item").show(speed);
+      jQuery(ele).find(".select-or-other-other").parent("div.form-item").show(speed, function() {
+        $(this).find(".select-or-other-other").focus();
+      });
     }
     else {
       jQuery(ele).find(".select-or-other-other").parent("div.form-item").hide(speed);
