@@ -17,7 +17,7 @@ function crm_core_donation_lb_views_default_views() {
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-  
+
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Donation Leaderboard';
@@ -273,7 +273,7 @@ function crm_core_donation_lb_views_default_views() {
   $handler->display->display_options['filters']['pdp']['field'] = 'pdp';
   $handler->display->display_options['filters']['pdp']['relationship'] = 'donation_page_id';
   $handler->display->display_options['filters']['pdp']['value']['value'] = '1';
-  
+
   /* Display: Other leaders */
   $handler = $view->new_display('page', 'Other leaders', 'page');
   $handler->display->display_options['defaults']['pager'] = FALSE;
@@ -516,7 +516,7 @@ function crm_core_donation_lb_views_default_views() {
   $handler->display->display_options['menu']['description'] = 'Donation leaderboard';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['name'] = 'main-menu';
-  
+
   /* Display: Top leader */
   $handler = $view->new_display('block', 'Top leader', 'block_1');
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
@@ -742,6 +742,6 @@ function crm_core_donation_lb_views_default_views() {
   $handler->display->display_options['fields']['total']['hide_alter_empty'] = 1;
 
 
-  $views['donation_leaderboard'] = $view; 
+  $views['donation_leaderboard'] = $view;
   return $views;
 }

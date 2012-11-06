@@ -3,9 +3,9 @@
  * @file
  * Installation for CRM_Core_Donation
  */
- 
+
 /**
- * Implements hook_schema()
+ * Implements hook_schema().
  */
 function crm_core_donation_schema() {
   $schema['crm_core_donation_page'] = array(
@@ -15,7 +15,7 @@ function crm_core_donation_schema() {
         'description' => 'Donation page ID',
         'type' => 'serial',
         'not null' => TRUE,
-      ),    
+      ),
       'name' => array(
         'description' => 'The CRM Core Profile FORM ID',
         'type' => 'varchar',

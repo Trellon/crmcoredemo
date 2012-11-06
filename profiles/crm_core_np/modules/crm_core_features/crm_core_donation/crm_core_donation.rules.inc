@@ -6,7 +6,7 @@
  */
 
 /*
- * implement hook_rules_condition_info
+ * Implements hook_rules_condition_info().
  */
 function crm_core_donation_rules_condition_info() {
   return array(
@@ -23,6 +23,6 @@ function crm_core_donation_rules_condition_info() {
 /*
  * implement crm_core_donation_order_has_donation_data condition callback
  */
-function crm_core_donation_order_has_donation_data ($order) {
+function crm_core_donation_order_has_donation_data($order) {
   return !empty($order->data['crm_core_donation']);
 }

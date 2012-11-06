@@ -1,52 +1,65 @@
 <?php
+/**
+ * @file
+ * Code for the CRM Core Donation feature.
+ */
 
 /**
  * Render the donation widget
  */
 function crm_core_donation_widget($donation_page_id) {
-  
+
   module_load_include('inc', 'crm_core_donation', 'crm_core_donation.pages');
   $donation_page = crm_core_donation_page_load($donation_page_id);
   if (empty($donation_page)) {
-    return;  
+    return;
   }
   if ($donation_page['widget'] == 0) {
-    return;    
+    return;
   }
-  
+
   // find the current amount donation from this page
   $query = new EntityFieldQuery();
-  $donations = $query->entityCondition('entity_type', 'crm_core_activity')
-                    ->entityCondition('bundle', 'donation')
-                    ->fieldCondition('field_donation_campaign', 'value', $donation_page_id)
-                    ->execute();
+  $donations = $query
+    ->entityCondition('entity_type', 'crm_core_activity')
+    ->entityCondition('bundle', 'donation')
+    ->fieldCondition('field_donation_campaign', 'value', $donation_page_id)
+    ->execute();
+
   $current = 1;
   if (!empty($donations)) {
-    foreach($donations['crm_core_activity'] as $id => $donation) {
+    foreach ($donations['crm_core_activity'] as $id => $donation) {
         $entity = crm_core_activity_load($id);
         $current += $entity->field_donation_amounts[LANGUAGE_NONE][0]['value'];
-    }  
+    }
   }
-                      
+
   $goal = $donation_page['goal'];
   if ($goal == 0 || $goal == '') {
-    $goal = (int) ($current / .9);  
+    $goal = (int) ($current / .9);
   }
-  
+
   $header = unserialize($donation_page['header']);
   $variables = array(
     'title' => $donation_page['title'],
     'message' => strip_tags($header['value']),
     'current' => $current,
     'goal' => $goal,
-    'url' => l('Donate', 'donation_pages/' . $donation_page_id, array('absolute' => TRUE, 'attributes' => array('target' => '_blank', 'class' => array('donate'),),)),
+    'url' => l(t('Donate'), 'donation_pages/' . $donation_page_id,
+      array('absolute' => TRUE, 'attributes' =>
+        array(
+          'target' => '_blank',
+          'class' => array('donate'),
+        ),
+      )
+    ),
     'percentage' => ceil(($current / $goal) * 100),
   );
-  
+
   $output = _crm_core_donation_widget($variables);
-  
+
   echo $output;
-  
+
 }
 
 /**
@@ -71,10 +84,10 @@ function _crm_core_donation_widget($v) {
     </div>
     <div class="current">$' . $v['current'] . ' raised</div>
   </div>
-  
+
     <div class="description">' . $v['message'] . '</div>
     ' . $v['url'] . '
 </div>
 </body>
-</html>';  
+</html>';
 }
