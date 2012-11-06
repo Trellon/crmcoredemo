@@ -369,7 +369,7 @@ function crm_core_donation_crm_core_profile_save($profile, $form_state_values) {
  */
 function crm_core_donation_fields($profile_name) {
   $crm_core_profile = crm_core_profile_load($profile_name);
-  $fields = unserialize($crm_core_profile['fields']);
+  $fields = $crm_core_profile['fields'];
   $data = array();
   foreach($fields['toggle'] as $_field => $toggle) {
     if ($toggle !== 0) {
@@ -393,7 +393,7 @@ function crm_core_donation_form_theme_preprocess(&$variables) {
 
   // load the profile and get the contact fields
   $crm_core_profile = crm_core_profile_load($form['profile_name']['#value']);
-  $fields = unserialize($crm_core_profile['fields']);
+  $fields = $crm_core_profile['fields'];
   $contact_fields = array();
   foreach($fields['toggle'] as $field_name => $toggle) {
     if ($toggle !== 0) {
@@ -514,10 +514,12 @@ function crm_core_donation_form_crm_core_profile_entry_form_alter(&$form, &$form
   $form['activity']['field_donation_campaign'][LANGUAGE_NONE][0]['value']['#default_value'] = $donation_page['id'];
 
   // preset an amount on the donation form according to get
-  $amount_set = array_keys($form['activity']['field_donation_amounts'][LANGUAGE_NONE]['#options']);
-  if (isset($_GET['amount'])) {
-    if (in_array($_GET['amount'], $amount_set)) {
-        $form['activity']['field_donation_amounts'][LANGUAGE_NONE]['#default_value']['value'] = check_plain($_GET['amount']);
+  if (isset($form['activity']['field_donation_amounts'][LANGUAGE_NONE]['#options'])) {
+    $amount_set = array_keys($form['activity']['field_donation_amounts'][LANGUAGE_NONE]['#options']);
+    if (isset($_GET['amount'])) {
+      if (in_array($_GET['amount'], $amount_set)) {
+          $form['activity']['field_donation_amounts'][LANGUAGE_NONE]['#default_value']['value'] = check_plain($_GET['amount']);
+      }
     }
   }
 
@@ -866,7 +868,7 @@ function crm_core_donation_authnet_arb_silentpost ($post) {
   // populate activity fields with values from attached to order profile
   $crm_core_profile = variable_get('crm_core_donation_profile', '');
   $donation_activity_profile = crm_core_profile_activity_load($crm_core_profile);
-  $donation_activity_profile_fields = unserialize($donation_activity_profile['fields']);
+  $donation_activity_profile_fields = $donation_activity_profile['fields'];
   $activity_fields_to_copy = array_filter($donation_activity_profile_fields['toggle']);
 
   foreach ($activity_fields_to_copy as $fieldname) {
@@ -924,7 +926,7 @@ function crm_core_donation_form_theme($variables) {
   $form = $variables['form'];
   // load the profile and get the contact fields
   $crm_core_profile = crm_core_profile_load($form['profile_name']['#value']);
-  $fields = unserialize($crm_core_profile['fields']);
+  $fields = $crm_core_profile['fields'];
   $contact_fields = array();
   foreach($fields['toggle'] as $field_name => $toggle) {
     if ($toggle !== 0) {
