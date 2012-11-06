@@ -201,24 +201,21 @@ function crm_core_event_registration_crm_core_profile_activity_alter(&$form, $pr
   if ($profile_name == variable_get('crm_core_event_registration_profile', '')) {
     $form['title']['#value'] = 'Event Registration';
 
-    // this has to exist because the form is located at
-    // node/nid/register/crm_core_profile_name
-    $node = menu_get_object();
+    // Usually accessed from node/nid/register/crm_core_profile_name, but if
+    // exposed elsewhere, may not exist.
+    if ($node = menu_get_object()) {
 
-    // setting the event reference on the crm_core_activity
-    // $event_reference_field = variable_get('crm_core_event_registration_event_ref', '');
-    // if ($event_reference_field != '') {
+      // Set the event reference on the crm_core_activity
       $default_value = sprintf('%s (%s)', $node->title, $node->nid);
-      //$form[$event_reference_field][LANGUAGE_NONE][0]['target_id']['#default_value'] = $default_value;
       $form['field_registration_event'][LANGUAGE_NONE][0]['target_id']['#default_value'] = $default_value;
-    //}
 
-    // setting default value for registration status for free events as registered
-    // this requires the event product be configured
-    $event_product_field = variable_get('crm_core_event_registration_product', '');
-    if ($event_product_field != '') {
-      if (empty($node->{$event_product_field})) {
-        $form['field_registration_status'][LANGUAGE_NONE]['#default_value'][0] = 'registered';
+      // Set default registration status for free events to registered.
+      // This requires the event product be configured.
+      $event_product_field = variable_get('crm_core_event_registration_product', '');
+      if ($event_product_field != '') {
+        if (empty($node->{$event_product_field})) {
+          $form['field_registration_status'][LANGUAGE_NONE]['#default_value'][0] = 'registered';
+        }
       }
     }
   }
