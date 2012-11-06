@@ -60,7 +60,7 @@ function crm_core_donation_lb_views_data() {
       'handler' => 'views_handler_argument_numeric',
     ),
   );
-  
+
   $data['crm_core_donation_lb']['total'] = array(
     'title' => t('Total donation amount'),
     'help' => t('Total donation amount from the donation page'),
@@ -77,7 +77,7 @@ function crm_core_donation_lb_views_data() {
     'argument' => array(
       'handler' => 'views_handler_argument_numeric',
     ),
-  );  
+  );
 
   $data['crm_core_donation_lb']['last_donation'] = array(
     'title' => t('Last donation date'),
@@ -93,6 +93,6 @@ function crm_core_donation_lb_views_data() {
       'handler' => 'views_handler_filter_date',
     ),
   );
-  
+
   return $data;
 }

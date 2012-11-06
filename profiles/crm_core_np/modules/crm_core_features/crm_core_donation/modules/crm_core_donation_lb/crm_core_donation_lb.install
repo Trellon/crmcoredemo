@@ -3,9 +3,9 @@
  * @file
  * Installation for CRM_Core_Donation_lb
  */
- 
+
 /**
- * Implements hook_schema()
+ * Implements hook_schema().
  */
 function crm_core_donation_lb_schema() {
   $schema['crm_core_donation_lb'] = array(
@@ -15,7 +15,7 @@ function crm_core_donation_lb_schema() {
         'description' => 'Donation page ID',
         'type' => 'int',
         'not null' => TRUE,
-      ),    
+      ),
       'donor_count' => array(
         'description' => 'Number of donors',
         'type' => 'int',

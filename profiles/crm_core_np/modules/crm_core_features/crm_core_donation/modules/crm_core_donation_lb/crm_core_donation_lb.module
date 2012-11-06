@@ -5,7 +5,7 @@
  */
 
 function crm_core_donation_lb_menu() {
-  
+
   $items['admin/structure/crm/donation/leaderboard'] = array(
     'title' => 'Donation leaderboard',
     'page callback' => 'drupal_get_form',
@@ -13,11 +13,11 @@ function crm_core_donation_lb_menu() {
     'access arguments' => array('administer crm core donation'),
     'type' => MENU_LOCAL_TASK,
   );
-  
-  return $items;  
+
+  return $items;
 }
- 
- 
+
+
 /**
  * Implements hook_views_api().
  */
@@ -27,16 +27,16 @@ function crm_core_donation_lb_views_api() {
     'path' => drupal_get_path('module', 'crm_core_donation_lb'),
   );
 }
- 
+
 /**
- * Implements hook_entity_insert
+ * Implements hook_entity_insert().
  *
  * When a donation is made, we aggregate the amount into our meta-table
  */
 function crm_core_donation_lb_entity_insert($entity, $type) {
   // update the count for the doation page total
   if ($type != 'crm_core_activity') {
-    return;  
+    return;
   }
   if ($entity->type == 'donation') {
     // get the donation page
@@ -44,7 +44,7 @@ function crm_core_donation_lb_entity_insert($entity, $type) {
     module_load_include('inc', 'crm_core_donation', 'crm_core_donation.pages');
     $donation_page = crm_core_donation_page_load($donation_page_id);
     if (empty($donation_page)) {
-      return;  
+      return;
     }
     $record = array();
     $dp_stat = crm_core_donation_lb_load($donation_page_id);
@@ -60,14 +60,14 @@ function crm_core_donation_lb_entity_insert($entity, $type) {
         'donor_count' => 1,
         'total' => $entity->field_donation_amounts[LANGUAGE_NONE][0]['value'],
         'last_donation' => time(),
-      );  
+      );
     }
-    crm_core_donation_lb_save($record); 
-  }    
+    crm_core_donation_lb_save($record);
+  }
 }
 
 /**
- * Form builder
+ * Form builder.
  */
 function crm_core_donation_lb_form($form, &$form_state) {
 
@@ -75,34 +75,34 @@ function crm_core_donation_lb_form($form, &$form_state) {
     '#type' => 'submit',
     '#value' => t('Re-calculate totals'),
   );
-  
+
   $form['message'] = array(
     '#markup' => 'Only Re-calculate totals if you have enabled the donation leaderboard module after donations have already been made, it will go back and total up all the donations from each pages',
     '#prefix' => '<div class="messages warning">',
     '#suffix' => '</div>',
   );
 
-  return $form;  
+  return $form;
 }
 
 /**
- * Submission handler
+ * Submission handler.
  */
 function crm_core_donation_lb_form_submit($form, &$form_state) {
   $function = 'crm_core_donation_lb_batch';
   $batch = $function();
-  batch_set($batch);  
+  batch_set($batch);
 }
 
 /**
- * Batch controller
+ * Batch controller.
  */
 function crm_core_donation_lb_batch() {
- 
- drupal_set_message(t('Recalculating total donations for each donation page'));
 
-  $operations = array();  
-  
+  drupal_set_message(t('Recalculating total donations for each donation page'));
+
+  $operations = array();
+
   // we have to get get the list of donation page ids and use that as the count
   $data = array();
   $query = db_select('crm_core_donation_page', 'p')
@@ -110,8 +110,8 @@ function crm_core_donation_lb_batch() {
   ->condition('status', 1);
 
   $result = $query->execute();
-  while($record = $result->fetchAssoc()) {
-    $data[] = $record;  
+  while ($record = $result->fetchAssoc()) {
+    $data[] = $record;
   }
 
   $num_operations = count($data);
@@ -124,7 +124,7 @@ function crm_core_donation_lb_batch() {
     'operations' => $operations,
     'finished' => 'crm_core_donation_lb_batch_finished',
   );
-  return $batch;  
+  return $batch;
 }
 
 /**
@@ -133,7 +133,7 @@ function crm_core_donation_lb_batch() {
 function crm_core_donation_lb_batch_op($donation_page_id, $operation_details, &$context) {
   module_load_include('inc', 'crm_core_donation', 'crm_core_donation.pages');
   $donation_page = crm_core_donation_page_load($donation_page_id);
-  
+
   $context['results'][] = 'donation_page_id: ' . $donation_page_id;
   $context['message'] = t('Re-calculating for donation page: @title', array('@title' => $donation_page['title']));
   crm_core_donation_lb_calc($donation_page_id);
@@ -163,21 +163,21 @@ function crm_core_donation_lb_calc($donation_page_id) {
                   ->entityCondition('bundle', 'donation')
                   ->fieldCondition('field_donation_campaign', 'value', $donation_page_id)
                   ->execute();
-  
+
   $count = 0;
-  $total = 0;                
+  $total = 0;
   if (!empty($donations)) {
-    $count = count($donations['crm_core_activity']);  
-    foreach($donations['crm_core_activity'] as $id => $donation) {
+    $count = count($donations['crm_core_activity']);
+    foreach ($donations['crm_core_activity'] as $id => $donation) {
         $entity = crm_core_activity_load($id);
         $total += $entity->field_donation_amounts[LANGUAGE_NONE][0]['value'];
-    }  
+    }
     $update = array(
       'donation_page_id' => $donation_page_id,
       'donor_count' => $count,
       'total' => $total,
     );
-    crm_core_donation_lb_save($update); 
+    crm_core_donation_lb_save($update);
   }
 }
 
@@ -199,7 +199,7 @@ function crm_core_donation_lb_load($id) {
   $result = $query->execute();
   $data = $result->fetchAssoc();
 
-  return $data;    
+  return $data;
 }
 
 /**
@@ -208,7 +208,7 @@ function crm_core_donation_lb_load($id) {
 function crm_core_donation_lb_preprocess_views_view(&$vars) {
   if ($vars['view']->name == 'donation_leaderboard') {
       drupal_add_css(drupal_get_path('module', 'crm_core_donation_lb') . '/crm_core_donation_lb.css');
-  }  
+  }
 }
 
 /**
@@ -221,13 +221,12 @@ function crm_core_donation_lb_preprocess_views_view(&$vars) {
 function crm_core_donation_lb_save($record) {
   $dp_stat = crm_core_donation_lb_load($record['donation_page_id']);
   if (!empty($dp_stat)) {
-    $res = drupal_write_record('crm_core_donation_lb', $record, 'donation_page_id');        
+    $res = drupal_write_record('crm_core_donation_lb', $record, 'donation_page_id');
   }
-  else 
-  {
+  else {
     $res = drupal_write_record('crm_core_donation_lb', $record);
-  } 
-  return $res;  
+  }
+  return $res;
 }
 
 /**
@@ -240,5 +239,5 @@ function crm_core_donation_lb_save($record) {
 function crm_core_donation_lb_delete($id) {
   db_delete('crm_core_donation_lb')
   ->condition('donation_page_id', $id)
-  ->execute();  
+  ->execute();
 }
