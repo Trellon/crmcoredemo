@@ -650,9 +650,7 @@ function crm_core_donation_form_submit($form, &$form_state) {
   $activity->field_activity_participants[LANGUAGE_NONE][0]['target_id'] = $form_state['contact']->contact_id;
   $activity->field_activity_participants[LANGUAGE_NONE][0]['target_type'] = 'crm_core_contact';
 
-  $recurring_payment_method = ($form_state['values']['commerce_payment']['payment_method']
-    == 'authnet_arb|commerce_payment_authnet_arb') ?
-    TRUE : FALSE;
+  $recurring_payment_method = $form_state['values']['commerce_payment']['payment_method'] == 'authnet_arb|commerce_payment_authnet_arb';
 
   // call a payment method
   module_load_include('inc', 'commerce_payment', 'includes/commerce_payment.checkout_pane');
