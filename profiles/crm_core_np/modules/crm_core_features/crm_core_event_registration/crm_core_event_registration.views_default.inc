@@ -131,9 +131,10 @@ function crm_core_event_registration_views_default_views() {
   $handler->display->display_options['display_description'] = 'Administer CRM Core Events';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['path'] = 'crm/events';
-  $handler->display->display_options['menu']['type'] = 'normal';
+  $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'Events';
-  $handler->display->display_options['menu']['name'] = 'management';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
   $export['crm_core_events_admin'] = $view;
 
   $view = new view();
@@ -144,7 +145,7 @@ function crm_core_event_registration_views_default_views() {
   $view->human_name = 'Events Calendar';
   $view->core = 7;
   $view->api_version = '3.0';
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
@@ -1176,7 +1177,7 @@ function crm_core_event_registration_views_default_views() {
   $view->human_name = 'Events';
   $view->core = 7;
   $view->api_version = '3.0';
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
