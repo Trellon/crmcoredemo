@@ -78,6 +78,7 @@ dependencies[] = commerce_product_pricing_ui
 dependencies[] = commerce_product_ui
 dependencies[] = commerce_order_ui
 dependencies[] = commerce_features
+dependencies[] = commerce_payment_example
 
 dependencies[] = authnet_arb
 dependencies[] = commerce_authnet
