@@ -8,6 +8,7 @@ project = crm_core_donation
 dependencies[] = addressfield
 dependencies[] = commerce_authnet
 dependencies[] = commerce_custom_line_items
+dependencies[] = commerce_payment_example
 dependencies[] = crm_core_activity
 dependencies[] = crm_core_profile
 dependencies[] = crm_core_profile_activity
