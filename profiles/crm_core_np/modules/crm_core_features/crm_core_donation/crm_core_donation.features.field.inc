@@ -289,6 +289,7 @@ function crm_core_donation_field_default_fields() {
           'available_options_php' => '',
           'markup_available_options_php' => '&lt;none&gt;',
           'other' => 'Other',
+          'other_title' => '',
           'other_unknown_defaults' => 'ignore',
           'sort_options' => 0,
         ),
@@ -949,7 +950,7 @@ function crm_core_donation_field_default_fields() {
   t('CC Last 4');
   t('Campaign');
   t('Date');
-  t('Dedication E-mail');
+  t('Dedication Email');
   t('Dedication Name');
   t('Dedication Type');
   t('Enter the code if this donation comes from a specific marketing campaign');
