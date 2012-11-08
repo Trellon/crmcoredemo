@@ -402,6 +402,8 @@ function crm_core_donation_form_theme_preprocess(&$variables) {
     }
   }
 
+  $variables['payment_method'] = drupal_render($form['payment_method']);
+
   $variables['message'] = drupal_render($form['message']);
   $variables['header'] = drupal_render($form['header']);
   //  $form['activity']['field_donation_amounts']['#access'] = FALSE;
@@ -559,13 +561,23 @@ function crm_core_donation_form_crm_core_profile_entry_form_alter(&$form, &$form
   if (!empty($data)) {
     if (array_key_exists('payment_method', $data)) {
       if ($data['payment_method'] != '') {
+        // detect the payment method and display some notification to the user
+        $payment = explode('|', $data['payment_method']);
+        if ($payment[0] == 'commerce_payment_example') {
+          $link = l('click here', 'admin/commerce/config/payment-methods');
+          $form['payment_method'] = array(
+            '#markup' => "Currently the donation page is using an example payment method, please {$link} to set up.",
+            '#prefix' => '<div class="messages warning">',
+            '#suffix' => '</div>',
+          );
+        }
         $order->data['payment_method'] = $data['payment_method'];
       }
     }
   }
 
   $form['commerce_payment'] = commerce_payment_pane_checkout_form($form, $form_state, $checkout_pane, $order);
-
+  
   $form['commerce_payment']['#tree'] = TRUE;
 
   $form['submit']['#value'] = t('donate');
