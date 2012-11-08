@@ -17,6 +17,11 @@
 <?php if ($message): ?>
   <?php print $message; ?>
 <?php endif; ?>
+
+<?php if ($payment_method): ?>
+  <?php print $payment_method; ?>
+<?php endif; ?>
+
 <div id="donation_header">
   <?php print $header; ?>
 </div>
