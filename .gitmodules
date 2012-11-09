@@ -1,3 +1,6 @@
 [submodule "profiles/crm_core_np/modules/crm_core"]
 	path = profiles/crm_core_np/modules/crm_core
 	url = http://git.drupal.org/project/crm_core.git
+[submodule "profiles/crm_core_np/modules/contrib/crm_core_profile"]
+	path = profiles/crm_core_np/modules/contrib/crm_core_profile
+	url = http://git.drupal.org/project/crm_core_profile.git
