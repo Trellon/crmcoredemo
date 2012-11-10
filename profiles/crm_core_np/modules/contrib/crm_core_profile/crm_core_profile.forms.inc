@@ -53,9 +53,6 @@ function crm_core_profile_entry_form($form, &$form_state, $profile) {
           $contact = crm_core_contact_load($_GET['contact_id']);
         }
         break;
-      case 'duplicate':
-        // @todo: find duplicate
-        break;
     }
 
     if (!empty($contact)) {
@@ -651,16 +648,10 @@ function crm_core_profile_get_create_contact_actions($profile) {
     );
   }
 
-  $actions['duplicate'] = array(
-    'weight' => isset($p_actions['duplicate']) ? $p_actions['duplicate']['weight'] : 10,
-    'label' => t('Find duplicate contact (TODO)'),
-  );
-
   $actions['new'] = array(
     'weight' => isset($p_actions['new']) ? $p_actions['new']['weight'] : 10,
     'label' => t('Create new contact'),
   );
-
 
   uasort($actions, 'crm_core_profile_weight_cmp');
 

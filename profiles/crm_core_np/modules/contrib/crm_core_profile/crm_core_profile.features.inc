@@ -91,7 +91,7 @@ function crm_core_profile_features_revert($module) {
  */
 function crm_core_profile_features_rebuild($module) {
   if ($crm_core_profiles = features_get_default('crm_core_profile', $module)) {
-    _crm_core_profile_featurs_rebuild($crm_core_profiles);
+    _crm_core_profile_features_rebuild($crm_core_profiles);
   }
 }
 
@@ -99,7 +99,7 @@ function crm_core_profile_features_rebuild($module) {
  *
  * Rebuild a crm_core_profile feature (and crm_core_profile_activity)
  */
-function _crm_core_profile_featurs_rebuild($crm_core_profiles) {
+function _crm_core_profile_features_rebuild($crm_core_profiles) {
   $types = array('profile', 'activity');
   foreach ($types as $type) {
     if (!empty($crm_core_profiles[$type])) {
@@ -161,3 +161,4 @@ function _crm_core_profile_field_dependencies($name, $type = 'profile') {
   }    
   return array_unique($dependencies);
 }
+
