@@ -21,7 +21,7 @@ function crm_core_donation_page_form($form, &$form_state, $donation_page_id = NU
     $form['message'] = array(
       '#prefix' => '<div class="messages warning">',
       '#suffix' => '</div>',
-      '#markup' => 'You have not set up a CRM Core Profile for donation, please do so ' . l(t('here'), 'admin/structure/crm/donation/config') . ' before you can create additional donation pages.'
+      '#markup' => 'You have not set up a CRM Core Profile for donation, please do so ' . l(t('here'), 'admin/crm/donation/config') . ' before you can create additional donation pages.'
     );
 
     return $form;
@@ -200,7 +200,7 @@ function crm_core_donation_page_form($form, &$form_state, $donation_page_id = NU
   );
 
   $form['cancel'] = array(
-    '#markup' => ($pdp) ? l(t('Cancel'), 'user') : l(t('Cancel'), 'admin/structure/crm/donation'),
+    '#markup' => ($pdp) ? l(t('Cancel'), 'user') : l(t('Cancel'), 'crm/donations'),
   );
 
   return $form;
@@ -260,7 +260,7 @@ function crm_core_donation_page_form_submit($form, &$form_state) {
     $form_state['redirect'] = 'user';
   }
   else {
-    $form_state['redirect'] = 'admin/structure/crm/donation';
+    $form_state['redirect'] = 'crm/donations';
   }
 
   drupal_set_message(t('The donation page has been saved'));
@@ -278,7 +278,7 @@ function crm_core_donation_page_delete_form($form, &$form_state, $donation_page_
   );
 
   $question = t('Are you sure you want to delete the donation page?');
-  $path = 'admin/structure/crm/donation';
+  $path = 'crm/donations';
 
   return confirm_form($form, $question, $path);
 }
@@ -288,7 +288,7 @@ function crm_core_donation_page_delete_form($form, &$form_state, $donation_page_
  */
 function crm_core_donation_page_delete_form_submit($form, &$form_state) {
   crm_core_donation_page_delete($form_state['values']['id']);
-  $form_state['redirect'] = 'admin/structure/crm/donation';
+  $form_state['redirect'] = 'crm/donations';
   drupal_set_message(t('The donation page has been deleted'));
 }
 

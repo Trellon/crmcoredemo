@@ -73,7 +73,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['nothing']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nothing']['alter']['text'] = 'Edit';
   $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'admin/structure/crm/donation/[id]';
+  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'crm/donations/[id]';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   /* Field: Delete Link */
   $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
@@ -84,7 +84,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['nothing_1']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nothing_1']['alter']['text'] = 'Delete';
   $handler->display->display_options['fields']['nothing_1']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'admin/structure/crm/donation/[id]/delete';
+  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'crm/donations/[id]/delete';
   $handler->display->display_options['fields']['nothing_1']['element_label_colon'] = FALSE;
   /* Field: Action */
   $handler->display->display_options['fields']['nothing_2']['id'] = 'nothing_2';
@@ -109,7 +109,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['filters']['pdp']['table'] = 'crm_core_donation_page';
   $handler->display->display_options['filters']['pdp']['field'] = 'pdp';
   $handler->display->display_options['filters']['pdp']['value']['value'] = '0';
-  $handler->display->display_options['path'] = 'admin/structure/crm/donation';
+  $handler->display->display_options['path'] = 'crm/donations';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Donation';
   $handler->display->display_options['menu']['description'] = 'donation pages';
@@ -156,7 +156,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['nothing']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nothing']['alter']['text'] = 'Edit';
   $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'admin/structure/crm/donation/[id]';
+  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'crm/donations/[id]';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   /* Field: Delete Link */
   $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
@@ -167,7 +167,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['nothing_1']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nothing_1']['alter']['text'] = 'Delete';
   $handler->display->display_options['fields']['nothing_1']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'admin/structure/crm/donation/1/delete';
+  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'crm/donations/1/delete';
   $handler->display->display_options['fields']['nothing_1']['element_label_colon'] = FALSE;
   /* Field: Action */
   $handler->display->display_options['fields']['nothing_2']['id'] = 'nothing_2';
@@ -183,7 +183,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['filters']['pdp']['table'] = 'crm_core_donation_page';
   $handler->display->display_options['filters']['pdp']['field'] = 'pdp';
   $handler->display->display_options['filters']['pdp']['value']['value'] = '1';
-  $handler->display->display_options['path'] = 'admin/structure/crm/donation/pdp';
+  $handler->display->display_options['path'] = 'crm/donations/personal-pages';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'PDP';
   $handler->display->display_options['menu']['description'] = 'personal donation pages';
