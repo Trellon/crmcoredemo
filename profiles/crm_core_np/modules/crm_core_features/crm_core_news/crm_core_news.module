@@ -84,7 +84,7 @@ function _crm_core_news_create_subscription_activity($contact, $categiry_tid, $s
  * Alter simplenews_subscriptions_multi_block_form form
  */
 function crm_core_news_form_simplenews_subscriptions_multi_block_form_alter(&$form, &$form_state) {
-  $form['update']['#value'] = t('Sign Up');
+  // $form['update']['#value'] = t('Sign Up');
 }
 
 /**
