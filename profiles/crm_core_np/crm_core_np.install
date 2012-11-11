@@ -231,7 +231,7 @@ function _crm_core_np_features_form_submit($form, &$form_state) {
       $modules[] = $feature;
     }
   }
-
+  
   module_enable($modules);
 }
 
@@ -273,11 +273,13 @@ function _crm_core_np_set_theme_form_submit($form, &$form_state) {
 
   // Enable Events feature views.
   // Avoids PHP notices from default fields not existing.
-  $views = crm_core_event_registration_views_default_views();
-  foreach ($views as $view) {
-    if ($view->disabled) {
-      $view->disabled = FALSE;
-      $view->save();
+  if (module_exists('crm_core_event_registration')) {
+    $views = crm_core_event_registration_views_default_views();
+    foreach ($views as $view) {
+      if ($view->disabled) {
+        $view->disabled = FALSE;
+        $view->save();
+      }
     }
   }
 }
