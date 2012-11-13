@@ -105,6 +105,6 @@ function crm_core_news_views_query_alter(&$view, &$query) {
   if ($view->name == 'crm_subscriptions_report' && $view->current_display == 'page') {
     $query->add_field(NULL, 'DATE_FORMAT(field_data_field_activity_date.field_activity_date_value, \'%Y %M\')', 'date_formatted');
     $query->add_groupby('date_formatted');
-    $query->add_groupby('crm_core_activity.title');
+    $query->add_groupby('field_data_field_newsletter_category.field_newsletter_category_tid');
   }
 }
