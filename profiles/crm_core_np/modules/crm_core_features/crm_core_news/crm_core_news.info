@@ -33,5 +33,6 @@ features[field][] = node-simplenews-body
 features[field][] = node-simplenews-field_simplenews_term
 features[node][] = simplenews
 features[taxonomy][] = newsletter
+features[views_view][] = crm_subscribers_report
 features[views_view][] = crm_subscriptions_report
 features[views_view][] = news
