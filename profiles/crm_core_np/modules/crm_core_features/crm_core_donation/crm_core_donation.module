@@ -34,7 +34,7 @@ function crm_core_donation_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['admin/structure/crm/donation/config'] = array(
+  $items['admin/crm/donation/config'] = array(
     'title' => 'Donation settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('crm_core_donation_config'),
@@ -42,7 +42,7 @@ function crm_core_donation_menu() {
     'type' => MENU_LOCAL_TASK,
   );
 
-  $items['admin/structure/crm/donation/%'] = array(
+  $items['crm/donations/%'] = array(
     'title' => 'Edit donation page',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('crm_core_donation_page_form', 4, FALSE),
@@ -51,7 +51,7 @@ function crm_core_donation_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['admin/structure/crm/donation/%/delete'] = array(
+  $items['crm/donations/%/delete'] = array(
     'title' => 'Delete donation page',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('crm_core_donation_page_delete_form', 4),
@@ -60,7 +60,7 @@ function crm_core_donation_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['admin/structure/crm/donation/new'] = array(
+  $items['crm/donations/new'] = array(
     'title' => 'Create new donation page',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('crm_core_donation_page_form'),

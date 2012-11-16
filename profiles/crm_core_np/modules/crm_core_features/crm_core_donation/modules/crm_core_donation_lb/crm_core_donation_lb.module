@@ -6,7 +6,7 @@
 
 function crm_core_donation_lb_menu() {
 
-  $items['admin/structure/crm/donation/leaderboard'] = array(
+  $items['crm/donations/leaderboard'] = array(
     'title' => 'Donation leaderboard',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('crm_core_donation_lb_form'),
