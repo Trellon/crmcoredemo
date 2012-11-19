@@ -1,0 +1,11 @@
+name = CRM Core VBO
+description = includes views bulk operations for contact and activity
+core = 7.x
+package = CRM Core
+version = 7.x-1.0
+project = crm_core_vbo
+dependencies[] = entity
+dependencies[] = rules
+features[features_api][] = api:1
+features[rules_config][] = rules_delete_activity
+features[rules_config][] = rules_delete_contact
