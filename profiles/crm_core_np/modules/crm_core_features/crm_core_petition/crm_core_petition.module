@@ -8,6 +8,20 @@
 include_once 'crm_core_petition.features.inc';
 
 /**
+ * Implements hook_menu_alter
+ */
+function crm_core_petition_menu_alter(&$items) {
+  $items['crm/contact/%/activity']['type'] = MENU_LOCAL_TASK;
+  $items['crm/contact/%/activity/all'] = array(
+    'title' => 'All',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+
+  $items['crm/contact/%/activity/petitions']['type'] = MENU_LOCAL_TASK;
+  $items['crm/contact/%/activity/petitions']['context'] = MENU_CONTEXT_PAGE;
+}
+
+/**
  * Implements hook_permission
  */
 function crm_core_petition_permission() {

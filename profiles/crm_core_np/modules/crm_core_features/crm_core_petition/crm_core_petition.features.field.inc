@@ -269,7 +269,7 @@ function crm_core_petition_field_default_fields() {
       'entity_type' => 'crm_core_activity',
       'field_name' => 'field_crm_petition_display',
       'label' => 'Public Display',
-      'required' => 1,
+      'required' => 0,
       'settings' => array(
         'user_register_form' => FALSE,
       ),
@@ -361,79 +361,6 @@ function crm_core_petition_field_default_fields() {
         ),
         'type' => 'entityreference_autocomplete',
         'weight' => '4',
-      ),
-    ),
-  );
-
-  // Exported field: 'crm_core_contact-individual-field_contact_address'.
-  $fields['crm_core_contact-individual-field_contact_address'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_contact_address',
-      'foreign keys' => array(),
-      'indexes' => array(),
-      'locked' => '0',
-      'module' => 'addressfield',
-      'settings' => array(),
-      'translatable' => '0',
-      'type' => 'addressfield',
-    ),
-    'field_instance' => array(
-      'bundle' => 'individual',
-      'default_value' => array(
-        0 => array(
-          'element_key' => 'crm_core_contact|individual|field_contact_address|und|0',
-          'thoroughfare' => '',
-          'premise' => '',
-          'locality' => '',
-          'administrative_area' => '',
-          'postal_code' => '',
-          'country' => 'US',
-        ),
-      ),
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'addressfield',
-          'settings' => array(
-            'format_handlers' => array(
-              0 => 'address',
-            ),
-            'use_widget_handlers' => 1,
-          ),
-          'type' => 'addressfield_default',
-          'weight' => 6,
-        ),
-      ),
-      'entity_type' => 'crm_core_contact',
-      'field_name' => 'field_contact_address',
-      'label' => 'Address',
-      'required' => 0,
-      'settings' => array(
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'addressfield',
-        'settings' => array(
-          'available_countries' => array(
-            'US' => 'US',
-          ),
-          'format_handlers' => array(
-            'address' => 'address',
-            'address-hide-country' => 0,
-            'organisation' => 0,
-            'name-full' => 0,
-            'name-oneline' => 0,
-          ),
-        ),
-        'type' => 'addressfield_standard',
-        'weight' => '6',
       ),
     ),
   );
@@ -815,7 +742,6 @@ function crm_core_petition_field_default_fields() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Address');
   t('Date');
   t('Description');
   t('Duration');
