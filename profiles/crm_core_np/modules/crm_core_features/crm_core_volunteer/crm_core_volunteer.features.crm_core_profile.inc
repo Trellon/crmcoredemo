@@ -9,6 +9,62 @@
  */
 function crm_core_volunteer_crm_core_profile_default() {
 $crm_core_profile = array();
+  $crm_core_profile['profile']['volunteer_application'] = array(
+  'name' => 'volunteer_application',
+  'label' => 'Volunteer Application',
+  'bundle_type' => 'individual',
+  'fields' => array(
+    'toggle' => array(
+      'contact_name' => 'contact_name',
+      'field_contact_email' => 'field_contact_email',
+      'field_contact_volunteer' => 'field_contact_volunteer',
+      'field_contact_phone' => 'field_contact_phone',
+      'contact_image' => 0,
+      'field_billing_address' => 0,
+    ),
+    'weight' => array(
+      'contact_name' => array(
+        'weight' => array(
+          'weight' => -10,
+        ),
+      ),
+      'field_contact_email' => array(
+        'weight' => array(
+          'weight' => -9,
+        ),
+      ),
+      'field_contact_phone' => array(
+        'weight' => array(
+          'weight' => -8,
+        ),
+      ),
+      'field_contact_volunteer' => array(
+        'weight' => array(
+          'weight' => -8,
+        ),
+      ),
+    ),
+  ),
+  'block' => '0',
+  'path' => NULL,
+  'redirect' => NULL,
+  'message' => 'Thank you for applying to be a volunteer, we will get in touch with you shortly',
+  'status' => '1',
+  'uid' => '1',
+  'created' => '1354041846',
+  'create_contact_actions' => array(
+    'new' => array(
+      'weight' => -9,
+    ),
+    'existing' => array(
+      'weight' => -10,
+    ),
+    'url' => array(
+      'weight' => -8,
+    ),
+  ),
+  'user_sync' => 'current',
+);
   $crm_core_profile['profile']['volunteer_commitment'] = array(
   'name' => 'volunteer_commitment',
   'label' => 'Volunteer Commitment',

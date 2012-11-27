@@ -222,7 +222,7 @@ function crm_core_volunteer_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-volunteer_commitment-field_volunteer_opportunity'
+  // Exported field: 'crm_core_activity-volunteer_commitment-field_volunteer_opportunity'.
   $fields['crm_core_activity-volunteer_commitment-field_volunteer_opportunity'] = array(
     'field_config' => array(
       'active' => '1',
@@ -230,12 +230,23 @@ function crm_core_volunteer_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_volunteer_opportunity',
-      'foreign keys' => array(),
+      'foreign keys' => array(
+        'node' => array(
+          'columns' => array(
+            'target_id' => 'nid',
+          ),
+          'table' => 'node',
+        ),
+      ),
       'indexes' => array(
         'target_entity' => array(
           1 => 'target_id',
         ),
+        'target_id' => array(
+          0 => 'target_id',
+        ),
       ),
+      'locked' => '0',
       'module' => 'entityreference',
       'settings' => array(
         'handler' => 'base',
@@ -293,7 +304,7 @@ function crm_core_volunteer_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-volunteer_commitment-field_volunteer_status'
+  // Exported field: 'crm_core_activity-volunteer_commitment-field_volunteer_status'.
   $fields['crm_core_activity-volunteer_commitment-field_volunteer_status'] = array(
     'field_config' => array(
       'active' => '1',
@@ -307,6 +318,7 @@ function crm_core_volunteer_field_default_fields() {
           0 => 'value',
         ),
       ),
+      'locked' => '0',
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
@@ -354,7 +366,7 @@ function crm_core_volunteer_field_default_fields() {
     ),
   );
 
-  // Exported field: 'crm_core_activity-volunteer_commitment-field_volunteer_time'
+  // Exported field: 'crm_core_activity-volunteer_commitment-field_volunteer_time'.
   $fields['crm_core_activity-volunteer_commitment-field_volunteer_time'] = array(
     'field_config' => array(
       'active' => '1',
@@ -364,6 +376,7 @@ function crm_core_volunteer_field_default_fields() {
       'field_name' => 'field_volunteer_time',
       'foreign keys' => array(),
       'indexes' => array(),
+      'locked' => '0',
       'module' => 'number',
       'settings' => array(),
       'translatable' => '0',
@@ -957,6 +970,7 @@ function crm_core_volunteer_field_default_fields() {
   t('Associated Event');
   t('Date');
   t('Description');
+  t('Estimated commitment time');
   t('Input the internal path or external url that will be redirected to when user completes signing up for a volunteer opportunity.');
   t('Location');
   t('Look up any associated events to this volunteer opportunity, if entered the volunteer opportunity button will appear on the event content as well');
@@ -964,10 +978,13 @@ function crm_core_volunteer_field_default_fields() {
   t('Number of Slots');
   t('Participants');
   t('Please enter how long this opportunity will last, this can help calculate if there are enough volunteers and time committed.');
+  t('Please enter the number of minutes you can spend volunteer for this opportunity');
   t('Redirect URL');
+  t('Status');
   t('The number of volunteers needed for this opportunity, when the number of slots are reached this opportunity automatically closes, put 0 for unlimited slots.');
   t('The physical location where the volunteer event will take place.');
   t('Time (in minutes)');
+  t('Volunteer opportunity');
 
   return $fields;
 }
