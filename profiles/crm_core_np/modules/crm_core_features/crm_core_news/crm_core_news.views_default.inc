@@ -270,7 +270,7 @@ function crm_core_news_views_default_views() {
   $handler->display->display_options['fields']['field_activity_date']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_activity_date']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_activity_date']['settings'] = array(
-    'format_type' => 'date_format_month_year',
+    'format_type' => 'crm_core_month_year',
     'fromto' => 'both',
     'multiple_number' => '',
     'multiple_from' => '',
