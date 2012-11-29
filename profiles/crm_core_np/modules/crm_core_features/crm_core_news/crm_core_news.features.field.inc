@@ -240,8 +240,8 @@ function crm_core_news_field_default_fields() {
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
-          'subscribe' => 'Subscribe',
-          'unsubscribe' => 'Unsubscribe',
+          'subscribe' => 'Newsletter Subscription',
+          'unsubscribe' => 'Subscription Cancellation',
         ),
         'allowed_values_function' => '',
       ),

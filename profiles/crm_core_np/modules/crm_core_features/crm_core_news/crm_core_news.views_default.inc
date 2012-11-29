@@ -15,16 +15,17 @@ function crm_core_news_views_default_views() {
   $view->description = 'List of activities of the contact';
   $view->tag = 'default';
   $view->base_table = 'crm_core_activity';
-  $view->human_name = 'CRM Subscribers Report';
+  $view->human_name = 'Newsletter Subscriptions Report (detail)';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Subscriptions Report';
+  $handler->display->display_options['title'] = 'Newsletter subscriptions: detail';
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['perm'] = 'view crm core reports';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['query']['options']['disable_sql_rewrite'] = TRUE;
@@ -40,23 +41,23 @@ function crm_core_news_views_default_views() {
   $handler->display->display_options['pager']['options']['expose']['items_per_page_options'] = '25, 50, 100';
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
-    'title_1' => 'title_1',
     'field_activity_date' => 'field_activity_date',
+    'contact_name' => 'contact_name',
     'field_newsletter_category_1' => 'field_newsletter_category_1',
-    'field_newsletter_category' => 'field_newsletter_category',
+    'field_newsletter_action' => 'field_newsletter_action',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
-    'title_1' => array(
+    'field_activity_date' => array(
       'sortable' => 0,
-      'default_sort_order' => 'asc',
+      'default_sort_order' => 'desc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_activity_date' => array(
-      'sortable' => 1,
-      'default_sort_order' => 'desc',
+    'contact_name' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
@@ -68,7 +69,7 @@ function crm_core_news_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_newsletter_category' => array(
+    'field_newsletter_action' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -93,7 +94,7 @@ function crm_core_news_views_default_views() {
   $handler->display->display_options['fields']['field_activity_date']['field'] = 'field_activity_date';
   $handler->display->display_options['fields']['field_activity_date']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_activity_date']['settings'] = array(
-    'format_type' => 'month_year',
+    'format_type' => 'short',
     'fromto' => 'both',
     'multiple_number' => '',
     'multiple_from' => '',
@@ -104,6 +105,7 @@ function crm_core_news_views_default_views() {
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['contact_name']['label'] = 'Contact Name';
   $handler->display->display_options['fields']['contact_name']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
   $handler->display->display_options['fields']['contact_name']['settings'] = array(
@@ -121,48 +123,40 @@ function crm_core_news_views_default_views() {
   $handler->display->display_options['fields']['field_newsletter_category_1']['id'] = 'field_newsletter_category_1';
   $handler->display->display_options['fields']['field_newsletter_category_1']['table'] = 'field_data_field_newsletter_category';
   $handler->display->display_options['fields']['field_newsletter_category_1']['field'] = 'field_newsletter_category';
+  $handler->display->display_options['fields']['field_newsletter_category_1']['label'] = 'Category';
   $handler->display->display_options['fields']['field_newsletter_category_1']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_newsletter_category_1']['group_columns'] = array(
     'tid' => 'tid',
   );
-  /* Field: CRM Activity: Title */
-  $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
-  $handler->display->display_options['fields']['title_1']['table'] = 'crm_core_activity';
-  $handler->display->display_options['fields']['title_1']['field'] = 'title';
-  $handler->display->display_options['fields']['title_1']['label'] = 'Activity';
-  $handler->display->display_options['fields']['title_1']['element_label_colon'] = FALSE;
-  /* Filter criterion: CRM Activity: Date (field_activity_date) */
-  $handler->display->display_options['filters']['field_activity_date_value']['id'] = 'field_activity_date_value';
-  $handler->display->display_options['filters']['field_activity_date_value']['table'] = 'field_data_field_activity_date';
-  $handler->display->display_options['filters']['field_activity_date_value']['field'] = 'field_activity_date_value';
-  $handler->display->display_options['filters']['field_activity_date_value']['operator'] = '>=';
-  $handler->display->display_options['filters']['field_activity_date_value']['group'] = 1;
-  $handler->display->display_options['filters']['field_activity_date_value']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['field_activity_date_value']['expose']['operator_id'] = 'field_activity_date_value_op';
-  $handler->display->display_options['filters']['field_activity_date_value']['expose']['label'] = 'From Date';
-  $handler->display->display_options['filters']['field_activity_date_value']['expose']['operator'] = 'field_activity_date_value_op';
-  $handler->display->display_options['filters']['field_activity_date_value']['expose']['identifier'] = 'field_activity_date_value';
-  $handler->display->display_options['filters']['field_activity_date_value']['expose']['remember_roles'] = array(
+  /* Field: CRM Activity: Newsletter Action */
+  $handler->display->display_options['fields']['field_newsletter_action']['id'] = 'field_newsletter_action';
+  $handler->display->display_options['fields']['field_newsletter_action']['table'] = 'field_data_field_newsletter_action';
+  $handler->display->display_options['fields']['field_newsletter_action']['field'] = 'field_newsletter_action';
+  $handler->display->display_options['fields']['field_newsletter_action']['label'] = 'Action';
+  /* Sort criterion: CRM Activity: Date created */
+  $handler->display->display_options['sorts']['created']['id'] = 'created';
+  $handler->display->display_options['sorts']['created']['table'] = 'crm_core_activity';
+  $handler->display->display_options['sorts']['created']['field'] = 'created';
+  $handler->display->display_options['sorts']['created']['order'] = 'DESC';
+  /* Filter criterion: Date: Date (crm_core_activity) */
+  $handler->display->display_options['filters']['date_filter']['id'] = 'date_filter';
+  $handler->display->display_options['filters']['date_filter']['table'] = 'crm_core_activity';
+  $handler->display->display_options['filters']['date_filter']['field'] = 'date_filter';
+  $handler->display->display_options['filters']['date_filter']['group'] = 1;
+  $handler->display->display_options['filters']['date_filter']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['date_filter']['expose']['operator_id'] = 'date_filter_op';
+  $handler->display->display_options['filters']['date_filter']['expose']['label'] = 'Date';
+  $handler->display->display_options['filters']['date_filter']['expose']['operator'] = 'date_filter_op';
+  $handler->display->display_options['filters']['date_filter']['expose']['identifier'] = 'date_filter';
+  $handler->display->display_options['filters']['date_filter']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
   );
-  $handler->display->display_options['filters']['field_activity_date_value']['form_type'] = 'date_popup';
-  /* Filter criterion: CRM Activity: Date (field_activity_date) */
-  $handler->display->display_options['filters']['field_activity_date_value_1']['id'] = 'field_activity_date_value_1';
-  $handler->display->display_options['filters']['field_activity_date_value_1']['table'] = 'field_data_field_activity_date';
-  $handler->display->display_options['filters']['field_activity_date_value_1']['field'] = 'field_activity_date_value';
-  $handler->display->display_options['filters']['field_activity_date_value_1']['operator'] = '<=';
-  $handler->display->display_options['filters']['field_activity_date_value_1']['group'] = 1;
-  $handler->display->display_options['filters']['field_activity_date_value_1']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['field_activity_date_value_1']['expose']['operator_id'] = 'field_activity_date_value_1_op';
-  $handler->display->display_options['filters']['field_activity_date_value_1']['expose']['label'] = 'To Date';
-  $handler->display->display_options['filters']['field_activity_date_value_1']['expose']['operator'] = 'field_activity_date_value_1_op';
-  $handler->display->display_options['filters']['field_activity_date_value_1']['expose']['identifier'] = 'field_activity_date_value_1';
-  $handler->display->display_options['filters']['field_activity_date_value_1']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
+  $handler->display->display_options['filters']['date_filter']['granularity'] = 'month';
+  $handler->display->display_options['filters']['date_filter']['year_range'] = '-10:+10';
+  $handler->display->display_options['filters']['date_filter']['date_fields'] = array(
+    'crm_core_activity.created' => 'crm_core_activity.created',
   );
-  $handler->display->display_options['filters']['field_activity_date_value_1']['form_type'] = 'date_popup';
   /* Filter criterion: CRM Activity: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
@@ -171,35 +165,19 @@ function crm_core_news_views_default_views() {
     'news_subscription' => 'news_subscription',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filter criterion: CRM Activity: Title */
-  $handler->display->display_options['filters']['title']['id'] = 'title';
-  $handler->display->display_options['filters']['title']['table'] = 'crm_core_activity';
-  $handler->display->display_options['filters']['title']['field'] = 'title';
-  $handler->display->display_options['filters']['title']['group'] = 1;
-  $handler->display->display_options['filters']['title']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
-  $handler->display->display_options['filters']['title']['expose']['label'] = 'Title';
-  $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
-  $handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
-  $handler->display->display_options['filters']['title']['is_grouped'] = TRUE;
-  $handler->display->display_options['filters']['title']['group_info']['label'] = 'Activity';
-  $handler->display->display_options['filters']['title']['group_info']['identifier'] = 'title';
-  $handler->display->display_options['filters']['title']['group_info']['group_items'] = array(
-    1 => array(
-      'title' => 'Newsletter Subscription',
-      'operator' => '=',
-      'value' => 'Newsletter Subscription',
-    ),
-    2 => array(
-      'title' => 'Subscription Cancellation',
-      'operator' => '=',
-      'value' => 'Subscription Cancellation',
-    ),
-    3 => array(
-      'title' => '',
-      'operator' => '=',
-      'value' => '',
-    ),
+  /* Filter criterion: CRM Activity: Newsletter Action (field_newsletter_action) */
+  $handler->display->display_options['filters']['field_newsletter_action_value']['id'] = 'field_newsletter_action_value';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['table'] = 'field_data_field_newsletter_action';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['field'] = 'field_newsletter_action_value';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['group'] = 1;
+  $handler->display->display_options['filters']['field_newsletter_action_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_newsletter_action_value']['expose']['operator_id'] = 'field_newsletter_action_value_op';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['expose']['label'] = 'Action';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['expose']['operator'] = 'field_newsletter_action_value_op';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['expose']['identifier'] = 'field_newsletter_action_value';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
   );
   /* Filter criterion: CRM Activity: Newsletter Category (field_newsletter_category) */
   $handler->display->display_options['filters']['field_newsletter_category_tid']['id'] = 'field_newsletter_category_tid';
@@ -219,10 +197,10 @@ function crm_core_news_views_default_views() {
   $handler->display->display_options['filters']['field_newsletter_category_tid']['type'] = 'select';
   $handler->display->display_options['filters']['field_newsletter_category_tid']['vocabulary'] = 'newsletter';
 
-  /* Display: Subscriptions Report */
-  $handler = $view->new_display('page', 'Subscriptions Report', 'page');
+  /* Display: Detail */
+  $handler = $view->new_display('page', 'Detail', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'crm/reports/news/subscribers';
+  $handler->display->display_options['path'] = 'crm/reports/news/detail';
   $export['crm_subscribers_report'] = $view;
 
   $view = new view();
@@ -230,17 +208,18 @@ function crm_core_news_views_default_views() {
   $view->description = 'List of activities of the contact';
   $view->tag = 'default';
   $view->base_table = 'crm_core_activity';
-  $view->human_name = 'CRM Subscriptions Report';
+  $view->human_name = 'Newsletter Subscriptions Report (summary)';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Subscriptions Report';
+  $handler->display->display_options['title'] = 'Newsletter subscriptions: summary';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['group_by'] = TRUE;
-  $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['perm'] = 'view crm core reports';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['query']['options']['disable_sql_rewrite'] = TRUE;
@@ -276,6 +255,13 @@ function crm_core_news_views_default_views() {
   $handler->display->display_options['fields']['title_1']['label'] = '';
   $handler->display->display_options['fields']['title_1']['exclude'] = TRUE;
   $handler->display->display_options['fields']['title_1']['element_label_colon'] = FALSE;
+  /* Field: CRM Activity: Newsletter Action */
+  $handler->display->display_options['fields']['field_newsletter_action']['id'] = 'field_newsletter_action';
+  $handler->display->display_options['fields']['field_newsletter_action']['table'] = 'field_data_field_newsletter_action';
+  $handler->display->display_options['fields']['field_newsletter_action']['field'] = 'field_newsletter_action';
+  $handler->display->display_options['fields']['field_newsletter_action']['label'] = '';
+  $handler->display->display_options['fields']['field_newsletter_action']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_newsletter_action']['element_label_colon'] = FALSE;
   /* Field: CRM Activity: Date */
   $handler->display->display_options['fields']['field_activity_date']['id'] = 'field_activity_date';
   $handler->display->display_options['fields']['field_activity_date']['table'] = 'field_data_field_activity_date';
@@ -284,7 +270,7 @@ function crm_core_news_views_default_views() {
   $handler->display->display_options['fields']['field_activity_date']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_activity_date']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_activity_date']['settings'] = array(
-    'format_type' => 'month_year',
+    'format_type' => 'date_format_month_year',
     'fromto' => 'both',
     'multiple_number' => '',
     'multiple_from' => '',
@@ -296,6 +282,7 @@ function crm_core_news_views_default_views() {
   $handler->display->display_options['fields']['field_newsletter_category_1']['field'] = 'field_newsletter_category';
   $handler->display->display_options['fields']['field_newsletter_category_1']['label'] = '';
   $handler->display->display_options['fields']['field_newsletter_category_1']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_newsletter_category_1']['type'] = 'taxonomy_term_reference_plain';
   $handler->display->display_options['fields']['field_newsletter_category_1']['group_columns'] = array(
     'tid' => 'tid',
   );
@@ -314,38 +301,27 @@ function crm_core_news_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'news_subscription' => 'news_subscription',
   );
-  /* Filter criterion: CRM Activity: Title */
-  $handler->display->display_options['filters']['title']['id'] = 'title';
-  $handler->display->display_options['filters']['title']['table'] = 'crm_core_activity';
-  $handler->display->display_options['filters']['title']['field'] = 'title';
-  $handler->display->display_options['filters']['title']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
-  $handler->display->display_options['filters']['title']['expose']['label'] = 'Title';
-  $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
-  $handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
-  $handler->display->display_options['filters']['title']['is_grouped'] = TRUE;
-  $handler->display->display_options['filters']['title']['group_info']['label'] = 'Activity';
-  $handler->display->display_options['filters']['title']['group_info']['identifier'] = 'title';
-  $handler->display->display_options['filters']['title']['group_info']['group_items'] = array(
-    1 => array(
-      'title' => 'Newsletter Subscription',
-      'operator' => '=',
-      'value' => 'Newsletter Subscription',
-    ),
-    2 => array(
-      'title' => 'Subscription Cancellation',
-      'operator' => '=',
-      'value' => 'Subscription Cancellation',
-    ),
-    3 => array(
-      'title' => '',
-      'operator' => '=',
-      'value' => '',
-    ),
+  /* Filter criterion: CRM Activity: Newsletter Action (field_newsletter_action) */
+  $handler->display->display_options['filters']['field_newsletter_action_value']['id'] = 'field_newsletter_action_value';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['table'] = 'field_data_field_newsletter_action';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['field'] = 'field_newsletter_action_value';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['value'] = array(
+    'subscribe' => 'subscribe',
+    'unsubscribe' => 'unsubscribe',
+  );
+  $handler->display->display_options['filters']['field_newsletter_action_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_newsletter_action_value']['expose']['operator_id'] = 'field_newsletter_action_value_op';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['expose']['label'] = 'Action';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['expose']['operator'] = 'field_newsletter_action_value_op';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['expose']['identifier'] = 'field_newsletter_action_value';
+  $handler->display->display_options['filters']['field_newsletter_action_value']['expose']['required'] = TRUE;
+  $handler->display->display_options['filters']['field_newsletter_action_value']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
   );
 
-  /* Display: Subscriptions Report */
-  $handler = $view->new_display('page', 'Subscriptions Report', 'page');
+  /* Display: Summary */
+  $handler = $view->new_display('page', 'Summary', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['path'] = 'crm/reports/news/summary';
   $export['crm_subscriptions_report'] = $view;
