@@ -16,6 +16,11 @@ function crm_core_demo_settings_date_formats() {
       'format' => 'm/d/y',
       'locales' => array(),
     ),
+    array(
+      'type' => 'crm_core_month_year',
+      'format' => 'M Y',
+      'locales' => array(),
+    ),
   );
 }
 
@@ -25,5 +30,17 @@ function crm_core_demo_settings_date_formats() {
 function crm_core_demo_settings_date_format_types() {
   return array(
     'date_format_slim' => t('Slim'),
+    'crm_core_month_year' => t('Month and Year')
+  );
+}
+
+/**
+ * Implements hook_permission().
+ */
+function crm_core_demo_settings_permission() {
+  return array(
+    'view crm core reports' => array(
+      'title' => t('View CRM Core reports'), 
+    ),
   );
 }
