@@ -103,15 +103,6 @@ function crm_core_volunteer_views_default_views() {
   $handler->display->display_options['relationships']['field_activity_participants_target_id']['relationship'] = 'reverse_field_volunteer_opportunity_crm_core_activity';
   $handler->display->display_options['relationships']['field_activity_participants_target_id']['label'] = 'Contact';
   $handler->display->display_options['relationships']['field_activity_participants_target_id']['required'] = TRUE;
-  /* Relationship: CRM Contact: Relation: User (crm_core_contact -&gt; user) */
-  $handler->display->display_options['relationships']['relation_crm_user_sync_user']['id'] = 'relation_crm_user_sync_user';
-  $handler->display->display_options['relationships']['relation_crm_user_sync_user']['table'] = 'crm_core_contact';
-  $handler->display->display_options['relationships']['relation_crm_user_sync_user']['field'] = 'relation_crm_user_sync_user';
-  $handler->display->display_options['relationships']['relation_crm_user_sync_user']['relationship'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['relationships']['relation_crm_user_sync_user']['required'] = TRUE;
-  $handler->display->display_options['relationships']['relation_crm_user_sync_user']['r_index'] = '-1';
-  $handler->display->display_options['relationships']['relation_crm_user_sync_user']['entity_deduplication_left'] = 0;
-  $handler->display->display_options['relationships']['relation_crm_user_sync_user']['entity_deduplication_right'] = 0;
   /* Field: CRM Activity: Date created */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'crm_core_activity';
