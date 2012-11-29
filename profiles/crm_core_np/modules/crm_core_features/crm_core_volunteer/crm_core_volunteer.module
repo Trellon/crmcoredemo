@@ -99,16 +99,6 @@ function crm_core_volunteer_node_view($node, $view_mode) {
 }
 
 /**
- * Implements hook_views_api().
- */
-function crm_core_volunteer_views_api() {
-  return array(
-    'api' => 3,
-    'path' => drupal_get_path('module', 'crm_core_volunteer'),
-  );
-}
-
-/**
  * Implements hook_views_data_alter
  */
 function crm_core_volunteer_views_data_alter(&$data) {
