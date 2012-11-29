@@ -15,14 +15,14 @@ function crm_core_news_views_default_views() {
   $view->description = 'List of activities of the contact';
   $view->tag = 'default';
   $view->base_table = 'crm_core_activity';
-  $view->human_name = 'Newsletter Subscriptions Report (detail)';
+  $view->human_name = 'Newsletter Subscription Report (detail)';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Newsletter subscriptions: detail';
+  $handler->display->display_options['title'] = 'Newsletter subscription: detail';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['access']['perm'] = 'view crm core reports';
@@ -208,14 +208,14 @@ function crm_core_news_views_default_views() {
   $view->description = 'List of activities of the contact';
   $view->tag = 'default';
   $view->base_table = 'crm_core_activity';
-  $view->human_name = 'Newsletter Subscriptions Report (summary)';
+  $view->human_name = 'Newsletter Subscription Report (summary)';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Newsletter subscriptions: summary';
+  $handler->display->display_options['title'] = 'Newsletter subscription: summary';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['group_by'] = TRUE;
   $handler->display->display_options['access']['type'] = 'perm';
