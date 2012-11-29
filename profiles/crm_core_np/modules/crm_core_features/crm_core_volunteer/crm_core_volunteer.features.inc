@@ -29,6 +29,13 @@ function crm_core_volunteer_ctools_plugin_api() {
 }
 
 /**
+ * Implements hook_views_api().
+ */
+function crm_core_volunteer_views_api() {
+  return array("version" => "3.0");
+}
+
+/**
  * Implements hook_node_info().
  */
 function crm_core_volunteer_node_info() {

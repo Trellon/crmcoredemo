@@ -73,10 +73,10 @@ $crm_core_profile = array();
     'toggle' => array(
       'contact_name' => 'contact_name',
       'field_contact_email' => 'field_contact_email',
-      'field_contact_volunteer' => 0,
-      'field_contact_phone' => 0,
       'contact_image' => 0,
       'field_billing_address' => 0,
+      'field_contact_phone' => 0,
+      'field_contact_volunteer' => 0,
     ),
     'weight' => array(
       'contact_name' => array(
@@ -92,21 +92,21 @@ $crm_core_profile = array();
     ),
   ),
   'block' => '0',
-  'path' => NULL,
-  'redirect' => NULL,
-  'message' => NULL,
+  'path' => '',
+  'redirect' => '',
+  'message' => '',
   'status' => '1',
   'uid' => '1',
   'created' => '1354040877',
   'create_contact_actions' => array(
-    'new' => array(
-      'weight' => -9,
-    ),
     'existing' => array(
-      'weight' => -10,
+      'weight' => '-10',
+    ),
+    'new' => array(
+      'weight' => '-9',
     ),
     'url' => array(
-      'weight' => -8,
+      'weight' => '-8',
     ),
   ),
   'user_sync' => 'current',
@@ -123,30 +123,18 @@ $crm_core_profile = array();
       'field_volunteer_opportunity' => 0,
       'field_volunteer_status' => 0,
     ),
-    'weight' => array(
-      'field_volunteer_time' => array(
-        'weight' => array(
-          'weight' => -8,
-        ),
-      ),
-      'field_activity_notes' => array(
-        'weight' => array(
-          'weight' => -7,
-        ),
-      ),
-    ),
   ),
   'status' => '1',
   'created' => '1354040877',
   'create_activity_actions' => array(
-    'new' => array(
-      'weight' => 10,
-    ),
     'recent' => array(
-      'weight' => 10,
+      'weight' => '-9',
+    ),
+    'new' => array(
+      'weight' => '-10',
     ),
     'url' => array(
-      'weight' => 10,
+      'weight' => '-8',
     ),
   ),
 );

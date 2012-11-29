@@ -404,3 +404,32 @@ function _crm_core_volunteer_check_quota($nid) {
   }
   return $quota;
 }
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alter exposed filters form of tutors view.
+ */
+function crm_core_volunteer_form_views_exposed_form_alter(&$form, &$form_state) {
+  if ($form_state['view']->name != 'volunteer_commitment_report') {
+    return;
+  }
+
+  $options = array('' => t('- Any -'));
+  
+  $query = new EntityFieldQuery();
+  $result = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'volunteer_opportunity')
+    ->execute();
+  if (!empty($result['node'])) {
+    $nodes = node_load_multiple(array_keys($result['node']));
+    foreach ($nodes as $node) {
+      $options[$node->nid] = $node->title; 
+    }
+  }
+
+  $form['nid']['#type'] = 'select';
+  $form['nid']['#options'] = $options;
+  $form['nid']['#size'] = NULL;
+}
