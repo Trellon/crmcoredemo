@@ -7,6 +7,23 @@
 
 include_once 'crm_core_petition.features.inc';
 
+
+/**
+ * Implements hook_enable
+ */
+function crm_core_petition_enable() {
+  db_query("UPDATE {system} SET weight = 20 WHERE name = 'crm_core_petition'");
+}
+
+/**
+ * Implements hook_disable
+ */
+function crm_core_petition_disable() {
+  $mlid = variable_get('crm_core_petition_menu_link', NULL);
+  menu_link_delete($mlid);
+  variable_del('crm_core_petition_menu_link');
+}
+
 /**
  * Implements hook_menu
  */

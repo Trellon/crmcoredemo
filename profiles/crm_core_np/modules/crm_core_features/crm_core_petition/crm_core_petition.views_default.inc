@@ -119,10 +119,6 @@ function crm_core_petition_views_default_views() {
   $handler = $view->new_display('page', 'Petitions List', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
-  /* Relationship: Entity Reference: Referencing entity */
-  $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['id'] = 'reverse_field_crm_petition_reference_crm_core_activity';
-  $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['table'] = 'node';
-  $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['field'] = 'reverse_field_crm_petition_reference_crm_core_activity';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['path'] = 'admin/crm/petitions/all';
 
