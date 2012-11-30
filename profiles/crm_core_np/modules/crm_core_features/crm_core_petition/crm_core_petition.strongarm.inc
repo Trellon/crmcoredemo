@@ -90,7 +90,7 @@ function crm_core_petition_strongarm() {
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '6',
+          'weight' => '7',
         ),
       ),
       'display' => array(),

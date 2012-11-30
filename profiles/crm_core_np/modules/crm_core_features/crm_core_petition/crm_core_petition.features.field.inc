@@ -666,6 +666,89 @@ function crm_core_petition_field_default_fields() {
     ),
   );
 
+  // Exported field: 'node-online_petition-field_crm_petition_redirect_path'.
+  $fields['node-online_petition-field_crm_petition_redirect_path'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_crm_petition_redirect_path',
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'locked' => '0',
+      'module' => 'link',
+      'settings' => array(
+        'attributes' => array(
+          'class' => '',
+          'rel' => '',
+          'target' => 'default',
+        ),
+        'display' => array(
+          'url_cutoff' => 80,
+        ),
+        'enable_tokens' => 1,
+        'title' => 'optional',
+        'title_maxlength' => 128,
+        'title_value' => '',
+        'url' => 0,
+      ),
+      'translatable' => '0',
+      'type' => 'link_field',
+    ),
+    'field_instance' => array(
+      'bundle' => 'online_petition',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => 'Specify the url for where users should be redirected to, when petition signing is completed',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'link',
+          'settings' => array(),
+          'type' => 'link_default',
+          'weight' => 5,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_crm_petition_redirect_path',
+      'label' => 'Redirect URL',
+      'required' => 0,
+      'settings' => array(
+        'attributes' => array(
+          'class' => '',
+          'configurable_title' => 0,
+          'rel' => '',
+          'target' => 'default',
+          'title' => '',
+        ),
+        'display' => array(
+          'url_cutoff' => '80',
+        ),
+        'enable_tokens' => 1,
+        'title' => 'none',
+        'title_maxlength' => '128',
+        'title_value' => '',
+        'url' => 0,
+        'user_register_form' => FALSE,
+        'validate_url' => 1,
+      ),
+      'widget' => array(
+        'active' => 0,
+        'module' => 'link',
+        'settings' => array(),
+        'type' => 'link_field',
+        'weight' => '5',
+      ),
+    ),
+  );
+
   // Exported field: 'node-online_petition-field_crm_petition_tags'.
   $fields['node-online_petition-field_crm_petition_tags'] = array(
     'field_config' => array(
@@ -735,7 +818,7 @@ function crm_core_petition_field_default_fields() {
           'size' => 60,
         ),
         'type' => 'taxonomy_autocomplete',
-        'weight' => '5',
+        'weight' => '6',
       ),
     ),
   );
@@ -755,7 +838,9 @@ function crm_core_petition_field_default_fields() {
   t('Please indicate if you want your name to be displayed in public petition signer list.');
   t('Please input the description of this petition');
   t('Public Display');
+  t('Redirect URL');
   t('Reference to the online petition content');
+  t('Specify the url for where users should be redirected to, when petition signing is completed');
   t('Tags');
 
   return $fields;

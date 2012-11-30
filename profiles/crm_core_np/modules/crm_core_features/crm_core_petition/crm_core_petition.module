@@ -8,6 +8,22 @@
 include_once 'crm_core_petition.features.inc';
 
 /**
+ * Implements hook_menu
+ */
+function crm_core_petition_menu() {
+  $items = array();
+  $items['petition/%node/thank-you'] = array(
+    'title callback' => 'crm_core_petition_thankyou_page_title',
+    'page callback' => 'crm_core_petition_thankyou_page',
+    'title arguments' => array(1),
+    'page arguments' => array(1),
+    'access arguments' => array('crm_core sign online petition'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
  * Implements hook_menu_alter
  */
 function crm_core_petition_menu_alter(&$items) {
@@ -57,7 +73,6 @@ function crm_core_petition_node_view(&$node, $view_mode) {
  * Implements hook_form_FORM_ID_alter().
  */
 function crm_core_petition_form_crm_core_profile_entry_form_alter(&$form, &$form_state, $form_id) {
-  
   $profile = $form_state['profile'];
 
   // making sure we are on the correct crm_core_profile
@@ -75,10 +90,27 @@ function crm_core_petition_form_crm_core_profile_entry_form_alter(&$form, &$form
   
   // Change the form button value and hide some of the address components
   $form['submit']['#value'] = t('Sign the petition');
+
+  $form['#submit'][] = 'crm_core_petition_form_crm_core_profile_entry_form_submit';
   
   $form['field_contact_address'][LANGUAGE_NONE][0]['street_block']['#access'] = FALSE;
   $form['field_contact_address'][LANGUAGE_NONE][0]['locality_block']['postal_code']['#access'] = FALSE;
   $form['field_contact_address'][LANGUAGE_NONE][0]['country']['#access'] = FALSE;   
+}
+
+/**
+ * Implements submit callback for "Petition Signing" form
+ */
+function crm_core_petition_form_crm_core_profile_entry_form_submit($form, &$form_state) {
+  $petition_nid = $form_state['values']['activity']['field_crm_petition_reference'][LANGUAGE_NONE][0]['target_id'];
+  $petition = node_load($petition_nid);
+
+  // redirect user to specific page if it's setup, otherwise send him to the default "Thank you" page
+  if (isset($petition->field_crm_petition_redirect_path[LANGUAGE_NONE])) {
+    $form_state['redirect'] = $petition->field_crm_petition_redirect_path[LANGUAGE_NONE][0]['url'];
+  } else {
+    $form_state['redirect'] = 'petition/' . $petition_nid . '/thank-you';
+  }
 }
 
 /**
@@ -99,4 +131,18 @@ function crm_core_petition_crm_core_profile_activity_alter(&$form, $profile_name
   // we are just setting the reference (association) of the activity back to the petition content
   $default_value = sprintf('%s (%s)', $node->title, $node->nid);
   $form['field_crm_petition_reference'][LANGUAGE_NONE][0]['target_id']['#default_value'] = $default_value;
+}
+
+/**
+ * Callback function for default "Thank you" page title.
+ */
+function crm_core_petition_thankyou_page_title($petition) {
+  return t('Petition @name signing.', array('@name' => $petition->title));
+}
+
+/**
+ * Callback function for default "Thank you" page.
+ */
+function crm_core_petition_thankyou_page($petition) {
+  return t('Thank you for signing the "@name" petition.', array('@name' => $petition->title));
 }

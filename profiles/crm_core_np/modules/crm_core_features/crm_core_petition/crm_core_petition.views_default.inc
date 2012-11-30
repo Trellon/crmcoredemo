@@ -66,7 +66,7 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = 'No published petitions yet.';
+  $handler->display->display_options['empty']['area']['content'] = 'No petition signs yet.';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
   /* Relationship: Entity Reference: Referencing entity */
   $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['id'] = 'reverse_field_crm_petition_reference_crm_core_activity';
@@ -84,35 +84,6 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
-  /* Field: Content: Duration */
-  $handler->display->display_options['fields']['field_crm_petition_duration']['id'] = 'field_crm_petition_duration';
-  $handler->display->display_options['fields']['field_crm_petition_duration']['table'] = 'field_data_field_crm_petition_duration';
-  $handler->display->display_options['fields']['field_crm_petition_duration']['field'] = 'field_crm_petition_duration';
-  $handler->display->display_options['fields']['field_crm_petition_duration']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_crm_petition_duration']['settings'] = array(
-    'format_type' => 'date_format_slim',
-    'fromto' => 'both',
-    'multiple_number' => '',
-    'multiple_from' => '',
-    'multiple_to' => '',
-  );
-  /* Field: Content: Goal */
-  $handler->display->display_options['fields']['field_crm_petition_goal']['id'] = 'field_crm_petition_goal';
-  $handler->display->display_options['fields']['field_crm_petition_goal']['table'] = 'field_data_field_crm_petition_goal';
-  $handler->display->display_options['fields']['field_crm_petition_goal']['field'] = 'field_crm_petition_goal';
-  $handler->display->display_options['fields']['field_crm_petition_goal']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_crm_petition_goal']['settings'] = array(
-    'thousand_separator' => ' ',
-    'prefix_suffix' => 1,
-  );
-  /* Field: COUNT(CRM Activity: Activity ID) */
-  $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
-  $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
-  $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
-  $handler->display->display_options['fields']['activity_id']['relationship'] = 'reverse_field_crm_petition_reference_crm_core_activity';
-  $handler->display->display_options['fields']['activity_id']['group_type'] = 'count';
-  $handler->display->display_options['fields']['activity_id']['label'] = 'Signers';
-  $handler->display->display_options['fields']['activity_id']['element_label_colon'] = FALSE;
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -187,6 +158,7 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['access']['perm'] = 'view any crm_core_activity entity of bundle petition_signature';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['distinct'] = TRUE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '25';
@@ -201,47 +173,38 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Content: Duration */
-  $handler->display->display_options['fields']['field_crm_petition_duration']['id'] = 'field_crm_petition_duration';
-  $handler->display->display_options['fields']['field_crm_petition_duration']['table'] = 'field_data_field_crm_petition_duration';
-  $handler->display->display_options['fields']['field_crm_petition_duration']['field'] = 'field_crm_petition_duration';
-  $handler->display->display_options['fields']['field_crm_petition_duration']['settings'] = array(
-    'format_type' => 'short',
-    'fromto' => 'both',
-    'multiple_number' => '',
-    'multiple_from' => '',
-    'multiple_to' => '',
-  );
-  /* Field: Content: Goal */
-  $handler->display->display_options['fields']['field_crm_petition_goal']['id'] = 'field_crm_petition_goal';
-  $handler->display->display_options['fields']['field_crm_petition_goal']['table'] = 'field_data_field_crm_petition_goal';
-  $handler->display->display_options['fields']['field_crm_petition_goal']['field'] = 'field_crm_petition_goal';
-  $handler->display->display_options['fields']['field_crm_petition_goal']['settings'] = array(
-    'thousand_separator' => ' ',
-    'prefix_suffix' => 1,
-  );
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
-  /* Field: COUNT(DISTINCT CRM Activity: Activity ID) */
-  $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
-  $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
-  $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
-  $handler->display->display_options['fields']['activity_id']['relationship'] = 'reverse_field_crm_petition_reference_crm_core_activity';
-  $handler->display->display_options['fields']['activity_id']['group_type'] = 'count_distinct';
-  $handler->display->display_options['fields']['activity_id']['label'] = 'Signer count';
-  $handler->display->display_options['fields']['activity_id']['separator'] = ' ';
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
   $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['label'] = '';
+  $handler->display->display_options['fields']['nothing']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nothing']['alter']['text'] = 'View signers';
   $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['nothing']['alter']['path'] = 'admin/crm/report/petition/signers/[nid]';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
+  $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_1']['label'] = '';
+  $handler->display->display_options['fields']['nothing_1']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['nothing_1']['alter']['text'] = 'Primer petitions';
+  $handler->display->display_options['fields']['nothing_1']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'admin/crm/report/petition/primer/[nid]';
+  $handler->display->display_options['fields']['nothing_1']['element_label_colon'] = FALSE;
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing_2']['id'] = 'nothing_2';
+  $handler->display->display_options['fields']['nothing_2']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing_2']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_2']['label'] = '';
+  $handler->display->display_options['fields']['nothing_2']['alter']['text'] = '[nothing] | [nothing_1]';
+  $handler->display->display_options['fields']['nothing_2']['element_label_colon'] = FALSE;
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -555,7 +518,7 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['fields']['created']['field'] = 'created';
   $handler->display->display_options['fields']['created']['relationship'] = 'reverse_field_crm_petition_reference_crm_core_activity';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  $handler->display->display_options['path'] = 'admin/crm/report/petition/signers/%';
+  $handler->display->display_options['path'] = 'admin/crm/report/petition/signers';
 
   /* Display: Petition Primer */
   $handler = $view->new_display('page', 'Petition Primer', 'page_3');
@@ -623,6 +586,14 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['empty'] = FALSE;
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area']['content'] = 'No primer petitions yet.';
+  $handler->display->display_options['empty']['area']['format'] = 'plain_text';
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   /* Relationship: Entity Reference: Referencing entity */
   $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['id'] = 'reverse_field_crm_petition_reference_crm_core_activity';
@@ -697,6 +668,93 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['arguments']['field_crm_petition_tags_tid']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['field_crm_petition_tags_tid']['break_phrase'] = TRUE;
   $handler->display->display_options['path'] = 'admin/crm/report/petition/primer/%';
+
+  /* Display: Publicly Signers */
+  $handler = $view->new_display('page', 'Publicly Signers', 'page_4');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Publicly Signers';
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['group_by'] = FALSE;
+  $handler->display->display_options['defaults']['empty'] = FALSE;
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area']['content'] = 'No publicly signers yet.';
+  $handler->display->display_options['empty']['area']['format'] = 'plain_text';
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Entity Reference: Referencing entity */
+  $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['id'] = 'reverse_field_crm_petition_reference_crm_core_activity';
+  $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['table'] = 'node';
+  $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['field'] = 'reverse_field_crm_petition_reference_crm_core_activity';
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_activity_participants_target_id']['id'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['relationships']['field_activity_participants_target_id']['table'] = 'field_data_field_activity_participants';
+  $handler->display->display_options['relationships']['field_activity_participants_target_id']['field'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['relationships']['field_activity_participants_target_id']['relationship'] = 'reverse_field_crm_petition_reference_crm_core_activity';
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Petition';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: CRM Contact: Household name */
+  $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
+  $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
+  $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
+  $handler->display->display_options['fields']['contact_name']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['contact_name']['label'] = 'Name';
+  $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
+  $handler->display->display_options['fields']['contact_name']['settings'] = array(
+    'format' => 'default',
+    'markup' => 0,
+    'output' => 'default',
+    'multiple' => 'default',
+    'multiple_delimiter' => ', ',
+    'multiple_and' => 'text',
+    'multiple_delimiter_precedes_last' => 'never',
+    'multiple_el_al_min' => '3',
+    'multiple_el_al_first' => '1',
+  );
+  /* Field: CRM Contact: Email */
+  $handler->display->display_options['fields']['field_contact_email']['id'] = 'field_contact_email';
+  $handler->display->display_options['fields']['field_contact_email']['table'] = 'field_data_field_contact_email';
+  $handler->display->display_options['fields']['field_contact_email']['field'] = 'field_contact_email';
+  $handler->display->display_options['fields']['field_contact_email']['relationship'] = 'field_activity_participants_target_id';
+  /* Field: CRM Activity: Date created */
+  $handler->display->display_options['fields']['created']['id'] = 'created';
+  $handler->display->display_options['fields']['created']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['created']['field'] = 'created';
+  $handler->display->display_options['fields']['created']['relationship'] = 'reverse_field_crm_petition_reference_crm_core_activity';
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'online_petition' => 'online_petition',
+  );
+  /* Filter criterion: CRM Activity: Public Display (field_crm_petition_display) */
+  $handler->display->display_options['filters']['field_crm_petition_display_value']['id'] = 'field_crm_petition_display_value';
+  $handler->display->display_options['filters']['field_crm_petition_display_value']['table'] = 'field_data_field_crm_petition_display';
+  $handler->display->display_options['filters']['field_crm_petition_display_value']['field'] = 'field_crm_petition_display_value';
+  $handler->display->display_options['filters']['field_crm_petition_display_value']['relationship'] = 'reverse_field_crm_petition_reference_crm_core_activity';
+  $handler->display->display_options['filters']['field_crm_petition_display_value']['value'] = array(
+    1 => '1',
+  );
+  $handler->display->display_options['path'] = 'admin/crm/report/petitions/publicly-signers';
   $export['petition_report'] = $view;
 
   return $export;
