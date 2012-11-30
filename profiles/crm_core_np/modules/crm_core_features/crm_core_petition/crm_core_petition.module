@@ -13,6 +13,14 @@ include_once 'crm_core_petition.features.inc';
  */
 function crm_core_petition_enable() {
   db_query("UPDATE {system} SET weight = 20 WHERE name = 'crm_core_petition'");
+  $menu_link = array(
+    'link_title' => t('Petitions'),
+    'link_path' => 'admin/crm/petitions/all',
+    'menu_name' => 'main-menu',
+  );
+
+  $mlid = menu_link_save($menu_link);
+  variable_set('crm_core_petition_menu_link', $mlid);
 }
 
 /**
