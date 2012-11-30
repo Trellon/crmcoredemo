@@ -21,6 +21,18 @@ function crm_core_petition_enable() {
 
   $mlid = menu_link_save($menu_link);
   variable_set('crm_core_petition_menu_link', $mlid);
+  
+  // enable the views in this because it is disabled
+  // work around for features
+  module_load_include('inc', 'crm_core_petition', 'crm_core_petition.views_default');
+  
+  $views = crm_core_petition_views_default_views();
+  foreach ($views as $view) {
+    if ($view->disabled) {
+      $view->disabled = FALSE;
+      $view->save();
+    }
+  }    
 }
 
 /**

@@ -189,6 +189,10 @@ function _crm_core_np_features() {
       'title' => st('CRM Core Node Claim'),
       'description' => st('CRM Core Node Claim allows users to claim and take ownership of a content type'),
     ),
+    'crm_core_petition' => array(
+      'title' => st('CRM Core Petition'),
+      'description' => st('CRM Core Petition allows users to sign online petitions'),
+    ),    
     'crm_core_volunteer' => array(
       'title' => st('CRM Core Volunteer'),
       'description' => st('CRM Core Volunteer allows signing up for volunteer opportunities'),
@@ -269,17 +273,5 @@ function _crm_core_np_set_theme_form_submit($form, &$form_state) {
   theme_enable($themes);
 
   // Set the default theme.
-  variable_set('theme_default', $selected_theme);
-
-  // Enable Events feature views.
-  // Avoids PHP notices from default fields not existing.
-  if (module_exists('crm_core_event_registration')) {
-    $views = crm_core_event_registration_views_default_views();
-    foreach ($views as $view) {
-      if ($view->disabled) {
-        $view->disabled = FALSE;
-        $view->save();
-      }
-    }
-  }
+  variable_set('theme_default', $selected_theme);  
 }
