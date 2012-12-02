@@ -93,7 +93,7 @@ function crm_core_news_form_simplenews_subscriptions_multi_block_form_alter(&$fo
  */
 function crm_core_news_block_view_simplenews_0_alter(&$data, $block) {
   // Override default title
-  if(empty($block->title)) {
+  if (empty($block->title)) {
     $data['subject'] = t('Sign Up for News Alerts');
   }
 }

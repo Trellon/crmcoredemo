@@ -145,7 +145,8 @@ function crm_core_petition_form_crm_core_profile_entry_form_submit($form, &$form
   // redirect user to specific page if it's setup, otherwise send him to the default "Thank you" page
   if (isset($petition->field_crm_petition_redirect_path[LANGUAGE_NONE])) {
     $form_state['redirect'] = $petition->field_crm_petition_redirect_path[LANGUAGE_NONE][0]['url'];
-  } else {
+  }
+  else {
     $form_state['redirect'] = 'petition/' . $petition_nid . '/thank-you';
   }
 }

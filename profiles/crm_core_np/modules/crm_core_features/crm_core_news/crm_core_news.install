@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Installation for CRM_Core_News
+ */
 
 /**
  * Implements hook_install()

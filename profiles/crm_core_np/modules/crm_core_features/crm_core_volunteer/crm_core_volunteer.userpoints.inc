@@ -4,8 +4,10 @@
  * Code for the CRM Core Volunteer feature.
  * userpoints integration
  */
+ 
 define('USERPOINTS_VOLUNTEER', 'userpoints_crm_core_volunteer');
 define('USERPOINTS_VOLUNTEER_TID', 'userpoints_crm_core_volunteer_tid');
+
 /**
  * Implements hook_userpoints
  */
@@ -70,9 +72,8 @@ function crm_core_volunteer_entity_insert($entity, $type) {
         $contact_id = $entity->field_activity_participants[LANGUAGE_NONE][0]['target_id'];
         $activity_user = _crm_user_sync_get_related_entity('crm_core_contact', $contact_id, 'crm_user_sync');        
       } 
-      else 
-      {
-        $activity_user = $user;  
+      else {
+        $activity_user = $user;
       }
       
       $params = array(

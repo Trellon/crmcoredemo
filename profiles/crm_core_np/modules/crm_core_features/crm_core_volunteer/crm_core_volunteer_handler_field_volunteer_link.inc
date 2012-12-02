@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @file
  * Field handler to present a link to a volunteer opportunity application/commitment.
  */
 class crm_core_volunteer_handler_field_volunteer_link extends views_handler_field {
@@ -34,7 +35,8 @@ class crm_core_volunteer_handler_field_volunteer_link extends views_handler_fiel
   }
 
   function render($values) {
-    $text = !empty($this->options['text']) ? $this->options['text'] : t('view');
+    $text = !empty($this->options['text']) ? $this->options['text'] : 'view';
+    $text = '<span>' . $text . '</span>';
     $nid = $this->get_value($values, 'nid');
     
     $crm_core_profile = variable_get('crm_core_volunteer_profile', '');
@@ -44,10 +46,9 @@ class crm_core_volunteer_handler_field_volunteer_link extends views_handler_fiel
     $access = user_access('crm_core volunteer apply');
     if (!$access) {
       if (!user_is_logged_in()) {
-        return l('<span>' . $text . '</span>', 'user', array('query' => array('destination' => drupal_get_path_alias('node/' . $node->nid)), 'html' => TRUE, 'attributes' => array('class' => array('crm_core_volunteer_link'))));        
+        return l(t($text), 'user', array('query' => array('destination' => drupal_get_path_alias('node/' . $node->nid)), 'html' => TRUE, 'attributes' => array('class' => array('crm_core_volunteer_link'))));        
       }
-      else 
-      {
+      else {
         return;  
       } 
     }
@@ -57,7 +58,6 @@ class crm_core_volunteer_handler_field_volunteer_link extends views_handler_fiel
     if ($check || $quota) {
       return;  
     }
-     
-    return l('<span>' . $text . '</span>', 'node/' . $nid . '/volunteer/' . $crm_core_profile, array('html' => TRUE, 'attributes' => array('class' => array('crm_core_volunteer_link'))));
+    return l(t($text), 'node/' . $nid . '/volunteer/' . $crm_core_profile, array('html' => TRUE, 'attributes' => array('class' => array('crm_core_volunteer_link'))));
   }
 }
