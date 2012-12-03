@@ -274,4 +274,24 @@ function _crm_core_np_set_theme_form_submit($form, &$form_state) {
 
   // Set the default theme.
   variable_set('theme_default', $selected_theme);  
+  
+  if (module_exists('crm_core_event_registration')) {
+	  $views = crm_core_event_registration_views_default_views();
+	  foreach ($views as $view) {
+	    if ($view->disabled) {
+	      $view->disabled = FALSE;
+	      $view->save();
+	    }
+	  }	  	  
+  }
+  
+  if (module_exists('crm_core_petition')) {
+	  $views = crm_core_petition_views_default_views();
+	  foreach ($views as $view) {
+	    if ($view->disabled) {
+	      $view->disabled = FALSE;
+	      $view->save();
+	    }
+	  } 	  	  
+  }
 }

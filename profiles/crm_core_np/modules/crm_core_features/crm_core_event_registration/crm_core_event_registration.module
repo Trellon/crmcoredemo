@@ -57,6 +57,25 @@ function crm_core_event_registration_menu() {
 }
 
 /**
+ * Implements hook_enable
+ */
+function crm_core_event_registration_enable() {
+
+  // Enable Events feature views.
+  // Avoids PHP notices from default fields not existing.
+/*
+  module_load_include('inc', 'crm_core_event_registration', 'crm_core_event_registration.views_default');
+  $views = crm_core_event_registration_views_default_views();
+  foreach ($views as $view) {
+    if ($view->disabled) {
+      $view->disabled = FALSE;
+      $view->save();
+    }
+  }	
+*/
+}
+
+/**
  * Implements hook_theme().
  */
 function crm_core_event_registration_theme($existing, $type, $theme, $path) {
