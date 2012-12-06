@@ -179,8 +179,7 @@ function theme_name_component($variables) {
   }
   switch ($variables['modifier']) {
     case 'initial':
-      $value = $variables['value'];
-      $value = $value{0};
+      $value = drupal_substr($variables['value'], 0, 1);
       break;
 
     default:
@@ -201,9 +200,33 @@ function name_username_alter(&$name, $account) {
     return;
   }
 
-  // Real name was loaded/generated via hook_user_load(), so re-use it.
-  if (!empty($account->realname)) {
+  // Try and load the realname in case this is a partial user object or
+  // another object, such as a node or comment.
+  if (!isset($account->realname)) {
+    name_username_alter_preload($account);
+  }
+
+  if (isset($account->realname) && drupal_strlen($account->realname)) {
     $name = $account->realname;
+  }
+}
+
+/**
+ * Internal helper function to load the user account if required.
+ *
+ * Recursion check in place after RealName module issue queue suggested that
+ * there were issues with token based recursion on load.
+ */
+function name_username_alter_preload(&$account) {
+  static $in_preload = FALSE;
+
+  if (!$in_preload && !isset($account->realname)) {
+    $field_name = variable_get('name_user_preferred', FALSE);
+    if ($field_name && $instance = field_info_instance('user', $field_name, 'user')) {
+      $in_preload = TRUE;
+      $account = user_load($account->uid);
+      $in_preload = FALSE;
+    }
   }
 }
 
@@ -477,7 +500,7 @@ function theme_name_item_list($variables) {
     }
   }
   $t_args = array(
-  	'!delimiter' => $delimiter,
+    '!delimiter' => $delimiter,
     '!etal' => $etal,
   );
   if ($original_count > $settings['multiple_el_al_min']) {
@@ -517,6 +540,8 @@ function theme_name_item_list($variables) {
  * The #process callback to create the element.
  */
 function name_element_expand($element, &$form_state, $complete_form) {
+  global $language;
+
   $element['#tree'] = TRUE;
   if (empty($element['#value'])) {
     $element['#value'] = array();
@@ -531,7 +556,6 @@ function name_element_expand($element, &$form_state, $complete_form) {
   }
 
   // Provides an override on the inline CSS.
-  $inline_css = ' style="float: left; margin-right: 1em;"';
   if (!empty($element['#component_css'])) {
     if ($element['#component_css'] == '<none>') {
       $inline_css = '';
@@ -540,13 +564,28 @@ function name_element_expand($element, &$form_state, $complete_form) {
       $inline_css = ' style="' . check_plain($element['#component_css']) . '"';
     }
   }
+  else {
+    // Language will be LANGUAGE_LTR (0) or LANGUAGE_RTL (1).
+    if ($language->direction) {
+      if ($style = variable_get('name_inline_styles_rtl', 'float: right; margin-left: 1em;')) {
+        $inline_css = ' style="' . $style . '"';
+      }
+    }
+    else {
+      if ($style = variable_get('name_inline_styles', 'float: left; margin-right: 1em;')) {
+        $inline_css = ' style="' . $style . '"';
+      }
+    }
+  }
 
   foreach ($parts as $key => $title) {
     if (!isset($components[$key]['exclude'])) {
       $element[$key] = _name_render_component($components[$key], $key, $element['#value'][$key], isset($min_components[$key]));
       $class = 'name-' . $key . '-wrapper';
       if ($key == 'credentials' && empty($element['#credentials_inline'])) {
-        $element[$key]['#prefix'] = '<div class="' . $class . ' clearfix" style="float: left;">';
+        $element[$key]['#prefix'] = '<div class="' . $class
+          . ' clearfix" style="float: ' . ($language->direction ? 'right' : 'left')
+          . ';">';
         $element[$key]['#suffix'] = '</div>';
       }
       else {
@@ -555,9 +594,10 @@ function name_element_expand($element, &$form_state, $complete_form) {
       }
     }
   }
-
-  $element['#prefix'] = '<div class="clearfix">';
-  $element['#suffix'] = '</div>';
+  if (variable_get('name_element_wrapper', 1)) {
+    $element['#prefix'] = '<div class="clearfix">';
+    $element['#suffix'] = '</div>';
+  }
   return $element;
 }
 
@@ -646,11 +686,13 @@ function name_element_validate($element, &$form_state) {
  * This function themes the element and controls the title display.
  */
 function name_element_pre_render($element) {
-  // Add a wrapper to fields
-  $element['_name'] = array(
-    '#prefix' => '<div class="clearfix">',
-    '#suffix' => '</div>',
-  );
+  // Add a wrapper to fields if required.
+  if (variable_get('name_element_wrapper', 1)) {
+    $element['_name'] = array(
+      '#prefix' => '<div class="clearfix">',
+      '#suffix' => '</div>',
+    );
+  }
   foreach (_name_translations() as $key => $title) {
     if (isset($element[$key])) {
       $element['_name'][$key] = $element[$key];
@@ -1172,9 +1214,9 @@ function name_field_formatter_view($entity_type, $entity, $field, $instance, $la
   foreach ($items as $delta => $item) {
     // We still have raw user input here unless the markup flag has been used.
     $value = name_format($item, $format, array(
-  		'object' => $entity,
-  		'type' => $entity_type,
-  		'markup' => !empty($display['settings']['markup']
+      'object' => $entity,
+      'type' => $entity_type,
+      'markup' => !empty($display['settings']['markup']
     )));
     if (empty($display['settings']['markup'])) {
       $element[$delta] = array(
@@ -1550,4 +1592,14 @@ function name_field_item_property_info() {
     'setter callback' => 'entity_property_verbatim_set',
   );
   return $properties;
+}
+
+/**
+ * Implements hook_migrate_api().
+ */
+function name_migrate_api() {
+  $api = array(
+    'api' => 2,
+  );
+  return $api;
 }

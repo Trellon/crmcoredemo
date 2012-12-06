@@ -226,6 +226,8 @@ function _webform_display_name($name, $value, $format = 'html') {
     '#component' => $name,
     '#format' => $format,
     '#value' => $themed_name,
+    '#field_prefix' => '',
+    '#field_suffix' => '',
   );
 }
 

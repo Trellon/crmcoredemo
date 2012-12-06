@@ -85,6 +85,9 @@ function name_uninstall() {
   variable_del('name_user_preferred');
   // There is no UI for this setting.
   variable_del('name_example_names');
+  variable_del('name_inline_styles');
+  variable_del('name_inline_styles_rtl');
+  variable_del('name_element_wrapper');
 }
 
 /**

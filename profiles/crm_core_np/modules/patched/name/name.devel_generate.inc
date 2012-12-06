@@ -30,7 +30,7 @@ function _name_devel_generate($object, $field, $instance, $bundle) {
   $names = $func($field);
 
   $components = array_filter($field['settings']['components']);
-  return array_intersect($names[array_rand($names)], $components);
+  return array_intersect_key($names[array_rand($names)], $components);
 }
 
 /**
