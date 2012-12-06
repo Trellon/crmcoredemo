@@ -213,8 +213,22 @@ function _crm_core_np_features_form($form, &$form_state) {
       '#description' => $info['description'],
     );
   }
-
-  $form['features']['submit'] = array(
+  
+  $form['sample_data'] = array(
+		'#type' => 'fieldset', 		
+		'#title' => t('Sample data'), 
+		'#weight' => 5, 		
+		'#collapsible' => TRUE, 	
+		'#collapsed' => FALSE,  	
+  );
+  
+  $form['sample_data']['sample_data_toggle'] = array(
+  	'#type' => 'checkbox',
+  	'#title' => t('Import sample data?'),
+  	'#description' => t('Checking this will import sample data for the feature(s) you have selected.'),
+  );
+  
+  $form['submit'] = array(
     '#type' => 'submit',
     '#value' => st('Next'),
   );
@@ -237,9 +251,30 @@ function _crm_core_np_features_form_submit($form, &$form_state) {
   }
   
   module_enable($modules);
+  
+  if ((bool)$form_state['values']['sample_data_toggle'] === FALSE) {
+		  return;
+  }
+  
+  // install sample data
+  // @todo: not totally operational yet
+/*
+  foreach ($modules as $module) {
+  	if (module_exists($module)) {
+	  	// look for something like crm_core_volunteer.sample_data.inc
+		  module_load_include('inc', $module, $module . '.sample_data');
+		  $function = $module . '_sample_data';
+		  if (function_exists($function)) {
+				$function();  
+		  }	  	
+  	}
+  }
+*/  
 }
 
-
+/**
+ * Theme configuration form
+ */
 function _crm_core_np_set_theme_form($form, &$form_state) {
   $themes = array();
   $system_themes = system_rebuild_theme_data();

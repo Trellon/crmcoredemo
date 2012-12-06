@@ -101,5 +101,11 @@ dependencies[] = rules
 dependencies[] = rules_admin
 dependencies[] = twitter_bootstrap_ui
 
+; Install sample data requirements
+dependencies[] = devel
+dependencies[] = devel_generate
+dependencies[] = crm_core_devel
+dependencies[] = crm_core_devel_generate
+
 ; System Requirements.
 php_memory_limit = 128M
