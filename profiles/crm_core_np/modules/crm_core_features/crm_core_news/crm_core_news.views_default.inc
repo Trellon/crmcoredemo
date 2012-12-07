@@ -248,6 +248,19 @@ function crm_core_news_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = 'There is no subscriptions yet.';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
+  /* Relationship: CRM Activity: Newsletter Category (field_newsletter_category) */
+  $handler->display->display_options['relationships']['field_newsletter_category_tid']['id'] = 'field_newsletter_category_tid';
+  $handler->display->display_options['relationships']['field_newsletter_category_tid']['table'] = 'field_data_field_newsletter_category';
+  $handler->display->display_options['relationships']['field_newsletter_category_tid']['field'] = 'field_newsletter_category_tid';
+  /* Field: Simplenews category: Term ID */
+  $handler->display->display_options['fields']['tid']['id'] = 'tid';
+  $handler->display->display_options['fields']['tid']['table'] = 'simplenews_category';
+  $handler->display->display_options['fields']['tid']['field'] = 'tid';
+  $handler->display->display_options['fields']['tid']['relationship'] = 'field_newsletter_category_tid';
+  $handler->display->display_options['fields']['tid']['label'] = '';
+  $handler->display->display_options['fields']['tid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['tid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['tid']['separator'] = '';
   /* Field: CRM Activity: Title */
   $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
   $handler->display->display_options['fields']['title_1']['table'] = 'crm_core_activity';
@@ -292,6 +305,8 @@ function crm_core_news_views_default_views() {
   $handler->display->display_options['fields']['field_newsletter_category']['field'] = 'field_newsletter_category';
   $handler->display->display_options['fields']['field_newsletter_category']['group_type'] = 'count';
   $handler->display->display_options['fields']['field_newsletter_category']['label'] = '';
+  $handler->display->display_options['fields']['field_newsletter_category']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['field_newsletter_category']['alter']['path'] = '/crm/reports/news/detail/?field_newsletter_category_tid=[tid]';
   $handler->display->display_options['fields']['field_newsletter_category']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_newsletter_category']['separator'] = ', ';
   /* Filter criterion: CRM Activity: Type */
