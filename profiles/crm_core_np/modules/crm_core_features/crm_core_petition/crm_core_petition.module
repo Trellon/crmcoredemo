@@ -15,7 +15,7 @@ function crm_core_petition_enable() {
   db_query("UPDATE {system} SET weight = 20 WHERE name = 'crm_core_petition'");
   $menu_link = array(
     'link_title' => t('Petitions'),
-    'link_path' => 'admin/crm/petitions/all',
+    'link_path' => 'petitions',
     'menu_name' => 'main-menu',
   );
 
@@ -32,8 +32,8 @@ function crm_core_petition_enable() {
       $view->disabled = FALSE;
       $view->save();
     }
-  } 
-*/   
+  }
+*/
 }
 
 /**
