@@ -43,7 +43,7 @@ function crm_core_volunteer_node_info() {
     'volunteer_opportunity' => array(
       'name' => t('Volunteer opportunity'),
       'base' => 'node_content',
-      'description' => t('A volunteer opportunity that users can commit or register to perform'),
+      'description' => t('Allow users to find and sign up for different volunteer opportunities.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',

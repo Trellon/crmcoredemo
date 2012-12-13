@@ -59,7 +59,7 @@ function crm_core_event_registration_node_info() {
     'event' => array(
       'name' => t('Event'),
       'base' => 'node_content',
-      'description' => t('An content that represents an event with its associated information'),
+      'description' => t('An event that allows free/paid registrations.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',

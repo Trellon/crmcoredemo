@@ -27,9 +27,9 @@ function crm_core_blog_views_api() {
 function crm_core_blog_node_info() {
   $items = array(
     'blog_post' => array(
-      'name' => t('Blog Post'),
+      'name' => t('Blog post'),
       'base' => 'node_content',
-      'description' => t('A simple blog post content type.'),
+      'description' => t('Use for multi-user blogs. Every user gets a personal blog.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',

@@ -45,9 +45,9 @@ function crm_core_petition_views_api() {
 function crm_core_petition_node_info() {
   $items = array(
     'online_petition' => array(
-      'name' => t('Online Petition'),
+      'name' => t('Online petition'),
       'base' => 'node_content',
-      'description' => '',
+      'description' => t('Allow people to sign up for causes they care about.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
