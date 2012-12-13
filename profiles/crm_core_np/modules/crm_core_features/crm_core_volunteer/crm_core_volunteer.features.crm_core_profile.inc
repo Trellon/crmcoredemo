@@ -17,50 +17,50 @@ $crm_core_profile = array();
     'toggle' => array(
       'contact_name' => 'contact_name',
       'field_contact_email' => 'field_contact_email',
-      'field_contact_volunteer' => 'field_contact_volunteer',
       'field_contact_phone' => 'field_contact_phone',
+      'field_contact_volunteer' => 'field_contact_volunteer',
       'contact_image' => 0,
       'field_billing_address' => 0,
     ),
     'weight' => array(
       'contact_name' => array(
         'weight' => array(
-          'weight' => -10,
+          'weight' => '-10',
         ),
       ),
       'field_contact_email' => array(
         'weight' => array(
-          'weight' => -9,
+          'weight' => '-9',
         ),
       ),
       'field_contact_phone' => array(
         'weight' => array(
-          'weight' => -8,
+          'weight' => '-8',
         ),
       ),
       'field_contact_volunteer' => array(
         'weight' => array(
-          'weight' => -8,
+          'weight' => '-7',
         ),
       ),
     ),
   ),
   'block' => '0',
-  'path' => NULL,
-  'redirect' => NULL,
+  'path' => 'volunteer-signup',
+  'redirect' => '',
   'message' => 'Thank you for applying to be a volunteer, we will get in touch with you shortly',
   'status' => '1',
   'uid' => '1',
   'created' => '1354041846',
   'create_contact_actions' => array(
-    'new' => array(
-      'weight' => -9,
-    ),
     'existing' => array(
-      'weight' => -10,
+      'weight' => '-10',
+    ),
+    'new' => array(
+      'weight' => '-9',
     ),
     'url' => array(
-      'weight' => -8,
+      'weight' => '-8',
     ),
   ),
   'user_sync' => 'current',
