@@ -168,6 +168,13 @@ function crm_core_event_registration_node_view($node, $view_mode) {
     $crm_core_profile = crm_core_profile_load($crm_core_profile_event);
 
     if (!empty($crm_core_profile)) {
+    	$element = array(
+    		'#markup' => 'Register for this event',
+    		'#prefix' => '<h2 id="event_registration_form_title">',
+    		'#suffix' => '</h2>',
+    		'#weight' => 998,
+    	);
+    	$node->content['crm_core_event_reg_title'] = $element;
       $node->content['crm_core_event_reg_form'] = crm_core_event_registration_attachment_form($node, $crm_core_profile);
       $node->content['crm_core_event_reg_form']['#weight'] = 999;
       drupal_set_title($node->title);
@@ -313,22 +320,20 @@ function crm_core_event_registration_form_crm_core_profile_entry_form_alter(&$fo
 
     // making sure there is a referenced product and the registration price is not 0
     // if these conditions are met, we will create a multi-step form for checkout
-    if ($event_product_field != '') {
-      if (!empty($node->{$event_product_field})) {
-        if (!empty($node->field_crmer_reg_price[LANGUAGE_NONE])) {
-            if ($node->field_crmer_reg_price[LANGUAGE_NONE][0]['amount'] != 0) {
-              $product_id = $node->{$event_product_field}[LANGUAGE_NONE][0]['product_id'];
-              $form['product_id'] = array(
-                '#type' => 'value',
-                '#value' => $product_id,
-              );
-
-              $form['submit']['#value'] = t('Continue to next step');
-              $form['#validate'][] = 'crm_core_event_registration_checkout_validate';
-              $form['#submit'][] = 'crm_core_event_registration_checkout_submit';
-            }
-        }
-      }
+    if ($event_product_field != '' && !empty($node->{$event_product_field})) {
+			if (!empty($node->field_crmer_reg_price[LANGUAGE_NONE])) {
+				if ($node->field_crmer_reg_price[LANGUAGE_NONE][0]['amount'] != 0) {
+					$product_id = $node->{$event_product_field}[LANGUAGE_NONE][0]['product_id'];
+					$form['product_id'] = array(
+					  '#type' => 'value',
+					  '#value' => $product_id,
+					);
+					
+					$form['submit']['#value'] = t('Continue to next step');
+					$form['#validate'][] = 'crm_core_event_registration_checkout_validate';
+					$form['#submit'][] = 'crm_core_event_registration_checkout_submit';
+				}
+			}
     }
     // free product, we are done
     else {
@@ -396,7 +401,12 @@ function crm_core_event_registration_checkout_submit($form, &$form_state) {
   // @todo: this needs to be a configuration option thing
   // $order->field_crm_activity_id[LANGUAGE_NONE][0]['target_id'] = $form_state['crm_core_activity']->activity_id;
   $order->data['crm_core_event_registration'] = $form_state['crm_core_activity']->activity_id;
-
+  
+  // set redirect path
+  if (array_key_exists('redirect', $form_state['profile'])) {
+	  $order->data['redirect'] = $form_state['profile']['redirect'];
+  }
+  
   // Save the order again to update its line item reference field.
   commerce_order_save($order);
 
@@ -424,10 +434,16 @@ function crm_core_event_registration_commerce_checkout_complete($order) {
       $activity->field_registration_order[LANGUAGE_NONE][0]['target_id'] = $order->order_id;
       crm_core_activity_save($activity);
 
-      $nid = $activity->field_registration_event[LANGUAGE_NONE][0]['target_id'];
-      // going back to the event
-      $path = drupal_get_path_alias('node/' . $nid);
-      drupal_goto($path);
+      if (array_key_exists('redirect', $order->data)) {
+	      drupal_goto($order->data['redirect']);
+      }
+      else 
+      {
+	      $nid = $activity->field_registration_event[LANGUAGE_NONE][0]['target_id'];
+	      // going back to the event
+	      $path = drupal_get_path_alias('node/' . $nid);
+	      drupal_goto($path);	      
+      }
     }
   }
 }
@@ -447,6 +463,10 @@ function crm_core_event_registration_commerce_checkout_pane_info_alter(&$checkou
 function crm_core_event_registration_profile_form_submit($form, &$form_state) {
   $message = variable_get('crm_core_event_registration_redirect_message', 'Thank you for registering. You will receive a confirmation e-mail shortly.');
   drupal_set_message(t('@message', array('@message' => $message)));
+  
+  if (array_key_exists('redirect', $form_state['profile'])) {
+	  $form_state['redirect'] = $form_state['profile']['redirect'];
+  }
 }
 
 /**
