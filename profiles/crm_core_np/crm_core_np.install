@@ -258,7 +258,7 @@ function _crm_core_np_features_form_submit($form, &$form_state) {
   
   // install sample data
   // @todo: not totally operational yet
-/*
+
   foreach ($modules as $module) {
   	if (module_exists($module)) {
 	  	// look for something like crm_core_volunteer.sample_data.inc
@@ -269,7 +269,7 @@ function _crm_core_np_features_form_submit($form, &$form_state) {
 		  }	  	
   	}
   }
-*/  
+  
 }
 
 /**
