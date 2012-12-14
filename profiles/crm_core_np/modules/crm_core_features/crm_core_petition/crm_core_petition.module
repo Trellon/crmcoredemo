@@ -166,10 +166,11 @@ function crm_core_petition_crm_core_profile_activity_alter(&$form, $profile_name
   // since we are embedding the online petition form in the content itself, we can get the content information
   // as well
   $node = menu_get_object();
-  
-  // we are just setting the reference (association) of the activity back to the petition content
-  $default_value = sprintf('%s (%s)', $node->title, $node->nid);
-  $form['field_crm_petition_reference'][LANGUAGE_NONE][0]['target_id']['#default_value'] = $default_value;
+  if (!empty($node)){
+    // we are just setting the reference (association) of the activity back to the petition content
+    $default_value = sprintf('%s (%s)', $node->title, $node->nid);
+    $form['field_crm_petition_reference'][LANGUAGE_NONE][0]['target_id']['#default_value'] = $default_value;
+  }
 }
 
 /**
