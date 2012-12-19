@@ -1,5 +1,36 @@
-
+BODY.front .jumbotron {
+	background: url(../images/jumbotron.png) top center no-repeat;
+	height: 389px;
+	margin-top: -50px;
+	padding: 50px 0px 0px 0px;
+}
+.jumbotron .block-title {
+	display: none;
+}
+.jumbotron H1 {
+	font-size: 6em;
+	margin: 1em auto .2em auto;
+	color: white;
+  text-shadow: 2px 1px 3px Black; /* Firefox 3.5+, Opera 9+, Safari 1+, Chrome, IE10 */
+  line-height: 1;
+}
+.jumbotron P {
+	font-size: 2em;
+	font-weight: 200;
+	line-height: 1.25;
+  color: white;
+ text-shadow: 2px 1px 3px Black; /* Firefox 3.5+, Opera 9+, Safari 1+, Chrome, IE10 */
+}
+.compact-form-label {
+	padding: 5px 0px 0px 0px;
+	color: #999999;
+}
 
 .navbar-inner .container A.brand {
   margin-left: 30px;
+}
+
+.controls .form-type-radio {
+  float: left;
+  margin-right: 1em;
 }
