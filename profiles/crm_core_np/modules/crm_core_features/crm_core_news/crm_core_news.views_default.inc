@@ -201,6 +201,10 @@ function crm_core_news_views_default_views() {
   $handler = $view->new_display('page', 'Detail', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['path'] = 'crm/reports/news/detail';
+  $handler->display->display_options['menu']['type'] = 'normal';
+  $handler->display->display_options['menu']['title'] = 'Newsletter Subscription Report (detail)';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
   $export['crm_subscribers_report'] = $view;
 
   $view = new view();
@@ -339,6 +343,10 @@ function crm_core_news_views_default_views() {
   $handler = $view->new_display('page', 'Summary', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['path'] = 'crm/reports/news/summary';
+  $handler->display->display_options['menu']['type'] = 'normal';
+  $handler->display->display_options['menu']['title'] = 'Newsletter Subscription Report (summary)';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
   $export['crm_subscriptions_report'] = $view;
 
   $view = new view();

@@ -45,7 +45,7 @@ function crm_core_news_views_api() {
 function crm_core_news_node_info() {
   $items = array(
     'simplenews' => array(
-      'name' => t('News'),
+      'name' => t('Simplenews newsletter'),
       'base' => 'node_content',
       'description' => t('A newsletter issue to be sent to subscribed email addresses.'),
       'has_title' => '1',

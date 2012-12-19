@@ -193,9 +193,9 @@ function crm_core_volunteer_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = 'There is no any past volunteer opportunity you have committed.';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
-  $handler->display->display_options['path'] = 'reports/volunteer/detail';
-  $handler->display->display_options['menu']['type'] = 'tab';
-  $handler->display->display_options['menu']['title'] = 'My volunteer opportunities ';
+  $handler->display->display_options['path'] = 'crm/reports/volunteer/detail';
+  $handler->display->display_options['menu']['type'] = 'normal';
+  $handler->display->display_options['menu']['title'] = 'Volunteer commitment report';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['context'] = 0;
   $export['volunteer_commitment_report'] = $view;

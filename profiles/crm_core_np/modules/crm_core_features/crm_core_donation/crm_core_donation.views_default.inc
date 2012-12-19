@@ -110,11 +110,11 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['filters']['pdp']['field'] = 'pdp';
   $handler->display->display_options['filters']['pdp']['value']['value'] = '0';
   $handler->display->display_options['path'] = 'crm/donations';
-  $handler->display->display_options['menu']['type'] = 'normal';
+  $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'Donation';
   $handler->display->display_options['menu']['description'] = 'donation pages';
   $handler->display->display_options['menu']['weight'] = '-10';
-  $handler->display->display_options['menu']['name'] = 'management';
+  $handler->display->display_options['menu']['context'] = 0;
 
   /* Display: PDP */
   $handler = $view->new_display('page', 'PDP', 'page_1');

@@ -126,7 +126,11 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  $handler->display->display_options['path'] = 'petitions';
+  $handler->display->display_options['path'] = 'crm/petitions';
+  $handler->display->display_options['menu']['type'] = 'tab';
+  $handler->display->display_options['menu']['title'] = 'Petitions';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
 
   /* Display: Contact Petitions List */
   $handler = $view->new_display('page', 'Contact Petitions List', 'page_1');
@@ -230,11 +234,10 @@ function crm_core_petition_views_default_views() {
   /* Display: Petition List */
   $handler = $view->new_display('page', 'Petition List', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'admin/crm/report/petition';
+  $handler->display->display_options['path'] = 'crm/reports/petition';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Petition Report';
   $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['name'] = 'management';
   $handler->display->display_options['menu']['context'] = 0;
 
   /* Display: Data export */
@@ -284,7 +287,7 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['fields']['activity_id']['group_type'] = 'count_distinct';
   $handler->display->display_options['fields']['activity_id']['label'] = 'Signer count';
   $handler->display->display_options['fields']['activity_id']['separator'] = ' ';
-  $handler->display->display_options['path'] = 'admin/crm/report/petition/export';
+  $handler->display->display_options['path'] = 'crm/reports/petition/export';
   $handler->display->display_options['displays'] = array(
     'page' => 'page',
     'default' => 0,
@@ -350,7 +353,7 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['path'] = 'admin/crm/report/petition/signers/%';
+  $handler->display->display_options['path'] = 'crm/reports/petition/signers/%';
 
   /* Display: Data export 2 */
   $handler = $view->new_display('views_data_export', 'Data export 2', 'views_data_export_2');
@@ -400,13 +403,6 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['fields']['field_contact_email']['table'] = 'field_data_field_contact_email';
   $handler->display->display_options['fields']['field_contact_email']['field'] = 'field_contact_email';
   $handler->display->display_options['fields']['field_contact_email']['relationship'] = 'field_activity_participants_target_id';
-  /* Field: Broken/missing handler */
-  $handler->display->display_options['fields']['field_contact_address']['id'] = 'field_contact_address';
-  $handler->display->display_options['fields']['field_contact_address']['table'] = 'field_data_field_contact_address';
-  $handler->display->display_options['fields']['field_contact_address']['field'] = 'field_contact_address';
-  $handler->display->display_options['fields']['field_contact_address']['relationship'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['fields']['field_contact_address']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_contact_address']['alter']['text'] = '[field_contact_address-locality], [field_contact_address-administrative_area]';
   /* Field: CRM Activity: Date created */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'crm_core_activity';
@@ -424,7 +420,7 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['path'] = 'admin/crm/report/petition/signers/%/export';
+  $handler->display->display_options['path'] = 'crm/reports/petition/signers/%/export';
   $handler->display->display_options['displays'] = array(
     'page_1' => 'page_1',
     'default' => 0,

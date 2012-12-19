@@ -152,7 +152,7 @@ function crm_core_node_claim_views_default_views() {
   /* Display: Resource Claim Queue */
   $handler = $view->new_display('page', 'Resource Claim Queue', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'admin/crm_core/node_claim';
+  $handler->display->display_options['path'] = 'admin/crm/node_claim';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Resource Claim Queue';
   $handler->display->display_options['menu']['description'] = 'Claim queue for the resource claim';
