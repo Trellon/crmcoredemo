@@ -7,9 +7,11 @@ function crm_core_demo_preprocess_region(&$variables){
 function crm_core_demo_preprocess_block(&$variables){
   
   if($variables['elements']['#block']->region === 'below' || $variables['elements']['#block']->region === 'bottom'){
-    $mod = 'span' . 12 / sizeof(block_list($variables['elements']['#block']->region));
-    $variables['classes_array'][] = $mod;
-    // dpm($variables);
+    $check = sizeof(block_list($variables['elements']['#block']->region));
+    if($check > 0){
+      $mod = 'span' . 12 / sizeof(block_list($variables['elements']['#block']->region));
+      $variables['classes_array'][] = $mod;
+    }
   }
 }
 
