@@ -141,7 +141,7 @@ function crm_core_donation_install() {
     'name' => 'donation',
     'title' => t('Donate Today'),
     'header' => array(
-      'value' => t('Please help us by make a donation today!'),
+      'value' => t('Most non-profit organizations, NGOs and other worthwhile causes rely on capital raised from one source or another to be successful in their mission. Online fundraising is usually one of many techniques used to bring in capital. This page is a CRM Core feature demonstrating simple online donation functionality. It allows users to make online contributions, and provides some snazzy options for collecting information. For administrators, it provides tools for configuritng online fundraising tools and reports that help you understand your audience and revenue sources.'),
       'format' => 'plain_text',
     ),
     'footer' => array(
