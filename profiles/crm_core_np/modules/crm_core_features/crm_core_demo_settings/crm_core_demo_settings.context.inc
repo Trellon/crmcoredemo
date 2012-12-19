@@ -23,7 +23,18 @@ function crm_core_demo_settings_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array();
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'block-1' => array(
+          'module' => 'block',
+          'delta' => '1',
+          'region' => 'marquee',
+          'weight' => '-10',
+        ),
+      ),
+    ),
+  );
   $context->condition_mode = 0;
 
   // Translatables
