@@ -9,8 +9,12 @@
  */
 function crm_core_np_install() {
 
+  // enable the default theme
+  $default_theme = variable_get('theme_default', 'crm_core_demo');
+
   // Enable some standard blocks.
-  $default_theme = variable_get('theme_default', 'twitter_bootstrap');
+  // removing standard block configuration
+  /*
   $values = array(
     array(
       'module' => 'system',
@@ -68,6 +72,7 @@ function crm_core_np_install() {
     $query->values($record);
   }
   $query->execute();
+  */
 
   // Create an image field named "Image", enabled for the 'article' content type.
   // Many of the following values will be defaulted, they're included here as an illustrative examples.
@@ -348,7 +353,7 @@ function _crm_core_np_set_theme_form($form, &$form_state) {
     '#type' => 'radios',
     '#title' => st('Default theme'),
     '#options' => $themes,
-    '#default_value' => 'twitter_bootstrap',
+    '#default_value' => 'crm_core_demo',
   );
     $form['theme']['submit'] = array(
     '#type' => 'submit',

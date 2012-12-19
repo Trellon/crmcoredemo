@@ -7,3 +7,17 @@ core = 7.x
 base theme = twitter_bootstrap
 
 stylesheets[all][] = css/identity.css
+
+regions[header]         = 'Top Bar'
+regions[highlighted]    = 'Highlighted'
+regions[help]           = 'Help'
+regions[content]        = 'Content'
+regions[sidebar_first]  = 'Primary'
+regions[sidebar_second] = 'Secondary'
+regions[footer]         = 'Footer'
+regions[top]         		= 'Top Content Area'
+regions[marquee]        = 'Marquee Display Region'
+regions[above]         	= 'Above Main Content'
+regions[below]         	= 'Below Main Content'
+regions[bottom]         = 'Bottom Content Area'
+

@@ -2,87 +2,58 @@
 CONTENTS OF THIS FILE
 ---------------------
 
- * About Drupal
- * Configuration and features
- * Appearance
- * Developing for Drupal
+* About CRM Core
+* Configuration and features
+* Developing for CRM Core
 
-ABOUT DRUPAL
-------------
+ABOUT CRM CORE DEMO
+-------------------
 
-Drupal is an open source content management platform supporting a variety of
-websites ranging from personal weblogs to large community-driven websites. For
-more information, see the Drupal website at http://drupal.org/, and join the
-Drupal community at http://drupal.org/community.
+CRM Core is a set of modules for managing contact relationships within the
+Drupal content management system. This application is a Drupal install
+profile that showcases some of the features available in CRM Core, and
+provides examples for how to extend CRM Core's capabilities through the use
+of features.
 
-Legal information about Drupal:
- * Know your rights when using Drupal:
-   See LICENSE.txt in the same directory as this document.
- * Learn about the Drupal trademark and logo policy:
-   http://drupal.com/trademark
+For more information about CRM Core, see the project page on drupal.org at 
+http://drupal.org/project/crm_core.
+
 
 CONFIGURATION AND FEATURES
 --------------------------
 
-Drupal core (what you get when you download and extract a drupal-x.y.tar.gz or
-drupal-x.y.zip file from http://drupal.org/project/drupal) has what you need to
-get started with your website. It includes several modules (extensions that add
-functionality) for common website features, such as managing content, user
-accounts, image uploading, and search. Core comes with many options that allow
-site-specific configuration. In addition to the core modules, there are
-thousands of contributed modules (for functionality not included with Drupal
-core) available for download.
+This install profile is a preconfigured instance of Drupal that includes a 
+number of contributed modules, custom features and themes. You can install 
+and configure this system on your own personal webserver using a web 
+browser and going to install.php (relative to the installation directory). 
+A web-based installer will take you through the steps of configuration.
 
-More about configuration:
- * Install, upgrade, and maintain Drupal:
-   See INSTALL.txt and UPGRADE.txt in the same directory as this document.
- * Learn about how to use Drupal to create your site:
-   http://drupal.org/documentation
- * Download contributed modules to sites/all/modules to extend Drupal's
-   functionality:
-   http://drupal.org/project/modules
- * See also: "Developing for Drupal" for writing your own modules, below.
+There are a variety of modules provided by and installed with this profile.
+The main one users should be aware of is CRM Core. CRM Core is a tool that 
+provides basic support for contact entities that can be used to track 
+contact relationships over time. The basic entities supported by CRM Core 
+include the following:
 
-APPEARANCE
-----------
+* Contacts
+* Activities
+* Relationships
 
-In Drupal, the appearance of your site is set by the theme (themes are
-extensions that set fonts, colors, and layout). Drupal core comes with several
-themes. More themes are available for download, and you can also create your own
-custom theme.
+This install profile includes a number of additional features, building on the 
+default functionality present in CRM Core. They integrate directly with CRM 
+Core and allow information about contacts to be tracked as part of a 
+consolidated contact record. This installation profile includes features for
+carrying out the following activities:
 
-More about themes:
- * Download contributed themes to sites/all/themes to modify Drupal's
-   appearance:
-   http://drupal.org/project/themes
- * Develop your own theme:
-   http://drupal.org/documentation/theme
+* Event management
+* Fundraising
+* Online petitions
+* Mailing lists
+* Comment tracking
 
-DEVELOPING FOR DRUPAL
----------------------
+... and more. The installer will allow you to select individual features to 
+look at within this profile.
 
-Drupal contains an extensive API that allows you to add to and modify the
-functionality of your site. The API consists of "hooks", which allow modules to
-react to system events and customize Drupal's behavior, and functions that
-standardize common operations such as database queries and form generation. The
-flexible hook architecture means that you should never need to directly modify
-the files that come with Drupal core to achieve the functionality you want;
-instead, functionality modifications take the form of modules.
+DEVELOPING FOR CRM CORE
+-----------------------
 
-When you need new functionality for your Drupal site, search for existing
-contributed modules. If you find a module that matches except for a bug or an
-additional needed feature, change the module and contribute your improvements
-back to the project in the form of a "patch". Create new custom modules only
-when nothing existing comes close to what you need.
 
-More about developing:
- * Search for existing contributed modules:
-   http://drupal.org/project/modules
- * Contribute a patch:
-   http://drupal.org/patch/submit
- * Develop your own module:
-   http://drupal.org/developing/modules
- * Follow best practices:
-   http://drupal.org/best-practices
- * Refer to the API documentation:
-   http://api.drupal.org/api/drupal/7
