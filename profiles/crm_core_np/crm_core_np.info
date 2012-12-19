@@ -23,6 +23,7 @@ dependencies[] = libraries
 
 
 ; Install CRM Core dependencies.
+dependencies[] = boxes
 dependencies[] = addressfield
 dependencies[] = admin_menu
 dependencies[] = cck_phone
