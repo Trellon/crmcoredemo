@@ -32,6 +32,36 @@ function crm_core_demo_settings_context_default_contexts() {
           'region' => 'marquee',
           'weight' => '-10',
         ),
+        'boxes-promo_people' => array(
+          'module' => 'boxes',
+          'delta' => 'promo_people',
+          'region' => 'below',
+          'weight' => '-10',
+        ),
+        'boxes-promo_features' => array(
+          'module' => 'boxes',
+          'delta' => 'promo_features',
+          'region' => 'below',
+          'weight' => '-9',
+        ),
+        'boxes-promo_portable' => array(
+          'module' => 'boxes',
+          'delta' => 'promo_portable',
+          'region' => 'below',
+          'weight' => '-8',
+        ),
+        'boxes-promo_demo' => array(
+          'module' => 'boxes',
+          'delta' => 'promo_demo',
+          'region' => 'bottom',
+          'weight' => '-10',
+        ),
+        'boxes-promo_pro_tips' => array(
+          'module' => 'boxes',
+          'delta' => 'promo_pro_tips',
+          'region' => 'bottom',
+          'weight' => '-10',
+        ),
       ),
     ),
   );
