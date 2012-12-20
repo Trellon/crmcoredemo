@@ -370,6 +370,16 @@ function _crm_core_np_set_theme_form_submit($form, &$form_state) {
   // Set the default theme.
   variable_set('theme_default', $selected_theme);  
   
+  
+  // set some variables for jquery update and compact forms
+  // these should apply in all instances of CRM Core Demo, regardless of what features are enabled
+  variable_set('compact_forms_ids', 'user-login-form
+crm-core-profile-entry-form');
+  variable_set('jquery_update_compression_type', 'min');
+  variable_set('jquery_update_jquery_cdn', 'google');
+  variable_set('jquery_update_jquery_version', '1.8');
+  
+  
   if (module_exists('crm_core_event_registration')) {
 	  $views = crm_core_event_registration_views_default_views();
 	  foreach ($views as $view) {

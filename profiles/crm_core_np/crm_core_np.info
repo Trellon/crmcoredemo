@@ -86,6 +86,7 @@ dependencies[] = commerce_authnet
 dependencies[] = commerce_node_product
 
 dependencies[] = calendar
+dependencies[] = jquery_update
 dependencies[] = compact_forms
 
 ; Install CRM Core Contrib modules
