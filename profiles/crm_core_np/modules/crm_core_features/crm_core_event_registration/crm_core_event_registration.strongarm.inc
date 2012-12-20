@@ -170,8 +170,8 @@ function crm_core_event_registration_strongarm() {
         ),
         'product:commerce_price' => array(
           'default' => array(
-            'weight' => '4',
-            'visible' => TRUE,
+            'weight' => '2',
+            'visible' => FALSE,
           ),
         ),
         'product:status' => array(

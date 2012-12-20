@@ -11,6 +11,7 @@ dependencies[] = commerce_cart
 dependencies[] = commerce_checkout
 dependencies[] = commerce_features
 dependencies[] = commerce_node_product
+dependencies[] = commerce_product_reference
 dependencies[] = commerce_product_ui
 dependencies[] = crm_core_activity
 dependencies[] = crm_core_profile

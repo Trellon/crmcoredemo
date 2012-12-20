@@ -807,7 +807,7 @@ function crm_core_event_registration_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => '1',
+          'weight' => '0',
         ),
         'teaser' => array(
           'label' => 'hidden',
@@ -875,15 +875,9 @@ function crm_core_event_registration_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'addressfield',
-          'settings' => array(
-            'format_handlers' => array(
-              0 => 'address',
-            ),
-            'use_widget_handlers' => 1,
-          ),
-          'type' => 'addressfield_default',
-          'weight' => '2',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '4',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -957,16 +951,9 @@ function crm_core_event_registration_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'inline',
-          'module' => 'date',
-          'settings' => array(
-            'format_type' => 'long',
-            'fromto' => 'both',
-            'multiple_from' => '',
-            'multiple_number' => '',
-            'multiple_to' => '',
-          ),
-          'type' => 'date_default',
-          'weight' => '0',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '5',
         ),
         'teaser' => array(
           'label' => 'hidden',
@@ -1035,9 +1022,8 @@ function crm_core_event_registration_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'inline',
-          'module' => 'cck_phone',
           'settings' => array(),
-          'type' => 'global_phone_number',
+          'type' => 'hidden',
           'weight' => '3',
         ),
         'teaser' => array(
@@ -1492,16 +1478,9 @@ function crm_core_event_registration_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'hidden',
-          'module' => 'commerce_cart',
-          'settings' => array(
-            'combine' => TRUE,
-            'default_quantity' => 1,
-            'line_item_type' => 'product',
-            'show_quantity' => FALSE,
-            'show_single_product_attributes' => FALSE,
-          ),
-          'type' => 'commerce_cart_add_to_cart_form',
-          'weight' => '5',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '1',
         ),
         'teaser' => array(
           'label' => 'above',
