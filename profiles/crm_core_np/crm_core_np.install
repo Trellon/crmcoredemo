@@ -204,6 +204,21 @@ function crm_core_np_install() {
   );
   $full_html_format = (object) $full_html_format;
   filter_format_save($full_html_format);
+  
+  $themes = array('crm_core_demo');
+  theme_enable($themes);
+
+  // Set the default theme.
+  variable_set('theme_default', 'crm_core_demo');   
+  
+  // set some variables for jquery update and compact forms
+  // these should apply in all instances of CRM Core Demo, regardless of what features are enabled
+  variable_set('compact_forms_ids', 'user-login-form
+crm-core-profile-entry-form');
+  variable_set('jquery_update_compression_type', 'min');
+  variable_set('jquery_update_jquery_cdn', 'google');
+  variable_set('jquery_update_jquery_version', '1.8');
+  
 }
 
 /**
@@ -218,11 +233,13 @@ function crm_core_np_install_tasks() {
       'display' => TRUE,
       'display_name' => 'Install CRM Core features',
     ),
+/*
     '_crm_core_np_set_theme_form' => array(
       'type' => 'form',
       'display' => TRUE,
       'display_name' => 'Select a theme',
     ),
+*/
   );
   return $tasks;
 }
@@ -335,7 +352,7 @@ function _crm_core_np_features_form_submit($form, &$form_state) {
 /**
  * Theme configuration form
  */
-function _crm_core_np_set_theme_form($form, &$form_state) {
+/*function _crm_core_np_set_theme_form($form, &$form_state) {
   $themes = array();
   $system_themes = system_rebuild_theme_data();
 
@@ -369,16 +386,72 @@ function _crm_core_np_set_theme_form_submit($form, &$form_state) {
 
   // Set the default theme.
   variable_set('theme_default', $selected_theme);  
+}*/
+
+/**
+ * Implements hook_install_tasks_alter().
+ */
+function crm_core_np_install_tasks_alter(&$tasks, $install_state) {
   
+  $tasks['install_finished']['function'] = 'crm_core_np_install_finished';
   
-  // set some variables for jquery update and compact forms
-  // these should apply in all instances of CRM Core Demo, regardless of what features are enabled
-  variable_set('compact_forms_ids', 'user-login-form
-crm-core-profile-entry-form');
-  variable_set('jquery_update_compression_type', 'min');
-  variable_set('jquery_update_jquery_cdn', 'google');
-  variable_set('jquery_update_jquery_version', '1.8');
-  
+  $tasks['install_select_profile']['display'] = FALSE;
+  $tasks['install_select_locale']['display'] = FALSE;
+  $tasks['install_select_locale']['run'] = INSTALL_TASK_SKIP;
+
+  // The "Welcome" screen needs to come after the first two steps
+  // (profile and language selection), despite the fact that they are disabled.
+  $new_task['install_welcome'] = array(
+    'display' => TRUE,
+    'display_name' => st('Welcome'),
+    'type' => 'form',
+    'run' => isset($install_state['parameters']['welcome']) ? INSTALL_TASK_SKIP : INSTALL_TASK_RUN_IF_REACHED,
+  );
+  $old_tasks = $tasks;
+  $tasks = array_slice($old_tasks, 0, 2) + $new_task + array_slice($old_tasks, 2);
+}
+
+
+/**
+ * Task callback: shows the welcome screen.
+ */
+function install_welcome($form, &$form_state, &$install_state) {
+  drupal_set_title(st('Welcome to CRM Core Demo'));
+
+  $message = st('Thank you for using CRM Core demo!') . '<br />';
+  $message .= '<p>' . st('This drupal distribution will demonstrate some of the powerful features built with CRM Core technology.') . '</p>';
+  $message .= '<p>' . st('Be sure to join us on ' . l('crmcore.org', 'http://crmcore.org') .
+    ' for the latest updates, discussions and share your comments and feedback with us.') . '</p>';
+
+  $form = array();
+  $form['welcome_message'] = array(
+    '#markup' => $message,
+  );
+  $form['actions'] = array(
+    '#type' => 'actions',
+  );
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => st("Get started!"),
+    '#weight' => 10,
+  );
+  return $form;
+}
+
+/**
+ * Install welcome submission handler
+ */
+function install_welcome_submit($form, &$form_state) {
+  global $install_state;
+
+  $install_state['parameters']['welcome'] = 'done';
+  $install_state['parameters']['locale'] = 'en';
+}
+
+/**
+ * Task finished callback
+ */
+function crm_core_np_install_finished(&$install_state) {
   
   if (module_exists('crm_core_event_registration')) {
 	  $views = crm_core_event_registration_views_default_views();
@@ -399,4 +472,6 @@ crm-core-profile-entry-form');
 	    }
 	  } 	  	  
   }
+  
+  drupal_goto('node');
 }
