@@ -168,13 +168,6 @@ function crm_core_event_registration_node_view($node, $view_mode) {
     $crm_core_profile = crm_core_profile_load($crm_core_profile_event);
 
     if (!empty($crm_core_profile)) {
-    	$element = array(
-    		'#markup' => 'Register for this event',
-    		'#prefix' => '<h2 id="event_registration_form_title">',
-    		'#suffix' => '</h2>',
-    		'#weight' => 998,
-    	);
-    	$node->content['crm_core_event_reg_title'] = $element;
       $node->content['crm_core_event_reg_form'] = crm_core_event_registration_attachment_form($node, $crm_core_profile);
       $node->content['crm_core_event_reg_form']['#weight'] = 999;
       drupal_set_title($node->title);
