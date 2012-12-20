@@ -312,6 +312,13 @@ function crm_core_volunteer_views_default_views() {
   $handler->display->display_options['filters']['field_crmvo_date_value']['field'] = 'field_crmvo_date_value';
   $handler->display->display_options['filters']['field_crmvo_date_value']['operator'] = '<';
   $handler->display->display_options['filters']['field_crmvo_date_value']['default_date'] = 'now';
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'volunteer_opportunity' => 'volunteer_opportunity',
+  );
 
   /* Display: Past Volunteer Opportunities Page */
   $handler = $view->new_display('page', 'Past Volunteer Opportunities Page', 'page');
@@ -337,7 +344,7 @@ function crm_core_volunteer_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = 'There is no any past volunteer opportunity you have committed.';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
-  $handler->display->display_options['path'] = 'user/%user/my-volunteer-opportunities';
+  $handler->display->display_options['path'] = 'user/%user/volunteer-opportunities';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'My volunteer opportunities ';
   $handler->display->display_options['menu']['weight'] = '0';
@@ -375,6 +382,80 @@ function crm_core_volunteer_views_default_views() {
   $handler->display->display_options['filters']['field_crmvo_date_value']['field'] = 'field_crmvo_date_value';
   $handler->display->display_options['filters']['field_crmvo_date_value']['operator'] = '>=';
   $handler->display->display_options['filters']['field_crmvo_date_value']['default_date'] = 'now';
+
+  /* Display: Volunteer opportunities */
+  $handler = $view->new_display('page', 'Volunteer opportunities', 'page_1');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Volunteer Opportunities';
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['quantity'] = '9';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'node';
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  $handler->display->display_options['defaults']['empty'] = FALSE;
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area']['content'] = 'There is no any past volunteer opportunity you have committed.';
+  $handler->display->display_options['empty']['area']['format'] = 'plain_text';
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Volunteer Opportunity';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: Date */
+  $handler->display->display_options['fields']['field_crmvo_date']['id'] = 'field_crmvo_date';
+  $handler->display->display_options['fields']['field_crmvo_date']['table'] = 'field_data_field_crmvo_date';
+  $handler->display->display_options['fields']['field_crmvo_date']['field'] = 'field_crmvo_date';
+  $handler->display->display_options['fields']['field_crmvo_date']['settings'] = array(
+    'format_type' => 'long',
+    'fromto' => 'both',
+    'multiple_number' => '',
+    'multiple_from' => '',
+    'multiple_to' => '',
+  );
+  /* Field: Content: Volunteer Link */
+  $handler->display->display_options['fields']['volunteer_link']['id'] = 'volunteer_link';
+  $handler->display->display_options['fields']['volunteer_link']['table'] = 'node';
+  $handler->display->display_options['fields']['volunteer_link']['field'] = 'volunteer_link';
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'volunteer_opportunity' => 'volunteer_opportunity',
+  );
+  $handler->display->display_options['path'] = 'volunteer-opportunities';
+  $handler->display->display_options['menu']['type'] = 'normal';
+  $handler->display->display_options['menu']['title'] = 'Volunteer opportunities ';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['name'] = 'main-menu';
+  $handler->display->display_options['menu']['context'] = 0;
   $export['volunteer_opportunities'] = $view;
 
   return $export;

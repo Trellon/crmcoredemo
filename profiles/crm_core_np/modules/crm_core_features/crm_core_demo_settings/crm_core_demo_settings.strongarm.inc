@@ -77,7 +77,7 @@ function crm_core_demo_settings_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'sharethis_node_option';
-  $strongarm->value = 'simplenews,0,0,0';
+  $strongarm->value = 'simplenews,volunteer_opportunity,online_petition,0,0';
   $export['sharethis_node_option'] = $strongarm;
 
   $strongarm = new stdClass();
