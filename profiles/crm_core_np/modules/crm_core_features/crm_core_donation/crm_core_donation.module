@@ -53,7 +53,7 @@ function crm_core_donation_menu() {
   $items['crm/donations/%'] = array(
     'title' => 'Edit donation page',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('crm_core_donation_page_form', 4, FALSE),
+    'page arguments' => array('crm_core_donation_page_form', 2, FALSE),
     'access arguments' => array('administer crm core donation'),
     'file' => 'crm_core_donation.pages.inc',
     'type' => MENU_CALLBACK,
@@ -62,7 +62,7 @@ function crm_core_donation_menu() {
   $items['crm/donations/%/delete'] = array(
     'title' => 'Delete donation page',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('crm_core_donation_page_delete_form', 4),
+    'page arguments' => array('crm_core_donation_page_delete_form', 2),
     'access arguments' => array('administer crm core donation'),
     'file' => 'crm_core_donation.pages.inc',
     'type' => MENU_CALLBACK,
