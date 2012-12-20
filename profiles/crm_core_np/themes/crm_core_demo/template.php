@@ -50,34 +50,6 @@ function crm_core_demo_preprocess_block(&$variables){
  * @see page.tpl.php
  */
 function crm_core_demo_preprocess_page(&$variables) {
-  // Secondary nav
-  $variables['secondary_nav'] = FALSE;
-  if($variables['secondary_menu']) {
-    $secondary_menu = menu_load(variable_get('menu_secondary_links_source', 'user-menu'));
-    
-    // Build links
-    $tree = menu_tree_page_data($secondary_menu['menu_name']);
-    $variables['secondary_menu'] = crm_core_demo_menu_navigation_links($tree);
-    
-    // Build list
-    $variables['secondary_nav'] = theme('twitter_bootstrap_btn_dropdown', array(
-      'links' => $variables['secondary_menu'],
-      'label' => $secondary_menu['title'],
-      'type' => 'success',
-      'attributes' => array(
-        'id' => 'user-menu',
-        'class' => array('pull-right'),
-      ),
-      'heading' => array(
-        'text' => t('Secondary menu'),
-        'level' => 'h2',
-        'class' => array('element-invisible'),
-      ),
-    ));
-  }
-  
-  // Replace tabs with dropw down version
-  $variables['tabs']['#primary'] = _twitter_bootstrap_local_tasks($variables['tabs']['#primary']);
 }
 
 function crm_core_demo_theme() {
@@ -90,60 +62,6 @@ function crm_core_demo_theme() {
     ), 
   );
 }
-
-
-/**
- * Returns navigational links based on a menu tree
- */
-function crm_core_demo_menu_navigation_links($tree, $lvl = 0) {
-  
-  // Create a single level of links.
-  $router_item = menu_get_item();
-  $links = array();
-  foreach ($tree as $item) {
-    if (!$item['link']['hidden']) {
-      $class = '';
-      $l = $item['link']['localized_options'];
-      $l['href'] = $item['link']['href'];
-      $l['title'] = $item['link']['title'];
-      if ($item['link']['in_active_trail']) {
-        $class = ' active-trail';
-        $l['attributes']['class'][] = 'active-trail';
-      }
-      // Normally, l() compares the href of every link with $_GET['q'] and sets
-      // the active class accordingly. But local tasks do not appear in menu
-      // trees, so if the current path is a local task, and this link is its
-      // tab root, then we have to set the class manually.
-      if ($item['link']['href'] == $router_item['tab_root_href'] && $item['link']['href'] != $_GET['q']) {
-        $l['attributes']['class'][] = 'active';
-      }
-      // Keyed with the unique mlid to generate classes in theme_links().
-      $links['menu-' . $item['link']['mlid'] . $class] = $l;
-    }
-  }
-  return $links;
-  
-  
-  // the original code from twitter bootstrap
-  
-  $result = array();
-
-  if(count($tree) > 0) {
-	foreach($tree as $id => $item) {
-	  $new_item = array('title' => $item['link']['title'], 'link_path' => $item['link']['link_path'], 'href' => $item['link']['href']);
-	  
-	  // Dont do drugs and don't do any levels deeper then 1
-	  if($lvl < 1)
-		$new_item['below'] = twitter_bootstrap_menu_navigation_links($item['below'], $lvl+1);
-	  
-	  $result['menu-'. $item['link']['mlid']] = $new_item;
-	}
-  }
-  
-  return $result;
-}
-
-
 
 /**
  * theme_twitter_bootstrap_btn_dropdown
