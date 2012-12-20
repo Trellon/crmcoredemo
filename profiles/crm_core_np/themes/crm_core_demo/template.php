@@ -6,13 +6,44 @@ function crm_core_demo_preprocess_region(&$variables){
 
 function crm_core_demo_preprocess_block(&$variables){
   
-  if($variables['elements']['#block']->region === 'below' || $variables['elements']['#block']->region === 'bottom'){
-    $check = sizeof(block_list($variables['elements']['#block']->region));
-    if($check > 0){
-      $mod = 'span' . 12 / sizeof(block_list($variables['elements']['#block']->region));
-      $variables['classes_array'][] = $mod;
+  // creating a static variable to store information about the number of blocks in each region
+  // it will be a keyed array that simply lists the number of blocks in each item
+  $regions = &drupal_static(__FUNCTION__);
+  $item = $variables['elements']['#block']->region;
+  
+  if(!isset($regions[$item])){
+    
+    dpm('checking');
+    
+    $regions[$item] = array('blocks' => 0, 'cblocks' => 0);
+    
+    // check blocks
+    $regions[$item]['blocks'] = sizeof(block_list($variables['elements']['#block']->region));
+    
+    // check contexts
+    $count = 0;
+    $ctxts = context_active_contexts();
+    
+    // dpm($ctxts[$item]->reactions['block']);
+    
+    foreach ($ctxts as $cxt => $record){
+      if($record->reactions['block']){
+        // dpm($record->reactions['block']);
+        foreach ($record->reactions['block']['blocks'] as $block => $data){
+          if($data['region'] == $item){
+            $regions[$item]['cblocks'] = $regions[$item]['cblocks'] + 1;
+          }
+        }
+      }
     }
   }
+  
+  // only do this for the right regions
+  if($variables['elements']['#block']->region === 'below' || $variables['elements']['#block']->region === 'bottom'){
+    $mod = 'span' . 12 / ($regions[$item]['cblocks'] + $regions[$item]['blocks']);
+    $variables['classes_array'][] = $mod;
+  }
+  
 }
 
 /**
