@@ -11,24 +11,21 @@ function crm_core_demo_preprocess_block(&$variables){
   $regions = &drupal_static(__FUNCTION__);
   $item = $variables['elements']['#block']->region;
   
+  // check to see whether or not we have already counted the blocks for this region
   if(!isset($regions[$item])){
     
-    dpm('checking');
-    
+    // set up the region array
     $regions[$item] = array('blocks' => 0, 'cblocks' => 0);
     
-    // check blocks
+    // check for blocks set in Drupal
     $regions[$item]['blocks'] = sizeof(block_list($variables['elements']['#block']->region));
     
-    // check contexts
+    // check for blocks set through a context
     $count = 0;
-    $ctxts = context_active_contexts();
-    
-    // dpm($ctxts[$item]->reactions['block']);
+    $ctxts = context_active_contexts(); // get a list of all active contexts to check
     
     foreach ($ctxts as $cxt => $record){
-      if($record->reactions['block']){
-        // dpm($record->reactions['block']);
+      if($record->reactions['block']){ // check to see if there are blocks defined as a reaction within the context
         foreach ($record->reactions['block']['blocks'] as $block => $data){
           if($data['region'] == $item){
             $regions[$item]['cblocks'] = $regions[$item]['cblocks'] + 1;
@@ -38,6 +35,7 @@ function crm_core_demo_preprocess_block(&$variables){
     }
   }
   
+  // apply a custom class to blocks based on the number of items in the region
   // only do this for the right regions
   if($variables['elements']['#block']->region === 'below' || $variables['elements']['#block']->region === 'bottom'){
     $mod = 'span' . 12 / ($regions[$item]['cblocks'] + $regions[$item]['blocks']);
