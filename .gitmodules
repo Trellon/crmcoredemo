@@ -7,3 +7,9 @@
 [submodule "profiles/crm_core_np/libraries/autosize"]
 	path = profiles/crm_core_np/libraries/autosize
 	url = https://github.com/jackmoore/autosize.git
+[submodule "profiles/crm_core_np/libraries/expanding.js"]
+	path = profiles/crm_core_np/libraries/expanding.js
+	url = https://github.com/bgrins/ExpandingTextareas.git
+[submodule "profiles/crm_core_np/libraries/expanding"]
+	path = profiles/crm_core_np/libraries/expanding
+	url = https://github.com/bgrins/ExpandingTextareas.git
