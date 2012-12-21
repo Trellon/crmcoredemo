@@ -154,7 +154,7 @@ function crm_core_donation_install() {
     'status' => 1,
     'widget' => 1,
     'data' => array(
-      'payment_method' => 'commerce_payment_example|commerce_payment_commerce_payment_example',
+      'payment_method' => 'authnet_aim|rules_authorize_net_aim_credit_card_demo_',
     ),
     'uid' => 1,
     'created' => time(),

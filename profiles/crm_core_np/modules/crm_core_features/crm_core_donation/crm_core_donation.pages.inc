@@ -210,10 +210,12 @@ function crm_core_donation_page_form($form, &$form_state, $donation_page_id = NU
  * Validation callback
  */
 function crm_core_donation_page_form_validate($form, &$form_state) {
+	
+	// work around for automatic line break for header and footer
+	$form_state['values']['options']['header']['value'] = _filter_autop($form_state['values']['options']['header']['value']);
+	$form_state['values']['options']['footer']['value'] = _filter_autop($form_state['values']['options']['footer']['value']);
 
   // @todo: validate the amount entered and make sure no symboles, etc
-
-
   if (isset($form_state['values']['options']['goal']) && $form_state['values']['options']['goal'] != '') {
     if (!is_numeric($form_state['values']['options']['goal'])) {
       form_set_error('goal', 'Goal must be an integer number');
