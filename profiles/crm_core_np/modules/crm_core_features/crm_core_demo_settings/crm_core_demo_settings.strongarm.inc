@@ -20,6 +20,29 @@ function crm_core_demo_settings_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'crm_user_sync_2_type';
+  $strongarm->value = 'individual';
+  $export['crm_user_sync_2_type'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'crm_user_sync_auto_sync_user_create';
+  $strongarm->value = 1;
+  $export['crm_user_sync_auto_sync_user_create'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'crm_user_sync_roles';
+  $strongarm->value = array(
+    2 => '2',
+  );
+  $export['crm_user_sync_roles'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'date_format_long';
   $strongarm->value = 'l, F j, Y - g:ia';
   $export['date_format_long'] = $strongarm;
