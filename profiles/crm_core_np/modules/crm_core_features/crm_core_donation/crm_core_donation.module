@@ -135,7 +135,7 @@ function crm_core_donation_theme() {
       'render element' => 'form',
       //'function' => 'crm_core_donation_form_theme',
       'preprocess functions' => array('template_preprocess', 'crm_core_donation_form_theme_preprocess'),
-      'template' => 'crm-core-donation-form',
+      'template' => 'crm-core-donation',
     ),
   );
 }
