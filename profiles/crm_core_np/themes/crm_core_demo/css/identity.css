@@ -34,3 +34,78 @@ BODY.front .jumbotron {
   float: left;
   margin-right: 1em;
 }
+
+TEXTAREA {
+}
+
+/*
+ * Text formats
+ */
+.text-format-wrapper .filter-wrapper {
+	border: 1px solid #CCC;
+	padding: .5em .5em 0em .5em;
+	margin: -1em 0em .5em 0em;
+	background-color: #EEE;
+  font-size: .85em;
+}
+.text-format-wrapper .filter-wrapper .filter-help {
+	float: right;
+  font-size: inherit;
+}
+
+.text-format-wrapper .filter-wrapper .control-group {
+  display: inline-block;
+  margin: 0em;
+}
+.text-format-wrapper .filter-wrapper LABEL {
+  display: inline-block;
+  font-size: inherit;
+  font-weight: bold !important;
+  text-transform: uppercase;
+  color: #777;
+  margin: 0em;
+}
+.text-format-wrapper .filter-wrapper .controls {
+  display: inline-block;
+  margin-left: 0.2em;
+  font-size: inherit;
+}
+.text-format-wrapper .filter-wrapper .controls SELECT {
+  display: inline-block;
+  margin: 0em 0em 0em 0.2em;
+  font-size: inherit;
+  height: auto;
+}
+.text-format-wrapper .filter-wrapper .filter-guidelines {
+  display: inline-block;
+}
+.text-format-wrapper .filter-wrapper UL.tips {
+  text-indent: -30000px;
+  overflow: none;
+  border: 1px solid #CCC;
+  background-color: #EEE;
+  height: 16px;
+  width: 16px;
+  margin: 0em 0em 0em .5em;
+  padding: 0em;
+  display: inline-block;
+}
+
+/* help text */
+.text-format-wrapper {
+	position: relative;
+}
+.text-format-wrapper .description {
+	border: 1px solid #CCC;
+	float: right;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	text-indent: -30000px;
+	width: 25px;
+	height: auto;
+	overflow: hidden;
+}
+
+
+

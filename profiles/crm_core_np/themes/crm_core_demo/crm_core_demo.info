@@ -23,4 +23,7 @@ regions[bottom]         = 'Bottom Content Area'
 
 settings[toggle_search] = 0
 
+scripts[] = scripts/crm_core_demo.js
+
+
 
