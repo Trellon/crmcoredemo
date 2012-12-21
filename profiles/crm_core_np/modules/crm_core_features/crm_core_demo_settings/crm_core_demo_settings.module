@@ -44,3 +44,34 @@ function crm_core_demo_settings_permission() {
     ),
   );
 }
+
+/**
+ * Implementation of hook_library
+ */
+function crm_core_demo_settings_library() {
+	
+	// libraries for the basic interface
+	// Helper functions for prototype inheritance - allows objects to be bound to jquery plug ins.
+	$libraries['expanding'] = array(
+    'title' => 'Expanding Textareas', 
+    'website' => 'https://github.com/bgrins/ExpandingTextareas', 
+    'version' => 1.15, 
+    'js' => array(
+			libraries_get_path('expanding') . '/expanding.js' => array(
+        'group' => JS_LIBRARY,
+        'weight' => 0,
+			),
+		),
+	);
+	return $libraries;
+}
+
+/**
+ * Page preprocessor
+ */
+function crm_core_demo_settings_preprocess_page($vars){
+  
+  // add autosize library for textareas
+  drupal_add_library('crm_core_demo_settings', 'expanding');
+  
+}	
