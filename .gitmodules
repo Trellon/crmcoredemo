@@ -4,3 +4,6 @@
 [submodule "profiles/crm_core_np/modules/contrib/crm_core_profile"]
 	path = profiles/crm_core_np/modules/contrib/crm_core_profile
 	url = http://git.drupal.org/project/crm_core_profile.git
+[submodule "profiles/crm_core_np/libraries/autosize"]
+	path = profiles/crm_core_np/libraries/autosize
+	url = https://github.com/jackmoore/autosize.git
