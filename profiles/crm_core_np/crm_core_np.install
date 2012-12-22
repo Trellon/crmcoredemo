@@ -231,15 +231,14 @@ function crm_core_np_install_tasks() {
     '_crm_core_np_features_form' => array(
       'type' => 'form',
       'display' => TRUE,
-      'display_name' => 'Install CRM Core features',
+      'display_name' => 'Install features',
     ),
-/*
-    '_crm_core_np_set_theme_form' => array(
+    '_crm_core_np_feature_config_form' => array(
       'type' => 'form',
       'display' => TRUE,
-      'display_name' => 'Select a theme',
+      'display_name' => 'Configure features',
     ),
-*/
+
   );
   return $tasks;
 }
@@ -290,21 +289,7 @@ function _crm_core_np_features_form($form, &$form_state) {
       '#description' => $info['description'],
     );
   }
-  
-  $form['sample_data'] = array(
-		'#type' => 'fieldset', 		
-		'#title' => t('Sample data'), 
-		'#weight' => 5, 		
-		'#collapsible' => TRUE, 	
-		'#collapsed' => FALSE,  	
-  );
-  
-  $form['sample_data']['sample_data_toggle'] = array(
-  	'#type' => 'checkbox',
-  	'#title' => t('Import sample data?'),
-  	'#description' => t('Checking this will import sample data for the feature(s) you have selected.'),
-  );
-  
+    
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => st('Next'),
@@ -327,15 +312,71 @@ function _crm_core_np_features_form_submit($form, &$form_state) {
     }
   }
   
-  module_enable($modules);
+  module_enable($modules);  
+}
+
+/**
+ * Configure features installed
+ */
+function _crm_core_np_feature_config_form($form, &$form_state) {
+	// @todo: load configuration forms here for features installed.
+  $form['sample_data'] = array(
+		'#type' => 'fieldset', 		
+		'#title' => t('Sample data'), 
+		'#weight' => 5, 		
+		'#collapsible' => TRUE, 	
+		'#collapsed' => FALSE,  	
+  );
   
+  $form['sample_data']['sample_data_toggle'] = array(
+  	'#type' => 'checkbox',
+  	'#title' => t('Import sample data?'),
+  	'#description' => t('Checking this will import sample data for the feature(s) you have selected.'),
+  );
+  
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => st('Next'),
+  );
+  
+  return $form;
+}
+
+/**
+ * Submission callback
+ */
+function _crm_core_np_feature_config_form_submit($form, &$form_state) {
+
+  // work around for https://github.com/Trellon/crmcoredemo/issues/1 (see 2nd error)
+  // this needs to be moved into it's separate step
+  if (module_exists('crm_core_event_registration')) {
+  	module_load_include('inc', 'crm_core_event_registration', 'crm_core_event_registration.views_default');
+	  $views = crm_core_event_registration_views_default_views();
+	  foreach ($views as $view) {
+	    if ($view->disabled) {
+	      $view->disabled = FALSE;
+	      $view->save();
+	    }
+	  }	  	  
+  }
+  
+  if (module_exists('crm_core_petition')) {
+  	module_load_include('inc', 'crm_core_petition', 'crm_core_petition.views_default');
+	  $views = crm_core_petition_views_default_views();
+	  foreach ($views as $view) {
+	    if ($view->disabled) {
+	      $view->disabled = FALSE;
+	      $view->save();
+	    }
+	  } 	  	  
+  }
+
   if ((bool)$form_state['values']['sample_data_toggle'] === FALSE) {
 		  return;
   }
   
   // install sample data
   // @todo: not totally operational yet
-
   foreach ($modules as $module) {
   	if (module_exists($module)) {
 	  	// look for something like crm_core_volunteer.sample_data.inc
@@ -345,48 +386,8 @@ function _crm_core_np_features_form_submit($form, &$form_state) {
 				$function();  
 		  }	  	
   	}
-  }
-  
+  }	
 }
-
-/**
- * Theme configuration form
- */
-/*function _crm_core_np_set_theme_form($form, &$form_state) {
-  $themes = array();
-  $system_themes = system_rebuild_theme_data();
-
-  foreach ($system_themes as $name => $theme) {
-    $themes[$name] = $theme->info['name'];
-  }
-
-  $form = array();
-  $form['theme'] = array(
-    '#type' => 'fieldset',
-    '#title' => st('Theme settings'),
-    '#collapsible' => FALSE,
-  );
-  $form['theme']['default_theme'] = array(
-    '#type' => 'radios',
-    '#title' => st('Default theme'),
-    '#options' => $themes,
-    '#default_value' => 'crm_core_demo',
-  );
-    $form['theme']['submit'] = array(
-    '#type' => 'submit',
-    '#value' => st('Submit'),
-  );
-  return $form;
-}
-
-function _crm_core_np_set_theme_form_submit($form, &$form_state) {
-  $selected_theme = $form_state['values']['default_theme'];
-  $themes = array('selected_theme' => $selected_theme);
-  theme_enable($themes);
-
-  // Set the default theme.
-  variable_set('theme_default', $selected_theme);  
-}*/
 
 /**
  * Implements hook_install_tasks_alter().
@@ -452,26 +453,51 @@ function install_welcome_submit($form, &$form_state) {
  * Task finished callback
  */
 function crm_core_np_install_finished(&$install_state) {
-  
-  if (module_exists('crm_core_event_registration')) {
-	  $views = crm_core_event_registration_views_default_views();
-	  foreach ($views as $view) {
-	    if ($view->disabled) {
-	      $view->disabled = FALSE;
-	      $view->save();
-	    }
-	  }	  	  
+    
+  drupal_set_title(st('@drupal installation complete', array('@drupal' => drupal_install_profile_distribution_name())), PASS_THROUGH);
+  $messages = drupal_set_message();
+
+  // Remember the profile which was used.
+  variable_set('install_profile', drupal_get_profile());
+  variable_set('install_task', 'done');
+
+  // Flush all caches to ensure that any full bootstraps during the installer
+  // do not leave stale cached data, and that any content types or other items
+  // registered by the install profile are registered correctly.
+  drupal_flush_all_caches();
+
+  // Install profiles are always loaded last
+  db_update('system')
+    ->fields(array('weight' => 1000))
+    ->condition('type', 'module')
+    ->condition('name', drupal_get_profile())
+    ->execute();
+
+  // Cache a fully-built schema.
+  drupal_get_schema(NULL, TRUE);
+
+  // Run cron to populate update status tables (if available) so that users
+  // will be warned if they've installed an out of date Drupal version.
+  // Will also trigger indexing of profile-supplied content or feeds.
+  drupal_cron_run();
+
+  if (isset($messages['error'])) {
+    $output = '<p>' . (isset($messages['error']) ? st('Review the messages above before visiting <a href="@url">your new site</a>.', array('@url' => url(''))) : st('<a href="@url">Visit your new site</a>.', array('@url' => url('')))) . '</p>';
+    return $output;
   }
-  
-  if (module_exists('crm_core_petition')) {
-	  $views = crm_core_petition_views_default_views();
-	  foreach ($views as $view) {
-	    if ($view->disabled) {
-	      $view->disabled = FALSE;
-	      $view->save();
-	    }
-	  } 	  	  
+  else {
+    // Since any module can add a drupal_set_message, this can bug the user
+    // when we redirect him to the front page. For a better user experience,
+    // remove all the message that are only "notifications" message.
+    drupal_get_messages('status', TRUE);
+    drupal_get_messages('completed', TRUE);
+    // Migrate adds its messages under the wrong type, see #1659150.
+    drupal_get_messages('ok', TRUE);
+
+    // If we don't install drupal using Drush, redirect the user to the front
+    // page.
+    if (!drupal_is_cli()) {
+	    	drupal_goto('node');
+    }
   }
-  
-  drupal_goto('node');
 }

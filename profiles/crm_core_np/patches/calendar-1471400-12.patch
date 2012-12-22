@@ -1,0 +1,14 @@
+diff --git a/theme/theme.inc b/theme/theme.inc
+index 5ae7b19..b8a83c2 100644
+--- a/theme/theme.inc
++++ b/theme/theme.inc
+@@ -35,6 +35,9 @@ function template_preprocess_calendar_month(&$vars) {
+   $month_rows = $rows;
+   foreach ($rows as $weekno => $row) {
+     foreach ($row as $day => $data) {
++      if (!is_array($data)) {
++        continue;
++      }
+       $cell = $data['data'];
+ 
+       // If this cell is already rendered, like the weekno column,
