@@ -1,0 +1,13 @@
+diff --git a/sites/all/modules/contrib/views/js/views-admin.js b/sites/all/modules/contrib/views/js/views-admin.js
+index 1eb3897..3ecad83 100644
+--- a/js/views-admin.js
++++ b/js/views-admin.js
+@@ -258,7 +258,7 @@ Drupal.behaviors.viewsUiRenderAddViewButton.attach = function (context, settings
+   // We use the live binder because the open class on this item will be
+   // toggled on and off and we want the handler to take effect in the cases
+   // that the class is present, but not when it isn't.
+-  $('li.add', $menu).live('mouseleave', function (event) {
++  $($menu.get(0)).find('li.add').live('mouseleave', function (event) {
+     var $this = $(this);
+     var $trigger = $this.children('a[href="#"]');
+     if ($this.children('.action-list').is(':visible')) {
