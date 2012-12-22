@@ -118,7 +118,7 @@ TEXTAREA {
 	float: right;
 	position: absolute;
 	top: 0px;
-	left: 0px;
+	right: 0px;
 	text-indent: -30000px;
 	width: 23px;
 	height: 23px;

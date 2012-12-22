@@ -27,7 +27,6 @@
         item.tooltip(options);
         
         // position the tip just to the right of the label
-        item.css('left', label.width() + 20);
         
       });
       
