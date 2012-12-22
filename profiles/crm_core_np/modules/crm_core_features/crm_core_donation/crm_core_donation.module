@@ -161,6 +161,34 @@ function crm_core_donation_commerce_line_item_type_info() {
   return $line_item_types;
 }
 
+
+/**
+ * Implements hook_crm_core_report_register
+ */
+function crm_core_donation_crm_core_report_register(){
+  
+  $reports = array(
+    'donations' => array(
+      'title'	    => t('Donations'),
+      'reports'		=> array(
+        'donation_page'	=> array(
+          'title'       => t('Donations Pages'),
+          'path'        => 'crm/donations/leaderboard',
+          'description'	=> t('Details on the performance of individual donation pages.'),
+        ),
+  		 'leaderboard'	  => array(
+          'title'       => t('Leaderboard'),
+          'path'        => 'crm/donations/leaderboard',
+          'description'	=> t('Who is raising the most through their personal donation pages?'),
+        ),
+      ),
+      'widgets'		=> array(),
+    ),
+  );
+  
+  return $reports;
+}
+
 /**
  * Dispatch (callback) menu items for PDP
  *
