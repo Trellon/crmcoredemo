@@ -12,7 +12,7 @@ module_load_include('inc', 'crm_core_profile', 'crm_core_profile.forms');
 /**
  * Implements hook_enable
  */
-function crm_core_petition_enable() {
+function crm_core_donation_enable() {
   // set the proper weight for this module, to allow donations to process properly
   db_query("UPDATE {system} SET weight = 20 WHERE name = 'crm_core_donation'");
 }
