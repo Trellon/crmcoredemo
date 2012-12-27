@@ -1,8 +1,0 @@
-<?php
-
-/**
- * Implements hook_install().
- */
-function crm_core_petition_install() {
-  db_query("UPDATE {system} SET weight = 20 WHERE name = 'crm_core_petition'");
-}
