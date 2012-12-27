@@ -329,7 +329,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['filters']['field_activity_date_value']['operator'] = 'between';
   $handler->display->display_options['filters']['field_activity_date_value']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_activity_date_value']['expose']['operator_id'] = 'field_activity_date_value_op';
-  $handler->display->display_options['filters']['field_activity_date_value']['expose']['label'] = 'Date';
+  $handler->display->display_options['filters']['field_activity_date_value']['expose']['label'] = 'Filter by Date';
   $handler->display->display_options['filters']['field_activity_date_value']['expose']['operator'] = 'field_activity_date_value_op';
   $handler->display->display_options['filters']['field_activity_date_value']['expose']['identifier'] = 'field_activity_date_value';
   $handler->display->display_options['filters']['field_activity_date_value']['expose']['remember'] = TRUE;
@@ -347,6 +347,21 @@ function crm_core_donation_views_default_views() {
   );
   $handler->display->display_options['filters']['field_activity_date_value']['form_type'] = 'date_popup';
   $handler->display->display_options['filters']['field_activity_date_value']['year_range'] = '-3:+1';
+  /* Filter criterion: CRM Activity: Amount (field_donation_amounts) */
+  $handler->display->display_options['filters']['field_donation_amounts_value']['id'] = 'field_donation_amounts_value';
+  $handler->display->display_options['filters']['field_donation_amounts_value']['table'] = 'field_data_field_donation_amounts';
+  $handler->display->display_options['filters']['field_donation_amounts_value']['field'] = 'field_donation_amounts_value';
+  $handler->display->display_options['filters']['field_donation_amounts_value']['operator'] = 'between';
+  $handler->display->display_options['filters']['field_donation_amounts_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_donation_amounts_value']['expose']['operator_id'] = 'field_donation_amounts_value_op';
+  $handler->display->display_options['filters']['field_donation_amounts_value']['expose']['label'] = 'Filter by Amounts Between';
+  $handler->display->display_options['filters']['field_donation_amounts_value']['expose']['operator'] = 'field_donation_amounts_value_op';
+  $handler->display->display_options['filters']['field_donation_amounts_value']['expose']['identifier'] = 'field_donation_amounts_value';
+  $handler->display->display_options['filters']['field_donation_amounts_value']['expose']['remember'] = TRUE;
+  $handler->display->display_options['filters']['field_donation_amounts_value']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+  );
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
