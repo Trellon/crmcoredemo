@@ -96,8 +96,7 @@ TEXTAREA {
 .text-format-wrapper {
 	position: relative;
 }
-.form-type-managed-file,
-.form-type-textfield  {
+.form-type-managed-file  {
   position: relative;
 }
 .text-format-wrapper .control-label,

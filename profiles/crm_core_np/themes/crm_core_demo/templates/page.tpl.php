@@ -46,7 +46,7 @@
 								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
                 
                 	<li><a href="<?php print base_path(); ?>crm/contact">Search Contacts</a></li>
-                  <li class="dropdown-submenu pull-left"><a href="<?php print base_path(); ?>crm/report">Reports</a>
+                  <li class="dropdown-submenu pull-left"><a href="<?php print base_path(); ?>crm/reports">Reports</a>
                      <ul class="dropdown-menu">
 		                  <li><a href="<?php print base_path(); ?>admin/crm/report/event/registration">Event Registration</a></li>
 		                  <li><a href="<?php print base_path(); ?>crm/reports/blog/commenters">Comment Report</a></li>
