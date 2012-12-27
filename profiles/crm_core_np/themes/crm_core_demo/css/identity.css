@@ -217,3 +217,21 @@ TEXTAREA {
 .views-exposed-form .views-exposed-widget .form-submit {
   margin: 0em 0em 0em 0em;
 }
+
+.view-header {
+	padding: .5em;
+	margin: 0em 0em .5em 0em;
+	
+}
+.view-empty {
+	margin: 1em 0em;
+	padding: 1em;
+	background-color: #e1e1e1;
+	font-size: 2em;
+	text-align: center;
+	color: #777;
+	font-weight: 600;
+	line-height: normal;
+}
+
+
