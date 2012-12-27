@@ -59,6 +59,7 @@ dependencies[] = crm_ui
 dependencies[] = crm_core_contact_ui
 dependencies[] = crm_core_activity_ui
 dependencies[] = crm_core_relationship_ui
+dependencies[] = crm_core_report
 
 ; Install CRM Core Contrib modules pre-requist
 dependencies[] = commerce
