@@ -46,6 +46,7 @@ dependencies[] = token
 dependencies[] = views
 dependencies[] = views_ui
 dependencies[] = views_data_export
+dependencies[] = pathologic
 
 ; Install CRM Core modules.
 dependencies[] = crm_core

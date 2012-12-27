@@ -172,7 +172,12 @@ function crm_core_np_install() {
       ),
       // HTML corrector filter.
       'filter_htmlcorrector' => array(
-        'weight' => 10,
+        'weight' => 3,
+        'status' => 1,
+      ),
+      // Pathologic
+      'pathologic' => array(
+        'weight' => 4,
         'status' => 1,
       ),
     ),
@@ -198,6 +203,11 @@ function crm_core_np_install() {
       // HTML corrector filter.
       'filter_htmlcorrector' => array(
         'weight' => 10,
+        'status' => 1,
+      ),
+      // Pathologic
+      'pathologic' => array(
+        'weight' => 4,
         'status' => 1,
       ),
     ),
