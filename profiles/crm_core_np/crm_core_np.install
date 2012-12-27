@@ -148,7 +148,7 @@ function crm_core_np_install() {
   // Enable default permissions for system roles.
   user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content'));
   user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content'));
-  
+
   // Create default input formats
   $filtered_html_format = array(
     'format' => 'filtered_html',
@@ -204,13 +204,13 @@ function crm_core_np_install() {
   );
   $full_html_format = (object) $full_html_format;
   filter_format_save($full_html_format);
-  
+
   $themes = array('crm_core_demo');
   theme_enable($themes);
 
   // Set the default theme.
-  variable_set('theme_default', 'crm_core_demo');   
-  
+  variable_set('theme_default', 'crm_core_demo');
+
   // set some variables for jquery update and compact forms
   // these should apply in all instances of CRM Core Demo, regardless of what features are enabled
   variable_set('compact_forms_ids', 'user-login-form
@@ -218,7 +218,7 @@ crm-core-profile-entry-form');
   variable_set('jquery_update_compression_type', 'min');
   variable_set('jquery_update_jquery_cdn', 'google');
   variable_set('jquery_update_jquery_version', '1.8');
-  
+
 }
 
 /**
@@ -268,7 +268,7 @@ function _crm_core_np_features() {
     'crm_core_petition' => array(
       'title' => st('CRM Core Petition'),
       'description' => st('CRM Core Petition allows users to sign online petitions'),
-    ),    
+    ),
     'crm_core_volunteer' => array(
       'title' => st('CRM Core Volunteer'),
       'description' => st('CRM Core Volunteer allows signing up for volunteer opportunities'),
@@ -289,7 +289,7 @@ function _crm_core_np_features_form($form, &$form_state) {
       '#description' => $info['description'],
     );
   }
-    
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => st('Next'),
@@ -311,34 +311,34 @@ function _crm_core_np_features_form_submit($form, &$form_state) {
       $modules[] = $feature;
     }
   }
-  
-  module_enable($modules);  
+
+  module_enable($modules);
 }
 
 /**
  * Configure features installed
  */
 function _crm_core_np_feature_config_form($form, &$form_state) {
-	// @todo: load configuration forms here for features installed.
+  // @todo: load configuration forms here for features installed.
   $form['sample_data'] = array(
-		'#type' => 'fieldset', 		
-		'#title' => t('Sample data'), 
-		'#weight' => 5, 		
-		'#collapsible' => TRUE, 	
-		'#collapsed' => FALSE,  	
+    '#type' => 'fieldset',
+    '#title' => t('Sample data'),
+    '#weight' => 5,
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
   );
-  
+
   $form['sample_data']['sample_data_toggle'] = array(
-  	'#type' => 'checkbox',
-  	'#title' => t('Import sample data?'),
-  	'#description' => t('Checking this will import sample data for the feature(s) you have selected.'),
+    '#type' => 'checkbox',
+    '#title' => t('Import sample data?'),
+    '#description' => t('Checking this will import sample data for the feature(s) you have selected.'),
   );
-  
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => st('Next'),
   );
-  
+
   return $form;
 }
 
@@ -350,52 +350,53 @@ function _crm_core_np_feature_config_form_submit($form, &$form_state) {
   // work around for https://github.com/Trellon/crmcoredemo/issues/1 (see 2nd error)
   // this needs to be moved into it's separate step
   if (module_exists('crm_core_event_registration')) {
-  	module_load_include('inc', 'crm_core_event_registration', 'crm_core_event_registration.views_default');
-	  $views = crm_core_event_registration_views_default_views();
-	  foreach ($views as $view) {
-	    if ($view->disabled) {
-	      $view->disabled = FALSE;
-	      $view->save();
-	    }
-	  }	  	  
+    module_load_include('inc', 'crm_core_event_registration', 'crm_core_event_registration.views_default');
+    $views = crm_core_event_registration_views_default_views();
+    foreach ($views as $view) {
+      if ($view->disabled) {
+        $view->disabled = FALSE;
+        $view->save();
+      }
+    }
   }
-  
+
   if (module_exists('crm_core_petition')) {
-  	module_load_include('inc', 'crm_core_petition', 'crm_core_petition.views_default');
-	  $views = crm_core_petition_views_default_views();
-	  foreach ($views as $view) {
-	    if ($view->disabled) {
-	      $view->disabled = FALSE;
-	      $view->save();
-	    }
-	  } 	  	  
+    module_load_include('inc', 'crm_core_petition', 'crm_core_petition.views_default');
+    $views = crm_core_petition_views_default_views();
+    foreach ($views as $view) {
+      if ($view->disabled) {
+        $view->disabled = FALSE;
+        $view->save();
+      }
+    }
   }
 
   if ((bool)$form_state['values']['sample_data_toggle'] === FALSE) {
-		  return;
+      return;
   }
-  
-  // install sample data
-  // @todo: not totally operational yet
+
+  // Install sample data.
+  // @todo: not totally operational yet.
+  $modules = array();
   foreach ($modules as $module) {
-  	if (module_exists($module)) {
-	  	// look for something like crm_core_volunteer.sample_data.inc
-		  module_load_include('inc', $module, $module . '.sample_data');
-		  $function = $module . '_sample_data';
-		  if (function_exists($function)) {
-				$function();  
-		  }	  	
-  	}
-  }	
+    if (module_exists($module)) {
+      // look for something like crm_core_volunteer.sample_data.inc
+      module_load_include('inc', $module, $module . '.sample_data');
+      $function = $module . '_sample_data';
+      if (function_exists($function)) {
+        $function();
+      }
+    }
+  }
 }
 
 /**
  * Implements hook_install_tasks_alter().
  */
 function crm_core_np_install_tasks_alter(&$tasks, $install_state) {
-  
+
   $tasks['install_finished']['function'] = 'crm_core_np_install_finished';
-  
+
   $tasks['install_select_profile']['display'] = FALSE;
   $tasks['install_select_locale']['display'] = FALSE;
   $tasks['install_select_locale']['run'] = INSTALL_TASK_SKIP;
@@ -453,7 +454,7 @@ function install_welcome_submit($form, &$form_state) {
  * Task finished callback
  */
 function crm_core_np_install_finished(&$install_state) {
-    
+
   drupal_set_title(st('@drupal installation complete', array('@drupal' => drupal_install_profile_distribution_name())), PASS_THROUGH);
   $messages = drupal_set_message();
 
@@ -497,7 +498,7 @@ function crm_core_np_install_finished(&$install_state) {
     // If we don't install drupal using Drush, redirect the user to the front
     // page.
     if (!drupal_is_cli()) {
-	    	drupal_goto('node');
+        drupal_goto('node');
     }
   }
 }
