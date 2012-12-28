@@ -48,7 +48,18 @@
                 	<li><a href="<?php print base_path(); ?>crm/contact">Search Contacts</a></li>
                   <li class="dropdown-submenu pull-left"><a href="<?php print base_path(); ?>crm/reports">Reports</a>
                      <ul class="dropdown-menu">
-		                  <li><a href="<?php print base_path(); ?>admin/crm/report/event/registration">Event Registration</a></li>
+		                  <li class="nav-header">Donations</li>
+		                  <li><a href="<?php print base_path(); ?>crm/reports/donations-overview">Donation Overview</a></li>
+		                  <li><a href="<?php print base_path(); ?>crm/reports/donations-overview">Personal Donation Pages</a></li>
+		                  <li><a href="<?php print base_path(); ?>crm/reports/donations/leaderboard">Leaderboard</a></li>
+		                  <li class="nav-header">Petitions</li>
+		                  <li><a href="<?php print base_path(); ?>crm/reports/petition">Petitions Overview</a></li>
+		                  <li class="nav-header">Events</li>
+		                  <li><a href="<?php print base_path(); ?>crm/reports/events/registrations">Event Registration</a></li>
+		                  <li class="nav-header">Volunteers</li>
+		                  <li><a href="<?php print base_path(); ?>crm/reports/volunteer/detail">Volunteers</a></li>
+		                  <li><a href="<?php print base_path(); ?>crm/reports/volunteer/detail">Volunteer Commitments</a></li>
+		                  <li class="nav-header">Mailing Lists</li>
 		                  <li><a href="<?php print base_path(); ?>crm/reports/blog/commenters">Comment Report</a></li>
                     </ul>
                   </li>
@@ -65,7 +76,7 @@
                   <li class="dropdown-submenu pull-left"><a href="<?php print base_path(); ?>admin/structure/crm">CRM Core Modules</a>
                     <ul class="dropdown-menu">
 		                  <li class="nav-header">Donations</li>
-		                  <li><a href="<?php print base_path(); ?>crm/donations">Donation Pages</a></li>
+		                  <li><a href="<?php print base_path(); ?>crm/donations">Manage Donation Pages</a></li>
 		                  <li><a href="<?php print base_path(); ?>crm/donations/leaderboard">Leaderboard</a></li>
 		                  <li class="nav-header">Events</li>
 		                  <li><a href="<?php print base_path(); ?>admin/crm/report/event/registration">Registration Report</a></li>
