@@ -126,7 +126,6 @@ TEXTAREA {
 	margin-bottom: 0px;
 }
 
-
 /* Dates */
 .views-exposed-form {
 	background-color: #e1e1e1;
@@ -233,4 +232,17 @@ TEXTAREA {
 	line-height: normal;
 }
 
+/* Blocks */
+.news_subscription .name-title-wrapper,
+.news_subscription .name-generational-wrapper {
+  display: none;
+}
 
+.news_subscription input {
+  width: 200px;
+}
+
+.news_subscription .help-block {
+  left: 190px !important;
+  top: 2px !important;
+}

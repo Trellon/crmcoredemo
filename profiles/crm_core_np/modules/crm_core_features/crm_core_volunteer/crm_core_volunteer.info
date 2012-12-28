@@ -23,6 +23,7 @@ dependencies[] = name
 dependencies[] = number
 dependencies[] = options
 dependencies[] = strongarm
+dependencies[] = sharethis
 features[crm_core_activity_type][] = volunteer_commitment
 features[crm_core_profile][] = volunteer_application
 features[crm_core_profile][] = volunteer_commitment

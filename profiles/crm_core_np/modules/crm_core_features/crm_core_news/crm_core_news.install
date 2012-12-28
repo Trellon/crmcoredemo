@@ -5,31 +5,37 @@
  */
 
 /**
+ * Implements hook_schema()
+ */
+function crm_core_news_schema() {
+  $schema['crm_core_news_subscription'] = array(
+    'description' => 'Stores information about subscriptions',
+    'fields' => array(
+      'contact_id' => array(
+        'description' => 'The primary identifer for subscribed contact.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('contact_id'),
+  );
+
+  return $schema;
+}
+
+/**
  * Implements hook_install()
  */
 function crm_core_news_install() {
-
   // Make sure sharethis is enabled for simplenews content type
   $sharethis_setting = variable_get('sharethis_node_option', '');
-
   $settings_array = explode(',', $sharethis_setting);
 
-  if (array_search('simplenews', $settings_array) === FALSE) {
-    $settings_array[] = 'simplenews';
+  if (array_search('news', $settings_array) === FALSE) {
+    $settings_array[] = 'news';
     $sharethis_setting = implode(',', $settings_array);
     variable_set('sharethis_node_option', $sharethis_setting);
   }
-
-  // Override simplenews default settings
-  $simplenews_default_settings = array(
-    'simplenews_format' => 'html',
-    'simplenews_throttle' => 50,
-    'simplenews_send' => SIMPLENEWS_COMMAND_SEND_NOW,
-  );
-  foreach ($simplenews_default_settings as $name => $value) {
-    variable_set($name, $value);
-  }
-
-  // Define simplenews block custom text variable with empty value
-  variable_set('simplenews_block_m_multiple', '');
 }
