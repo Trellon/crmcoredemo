@@ -26,6 +26,7 @@ dependencies[] = options
 dependencies[] = strongarm
 dependencies[] = taxonomy
 dependencies[] = views
+dependencies[] = sharethis
 features[context][] = petition_content
 features[crm_core_activity_type][] = petition_signature
 features[crm_core_profile][] = petition_signing_form

@@ -1,0 +1,20 @@
+<?php
+/**
+ * @file
+ * Code for the CRM Core Event Registration feature.
+ */
+
+/**
+ * Implements hook_install
+ */
+function crm_core_volunteer_install() {
+  // Make sure sharethis is enabled for simplenews content type
+  $sharethis_setting = variable_get('sharethis_node_option', '');
+  $settings_array = explode(',', $sharethis_setting);
+
+  if (array_search('volunteer_opportunity', $settings_array) === FALSE) {
+    $settings_array[] = 'volunteer_opportunity';
+    $sharethis_setting = implode(',', $settings_array);
+    variable_set('sharethis_node_option', $sharethis_setting);
+  }
+}
