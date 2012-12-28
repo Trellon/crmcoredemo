@@ -371,6 +371,12 @@ function crm_core_donation_views_default_views() {
     ),
   );
   $handler->display->display_options['style_options']['summary'] = 'List of all donations.';
+  /* Header: Global: View area */
+  $handler->display->display_options['header']['view']['id'] = 'view';
+  $handler->display->display_options['header']['view']['table'] = 'views';
+  $handler->display->display_options['header']['view']['field'] = 'view';
+  $handler->display->display_options['header']['view']['empty'] = TRUE;
+  $handler->display->display_options['header']['view']['view_to_insert'] = 'donations_totals:default';
   /* Header: Global: Result summary */
   $handler->display->display_options['header']['result']['id'] = 'result';
   $handler->display->display_options['header']['result']['table'] = 'views';
@@ -589,6 +595,62 @@ function crm_core_donation_views_default_views() {
     'page' => 0,
   );
   $export['donations_overview_alt'] = $view;
+
+  $view = new view();
+  $view->name = 'donations_totals';
+  $view->description = 'Total donations received. Can be filtered by donation page to provide filtered results.';
+  $view->tag = 'default';
+  $view->base_table = 'crm_core_activity';
+  $view->human_name = 'donations_totals';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['group_by'] = TRUE;
+  $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* Field: SUM(CRM Activity: Amount) */
+  $handler->display->display_options['fields']['field_donation_amounts']['id'] = 'field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts']['table'] = 'field_data_field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts']['field'] = 'field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts']['group_type'] = 'sum';
+  $handler->display->display_options['fields']['field_donation_amounts']['label'] = 'Total Raised';
+  $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
+    'thousand_separator' => ' ',
+    'prefix_suffix' => 1,
+  );
+  /* Field: AVG(CRM Activity: Amount) */
+  $handler->display->display_options['fields']['field_donation_amounts_1']['id'] = 'field_donation_amounts_1';
+  $handler->display->display_options['fields']['field_donation_amounts_1']['table'] = 'field_data_field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts_1']['field'] = 'field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts_1']['group_type'] = 'avg';
+  $handler->display->display_options['fields']['field_donation_amounts_1']['label'] = 'Average Donation Amount';
+  $handler->display->display_options['fields']['field_donation_amounts_1']['settings'] = array(
+    'thousand_separator' => ' ',
+    'prefix_suffix' => 1,
+  );
+  /* Field: COUNT(CRM Activity: Activity ID) */
+  $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['group_type'] = 'count';
+  $handler->display->display_options['fields']['activity_id']['label'] = 'Number of Donations';
+  /* Filter criterion: CRM Activity: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'donation' => 'donation',
+  );
+  $export['donations_totals'] = $view;
 
   return $export;
 }
