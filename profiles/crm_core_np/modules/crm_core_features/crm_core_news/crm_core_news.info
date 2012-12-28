@@ -5,6 +5,7 @@ package = CRM Core
 php = 5.2.4
 version = 7.x-1.0
 project = crm_core_news
+files[] = crm_core_news.inc
 dependencies[] = context
 dependencies[] = crm_core_activity
 dependencies[] = crm_core_contact
