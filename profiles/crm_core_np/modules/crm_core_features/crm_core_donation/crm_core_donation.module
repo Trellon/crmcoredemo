@@ -165,12 +165,17 @@ function crm_core_donation_commerce_line_item_type_info() {
 /**
  * Implements hook_crm_core_report_register
  */
-function crm_core_donation_crm_core_report_register(){
-  
+function crm_core_donation_crm_core_report_register() {
+
   $reports = array(
     'donations' => array(
-      'title'	    => t('Donations'),
-      'reports'		=> array(
+      'title'	  => t('Donations'),
+      'reports'	=> array(
+        'donations_overview'	=> array(
+          'title'       => t('Donations Overview'),
+          'path'        => 'crm/reports/donations-overview',
+          'description'	=> t('Details on donations recorded in the system.'),
+        ),
         'donation_page'	=> array(
           'title'       => t('Donations Pages'),
           'path'        => 'crm/donations/leaderboard',
@@ -182,10 +187,10 @@ function crm_core_donation_crm_core_report_register(){
           'description'	=> t('Who is raising the most through their personal donation pages?'),
         ),
       ),
-      'widgets'		=> array(),
+      'widgets'	=> array(),
     ),
   );
-  
+
   return $reports;
 }
 

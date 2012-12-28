@@ -40,16 +40,16 @@ function crm_core_event_registration_menu() {
     }
     $type_url_str = str_replace('_', '-', $type->type);
     $items['crm/events/add'] = array(
-      'title' => 'Add an ' . drupal_strtolower($type->name), 
-      'title callback' => 'check_plain', 
-      'page callback' => 'node_add', 
-      'page arguments' => array($type->type), 
-      'access callback' => 'node_access', 
-      'access arguments' => array('create', $type->type), 
-      'description' => $type->description, 
+      'title' => 'Add an ' . drupal_strtolower($type->name),
+      'title callback' => 'check_plain',
+      'page callback' => 'node_add',
+      'page arguments' => array($type->type),
+      'access callback' => 'node_access',
+      'access arguments' => array('create', $type->type),
+      'description' => $type->description,
       'file path' => $path,
       'file' => 'node.pages.inc',
-      'type' => MENU_LOCAL_ACTION, 
+      'type' => MENU_LOCAL_ACTION,
     );
   }
 
@@ -71,7 +71,7 @@ function crm_core_event_registration_enable() {
       $view->disabled = FALSE;
       $view->save();
     }
-  }	
+  }
 */
 }
 
@@ -312,43 +312,43 @@ function crm_core_event_registration_form_crm_core_profile_entry_form_alter(&$fo
       '#markup' => $event_teaser,
     );
 
-		// if redirect path is set on the node, we go there, otherwise we will go back to the event node
-		if (!empty($node->field_crmer_redirect_path[LANGUAGE_NONE])) {
-			$form_state['profile']['redirect'] = $node->field_crmer_redirect_path[LANGUAGE_NONE][0]['url'];
-		}
-		else {
-			$form_state['profile']['redirect'] = drupal_get_path_alias('node/' . $node->nid);
-		}
-	
+    // if redirect path is set on the node, we go there, otherwise we will go back to the event node
+    if (!empty($node->field_crmer_redirect_path[LANGUAGE_NONE])) {
+      $form_state['profile']['redirect'] = $node->field_crmer_redirect_path[LANGUAGE_NONE][0]['url'];
+    }
+    else {
+      $form_state['profile']['redirect'] = drupal_get_path_alias('node/' . $node->nid);
+    }
+
     // making sure there is a referenced product and the registration price is not 0
     // if these conditions are met, we will create a multi-step form for checkout
     if ($event_product_field != '' && !empty($node->{$event_product_field})) {
-			if (!empty($node->field_crmer_reg_price[LANGUAGE_NONE])) {
-				if ($node->field_crmer_reg_price[LANGUAGE_NONE][0]['amount'] != 0) {
-					$product_id = $node->{$event_product_field}[LANGUAGE_NONE][0]['product_id'];
-					$form['product_id'] = array(
-					  '#type' => 'value',
-					  '#value' => $product_id,
-					);
-					
-					$form['submit']['#value'] = t('Continue to next step');
-					$form['#validate'][] = 'crm_core_event_registration_checkout_validate';
-					$form['#submit'][] = 'crm_core_event_registration_checkout_submit';
-				}
-				else {
-					_crm_core_event_registration_form_alter_unpaid($form, $form_state, $node);
-				} 
-			}
+      if (!empty($node->field_crmer_reg_price[LANGUAGE_NONE])) {
+        if ($node->field_crmer_reg_price[LANGUAGE_NONE][0]['amount'] != 0) {
+          $product_id = $node->{$event_product_field}[LANGUAGE_NONE][0]['product_id'];
+          $form['product_id'] = array(
+            '#type' => 'value',
+            '#value' => $product_id,
+          );
+
+          $form['submit']['#value'] = t('Continue to next step');
+          $form['#validate'][] = 'crm_core_event_registration_checkout_validate';
+          $form['#submit'][] = 'crm_core_event_registration_checkout_submit';
+        }
+        else {
+          _crm_core_event_registration_form_alter_unpaid($form, $form_state, $node);
+        }
+      }
     }
     else {
-    	_crm_core_event_registration_form_alter_unpaid($form, $form_state, $node);      
+      _crm_core_event_registration_form_alter_unpaid($form, $form_state, $node);
     }
   }
 }
 
 function _crm_core_event_registration_form_alter_unpaid(&$form, &$form_state, $node) {
-	$form['submit']['#value'] = t('Register');	
-	$form['#submit'][] = 'crm_core_event_registration_profile_form_submit';	
+  $form['submit']['#value'] = t('Register');
+  $form['#submit'][] = 'crm_core_event_registration_profile_form_submit';
 }
 
 
@@ -371,7 +371,7 @@ function crm_core_event_registration_checkout_validate($form, &$form_state) {
  * Paid event registration submission handler.
  */
 function crm_core_event_registration_checkout_submit($form, &$form_state) {
-	
+
   // @todo: check the order status, clear out the user's cart first before we add
   // any order.
   // we also need to use the checkout hook to change some ui to not say quantity, products, etc
@@ -402,12 +402,12 @@ function crm_core_event_registration_checkout_submit($form, &$form_state) {
   // @todo: this needs to be a configuration option thing
   // $order->field_crm_activity_id[LANGUAGE_NONE][0]['target_id'] = $form_state['crm_core_activity']->activity_id;
   $order->data['crm_core_event_registration'] = $form_state['activity']->activity_id;
-  
+
   // set redirect path
   if (array_key_exists('redirect', $form_state['profile'])) {
-	  $order->data['redirect'] = $form_state['profile']['redirect'];
+    $order->data['redirect'] = $form_state['profile']['redirect'];
   }
-  
+
   // Save the order again to update its line item reference field.
   commerce_order_save($order);
 
@@ -436,14 +436,14 @@ function crm_core_event_registration_commerce_checkout_complete($order) {
       crm_core_activity_save($activity);
 
       if (array_key_exists('redirect', $order->data)) {
-	      drupal_goto($order->data['redirect']);
+        drupal_goto($order->data['redirect']);
       }
-      else 
+      else
       {
-	      $nid = $activity->field_registration_event[LANGUAGE_NONE][0]['target_id'];
-	      // going back to the event
-	      $path = drupal_get_path_alias('node/' . $nid);
-	      drupal_goto($path);	      
+        $nid = $activity->field_registration_event[LANGUAGE_NONE][0]['target_id'];
+        // going back to the event
+        $path = drupal_get_path_alias('node/' . $nid);
+        drupal_goto($path);
       }
     }
   }
@@ -461,13 +461,13 @@ function crm_core_event_registration_commerce_checkout_pane_info_alter(&$checkou
 /**
  * Submission handler for free event registration.
  */
-function crm_core_event_registration_profile_form_submit($form, &$form_state) {  
+function crm_core_event_registration_profile_form_submit($form, &$form_state) {
   if (array_key_exists('redirect', $form_state['profile'])) {
-	  $form_state['redirect'] = $form_state['profile']['redirect'];
+    $form_state['redirect'] = $form_state['profile']['redirect'];
   }
   else {
-  	$message = variable_get('crm_core_event_registration_redirect_message', 'Thank you for registering. You will receive a confirmation e-mail shortly.');
-  	drupal_set_message(t('@message', array('@message' => $message)));	  
+    $message = variable_get('crm_core_event_registration_redirect_message', 'Thank you for registering. You will receive a confirmation e-mail shortly.');
+    drupal_set_message(t('@message', array('@message' => $message)));
   }
 }
 

@@ -4,6 +4,12 @@
  * Implements hook_install().
  */
 function crm_core_petition_install() {
+  // Set the correct module weight for crm core petitions.
+  db_update('system')
+  ->fields(array('weight' => 20))
+  ->condition('name', 'crm_core_petition')
+  ->execute();
+
   // Make sure sharethis is enabled for simplenews content type
   $sharethis_setting = variable_get('sharethis_node_option', '');
   $settings_array = explode(',', $sharethis_setting);

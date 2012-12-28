@@ -46,6 +46,7 @@ dependencies[] = token
 dependencies[] = views
 dependencies[] = views_ui
 dependencies[] = views_data_export
+dependencies[] = pathologic
 
 ; Install CRM Core modules.
 dependencies[] = crm_core
@@ -59,6 +60,7 @@ dependencies[] = crm_ui
 dependencies[] = crm_core_contact_ui
 dependencies[] = crm_core_activity_ui
 dependencies[] = crm_core_relationship_ui
+dependencies[] = crm_core_report
 
 ; Install CRM Core Contrib modules pre-requist
 dependencies[] = commerce

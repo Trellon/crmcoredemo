@@ -134,18 +134,24 @@ function crm_core_donation_schema() {
  * Implements hook_install
  */
 function crm_core_donation_install() {
+  // Set the correct module weight for crm core donations.
+  db_update('system')
+    ->fields(array('weight' => 20))
+    ->condition('name', 'crm_core_donation')
+    ->execute();
+
   module_load_include('inc', 'crm_core_donation', 'crm_core_donation.pages');
-  
+
   // install a default donation page
   $donation_page = array(
     'name' => 'donation',
-    'title' => t('Donate Today'),
+    'title' => st('Donate Today'),
     'header' => array(
-      'value' => t('Most non-profit organizations, NGOs and other worthwhile causes rely on capital raised from one source or another to be successful in their mission. Online fundraising is usually one of many techniques used to bring in capital. This page is a CRM Core feature demonstrating simple online donation functionality. It allows users to make online contributions, and provides some snazzy options for collecting information. For administrators, it provides tools for configuritng online fundraising tools and reports that help you understand your audience and revenue sources.'),
+      'value' => st('Most non-profit organizations, NGOs and other worthwhile causes rely on capital raised from one source or another to be successful in their mission. Online fundraising is usually one of many techniques used to bring in capital. This page is a CRM Core feature demonstrating simple online donation functionality. It allows users to make online contributions, and provides some snazzy options for collecting information. For administrators, it provides tools for configuritng online fundraising tools and reports that help you understand your audience and revenue sources.'),
       'format' => 'plain_text',
     ),
     'footer' => array(
-      'value' => t('This donation will help make our organization stronger and better!'),
+      'value' => st('This donation will help make our organization stronger and better!'),
       'format' => 'plain_text',
     ),
     'goal' => '10000',
@@ -159,7 +165,7 @@ function crm_core_donation_install() {
     'uid' => 1,
     'created' => time(),
   );
-  
+
   crm_core_donation_page_save($donation_page);
-  
+
 }

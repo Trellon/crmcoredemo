@@ -12,7 +12,6 @@ include_once 'crm_core_petition.features.inc';
  * Implements hook_enable
  */
 function crm_core_petition_enable() {
-  db_query("UPDATE {system} SET weight = 20 WHERE name = 'crm_core_petition'");
   $menu_link = array(
     'link_title' => t('Petitions'),
     'link_path' => 'petitions',
@@ -21,11 +20,11 @@ function crm_core_petition_enable() {
 
   $mlid = menu_link_save($menu_link);
   variable_set('crm_core_petition_menu_link', $mlid);
-  
+
   // enable the views in this because it is disabled
   // work around for features
 /*
-  module_load_include('inc', 'crm_core_petition', 'crm_core_petition.views_default');  
+  module_load_include('inc', 'crm_core_petition', 'crm_core_petition.views_default');
   $views = crm_core_petition_views_default_views();
   foreach ($views as $view) {
     if ($view->disabled) {
@@ -84,7 +83,7 @@ function crm_core_petition_permission() {
       'title' => t('Allow online petition signing'),
       'description' => t('Ability to use petition signing form on online peition pages'),
     ),
-  );  
+  );
 }
 
 /**
@@ -93,17 +92,17 @@ function crm_core_petition_permission() {
 function crm_core_petition_node_view($node, $view_mode) {
 
   if (!user_access('crm_core sign online petition')) {
-    return;  
-  }  
+    return;
+  }
 
   // let's embed the petition signing form on the online petition content itself
   if ($node->type == 'online_petition') {
     $crm_core_profile = crm_core_profile_load('petition_signing_form');
     if (!empty($crm_core_profile)) {
       module_load_include('inc', 'crm_core_profile', 'crm_core_profile.forms');
-      $node->content['crm_core_petition_form'] = drupal_get_form('crm_core_profile_entry_form', $crm_core_profile);      
+      $node->content['crm_core_petition_form'] = drupal_get_form('crm_core_profile_entry_form', $crm_core_profile);
       $node->content['crm_core_petition_form']['#weight'] = 999;
-    }  
+    }
   }
 }
 
@@ -125,15 +124,15 @@ function crm_core_petition_form_crm_core_profile_entry_form_alter(&$form, &$form
   else {
     $form['#attributes']['class'] += array('crm_core_petition_signing_form');
   }
-  
+
   // Change the form button value and hide some of the address components
   $form['submit']['#value'] = t('Sign the petition');
 
   $form['#submit'][] = 'crm_core_petition_form_crm_core_profile_entry_form_submit';
-  
+
   $form['field_contact_address'][LANGUAGE_NONE][0]['street_block']['#access'] = FALSE;
   $form['field_contact_address'][LANGUAGE_NONE][0]['locality_block']['postal_code']['#access'] = FALSE;
-  $form['field_contact_address'][LANGUAGE_NONE][0]['country']['#access'] = FALSE;   
+  $form['field_contact_address'][LANGUAGE_NONE][0]['country']['#access'] = FALSE;
 }
 
 /**
@@ -158,15 +157,15 @@ function crm_core_petition_form_crm_core_profile_entry_form_submit($form, &$form
  * We are just setting some default value to the crm_core_profile form in the activity data container
  * the $form here refers to the $form['activity'] data container from the original crm_core_profile form
  */
-function crm_core_petition_crm_core_profile_activity_alter(&$form, $profile_name) {  
+function crm_core_petition_crm_core_profile_activity_alter(&$form, $profile_name) {
   if ($profile_name != 'petition_signing_form') {
-    return;  
+    return;
   }
-  
+
   // since we are embedding the online petition form in the content itself, we can get the content information
   // as well
   $node = menu_get_object();
-  if (!empty($node)){
+  if (!empty($node)) {
     // we are just setting the reference (association) of the activity back to the petition content
     $default_value = sprintf('%s (%s)', $node->title, $node->nid);
     $form['field_crm_petition_reference'][LANGUAGE_NONE][0]['target_id']['#default_value'] = $default_value;

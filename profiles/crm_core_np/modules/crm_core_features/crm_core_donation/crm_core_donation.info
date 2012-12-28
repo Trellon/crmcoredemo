@@ -51,4 +51,6 @@ features[variable][] = crm_core_donation_pdp
 features[variable][] = crm_core_donation_profile
 features[variable][] = crm_core_donation_redirect_message
 features[views_view][] = crm_core_donation_pages
+features[views_view][] = donations_individual
+features[views_view][] = donations_overview_alt
 files[] = views_handler_field_text_format.inc
