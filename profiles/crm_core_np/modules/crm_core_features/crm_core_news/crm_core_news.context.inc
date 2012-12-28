@@ -19,7 +19,7 @@ function crm_core_news_context_default_contexts() {
   $context->conditions = array(
     'node' => array(
       'values' => array(
-        'simplenews' => 'simplenews',
+        'news' => 'news',
       ),
       'options' => array(
         'node_form' => '1',
@@ -29,9 +29,9 @@ function crm_core_news_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'simplenews-0' => array(
-          'module' => 'simplenews',
-          'delta' => '0',
+        'crm_core_news-subscription' => array(
+          'module' => 'crm_core_news',
+          'delta' => 'subscription',
           'region' => 'sidebar_second',
           'weight' => '-10',
         ),
@@ -62,9 +62,9 @@ function crm_core_news_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'simplenews-0' => array(
-          'module' => 'simplenews',
-          'delta' => '0',
+        'crm_core_news-subscription' => array(
+          'module' => 'crm_core_news',
+          'delta' => 'subscription',
           'region' => 'sidebar_second',
           'weight' => '-10',
         ),
