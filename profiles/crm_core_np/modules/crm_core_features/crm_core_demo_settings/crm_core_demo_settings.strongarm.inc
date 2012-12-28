@@ -99,13 +99,6 @@ function crm_core_demo_settings_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'sharethis_node_option';
-  $strongarm->value = 'simplenews,0,0,0';
-  $export['sharethis_node_option'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'sharethis_service_option';
   $strongarm->value = '"Facebook:facebook","Google +:googleplus","Tweet:twitter","Email:email","ShareThis:sharethis"';
   $export['sharethis_service_option'] = $strongarm;
