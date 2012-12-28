@@ -63,7 +63,7 @@ function crm_core_news_form_alter(&$form, &$form_state, $form_id) {
     return;
   }
 
-  $form['submit']['#value'] = t('Sign Up');
+  $form['submit']['#value'] = t('Sign up');
 
   $form['#submit'][] = 'crm_core_news_subscription_form_submit';
 }

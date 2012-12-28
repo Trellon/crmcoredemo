@@ -11,7 +11,7 @@ function crm_core_news_default_crm_core_activity_type() {
   $items = array();
   $items['news_subscription'] = entity_import('crm_core_activity_type', '{
     "type" : "news_subscription",
-    "label" : "Newsletter Subscription",
+    "label" : "News Subscription",
     "weight" : 0,
     "description" : ""
   }');
@@ -44,10 +44,10 @@ function crm_core_news_views_api() {
  */
 function crm_core_news_node_info() {
   $items = array(
-    'simplenews' => array(
-      'name' => t('Simplenews newsletter'),
+    'news' => array(
+      'name' => t('News'),
       'base' => 'node_content',
-      'description' => t('A newsletter issue to be sent to subscribed email addresses.'),
+      'description' => t('Site news. Site visitors can subscribe on the news digest.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
