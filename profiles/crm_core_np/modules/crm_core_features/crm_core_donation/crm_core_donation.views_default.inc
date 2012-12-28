@@ -217,7 +217,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = 'Showing donations for [contact_name].';
+  $handler->display->display_options['header']['area']['content'] = 'Showing donations for <a href="/crm/contact/%1">[contact_name]</a>.';
   $handler->display->display_options['header']['area']['format'] = 'filtered_html';
   $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   /* Header: Global: Result summary */
@@ -375,7 +375,14 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['header']['result']['id'] = 'result';
   $handler->display->display_options['header']['result']['table'] = 'views';
   $handler->display->display_options['header']['result']['field'] = 'result';
-  $handler->display->display_options['header']['result']['content'] = 'Displaying @start - @end of @total donations stored in the system. <a href="#">Export to CSV.</a>';
+  $handler->display->display_options['header']['result']['content'] = 'Displaying @start - @end of @total donations stored in the system.';
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['content'] = '<a href="/crm/reports/donations-overview/export">Export to CSV.</a>';
+  $handler->display->display_options['header']['area']['format'] = 'filtered_html';
+  $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
   $handler->display->display_options['empty']['area']['table'] = 'views';
@@ -448,6 +455,10 @@ function crm_core_donation_views_default_views() {
       'address' => 'address',
     ),
   );
+  /* Field: CRM Activity: Campaign */
+  $handler->display->display_options['fields']['field_donation_campaign']['id'] = 'field_donation_campaign';
+  $handler->display->display_options['fields']['field_donation_campaign']['table'] = 'field_data_field_donation_campaign';
+  $handler->display->display_options['fields']['field_donation_campaign']['field'] = 'field_donation_campaign';
   /* Sort criterion: CRM Activity: Date (field_activity_date) */
   $handler->display->display_options['sorts']['field_activity_date_value']['id'] = 'field_activity_date_value';
   $handler->display->display_options['sorts']['field_activity_date_value']['table'] = 'field_data_field_activity_date';

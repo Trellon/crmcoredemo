@@ -37,9 +37,6 @@
         		<?php endif; ?>
         		
         		
-        		
-        		
-        		
         		<!--  hard coded, need to move this into a menu. twitter bootstrap does not support multi level menus currently, need to do something interesting here  -->
         		<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">CRM Core<b class="caret"></b></a>
@@ -50,15 +47,15 @@
                      <ul class="dropdown-menu">
 		                  <li class="nav-header">Donations</li>
 		                  <li><a href="<?php print base_path(); ?>crm/reports/donations-overview">Donation Overview</a></li>
-		                  <li><a href="<?php print base_path(); ?>crm/reports/donations-overview">Personal Donation Pages</a></li>
-		                  <li><a href="<?php print base_path(); ?>crm/reports/donations/leaderboard">Leaderboard</a></li>
+		                  <li><a href="<?php print base_path(); ?>crm/donations/personal-pages">Personal Donation Pages</a></li>
+		                  <li><a href="<?php print base_path(); ?>donate/leaders">Leaderboard</a></li>
+		                  <li class="nav-header">Volunteers</li>
+		                  <li><a href="<?php print base_path(); ?>crm/reports/volunteer/detail">Volunteers</a></li>
+		                  <li><a href="#">Volunteer Commitments</a></li>
 		                  <li class="nav-header">Petitions</li>
 		                  <li><a href="<?php print base_path(); ?>crm/reports/petition">Petitions Overview</a></li>
 		                  <li class="nav-header">Events</li>
 		                  <li><a href="<?php print base_path(); ?>crm/reports/events/registrations">Event Registration</a></li>
-		                  <li class="nav-header">Volunteers</li>
-		                  <li><a href="<?php print base_path(); ?>crm/reports/volunteer/detail">Volunteers</a></li>
-		                  <li><a href="<?php print base_path(); ?>crm/reports/volunteer/detail">Volunteer Commitments</a></li>
 		                  <li class="nav-header">Mailing Lists</li>
 		                  <li><a href="<?php print base_path(); ?>crm/reports/blog/commenters">Comment Report</a></li>
                     </ul>
@@ -77,19 +74,18 @@
                     <ul class="dropdown-menu">
 		                  <li class="nav-header">Donations</li>
 		                  <li><a href="<?php print base_path(); ?>crm/donations">Manage Donation Pages</a></li>
-		                  <li><a href="<?php print base_path(); ?>crm/donations/leaderboard">Leaderboard</a></li>
+		                  <li><a href="<?php print base_path(); ?>crm/donations/leaderboard">Personal Donation Page Settings</a></li>
 		                  <li class="nav-header">Events</li>
-		                  <li><a href="<?php print base_path(); ?>admin/crm/report/event/registration">Registration Report</a></li>
-		                  <li><a href="<?php print base_path(); ?>crm/donations/leaderboard">Leaderboard</a></li>
+		                  <li><a href="<?php print base_path(); ?>node/add/event">Create New Event</a></li>
+		                  <li class="nav-header">Volunteers</li>
+		                  <li><a href="<?php print base_path(); ?>node/add/volunteer-opportunity">Create New Volunteer Opportunity</a></li>
+		                  <li class="nav-header">Petitions</li>
+		                  <li><a href="<?php print base_path(); ?>node/add/online-petition">Create New Petition</a></li>
                     </ul>
                   </li>
                   <li><a href="<?php print base_path(); ?>admin/structure/features">Features</a></li>
                 </ul>
               </li>
-        		
-        		
-        		
-        		
         		
         		
         		
