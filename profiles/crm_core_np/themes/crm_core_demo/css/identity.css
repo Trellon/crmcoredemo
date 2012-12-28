@@ -128,4 +128,18 @@ TEXTAREA {
 }
 
 
+/* Blocks */
 
+.news_subscription .name-title-wrapper,
+.news_subscription .name-generational-wrapper {
+  display: none;
+}
+
+.news_subscription input {
+  width: 200px;
+}
+
+.news_subscription .help-block {
+  left: 190px !important;
+  top: 2px !important;
+}
