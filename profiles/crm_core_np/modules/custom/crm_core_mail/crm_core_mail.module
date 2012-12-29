@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file Alters Rules form with additional parameters for action to introduced more friendly UI.
+ */
+
+/**
+ * Alters VBO form for any view and tweaks the config step with parameters form for rules action.
+ */
+function crm_core_mail_form_alter(&$form, &$form_state, $form_id) {
+  if (strpos($form_id, 'views_form_') != 0 ||
+      empty($form_state['values']['operation']) ||
+      $form_state['values']['operation'] != 'rules_component::rules_send_mail_to_crm_contact' ||
+      empty($form_state['step']) ||
+      $form_state['step'] != 'views_bulk_operations_config_form') {
+    return;
+  }
+  
+  // hint icon source
+  $hint_elem = '<span class="help">' . theme('image', array('path' => drupal_get_path('module',
+    'crm_core_mail') . '/help.png')) . '</span>';
+  drupal_add_library('system', 'ui.dialog');
+
+  // tweak the from field
+  $from_field = &$form['parameter']['from']['settings'];
+  $from_field['from']['#type'] = 'textfield';
+  $from_field['from']['#default_value'] = '[site:name] <[site:mail]>';
+  $from_field['from']['#size'] = 40;
+  $from_field['from']['#title'] .= $hint_elem;
+  $from_field['from']['#attached']['js'][] = drupal_get_path('module', 'crm_core_mail') . '/crm_core_mail.js';
+  $from_field['help']['token']['#attributes']['class'][] = 'element-invisible';
+
+  // selecting all fields of type Email attached to the CRM Contact entity
+  $query = db_select('field_config', 'fc')->fields('fc', array('field_name'));
+  $query->innerJoin('field_config_instance', 'fci', 'fc.id = fci.field_id');
+  $query->condition('fci.entity_type', 'crm_core_contact')->condition('fc.type', 'email')
+      ->addField('fci', 'data');
+  $query->addField('fci', 'bundle');
+  $fields = $query->execute()->fetchAllAssoc('field_name');
+  $options = array();
+  // TODO: retrieve tokens in more proper way
+  foreach($fields as $field_name => &$field) {
+    $field->data = unserialize($field->data);
+    $field_name = str_replace('field_', 'field-', $field_name);
+    $options["[contact:$field_name]"] = $field->data['label'];
+  }
+  $first_item = array_pop(array_keys($options));
+
+  // tweak the To field
+  $to_field = &$form['parameter']['to']['settings'];
+  $to_field['to']['#type'] = 'select';
+  $to_field['to']['#default_value'] = $first_item;
+  $to_field['to']['#description'] = t('Choose the field from which the email will be populated.');
+  $to_field['to']['#options'] = $options;
+  unset($to_field['help']);
+
+  // tweak the subject field
+  $subject = &$form['parameter']['subject']['settings'];
+  $subject['subject']['#type'] = 'textfield';
+  $subject['subject']['#title'] .= $hint_elem;
+  $subject['help']['token']['#attributes']['class'][] = 'element-invisible';
+}

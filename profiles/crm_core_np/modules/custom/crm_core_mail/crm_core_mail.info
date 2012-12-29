@@ -1,0 +1,7 @@
+name = CRM Core Mail
+description = Rules action for VBO to send email to CRM Core contacts.
+package = CRM
+core = 7.x
+
+dependencies[] = views_bulk_operations
+dependencies[] = rules
