@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file Implements Rules API to introduce new action for sending mail with formatted message body.
+ * @file Implements Rules API. Introduces new action for sending mail to CRM Core Contact.
  */
 
 /**
@@ -9,14 +9,14 @@
  */
 function crm_core_mail_rules_action_info() {
   return array(
-    'filtered_mail' => array(
-      'label' => t('Send filtered mail'),
+    'send_to_contact' => array(
+      'label' => t('Send e-mail to the CRM Contact'),
       'group' => t('CRM Core'),
       'parameter' => array(
-        'to' => array(
-          'type' => 'text',
-          'label' => t('To'),
-          'description' => t('The e-mail address or addresses where the message will be sent to. The formatting of this string must comply with RFC 2822.'),
+        'contact' => array(
+          'type' => 'crm_core_contact',
+          'label' => t('CRM Core Contact'),
+          'description' => t('CRM Core Contact to send the e-mail.'),
         ),
         'subject' => array(
           'type' => 'text',
@@ -25,28 +25,13 @@ function crm_core_mail_rules_action_info() {
           'translatable' => TRUE,
         ),
         'message' => array(
-          'type' => 'text_formatted',
+          'type' => 'text',
           'label' => t('Message'),
           'description' => t("The e-mail message body."),
           'translatable' => TRUE,
         ),
-        'from' => array(
-          'type' => 'text',
-          'label' => t('From'),
-          'description' => t("The e-mail from address. Leave it empty to use the site-wide configured address."),
-          'optional' => TRUE,
-        ),
-        'language' => array(
-          'type' => 'token',
-          'label' => t('Language'),
-          'description' => t('If specified, the language used for getting the mail message and subject.'),
-          'options list' => 'entity_metadata_language_list',
-          'optional' => TRUE,
-          'default value' => LANGUAGE_NONE,
-          'default mode' => 'selector',
-        ),
       ),
-      'base' => 'crm_core_mail_send',
+      'base' => 'crm_core_mail_send_to_contact',
     ),
   );
 }
@@ -54,29 +39,41 @@ function crm_core_mail_rules_action_info() {
 /**
  * Callback for rules action 'filtered_mail'.
  */
-function crm_core_mail_send($to, $subject, $message, $from = NULL, $langcode, $settings, RulesState $state, RulesPlugin $element) {
-  $to = str_replace(array("\r", "\n"), '', $to);
-  $from = !empty($from) ? str_replace(array("\r", "\n"), '', $from) : NULL;
+function crm_core_mail_send_to_contact($contact, $subject, $message, $settings, RulesState $state, RulesPlugin $element) {
+  // TODO: deal with language correctly (current lang, fields, tokenes, etc...)
+  $langcode = LANGUAGE_NONE;
+  
+  $to = '';
+
+  if (!empty($contact->field_contact_email[$langcode][0]['email'])) {
+    // TODO: get email field from config
+    $to = str_replace(array("\r", "\n"), '', $contact->field_contact_email[$langcode][0]['email']);
+  }
+
+  // Validate mail of recipient.
+  if (!valid_email_address($to)) {
+    watchdog('crm_core_mail', 'Mail was not sent because of not valid email of the recipient: %recipient', array('%recipient' => crm_core_contact_title($contact)));
+    return;
+  }
+
+  // TODO: get from mail from config 
+  $from = variable_get('site_mail', '');
+
   $params = array(
     'subject' => $subject,
-    'message' => $message,
-    'langcode' => $langcode,
+    'body' => $message
   );
 
   // Set a unique key for this mail.
   $name = isset($element->root()->name) ? $element->root()->name : 'unnamed';
-  $key = 'crm_rules_action_mail_' . $name . '_' . $element->elementId();
-  $languages = language_list();
-  $language = $langcode == LANGUAGE_NONE ? language_default() : $languages[$langcode];
+  $key = 'crm_core_mail_' . $name . '_' . $element->elementId();
 
-  // Validate mail of recipient
-  if (valid_email_address($to)) {
-    $message = drupal_mail('crm_core_mail', $key, $to, $language, $params, $from);
-    if ($message['result']) {
-      watchdog('rules', 'Successfully sent email to %recipient', array('%recipient' => $to));
-    }
-  }
-  else {
-    watchdog('rules', 'Mail was not sent because of not valid email of the recipient: %recipient', array('%recipient' => $to));
+  $message = drupal_mail('crm_core_mail', $key, $to, language_default(), $params, $from);
+
+  if ($message['result']) {
+    watchdog('crm_core_mail', 'Successfully sent email to %recipient', array('%recipient' => crm_core_contact_title($contact)));
+  } else {
+    watchdog('crm_core_mail', 'Mail was not sent to the %recipient', array('%recipient' => crm_core_contact_title($contact)));  
   }
 }
+

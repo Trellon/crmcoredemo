@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Default Rules configuration for CRM Core Email Contact
+ * Default Rules configuration.
  */
 
 /**
@@ -12,24 +12,21 @@ function crm_core_mail_default_rules_configuration() {
   $rules = array();
 
   $rule_config = '
-    { "crm_core_mail_send" : {
-        "LABEL" : "Send email to CRM Core Contact",
+    { "crm_core_mail_send_to_contact" : {
+        "LABEL" : "Send email to the contact",
         "PLUGIN" : "action set",
         "REQUIRES" : [ "crm_core_mail" ],
         "USES VARIABLES" : {
           "contact" : { "label" : "Contact", "type" : "crm_core_contact" },
           "subject" : { "label" : "Subject", "type" : "text" },
-          "from" : { "label" : "From", "type" : "text" },
-          "to" : { "label" : "To", "type" : "text" },
-          "message" : { "label" : "Message", "type" : "text_formatted" }
+          "message" : { "label" : "Message", "type" : "text" }
         },
         "ACTION SET" : [
-          { "filtered_mail" : {
-              "to" : [ "to" ],
+          {
+            "send_to_contact" : {
+              "contact" : [ "contact" ],
               "subject" : [ "subject" ],
-              "message" : [ "message" ],
-              "from" : [ "from" ],
-              "language" : [ "" ]
+              "message" : [ "message" ]
             }
           }
         ]
@@ -40,3 +37,4 @@ function crm_core_mail_default_rules_configuration() {
 
   return $rules;
 }
+
