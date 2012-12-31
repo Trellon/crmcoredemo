@@ -107,6 +107,29 @@ function crm_core_petition_node_view($node, $view_mode) {
 }
 
 /**
+ * Implements hook_crm_core_report_register
+ */
+function crm_core_petition_crm_core_report_register() {
+
+  $reports = array(
+    'petitions' => array(
+      'title'	  => t('Petitions'),
+      'reports'	=> array(
+        'petition_overview'	=> array(
+          'title'       => t('Petitions'),
+          'path'        => 'crm/reports/petition',
+          'description'	=> t('Overview of petitions stored in the system.'),
+        ),
+      ),
+      'widgets'	=> array(),
+    ),
+  );
+
+  return $reports;
+}
+
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function crm_core_petition_form_crm_core_profile_entry_form_alter(&$form, &$form_state, $form_id) {
