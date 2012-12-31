@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file Alters Rules form to be more friendly.
+ */
+
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Alters VBO settings form.
+ */
+function crm_core_mail_form_alter(&$form, &$form_state, $form_id) {
+  if (strpos($form_id, 'views_form_') != 0 ||
+      empty($form_state['values']['operation']) ||
+      $form_state['values']['operation'] != 'rules_component::crm_core_mail_send' ||
+      empty($form_state['step']) ||
+      $form_state['step'] != 'views_bulk_operations_config_form') {
+    return;
+  }
+
+  // Add some tweeks.
+  $subject = &$form['parameter']['subject']['settings'];
+  $subject['subject']['#type'] = 'textfield';
+  $subject['help']['token']['#attributes']['class'][] = 'element-invisible';
+}
+
+
+/**
+ * Implements hook_mail()
+ */
+function crm_core_mail_mail($key, &$message, $params) {
+  $message['subject'] .= str_replace(array("\r", "\n"), '', $params['subject']);
+  $message['body'][] = drupal_html_to_text($params['body']);
+}
+
