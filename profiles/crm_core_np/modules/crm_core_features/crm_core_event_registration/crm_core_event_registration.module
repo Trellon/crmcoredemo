@@ -76,6 +76,29 @@ function crm_core_event_registration_enable() {
 }
 
 /**
+ * Implements hook_crm_core_report_register
+ */
+function crm_core_event_registration_crm_core_report_register() {
+
+  $reports = array(
+    'events' => array(
+      'title'	  => t('Events'),
+      'reports'	=> array(
+        'events_overview'	=> array(
+          'title'       => t('Event Registration'),
+          'path'        => 'crm/reports/events/registrations',
+          'description'	=> t('Details on event registration throughout the site.'),
+        ),
+      ),
+      'widgets'	=> array(),
+    ),
+  );
+
+  return $reports;
+}
+
+
+/**
  * Implements hook_theme().
  */
 function crm_core_event_registration_theme($existing, $type, $theme, $path) {
