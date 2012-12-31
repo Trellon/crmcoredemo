@@ -112,6 +112,27 @@ function crm_core_volunteer_views_data_alter(&$data) {
   );
 }
 
+/**
+ * Implements hook_crm_core_report_register
+ */
+function crm_core_volunteer_crm_core_report_register() {
+
+  $reports = array(
+    'volunteer' => array(
+      'title'	  => t('Volunteer'),
+      'reports'	=> array(
+        'volunteer_commitment'	=> array(
+          'title'       => t('Volunteer Commitments'),
+          'path'        => 'crm/reports/volunteer/detail',
+          'description'	=> t('Displays volunteer commitments stored in the system.'),
+        ),
+      ),
+      'widgets'	=> array(),
+    ),
+  );
+
+  return $reports;
+}
 
 /**
  * Main registration form to be attached
