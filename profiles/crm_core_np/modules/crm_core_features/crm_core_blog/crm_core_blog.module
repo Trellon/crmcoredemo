@@ -5,3 +5,25 @@
  */
 
 include_once 'crm_core_blog.features.inc';
+
+/**
+ * Implements hook_crm_core_report_register
+ */
+function crm_core_blog_crm_core_report_register() {
+
+  $reports = array(
+    'blogs' => array(
+      'title'	  => t('Comments'),
+      'reports'	=> array(
+        'comment_overview'	=> array(
+          'title'       => t('Comment Report'),
+          'path'        => 'crm/reports/blog/commenters',
+          'description'	=> t('Details on who is commenting in the blog.'),
+        ),
+      ),
+      'widgets'	=> array(),
+    ),
+  );
+
+  return $reports;
+}
