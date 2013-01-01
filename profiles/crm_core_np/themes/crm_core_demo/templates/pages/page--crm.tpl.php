@@ -8,11 +8,13 @@
 </div>
 <div class="crm-nav">
   <div class="container">
-		<a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
+		<a href="<?php print base_path() . 'crm'; ?>" title="<?php print t('Home'); ?>">
 		  <img src="<?php print base_path() . path_to_theme() . '/images/crmcorelogo.png'; ?>" style="float: left;" alt="<?php print t('Home'); ?>" />
 		</a>
   	<div class="crm-nav-header pull-left">
-			CRM Core
+  		<a href="<?php print base_path() . 'crm'; ?>" title="<?php print t('Home'); ?>">
+				CRM Core
+  		</a>
   	</div>
     <div class="crm-opts-header pull-right">
       <?php if ($tabs): ?>

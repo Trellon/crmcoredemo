@@ -84,6 +84,13 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  /* Field: COUNT(DISTINCT CRM Activity: Activity ID) */
+  $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['relationship'] = 'reverse_field_crm_petition_reference_crm_core_activity';
+  $handler->display->display_options['fields']['activity_id']['group_type'] = 'count_distinct';
+  $handler->display->display_options['fields']['activity_id']['label'] = 'Responses';
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -119,12 +126,36 @@ function crm_core_petition_views_default_views() {
   $handler = $view->new_display('page', 'Petitions List', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
-  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'title' => 'title',
+    'activity_id' => 'activity_id',
+  );
+  $handler->display->display_options['style_options']['default'] = '-1';
+  $handler->display->display_options['style_options']['info'] = array(
+    'title' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'activity_id' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
-  $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Entity Reference: Referencing entity */
+  $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['id'] = 'reverse_field_crm_petition_reference_crm_core_activity';
+  $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['table'] = 'node';
+  $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['field'] = 'reverse_field_crm_petition_reference_crm_core_activity';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['path'] = 'crm/petitions';
   $handler->display->display_options['menu']['type'] = 'tab';
@@ -157,7 +188,7 @@ function crm_core_petition_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Petition Report';
+  $handler->display->display_options['title'] = 'Petition Response';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['group_by'] = TRUE;
   $handler->display->display_options['access']['type'] = 'perm';
@@ -216,12 +247,6 @@ function crm_core_petition_views_default_views() {
       'empty_column' => 0,
     ),
   );
-  /* Header: Global: View area */
-  $handler->display->display_options['header']['view']['id'] = 'view';
-  $handler->display->display_options['header']['view']['table'] = 'views';
-  $handler->display->display_options['header']['view']['field'] = 'view';
-  $handler->display->display_options['header']['view']['empty'] = TRUE;
-  $handler->display->display_options['header']['view']['view_to_insert'] = 'petition_totals:default';
   /* Relationship: Entity Reference: Referencing entity */
   $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['id'] = 'reverse_field_crm_petition_reference_crm_core_activity';
   $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['table'] = 'node';
@@ -238,7 +263,39 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
   $handler->display->display_options['fields']['activity_id']['relationship'] = 'reverse_field_crm_petition_reference_crm_core_activity';
   $handler->display->display_options['fields']['activity_id']['group_type'] = 'count';
-  $handler->display->display_options['fields']['activity_id']['label'] = 'Total Signatures';
+  $handler->display->display_options['fields']['activity_id']['label'] = 'Responses';
+  /* Field: Content: Goal */
+  $handler->display->display_options['fields']['field_crm_petition_goal']['id'] = 'field_crm_petition_goal';
+  $handler->display->display_options['fields']['field_crm_petition_goal']['table'] = 'field_data_field_crm_petition_goal';
+  $handler->display->display_options['fields']['field_crm_petition_goal']['field'] = 'field_crm_petition_goal';
+  $handler->display->display_options['fields']['field_crm_petition_goal']['settings'] = array(
+    'thousand_separator' => ' ',
+    'prefix_suffix' => 1,
+  );
+  /* Field: Content: Duration */
+  $handler->display->display_options['fields']['field_crm_petition_duration']['id'] = 'field_crm_petition_duration';
+  $handler->display->display_options['fields']['field_crm_petition_duration']['table'] = 'field_data_field_crm_petition_duration';
+  $handler->display->display_options['fields']['field_crm_petition_duration']['field'] = 'field_crm_petition_duration';
+  $handler->display->display_options['fields']['field_crm_petition_duration']['label'] = 'Start Date';
+  $handler->display->display_options['fields']['field_crm_petition_duration']['settings'] = array(
+    'format_type' => 'long',
+    'fromto' => 'value',
+    'multiple_number' => '',
+    'multiple_from' => '',
+    'multiple_to' => '',
+  );
+  /* Field: Content: Duration */
+  $handler->display->display_options['fields']['field_crm_petition_duration_1']['id'] = 'field_crm_petition_duration_1';
+  $handler->display->display_options['fields']['field_crm_petition_duration_1']['table'] = 'field_data_field_crm_petition_duration';
+  $handler->display->display_options['fields']['field_crm_petition_duration_1']['field'] = 'field_crm_petition_duration';
+  $handler->display->display_options['fields']['field_crm_petition_duration_1']['label'] = 'End Date';
+  $handler->display->display_options['fields']['field_crm_petition_duration_1']['settings'] = array(
+    'format_type' => 'medium',
+    'fromto' => 'value2',
+    'multiple_number' => '',
+    'multiple_from' => '',
+    'multiple_to' => '',
+  );
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
@@ -294,6 +351,19 @@ function crm_core_petition_views_default_views() {
   /* Display: Petition List */
   $handler = $view->new_display('page', 'Petition List', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  /* Header: Global: View area */
+  $handler->display->display_options['header']['view']['id'] = 'view';
+  $handler->display->display_options['header']['view']['table'] = 'views';
+  $handler->display->display_options['header']['view']['field'] = 'view';
+  $handler->display->display_options['header']['view']['empty'] = TRUE;
+  $handler->display->display_options['header']['view']['view_to_insert'] = 'petition_totals:default';
+  /* Header: Global: Result summary */
+  $handler->display->display_options['header']['result']['id'] = 'result';
+  $handler->display->display_options['header']['result']['table'] = 'views';
+  $handler->display->display_options['header']['result']['field'] = 'result';
+  $handler->display->display_options['header']['result']['empty'] = TRUE;
+  $handler->display->display_options['header']['result']['content'] = 'Displaying petitions @start - @end of @total.';
   $handler->display->display_options['path'] = 'crm/reports/petition';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Petition Report';
@@ -880,7 +950,7 @@ function crm_core_petition_views_default_views() {
   $view->description = 'Displays information about petitions in the system. Can be filtered by individual  petitions.';
   $view->tag = 'default';
   $view->base_table = 'crm_core_activity';
-  $view->human_name = 'Petition Totals';
+  $view->human_name = 'CRM Core Petition Totals';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
@@ -893,19 +963,20 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
   /* Relationship: Entity Reference: Referenced Entity */
   $handler->display->display_options['relationships']['field_crm_petition_reference_target_id']['id'] = 'field_crm_petition_reference_target_id';
   $handler->display->display_options['relationships']['field_crm_petition_reference_target_id']['table'] = 'field_data_field_crm_petition_reference';
   $handler->display->display_options['relationships']['field_crm_petition_reference_target_id']['field'] = 'field_crm_petition_reference_target_id';
-  /* Field: COUNT(Content: Nid) */
+  /* Field: COUNT(DISTINCT Content: Nid) */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['relationship'] = 'field_crm_petition_reference_target_id';
-  $handler->display->display_options['fields']['nid']['group_type'] = 'count';
+  $handler->display->display_options['fields']['nid']['group_type'] = 'count_distinct';
   $handler->display->display_options['fields']['nid']['label'] = 'Total Petitions';
   $handler->display->display_options['fields']['nid']['empty'] = '0';
   /* Field: COUNT(CRM Activity: Activity ID) */
@@ -914,13 +985,13 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
   $handler->display->display_options['fields']['activity_id']['group_type'] = 'count';
   $handler->display->display_options['fields']['activity_id']['label'] = 'Signatures Collected';
-  /* Field: AVG(Content: Nid) */
-  $handler->display->display_options['fields']['nid_1']['id'] = 'nid_1';
-  $handler->display->display_options['fields']['nid_1']['table'] = 'node';
-  $handler->display->display_options['fields']['nid_1']['field'] = 'nid';
-  $handler->display->display_options['fields']['nid_1']['relationship'] = 'field_crm_petition_reference_target_id';
-  $handler->display->display_options['fields']['nid_1']['group_type'] = 'avg';
-  $handler->display->display_options['fields']['nid_1']['label'] = 'Average Response';
+  /* Field: Global: Math expression */
+  $handler->display->display_options['fields']['expression']['id'] = 'expression';
+  $handler->display->display_options['fields']['expression']['table'] = 'views';
+  $handler->display->display_options['fields']['expression']['field'] = 'expression';
+  $handler->display->display_options['fields']['expression']['label'] = 'Average Response';
+  $handler->display->display_options['fields']['expression']['precision'] = '0';
+  $handler->display->display_options['fields']['expression']['expression'] = '[activity_id]/[nid]';
   /* Filter criterion: CRM Activity: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';

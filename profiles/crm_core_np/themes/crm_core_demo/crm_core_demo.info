@@ -7,6 +7,10 @@ core = 7.x
 base theme = twitter_bootstrap
 
 stylesheets[all][] = css/identity.css
+stylesheets[all][] = css/typography.css
+stylesheets[all][] = css/views.css
+stylesheets[all][] = css/forms.css
+
 
 regions[header]         = 'Top Bar'
 regions[highlighted]    = 'Highlighted'
