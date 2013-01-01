@@ -157,8 +157,7 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['table'] = 'node';
   $handler->display->display_options['relationships']['reverse_field_crm_petition_reference_crm_core_activity']['field'] = 'reverse_field_crm_petition_reference_crm_core_activity';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  $handler->display->display_options['path'] = 'crm/petitions';
-  $handler->display->display_options['menu']['type'] = 'tab';
+  $handler->display->display_options['path'] = 'petitions';
   $handler->display->display_options['menu']['title'] = 'Petitions';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['context'] = 0;
@@ -203,6 +202,9 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['style_options']['columns'] = array(
     'title' => 'title',
     'activity_id' => 'activity_id',
+    'field_crm_petition_goal' => 'field_crm_petition_goal',
+    'field_crm_petition_duration' => 'field_crm_petition_duration',
+    'field_crm_petition_duration_1' => 'field_crm_petition_duration_1',
     'nid' => 'nid',
     'nothing' => 'nothing',
     'nothing_1' => 'nothing_1',
@@ -218,6 +220,27 @@ function crm_core_petition_views_default_views() {
       'empty_column' => 0,
     ),
     'activity_id' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_crm_petition_goal' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_crm_petition_duration' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_crm_petition_duration_1' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -264,6 +287,8 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['fields']['activity_id']['relationship'] = 'reverse_field_crm_petition_reference_crm_core_activity';
   $handler->display->display_options['fields']['activity_id']['group_type'] = 'count';
   $handler->display->display_options['fields']['activity_id']['label'] = 'Responses';
+  $handler->display->display_options['fields']['activity_id']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['activity_id']['alter']['text'] = '<div class="total-highlight">[activity_id]</div>';
   /* Field: Content: Goal */
   $handler->display->display_options['fields']['field_crm_petition_goal']['id'] = 'field_crm_petition_goal';
   $handler->display->display_options['fields']['field_crm_petition_goal']['table'] = 'field_data_field_crm_petition_goal';
@@ -278,7 +303,7 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['fields']['field_crm_petition_duration']['field'] = 'field_crm_petition_duration';
   $handler->display->display_options['fields']['field_crm_petition_duration']['label'] = 'Start Date';
   $handler->display->display_options['fields']['field_crm_petition_duration']['settings'] = array(
-    'format_type' => 'long',
+    'format_type' => 'medium',
     'fromto' => 'value',
     'multiple_number' => '',
     'multiple_from' => '',
@@ -364,6 +389,12 @@ function crm_core_petition_views_default_views() {
   $handler->display->display_options['header']['result']['field'] = 'result';
   $handler->display->display_options['header']['result']['empty'] = TRUE;
   $handler->display->display_options['header']['result']['content'] = 'Displaying petitions @start - @end of @total.';
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-primary" href="crm/reports/petition/export">Export to CSV.</a></div>';
+  $handler->display->display_options['header']['area']['format'] = 'full_html';
   $handler->display->display_options['path'] = 'crm/reports/petition';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Petition Report';

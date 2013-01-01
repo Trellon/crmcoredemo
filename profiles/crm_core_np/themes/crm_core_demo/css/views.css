@@ -1,6 +1,54 @@
 @CHARSET "UTF-8";
 
+/* widgets */
+.view-petition-totals,
+.view-donations-totals {
+  margin-bottom: 12px;
+}
+.view-donations-overview-alt .views-exposed-form {
+  margin-top: 12px;
+}
+.info-panel {
+  border: 1px solid #CCC;
+  text-align: center;
+  font-size: 1.5em;
+  padding-bottom: .8em;
+  -webkit-border-radius: 12px;
+          border-radius: 12px;
+  -moz-background-clip: padding; 
+  -webkit-background-clip: padding-box; 
+  background-clip: padding-box;
+  overflow: hidden;
+}
+.info-panel .views-label {
+  background-color: #CCC;
+  font-size: .7em;
+  text-transform: underline;
+  text-align: left;
+  font-weight: 600;
+  display: block;
+  width: 100%;
+  padding: .5em;
+  margin-bottom: 12px;
+  color: #777;
+}
+
 /* Dates */
+.total-highlight {
+	background-color: #ccc;
+	text-align: center;
+	font-weight: 600;
+	width: auto;
+	display: inline-block;
+	padding: .3em .8em;
+  -webkit-border-radius: 8px;
+          border-radius: 8px;
+  -moz-background-clip: padding; 
+  -webkit-background-clip: padding-box; 
+  background-clip: padding-box;
+  margin-left: auto;
+  margin-right: auto;
+}
 .views-exposed-form {
   background-color: #e1e1e1;
   padding: 1em;

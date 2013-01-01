@@ -150,37 +150,7 @@ BODY.front .jumbotron {
   top: 2px !important;
 }
 
-/* widgets */
-.view-donations-totals {
-	margin-bottom: 12px;
-}
-.view-donations-overview-alt .views-exposed-form {
-	margin-top: 12px;
-}
-.info-panel {
-	border: 1px solid #CCC;
-	text-align: center;
-	font-size: 1.5em;
-	padding-bottom: .8em;
-  -webkit-border-radius: 12px;
-          border-radius: 12px;
-  -moz-background-clip: padding; 
-  -webkit-background-clip: padding-box; 
-  background-clip: padding-box;
-  overflow: hidden;
-}
-.info-panel .views-label {
-	background-color: #CCC;
-	font-size: .7em;
-	text-transform: underline;
-	text-align: left;
-	font-weight: 600;
-	display: block;
-	width: 100%;
-	padding: .5em;
-	margin-bottom: 12px;
-	color: #777;
-}
+
 
 
 
