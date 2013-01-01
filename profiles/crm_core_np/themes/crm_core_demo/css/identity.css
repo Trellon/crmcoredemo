@@ -1,3 +1,8 @@
+
+BODY.page-crm {
+	padding-top: 0px;
+}
+
 BODY.front .jumbotron {
 	background: url(../images/jumbotron.png) top center no-repeat;
 	height: 320px;
@@ -25,47 +30,14 @@ BODY.front .jumbotron {
 	padding: 5px 0px 0px 0px;
 	color: #999999;
 }
-
 .navbar-inner .container A.brand {
   margin-left: 30px;
 }
-
 .controls .form-type-radio {
   float: left;
   margin-right: 1em;
 }
 
-TEXTAREA {
-}
-
-/**
- * Fonts and typography
- */
-BODY {
-	font: 12px/1.7em "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-h1, h2, h3, h4, h5, h6 {
-	margin-top: 0;
-  font-weight: 300;
-}
-h2 {
-	font-size: 28px;
-}
-h2 {
-	font-size: 24px;
-}
-h3 {
-  font-size: 18px;
-}
-h4 {
-  font-size: 16px;
-}
-h5 {
-  font-size: 14px;
-}
-h6 {
-  font-size: 12px;
-}
 
 /**
  * page elements
@@ -84,11 +56,7 @@ h6 {
   height: 80px;
 }
 .crm-nav .container {
-          
 }
-
-
-
 .crm-nav .crm-nav-header {
 	font-weight: bold;
 	color: White;
@@ -150,7 +118,6 @@ h6 {
   background-image:      -o-linear-gradient(top, White, #aaaaaa);
   background-image:         linear-gradient(to bottom, White, #aaaaaa);
 }
-
 .title-container {
   background-color: #e1e1e1;
   background: url(../images/linen-light.png) top left repeat;
@@ -160,7 +127,6 @@ h6 {
   border-top: 1px solid #bbb;
   border-bottom: 1px solid #aaa;
 }
-
 .title-container H2 {
 	border: none;
 	padding-bottom: 0em;
@@ -168,200 +134,6 @@ h6 {
 	border-bottom: none;	
 }
 
-
-/*
- * Text formats
- */
-.text-format-wrapper .filter-wrapper {
-	border: 1px solid #CCC;
-	padding: .5em .5em 0em .5em;
-	margin: -1em 0em .5em 0em;
-	background-color: #EEE;
-  font-size: .85em;
-}
-.text-format-wrapper .filter-wrapper .filter-help {
-	float: right;
-  font-size: inherit;
-}
-
-.text-format-wrapper .filter-wrapper .control-group {
-  display: inline-block;
-  margin: 0em;
-}
-.text-format-wrapper .filter-wrapper LABEL {
-  display: inline-block;
-  font-size: inherit;
-  font-weight: bold !important;
-  text-transform: uppercase;
-  color: #777;
-  margin: 0em;
-}
-.text-format-wrapper .filter-wrapper .controls {
-  display: inline-block;
-  margin-left: 0.2em;
-  font-size: inherit;
-}
-.text-format-wrapper .filter-wrapper .controls SELECT {
-  display: inline-block;
-  margin: 0em 0em 0em 0.2em;
-  font-size: inherit;
-  height: auto;
-}
-.text-format-wrapper .filter-wrapper .filter-guidelines {
-  display: inline-block;
-}
-.text-format-wrapper .filter-wrapper UL.tips {
-  text-indent: -30000px;
-  overflow: none;
-  background-color: #EEE;
-  height: 21px;
-  width: 21px;
-  margin: 0em 0em 0em .5em;
-  padding: 0em;
-  display: inline-block;
-  background: url(../images/icons.png) -22px 1px no-repeat;
-}
-
-
-/* help text */
-.text-format-wrapper {
-	position: relative;
-}
-.form-type-managed-file  {
-  position: relative;
-}
-.text-format-wrapper .control-label,
-.form-type-managed-file  LABEL,
-.form-type-textfield  LABEL {
-  display: inline-block;
-  width: auto;
-}
-.form-type-managed-file .controls .help-block,
-.form-type-textfield .controls .help-block {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-}
-.form-type-managed-file .controls .help-block,
-.form-type-textfield .controls .help-block,
-.text-format-wrapper .description {
-	float: right;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	text-indent: -30000px;
-	width: 23px;
-	height: 23px;
-	overflow: hidden;
-	background: url(../images/icons.png) 0px 1px no-repeat;
-	margin-bottom: 0px;
-}
-
-/* Dates */
-.views-exposed-form {
-	background-color: #e1e1e1;
-	padding: 1em;
-	font-size: 0.9em;
-}
-.views-exposed-form .control-group {
-	margin: 0em .5em 0em 0em;
-	padding: 0em;
-}
-.views-widget-filter-field_activity_date_value {
-}
-#edit-field-activity-date-value-wrapper,
-#edit-field-donation-amounts-value-wrapper {
-  display: table;
-  float: none;	
-  width: 100%;
-  margin: 0em 0em 1em 0em;
-  padding: 0em 0em 1em 0em;
-  border-bottom: 1px solid #CCC;
-}
-#edit-field-donation-amounts-value-wrapper LABEL,
-#edit-field-activity-date-value-wrapper LABEL {
-  font-size: inherit;
-  margin: 0em;
-  padding: 0em 1em 0em 0em;
-  width: auto;
-  display: table-cell;
-  vertical-align: middle;
-  color: #777;
-}
-#edit-field-donation-amounts-value-wrapper .views-widget,
-#edit-field-activity-date-value-wrapper .views-widget {
-  display: table-cell;
-  vertical-align: middle;
-}
-#edit-field-donation-amounts-value-wrapper .control-group,
-#edit-field-activity-date-value-wrapper .control-group {
-	display: table;
-}
-#edit-field-donation-amounts-value-wrapper .control-group LABEL,
-#edit-field-activity-date-value-wrapper .control-group LABEL {
-	display: table-cell;
-	vertical-align: top;
-}
-#edit-field-donation-amounts-value-wrapper .control-group .controls,
-#edit-field-activity-date-value-wrapper .control-group .controls {
-	display: table-cell;
-	vertical-align: top;
-}
-#edit-field-donation-amounts-value-wrapper .views-widget,
-#edit-field-activity-date-value-wrapper .views-widget {
-	display: table;
-	vertical-align: top;
-}
-
-#edit-field-donation-amounts-value-wrapper .views-widget .control-group,
-#edit-field-activity-date-value-wrapper .views-widget .control-group {
-	display: table-cell;
-	padding: 0em .5em 0em 0em;
-}
-#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper, 
-#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-max-wrapper {
-	display: table-cell;
-}
-#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper LABEL, 
-#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-max-wrapper LABEL {
-  display: table-cell;
-  vertical-align: middle;
-  margin: 0em;
-  padding: 0em .5em 0em 0em;
-}
-#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper .controls, 
-#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-max-wrapper .controls {
-  display: table-cell;
-  vertical-align: middle;
-}
-#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper .controls INPUT, 
-#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-max-wrapper .controls INPUT {
-	margin: 0em;
-}
-
-.views-exposed-form .views-exposed-widget {
-  margin: 0em 0em 0em 0em;
-  padding: 0em 0em 0em 0em;
-}
-.views-exposed-form .views-exposed-widget .form-submit {
-  margin: 0em 0em 0em 0em;
-}
-
-.view-header {
-	padding: .5em;
-	margin: 0em 0em .5em 0em;
-	
-}
-.view-empty {
-	margin: 1em 0em;
-	padding: 1em;
-	background-color: #e1e1e1;
-	font-size: 2em;
-	text-align: center;
-	color: #777;
-	font-weight: 600;
-	line-height: normal;
-}
 
 /* Blocks */
 .news_subscription .name-title-wrapper,

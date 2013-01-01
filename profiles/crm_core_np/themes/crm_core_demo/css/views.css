@@ -1,0 +1,107 @@
+@CHARSET "UTF-8";
+
+/* Dates */
+.views-exposed-form {
+  background-color: #e1e1e1;
+  padding: 1em;
+  font-size: 0.9em;
+}
+.views-exposed-form .control-group {
+  margin: 0em .5em 0em 0em;
+  padding: 0em;
+}
+.views-widget-filter-field_activity_date_value {
+}
+#edit-field-activity-date-value-wrapper,
+#edit-field-donation-amounts-value-wrapper {
+  display: table;
+  float: none;  
+  width: 100%;
+  margin: 0em 0em 1em 0em;
+  padding: 0em 0em 1em 0em;
+  border-bottom: 1px solid #CCC;
+}
+#edit-field-donation-amounts-value-wrapper LABEL,
+#edit-field-activity-date-value-wrapper LABEL {
+  font-size: inherit;
+  margin: 0em;
+  padding: 0em 1em 0em 0em;
+  width: auto;
+  display: table-cell;
+  vertical-align: middle;
+  color: #777;
+}
+#edit-field-donation-amounts-value-wrapper .views-widget,
+#edit-field-activity-date-value-wrapper .views-widget {
+  display: table-cell;
+  vertical-align: middle;
+}
+#edit-field-donation-amounts-value-wrapper .control-group,
+#edit-field-activity-date-value-wrapper .control-group {
+  display: table;
+}
+#edit-field-donation-amounts-value-wrapper .control-group LABEL,
+#edit-field-activity-date-value-wrapper .control-group LABEL {
+  display: table-cell;
+  vertical-align: top;
+}
+#edit-field-donation-amounts-value-wrapper .control-group .controls,
+#edit-field-activity-date-value-wrapper .control-group .controls {
+  display: table-cell;
+  vertical-align: top;
+}
+#edit-field-donation-amounts-value-wrapper .views-widget,
+#edit-field-activity-date-value-wrapper .views-widget {
+  display: table;
+  vertical-align: top;
+}
+
+#edit-field-donation-amounts-value-wrapper .views-widget .control-group,
+#edit-field-activity-date-value-wrapper .views-widget .control-group {
+  display: table-cell;
+  padding: 0em .5em 0em 0em;
+}
+#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper, 
+#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-max-wrapper {
+  display: table-cell;
+}
+#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper LABEL, 
+#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-max-wrapper LABEL {
+  display: table-cell;
+  vertical-align: middle;
+  margin: 0em;
+  padding: 0em .5em 0em 0em;
+}
+#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper .controls, 
+#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-max-wrapper .controls {
+  display: table-cell;
+  vertical-align: middle;
+}
+#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper .controls INPUT, 
+#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-max-wrapper .controls INPUT {
+  margin: 0em;
+}
+
+.views-exposed-form .views-exposed-widget {
+  margin: 0em 0em 0em 0em;
+  padding: 0em 0em 0em 0em;
+}
+.views-exposed-form .views-exposed-widget .form-submit {
+  margin: 0em 0em 0em 0em;
+}
+
+.view-header {
+  padding: .5em;
+  margin: 0em 0em .5em 0em;
+  
+}
+.view-empty {
+  margin: 1em 0em;
+  padding: 1em;
+  background-color: #e1e1e1;
+  font-size: 2em;
+  text-align: center;
+  color: #777;
+  font-weight: 600;
+  line-height: normal;
+}
