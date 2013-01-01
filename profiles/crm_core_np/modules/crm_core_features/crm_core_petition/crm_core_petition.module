@@ -83,6 +83,10 @@ function crm_core_petition_permission() {
       'title' => t('Allow online petition signing'),
       'description' => t('Ability to use petition signing form on online peition pages'),
     ),
+    'crm_core petition reports' => array(
+      'title' => t('View online petition reports'),
+      'description' => t('Allow users to view reports on online petitions.'),
+    ),
   );
 }
 
