@@ -82,7 +82,6 @@ h6 {
   border-top: 1px solid #88aabb;
   width: 100%;
   height: 80px;
-          
 }
 .crm-nav .container {
           
@@ -144,22 +143,24 @@ h6 {
   -moz-border-radius: 0em;
   -webkit-border-radius: 0em;
   margin-right: 0px;
-
-
   background-color: White;
   background-image: -webkit-gradient(linear, left top, left bottom, from(White), to(#aaaaaa));
   background-image: -webkit-linear-gradient(top, White, #aaaaaa);
   background-image:    -moz-linear-gradient(top, White, #aaaaaa);
   background-image:      -o-linear-gradient(top, White, #aaaaaa);
   background-image:         linear-gradient(to bottom, White, #aaaaaa);
-
-  
 }
 
 .title-container {
   background-color: #e1e1e1;
   background: url(../images/linen-light.png) top left repeat;
+  -webkit-box-shadow: 0px 5px 5px 0px #ccd;
+          box-shadow: 0px 5px 5px 0px #ccd;
+  margin-bottom: 8px;
+  border-top: 1px solid #bbb;
+  border-bottom: 1px solid #aaa;
 }
+
 .title-container H2 {
 	border: none;
 	padding-bottom: 0em;
@@ -376,3 +377,38 @@ h6 {
   left: 190px !important;
   top: 2px !important;
 }
+
+/* widgets */
+.view-donations-totals {
+	margin-bottom: 12px;
+}
+.view-donations-overview-alt .views-exposed-form {
+	margin-top: 12px;
+}
+.info-panel {
+	border: 1px solid #CCC;
+	text-align: center;
+	font-size: 1.5em;
+	padding-bottom: .8em;
+  -webkit-border-radius: 12px;
+          border-radius: 12px;
+  -moz-background-clip: padding; 
+  -webkit-background-clip: padding-box; 
+  background-clip: padding-box;
+  overflow: hidden;
+}
+.info-panel .views-label {
+	background-color: #CCC;
+	font-size: .7em;
+	text-transform: underline;
+	text-align: left;
+	font-weight: 600;
+	display: block;
+	width: 100%;
+	padding: .5em;
+	margin-bottom: 12px;
+	color: #777;
+}
+
+
+

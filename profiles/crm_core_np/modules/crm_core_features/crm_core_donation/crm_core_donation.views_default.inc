@@ -386,8 +386,8 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = '<a href="/crm/reports/donations-overview/export">Export to CSV.</a>';
-  $handler->display->display_options['header']['area']['format'] = 'filtered_html';
+  $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-primary" href="/crm/reports/donations-overview/export">Export to CSV.</a></div>';
+  $handler->display->display_options['header']['area']['format'] = 'full_html';
   $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
@@ -601,7 +601,7 @@ function crm_core_donation_views_default_views() {
   $view->description = 'Total donations received. Can be filtered by donation page to provide filtered results.';
   $view->tag = 'default';
   $view->base_table = 'crm_core_activity';
-  $view->human_name = 'donations_totals';
+  $view->human_name = 'CRM Core Donations: Totals';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
@@ -623,6 +623,8 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['field_donation_amounts']['field'] = 'field_donation_amounts';
   $handler->display->display_options['fields']['field_donation_amounts']['group_type'] = 'sum';
   $handler->display->display_options['fields']['field_donation_amounts']['label'] = 'Total Raised';
+  $handler->display->display_options['fields']['field_donation_amounts']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_donation_amounts']['alter']['text'] = '$[field_donation_amounts]';
   $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
     'thousand_separator' => ' ',
     'prefix_suffix' => 1,
