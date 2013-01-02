@@ -11,6 +11,8 @@ stylesheets[all][] = css/typography.css
 stylesheets[all][] = css/views.css
 stylesheets[all][] = css/forms.css
 stylesheets[all][] = css/elements.css
+stylesheets[all][] = css/homebox-alt.css
+stylesheets[all][] = css/activity.css
 
 
 regions[header]         = 'Top Bar'
