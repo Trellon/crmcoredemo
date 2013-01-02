@@ -1,0 +1,23 @@
+
+#homebox-buttons {
+  display: none;
+}
+#homebox .homebox-column {
+  background-image: none;
+}
+#homebox .homebox-portlet  {
+  border: none;
+}
+#homebox .homebox-portlet .portlet-header {
+  display: none;
+}
+#homebox .homebox-portlet .portlet-content {
+  padding: 0em;
+}
+#homebox .homebox-portlet .portlet-content .view-empty {
+  margin: 0em;
+}
+#homebox .homebox-portlet .homebox-portlet-inner {
+  border: none;
+}
+
