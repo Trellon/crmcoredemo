@@ -1,0 +1,82 @@
+DECORATOR API
+-------------
+
+This file contains an overview to API for Decorator.
+
+MOTIVATION AND PITFALLS
+-----------------------
+
+Decorator utilizes generation of files, so you shouldn't be using it, unless there
+is no other way to accomplish your needs.
+
+This module is designed for those cases where there is no pattern for composition
+(decorator, mixins, dependency injection) used in the subsystem (described by objects)
+you want to extend, but there is a register present which can be overriden. You
+simply want to inject a functionality from your module, to a class defined outside
+your module, which is somewhere in the middle of a chain of inheriting classes from
+left to right, to have this particular functionality in all of those classes to
+the right. Decorator can help achieve it from the other side, generating classes
+which extends all classes to the right. Let's call these generated classes "decorators".
+One thing necessary keeping in mind is that the file generation process is really
+time consuming. Therefore "applicable" only in strongly cached situations.
+
+USAGE
+-----
+
+For working with Decorator you can use these functions:
+
+  // Set definitions of "decorators", objects which are going to be generated, and
+  // generate them if not already existing.
+  decorator_set_decorators('my_module', $definitions);
+
+  // Retrieve cached definitions of "decorators".
+  $decorators = decorator_get_decorators('my_module');
+
+  // Retrieve cached decorator's class name, according to parent class name.
+  $decorator = decorator_get_decorator('my_module', 'my_decorator_parent');
+
+  // Purge cached data, delete decorator files.
+  decorator_purge('my_module');
+
+Following are the necessary definitions:
+
+  // An associated array of decorator definitions. Optional properties are commented out.
+  $definitions = array(
+    'info' => array(
+      'module' => 'my_module',
+    //'path' => drupal_get_path('module', 'my_module') . '/plugins',
+    ),
+    'templates' => array(
+      'my_template' => array(
+        'parent' => 'my_template_parent',
+      //'module' => 'my_module',
+      //'path' => drupal_get_path('module', 'my_module') . '/plugins',
+      //'file' => 'my_template.inc',
+      //'class' => 'my_template',
+        'decorators' => array(
+          'my_decorator' => array(
+            'parent' => 'my_decorator_parent',
+          //'file' => 'my_decorator.inc',
+          //'class' => 'my_decorator',
+          ),
+        ),
+      ),
+    ),
+  );
+
+  // A class definition of the decorator template.
+  // File drupal_get_path('module', 'my_module') . '/plugins/my_template.inc'
+  class my_template extends my_template_parent {
+    // Your overrides here.
+  }
+
+Which results in following:
+
+  // A generated class definition of a decorator.
+  // File 'my_decorator.inc' somewhere in the files folder.
+  class my_decorator extends my_decorator_parent {
+    // Copied overrides here.
+  }
+
+For a more detailed example of an implementation see the sources of Views Decorator
+module.

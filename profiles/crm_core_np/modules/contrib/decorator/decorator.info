@@ -1,0 +1,13 @@
+name = Decorator
+description = "Decorates classes using inheritance and file generation."
+core = 7.x
+package = Decorator
+
+files[] = decorator.module
+
+; Information added by drupal.org packaging script on 2011-04-26
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "decorator"
+datestamp = "1303776413"
+
