@@ -1,11 +1,31 @@
 <?php 
+/**
+ * @file
+ * template.php file for CRM Core Demo theme.
+ * 
+ * This file contains a number of practical demonstrations
+ * for how to work with CRM Core demo code. 
+ * 
+ * - hook_pre_render_views_view: used to override various activity
+ *   feeds and apply stylized formating consistently through the
+ *   interface.
+ * 
+ */
 
-function crm_core_demo_preprocess_region(&$variables){
-  // dpm($variables);
-}
-
+/**
+ * Preprocess variables for block.tpl.php
+ * 
+ * @see block.tpl.php
+ */
 function crm_core_demo_preprocess_block(&$variables){
   
+	// adding classes specific to twitter bootstrap to allow some blocks
+	// to display as horizontal rows in the theme. the only block regions we
+	// are modifying are 'below' and 'bottom'.
+	
+	// blocks can be added to the theme using the block module and the context
+	// module. This function accounts for the presence of each.
+	
   // creating a static variable to store information about the number of blocks in each region
   // it will be a keyed array that simply lists the number of blocks in each item
   $regions = &drupal_static(__FUNCTION__);
@@ -13,7 +33,6 @@ function crm_core_demo_preprocess_block(&$variables){
   
   // check to see whether or not we have already counted the blocks for this region
   if(!isset($regions[$item])){
-    
     // set up the region array
     $regions[$item] = array('blocks' => 0, 'cblocks' => 0);
     
@@ -36,7 +55,7 @@ function crm_core_demo_preprocess_block(&$variables){
   }
   
   // apply a custom class to blocks based on the number of items in the region
-  // only do this for the right regions
+  // only do this for the proper regions
   if($variables['elements']['#block']->region === 'below' || $variables['elements']['#block']->region === 'bottom'){
     $mod = 'span' . 12 / ($regions[$item]['cblocks'] + $regions[$item]['blocks']);
     $variables['classes_array'][] = $mod;
@@ -50,10 +69,15 @@ function crm_core_demo_preprocess_block(&$variables){
  * @see page.tpl.php
  */
 function crm_core_demo_preprocess_page(&$variables) {
+	// mostly using this function for debugging
+	// TODO: remove this function at some point in the future
 }
+
 /**
- * Overriding default text areas
- * @param unknown_type $variables
+ * Overriding default text areas to remove the handlebars from the bottom.
+ * Adding a autosizing jquery plugin instead.
+ * 
+ * @param array $variables: preprocessing variables
  */
 function crm_core_demo_textarea($variables) {
   $element = $variables['element'];
@@ -77,46 +101,72 @@ function crm_core_demo_textarea($variables) {
   $output .= '</div>';
   return $output;
 }
+
+
 /**
- * Implementation of hook_preprocess_views_view
+ * Implementation of hook_preprocess_views_pre_render
+ * 
+ * This function is used as a preprocessing function for views
+ * within the theme. Each time a view is loaded, it directs 
+ * traffic to the appropriate preprocessing function.
+ * 
  */
-function crm_core_demo_preprocess_views_view(&$vars) {
-}
-
-function crm_core_demo_preprocess_views_view__crm_core_recent_activities__block_1 (&$vars) {
-	dpm('yo yo yo 2');
+function crm_core_demo_views_pre_render(&$view) {
+	
+	// check to see if the view has a name. if so, look for
+	// a correlate function in the theme that can be loaded
+	// to preprocess variables within the view
+	
+	if (isset($view->name)) {
+		$function = 'crm_core_demo_preprocess_views_view__'.$view->name;
+		if (function_exists($function)) {
+			$function($view);
+		}
+	}
+	
 }
 
 /**
- * Preprocesses activity lists to add information relevant to the view
+ * Example of a theme preprocessing function. 
+ * 
+ * This function assigns several custom variables to the view being loaded. 
+ * It is specific to the view being presented, helping to keep code 
+ * well-organized within this file.
  */
 function crm_core_demo_preprocess_views_view__crm_core_recent_activities(&$view) {
+
+	// we already know the structure of the view being loaded, so we are going
+	// to make modifications based on data coming from the view. In this case, we are
+	// interested in the kind of activity being presented, and want to display
+	// some custom text and icons in the theme template file. Information about
+	// the icon and custom text are stored here as variables with each view result.
 	
 	foreach ($view->result as $item => $data){
-		
+
+		// TODO: remove debugging
 		// dpm($view->result[$item]);
 		// dpm($view->result[$item]->crm_core_contact_field_data_field_activity_participants_cont);
 		// dpm($view->result[$item]->field_contact_name[0]['rendered']['#markup']);
 		// dpm($view->result[$item]->field_field_donation_amounts[0]['rendered']['#markup']);
-		
+
 		if(is_array($view->result[$item]->field_contact_name) && sizeof($view->result[$item]->field_contact_name) > 0){
 			$name = $view->result[$item]->field_contact_name[0]['rendered']['#markup'];
-			$link = l($name, 
-					'crm/contact/' . $view->result[$item]->crm_core_contact_field_data_field_activity_participants_cont, 
+			$link = l($name,
+					'crm/contact/' . $view->result[$item]->crm_core_contact_field_data_field_activity_participants_cont,
 					array('attributes' => array(
 							'class'	=> 'contact_name',
-						)
 					)
-				);
+				)
+			);
 		} else {
 			$name = 'An anonymous user';
 			$link = $name;
 		}
-		
+
 		// add default icons and text to each activity item
 		$view->result[$item]->icon_class = 'activity-icon-default';
 		$view->result[$item]->activity_desc = $link . ' did something in the system';
-	
+
 		// loop through the possible activity types
 		switch ($view->result[$item]->crm_core_activity_type){
 			case 'donation':
@@ -135,28 +185,13 @@ function crm_core_demo_preprocess_views_view__crm_core_recent_activities(&$view)
 				break;
 		}
 	}
-	
+
 }
-
-function crm_core_demo_views_pre_render(&$view) {
-
-	
-	if (isset($view->name)) {
-		$function = 'crm_core_demo_preprocess_views_view__'.$view->name;
-		if (function_exists($function)) {
-			$function($view);
-		}
-	}
-	
-	
-	
-}
-
 
 
 /**
  * Implementation of hook_theme
- * Enter description here ...
+ * Creating several custom functions for presenting links within the theme.
  */
 function crm_core_demo_theme() {
   return array(
@@ -170,7 +205,7 @@ function crm_core_demo_theme() {
 }
 
 /**
- * theme_twitter_bootstrap_btn_dropdown
+ * copy of theme_twitter_bootstrap_btn_dropdown
  */
 function crm_core_demo_btn_dropdown($variables) {
   $type_class = '';
