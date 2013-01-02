@@ -88,36 +88,55 @@ function crm_core_demo_preprocess_views_view(&$vars) {
 		}
 	}
 }
+
+function crm_core_demo_preprocess_views_view__crm_core_recent_activities__block_1 (&$vars) {
+	dpm('yo yo yo 2');
+}
+
 /**
  * Preprocessor for activity lists
  */
 function crm_core_demo_preprocess_views_view__crm_core_recent_activities(&$vars) {
+}
+
+function crm_core_demo_views_pre_render(&$view) {
 	
-	// dpm($vars);
+	dpm('yo yo yo 4');
 	
-	foreach ($vars['view']->result as $item => $data){
+	foreach ($view->result as $item => $data){
 		// dpm($item);
 		// dpm($data);
-		
-		$vars['view']->result[$item]->icon_class = 'activity-icon-default';
-		$vars['view']->result[$item]->activity_desc = 'someone did something';
-		
-		switch ($vars['view']->result[$item]){
+		// dpm($vars);
+		// dpm($vars['view']);
+		// dpm($vars['view']->query);
+		// dpm($vars['view']->style_plugin);
+	
+		// $vars['view']->result[$item]->icon_class = 'activity-icon-default';
+		// $vars['view']->result[$item]->activity_desc = 'someone did something';
+	
+		switch ($view->result[$item]->crm_core_activity_type){
 			case 'donation':
-				$vars['view']->result[$item]->icon_class = 'activity-icon-donation';				
-				$vars['view']->result[$item]->activity_desc = 'someone made a donation of X dollars';				
+				$view->result[$item]->yoyoyo = 'yo yo yo';
+				$view->result[$item]->icon_class = '.activity-icon-donation';
+				$view->result[$item]->activity_desc = 'someone made a donation of X dollars';
+	
+				// $vars['view']->style_plugin->rendered_fields[$item]->nothing = 'yo yo yo';
+				// $vars['view']->style_plugin->rendered_fields[$item]['nothing'] = 'yo yo yo';
+				// dpm($vars['view']->style_plugin->rendered_fields[$item]);
+	
 				break;
 			case 'event-registration':
 				break;
 			default:
 				break;
 		}
-		
+	
 		// dpm($vars['view']->result[$item]);
-		
+	
 	}
+	
+	
 }
-
 
 
 

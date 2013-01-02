@@ -30,15 +30,14 @@
 	// dpm($variables);
 	// dpm($row);
 	// dpm($fields);
-
+	// dpm($view);
+	// dpm($yoyoyo);
+	dpm($row);
+	
 ?>
-<?php foreach ($fields as $id => $field): ?>
-  <?php if (!empty($field->separator)): ?>
-    <?php print $field->separator; ?>
-  <?php endif; ?>
+<div class="activity_icon <?php print $row->icon_class; ?>"></div>
+<div class="activity_desc">
+	<?php print $row->activity_desc; ?>
+</div>
 
-  <?php print $field->wrapper_prefix; ?>
-    <?php print $field->label_html; ?>
-    <?php print $field->content; ?>
-  <?php print $field->wrapper_suffix; ?>
-<?php endforeach; ?>
+

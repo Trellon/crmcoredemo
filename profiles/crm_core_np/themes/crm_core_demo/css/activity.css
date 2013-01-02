@@ -13,3 +13,11 @@
 .activity-list .activity-record:last-child {
   border-bottom: none;
 }
+.activity_icon {
+  float: left;
+  width: 45px;
+  height: 200px;
+}
+.activity_desc {
+  margin-left: 53px;
+}
