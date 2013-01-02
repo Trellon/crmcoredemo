@@ -79,10 +79,12 @@ function crm_core_demo_settings_preprocess_page($vars){
 
 /*
  * Implementation of hook_menu_alter
-*/
+ */
 function crm_core_demo_settings_menu_alter(&$items) {
 
-	// set the dashboard to a homebox preset
+	// Sets the CRM Core dashboard tab to a preset homebox
+	// this allows CRM Core to provide dashboards in a variety of situations
+	// which could have varying business requirements
 	$items['crm']['page callback'] = 'homebox_build';
 	$items['crm']['page arguments'] = $items['crm/dashboard/hb']['page arguments'];
 

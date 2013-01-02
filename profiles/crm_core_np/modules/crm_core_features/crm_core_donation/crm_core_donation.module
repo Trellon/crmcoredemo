@@ -2,6 +2,10 @@
 /**
  * @file
  * Code for the CRM Core Donation feature.
+ * 
+ * This module handles most of the default settings necessary to run
+ * CRM Core Demo. It also includes a number of enhancements that demonstrate 
+ * ways of working with CRM Core features in Drupal.
  */
 
 include_once('crm_core_donation.features.inc');
@@ -195,28 +199,16 @@ function crm_core_donation_crm_core_report_register() {
   return $reports;
 }
 
-function crm_core_donation_test() {
-	return 'yo yo yo this is crm core donation test';
+/*
+ * Implementation of hook_menu_alter
+ */
+function crm_core_donation_menu_alter(&$items) {
+	
+	// set the dashboard to a homebox preset
+	$items['crm']['page callback'] = 'homebox_build';
+	$items['crm']['page arguments'] = $items['crm/dashboard/hb']['page arguments'];
+
 }
-
-function MYMODULE_access_callback($account) {
-	if ($something) {
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-function MYMODULE_user_edit_page_callback($account) {
-	if ($something) {
-		return drupal_get_form('some_form');
-	}
-	else {
-		return drupal_get_form('some_other_form');
-	}
-}
-
-
 
 /**
  * Dispatch (callback) menu items for PDP
