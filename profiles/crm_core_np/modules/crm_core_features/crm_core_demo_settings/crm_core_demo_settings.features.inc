@@ -39,3 +39,75 @@ function crm_core_demo_settings_ctools_plugin_api() {
     return array("version" => "1");
   }
 }
+
+/**
+ * Implements hook_views_api().
+ */
+function crm_core_demo_settings_views_api() {
+  return array("version" => "3.0");
+}
+
+/**
+ * Implements hook_homebox().
+ */
+function crm_core_demo_settings_homebox() {
+  $homeboxes = array();
+
+  $homeboxes['crm_core_dashboard'] = array (
+    'regions' => 2,
+    'cache' => 1,
+    'color' => 0,
+    'colors' => 
+    array (
+      0 => '#E4F0F8',
+      1 => '#E4F0F8',
+      2 => '#E4F0F8',
+      3 => '#E4F0F8',
+      4 => '#E4F0F8',
+      5 => '#E4F0F8',
+    ),
+    'blocks' => 
+    array (
+      'menu_menu-crm-core-content' => 
+      array (
+        'module' => 'menu',
+        'delta' => 'menu-crm-core-content',
+        'region' => 2,
+        'movable' => 0,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 0,
+        'title' => '',
+        'weight' => -22,
+      ),
+      'views_d2b9063a2b28cbc611462754cfae32a3' => 
+      array (
+        'module' => 'views',
+        'delta' => 'd2b9063a2b28cbc611462754cfae32a3',
+        'region' => 1,
+        'movable' => 0,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 0,
+        'title' => '',
+        'weight' => -22,
+      ),
+    ),
+    'widths' => 
+    array (
+    ),
+    'title' => 'Dashboard',
+    'path' => 'crm/dashboard/hb',
+    'menu' => 1,
+    'enabled' => 1,
+    'auto_save' => 1,
+    'full' => 1,
+    'roles' => 
+    array (
+      0 => 'authenticated user',
+    ),
+  );
+
+
+  return $homeboxes;
+}
