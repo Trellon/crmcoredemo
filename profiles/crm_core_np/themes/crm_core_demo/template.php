@@ -81,12 +81,6 @@ function crm_core_demo_textarea($variables) {
  * Implementation of hook_preprocess_views_view
  */
 function crm_core_demo_preprocess_views_view(&$vars) {
-	if (isset($vars['view']->name)) {
-		$function = 'crm_core_demo_preprocess_views_view__'.$vars['view']->name;
-		if (function_exists($function)) {
-			$function($vars);
-		}
-	}
 }
 
 function crm_core_demo_preprocess_views_view__crm_core_recent_activities__block_1 (&$vars) {
@@ -94,46 +88,66 @@ function crm_core_demo_preprocess_views_view__crm_core_recent_activities__block_
 }
 
 /**
- * Preprocessor for activity lists
+ * Preprocesses activity lists to add information relevant to the view
  */
-function crm_core_demo_preprocess_views_view__crm_core_recent_activities(&$vars) {
-}
-
-function crm_core_demo_views_pre_render(&$view) {
-	
-	dpm('yo yo yo 4');
+function crm_core_demo_preprocess_views_view__crm_core_recent_activities(&$view) {
 	
 	foreach ($view->result as $item => $data){
-		// dpm($item);
-		// dpm($data);
-		// dpm($vars);
-		// dpm($vars['view']);
-		// dpm($vars['view']->query);
-		// dpm($vars['view']->style_plugin);
+		
+		// dpm($view->result[$item]);
+		// dpm($view->result[$item]->crm_core_contact_field_data_field_activity_participants_cont);
+		// dpm($view->result[$item]->field_contact_name[0]['rendered']['#markup']);
+		// dpm($view->result[$item]->field_field_donation_amounts[0]['rendered']['#markup']);
+		
+		if(is_array($view->result[$item]->field_contact_name) && sizeof($view->result[$item]->field_contact_name) > 0){
+			$name = $view->result[$item]->field_contact_name[0]['rendered']['#markup'];
+			$link = l($name, 
+					'crm/contact/' . $view->result[$item]->crm_core_contact_field_data_field_activity_participants_cont, 
+					array('attributes' => array(
+							'class'	=> 'contact_name',
+						)
+					)
+				);
+		} else {
+			$name = 'An anonymous user';
+			$link = $name;
+		}
+		
+		// add default icons and text to each activity item
+		$view->result[$item]->icon_class = 'activity-icon-default';
+		$view->result[$item]->activity_desc = $link . ' did something in the system';
 	
-		// $vars['view']->result[$item]->icon_class = 'activity-icon-default';
-		// $vars['view']->result[$item]->activity_desc = 'someone did something';
-	
+		// loop through the possible activity types
 		switch ($view->result[$item]->crm_core_activity_type){
 			case 'donation':
-				$view->result[$item]->yoyoyo = 'yo yo yo';
-				$view->result[$item]->icon_class = '.activity-icon-donation';
-				$view->result[$item]->activity_desc = 'someone made a donation of X dollars';
-	
-				// $vars['view']->style_plugin->rendered_fields[$item]->nothing = 'yo yo yo';
-				// $vars['view']->style_plugin->rendered_fields[$item]['nothing'] = 'yo yo yo';
-				// dpm($vars['view']->style_plugin->rendered_fields[$item]);
-	
+				$view->result[$item]->icon_class = 'activity-icon-donation';
+				$view->result[$item]->activity_desc = $link . ' donated <strong>$' . $view->result[$item]->field_field_donation_amounts[0]['rendered']['#markup'] . '</strong>.' ;
 				break;
-			case 'event-registration':
+			case 'event_registration':
+				$view->result[$item]->icon_class = 'activity-icon-event-registration';
+				$view->result[$item]->activity_desc = $link . ' registered for an event.';
+				break;
+			case 'petition_signature':
+				$view->result[$item]->icon_class = 'activity-icon-petition-signature';
+				$view->result[$item]->activity_desc = $link . ' signed a petition.';
 				break;
 			default:
 				break;
 		}
-	
-		// dpm($vars['view']->result[$item]);
-	
 	}
+	
+}
+
+function crm_core_demo_views_pre_render(&$view) {
+
+	
+	if (isset($view->name)) {
+		$function = 'crm_core_demo_preprocess_views_view__'.$view->name;
+		if (function_exists($function)) {
+			$function($view);
+		}
+	}
+	
 	
 	
 }
