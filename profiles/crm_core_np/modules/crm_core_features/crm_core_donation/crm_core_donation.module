@@ -195,6 +195,29 @@ function crm_core_donation_crm_core_report_register() {
   return $reports;
 }
 
+function crm_core_donation_test() {
+	return 'yo yo yo this is crm core donation test';
+}
+
+function MYMODULE_access_callback($account) {
+	if ($something) {
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+function MYMODULE_user_edit_page_callback($account) {
+	if ($something) {
+		return drupal_get_form('some_form');
+	}
+	else {
+		return drupal_get_form('some_other_form');
+	}
+}
+
+
+
 /**
  * Dispatch (callback) menu items for PDP
  *

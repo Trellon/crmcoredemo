@@ -75,3 +75,17 @@ function crm_core_demo_settings_preprocess_page($vars){
   drupal_add_library('crm_core_demo_settings', 'expanding');
   
 }	
+
+
+/*
+ * Implementation of hook_menu_alter
+*/
+function crm_core_demo_settings_menu_alter(&$items) {
+
+	// set the dashboard to a homebox preset
+	$items['crm']['page callback'] = 'homebox_build';
+	$items['crm']['page arguments'] = $items['crm/dashboard/hb']['page arguments'];
+
+}
+
+
