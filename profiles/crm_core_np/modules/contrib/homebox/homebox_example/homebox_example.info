@@ -1,0 +1,11 @@
+name = Homebox example
+description = An example implementation of the Homebox API
+dependencies[] = homebox
+package = Homebox
+core = 7.x
+; Information added by drupal.org packaging script on 2011-10-05
+version = "7.x-2.0-beta6"
+core = "7.x"
+project = "homebox"
+datestamp = "1317831105"
+

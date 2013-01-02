@@ -1,0 +1,8 @@
+
+HOME BOX API:
+====================
+
+Homebox features a simple API that allows modules to ship with 
+fully-functional Homebox pages that live in code.
+
+* See homebox_example.module for documentation and a code example

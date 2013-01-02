@@ -1,0 +1,45 @@
+
+CHANGELOG for Homebox for Drupal
+
+7.x-2.x-dev xxxx/xx/xx
+
+
+7.x-2.x-beta6 2011/10/05
+  - Fix another bad syntax error.
+
+7.x-2.x-beta5 2011/10/05
+  - #1296902 by EvanDonovan: Fixed Homebox user profile path should be admin/people/homebox, not admin/user/homebox.
+  - #1295292 by theullrich: Fixed Getting  BLOCK_CACHE_PER_PAGE error.
+  - #1294790 by mongolito404: Added Homebox should uses hook_block_view_alter() and hook_block_view_MODULE_DELTA_alter() implementations.
+  - Fix syntax error.
+
+7.x-2.x-beta4 2011/10/04
+  - #946206 by rv0 | flecus: Fixed Changed the color of the block is not saved.
+  - #1107020 by heyrocker, alakon: Fixed 'User profile Homebox' link does not belong in floating primary admin menu.
+  - #1152692 by heyrocker: Fixed Custom edit forms do not work.
+  - #1202592 by setvik, slashrsm: Fixed Features export: jquery_ui() is not depencency anymore in D7.
+  - Fix XSS vulnerability in homebox_og.
+  - #1289338 filter on output, validate on input.
+
+7.x-2.x-beta3 2011/02/17
+  - by brianV: Remove unneeded hook_update_n() implementations for D5-D6 update.
+  - by brianV: Fix autosave.
+  - #1063928 by drumm: Fix equalizeColumnHeight() JS function, which fixes the block landing zones.
+  - by brianV: revert #1063928 to remove 100% width columns from the maximum-height check.
+
+7.x-2.0-beta2 2011/02/15
+  - by brianV: update arguments to og_is_group_type() in homebox_og.module.
+  - by brianV: remove navigation menu from homebox_example to avoid throwing errors.
+  - by brianV: make sure the block still exists before adding it to the list of allowed blocks.
+  - by brianV: make sure a views display with the given display_id exists before attempting to fetch a block description from it.
+  - by brianV: if custom widths aren't set, make each width a percentage of the total available.
+  - by brianV: make custom widths code compatible with PHP <= 5.3.0.
+
+7.x-2.0-beta1 2011/02/14
+  - by brianV: Initial D7 port.
+  - by brianV: Match column widths with case-insensitive regex rather than exact match in homebox.js due to IE irregularity.
+  - #1049416 by grobot: Fixed Missing argument 3 for db_query_range().
+  - #1053946 by thekevinday: Fixed Homebox doesn't display views properly.
+  - #1052456 by thekevingday: Fixed Invalid json uses.
+  - by brianV: Remove unneeded hook_requirements().
+  - by brianV: Fix the bad deltas in homebox_example.module.

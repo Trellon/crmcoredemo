@@ -1,0 +1,14 @@
+name = Homebox OG
+description = Provides integration with Organic Groups and Homebox
+dependencies[] = homebox
+dependencies[] = og
+package = Homebox
+core = 7.x
+configure = admin/config/group/homebox
+
+; Information added by drupal.org packaging script on 2011-10-05
+version = "7.x-2.0-beta6"
+core = "7.x"
+project = "homebox"
+datestamp = "1317831105"
+
