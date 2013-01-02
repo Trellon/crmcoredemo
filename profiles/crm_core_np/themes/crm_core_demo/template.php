@@ -77,6 +77,49 @@ function crm_core_demo_textarea($variables) {
   $output .= '</div>';
   return $output;
 }
+/**
+ * Implementation of hook_preprocess_views_view
+ */
+function crm_core_demo_preprocess_views_view(&$vars) {
+	if (isset($vars['view']->name)) {
+		$function = 'crm_core_demo_preprocess_views_view__'.$vars['view']->name;
+		if (function_exists($function)) {
+			$function($vars);
+		}
+	}
+}
+/**
+ * Preprocessor for activity lists
+ */
+function crm_core_demo_preprocess_views_view__crm_core_recent_activities(&$vars) {
+	
+	dpm($vars);
+	
+	foreach ($vars['view']->result as $item => $data){
+		// dpm($item);
+		// dpm($data);
+		
+		$vars['view']->result[$item]->icon_class = 'activity-icon-default';
+		$vars['view']->result[$item]->activity_desc = 'someone did something';
+		
+		switch ($vars['view']->result[$item]){
+			case 'donation':
+				$vars['view']->result[$item]->icon_class = 'activity-icon-donation';				
+				$vars['view']->result[$item]->activity_desc = 'someone made a donation of X dollars';				
+				break;
+			case 'event-registration':
+				break;
+			default:
+				break;
+		}
+		
+		// dpm($vars['view']->result[$item]);
+		
+	}
+}
+
+
+
 
 /**
  * Implementation of hook_theme

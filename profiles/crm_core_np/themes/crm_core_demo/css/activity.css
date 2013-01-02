@@ -1,3 +1,15 @@
+.activity-list {
+  border: 1px solid #CCC;
+  -webkit-border-radius: 12px;
+          border-radius: 12px;
+  -moz-background-clip: padding; 
+  -webkit-background-clip: padding-box; 
+  background-clip: padding-box;
+}
 .activity-record {
-  
+  border-bottom: 1px solid #CCC;
+  padding: .5em;
+}
+.activity-list .activity-record:last-child {
+  border-bottom: none;
 }
