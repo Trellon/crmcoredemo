@@ -93,7 +93,7 @@ function crm_core_demo_preprocess_views_view(&$vars) {
  */
 function crm_core_demo_preprocess_views_view__crm_core_recent_activities(&$vars) {
 	
-	dpm($vars);
+	// dpm($vars);
 	
 	foreach ($vars['view']->result as $item => $data){
 		// dpm($item);
