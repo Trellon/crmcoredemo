@@ -233,6 +233,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['field_donation_amounts']['alter']['text'] = '$[field_donation_amounts]';
   $handler->display->display_options['fields']['field_donation_amounts']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_donation_amounts']['empty'] = '$0';
+  $handler->display->display_options['fields']['field_donation_amounts']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
     'thousand_separator' => ' ',
     'prefix_suffix' => 1,
@@ -245,8 +246,8 @@ function crm_core_donation_views_default_views() {
     'donation' => 'donation',
   );
 
-  /* Display: Block */
-  $handler = $view->new_display('block', 'Block', 'block_1');
+  /* Display: Block - Total Donations */
+  $handler = $view->new_display('block', 'Block - Total Donations', 'block_1');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['header'] = FALSE;
   /* Header: Global: View area */
@@ -266,8 +267,8 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['header']['area']['content'] = 'Total Raised';
   $handler->display->display_options['header']['area']['format'] = 'filtered_html';
 
-  /* Display: Block 2 */
-  $handler = $view->new_display('block', 'Block 2', 'block_2');
+  /* Display: Block - Donations Received */
+  $handler = $view->new_display('block', 'Block - Donations Received', 'block_2');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['header'] = FALSE;
   /* Header: Global: Text area */
@@ -283,10 +284,14 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
   $handler->display->display_options['fields']['activity_id']['group_type'] = 'count';
   $handler->display->display_options['fields']['activity_id']['label'] = '';
+  $handler->display->display_options['fields']['activity_id']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['activity_id']['alter']['text'] = '$[activity_id]';
   $handler->display->display_options['fields']['activity_id']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['activity_id']['empty'] = '0';
+  $handler->display->display_options['fields']['activity_id']['hide_alter_empty'] = FALSE;
 
-  /* Display: Block 3 */
-  $handler = $view->new_display('block', 'Block 3', 'block_3');
+  /* Display: Block - Total Donors */
+  $handler = $view->new_display('block', 'Block - Total Donors', 'block_3');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['header'] = FALSE;
   /* Header: Global: Text area */
@@ -308,7 +313,10 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['contact_id']['relationship'] = 'field_activity_participants_target_id';
   $handler->display->display_options['fields']['contact_id']['group_type'] = 'count_distinct';
   $handler->display->display_options['fields']['contact_id']['label'] = '';
+  $handler->display->display_options['fields']['contact_id']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['contact_id']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['contact_id']['empty'] = '0';
+  $handler->display->display_options['fields']['contact_id']['hide_alter_empty'] = FALSE;
   $export['crm_core_donations_widget'] = $view;
 
   $view = new view();
