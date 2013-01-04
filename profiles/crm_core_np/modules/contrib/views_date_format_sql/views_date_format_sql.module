@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * Implements hook_views_api().
+ */
+function views_date_format_sql_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
