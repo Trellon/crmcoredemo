@@ -45,6 +45,7 @@ function flot_theme() {
         'element' => NULL,
         'data' => NULL,
         'options' => NULL,
+        'zoom' => NULL,
       ),
     ),
   );
@@ -64,9 +65,10 @@ function template_preprocess_flot_graph(&$variables) {
 
   $options = new stdClass();
   if (isset($variables['options'])) {
-    $options = $variables['options'];
+    $options = (object)$variables['options'];
   }
 
+  $variables['element']['class'] = (isset($variables['element']['class'])) ? $variables['element']['class'] . ' flot' : 'flot ';
   if ($zoom) {
     $variables['element']['class'] = (isset($variables['element']['class'])) ? $variables['element']['class'] . ' flot-with-zoom' : 'flot-with-zoom';
     $variables['element']['id'] = 'flot-view-zoomable-' . $n++;
@@ -82,19 +84,26 @@ function template_preprocess_flot_graph(&$variables) {
   if (isset($variables['legend']) && $variables['legend']) {
     if (!isset($options->legend)) {
       // Default position bottom
+      $options->legend = new stdClass();
       $options->legend->show = TRUE;
-      $options->legend->position = 'bottom';
+      $options->legend->position = 'ne';
     }
     else {
       $options->legend->show = TRUE;
       if (!isset($options->legend->position)) {
-        $options->legend->position = 'bottom';
+        $options->legend->position = 'ne';
       }
     }
   }
+  else {
+    if(!isset($options->legend)){
+      $options->legend = new stdClass();
+    }
+    $options->legend->show = FALSE;
+  }
   $variables['options'] = $options;
   $legend_element = array();
-  if (isset($options->legend) && $options->legend->position == 'bottom' && !isset($options->legend->container)) {
+  if (isset($options->legend) && isset($options->legend->position) &&  $options->legend->position == 'bottom' && !isset($options->legend->container)) {
     $variables['element']['legendid'] = $variables['element']['id'] . '-legend';
     $options->legend->container = '#' . $variables['element']['legendid'];
     $options->legend->containerid = $variables['element']['legendid'];
@@ -103,17 +112,21 @@ function template_preprocess_flot_graph(&$variables) {
       'class' => array('legend', 'legend-bottom'),
     );
   }
-  
+
   flot_add_js('core');
   if (isset($options->selection)) {
     flot_add_js('selection');
   }
-  if (isset($options->series->pie->show) && $options->series->pie->show) {
+  if ((isset($options->series->pie->show) && $options->series->pie->show) || (isset($options->pie) && $options->pie)) {
+    $options = (object)((array)new flotStylePie() + (array)$options);
     flot_add_js('pie');
   }
   foreach ($variables['data'] as $s => $serie) {
     if (isset($serie->stack)) {
       flot_add_js('stack');
+    }
+    if (isset($serie->bars->order)) {
+      flot_add_js('orderBars');
     }
   }
 
@@ -139,6 +152,16 @@ function template_preprocess_flot_graph(&$variables) {
   if($zoom && (!isset($options->series->pie->show) || $options->series->pie->show == FALSE)) {
     $zoom_options = clone $options;
     $zoom_data = $data;
+    
+    if(!isset($zoom_options->series)){
+      $zoom_options->series = new stdClass();
+      $zoom_options->series->points = new stdClass();
+      $zoom_options->series->lines = new stdClass();
+    }
+    if(!isset($zoom_options->grid)){
+      $zoom_options->grid = new stdClass();
+    }
+    
     $zoom_options->series->points->show = FALSE;
     $zoom_options->series->lines->lineWidth = 1;
     $zoom_options->series->shadowSize = 0;
@@ -155,8 +178,14 @@ function template_preprocess_flot_graph(&$variables) {
       unset($zoom_options->yaxis->autoscaleMargin);
     }
     foreach ($zoom_data as &$zdata) {
-      $zdata->points->show = FALSE;
+      if (isset($zdata->lines) || isset($zdata->bars) || isset($zdata->pie)) {
+        if(!isset($zdata->points)){
+          $zdata->points = new stdClass();
+        }
+        $zdata->points->show = FALSE;
+      }
     }
+    
     $jszoomdata = '
       jQuery(document).ready(function() {
         Drupal.flot[\'' . str_replace('-', '_', $variables['element']['graph']['id'] . '-zoom') . '\'] = {};
@@ -218,19 +247,6 @@ function theme_flot_graph($variables) {
     ),
   );
   return drupal_render($output);
-  /*$element = array();
-  if (isset($variables['element'])) {
-    $element = $variables['element'];
-  }
-  
-  if (empty($variables['data'])) {
-    return '<div ' . drupal_attributes($element) . '> ' . t('No data') . ' </div>';
-  }
-  $extra = '';
-  if (isset($element['legendid'])) {
-    $extra = '<div id="' . $element['legendid'] . '"> </div>';
-  }
-  return '<div ' . drupal_attributes($element) . '> </div>';// . $extra;*/
 }
 
 /**
@@ -248,7 +264,9 @@ function flot_add_js($type = 'core') {
     drupal_add_html_head($forie, 'flot');
 
     drupal_add_js($path . '/jquery.flot.js');
+    drupal_add_js($path . '/jquery.flot.time.js');
     drupal_add_js('Drupal.flot = {};', 'inline');
+    drupal_add_css(drupal_get_path('module', 'flot') . '/flot.legend.css');
 
     $added['core'] = TRUE;
   }
@@ -264,6 +282,10 @@ function flot_add_js($type = 'core') {
   if (!isset($added['selection']) && $type == 'selection') {
     drupal_add_js($path . '/jquery.flot.selection.js');
     $added['selection'] = TRUE;
+  }
+  if (!isset($added['orderBars']) && $type == 'orderBars') {
+    drupal_add_js(drupal_get_path('module', 'flot') . '/js/jquery.flot.orderBars.js');
+    $added['orderBars'] = TRUE;
   }
 }
 
@@ -374,9 +396,9 @@ class flot {
 class flotLine extends flot {
 
   function __construct($settings = NULL) {
-    parent::__construct($settings);
     $this->show = TRUE;
     $this->lineWidth = 1;
+    parent::__construct($settings);
   }
 
 }
@@ -387,10 +409,10 @@ class flotLine extends flot {
 class flotBar extends flot {
 
   function __construct($settings = NULL) {
-    parent::__construct($settings);
     $this->show = TRUE;
     $this->lineWidth = 4;
     $this->fill = .5;
+    parent::__construct($settings);
   }
 
 }
@@ -401,10 +423,10 @@ class flotBar extends flot {
 class flotPoint extends flot {
 
   function __construct($settings = NULL) {
-    parent::__construct($settings);
     $this->show = TRUE;
     $this->lineWidth = 1;
     $this->fill = .1;
+    parent::__construct($settings);
   }
 
 }
@@ -414,13 +436,19 @@ class flotPoint extends flot {
  */
 class flotPie extends flot {
   function __construct($settings = NULL) {
-    parent::__construct($settings);
     $this->show = TRUE;
     $this->radius = 1;
+    if(!isset($this->label)){
+      $this->label = new stdClass();
+    }
     $this->label->show = TRUE;
     $this->label->radius = 2/3;
     $this->label->threshold = 0.1;
+    if(!isset($this->label->background)){
+      $this->label->background = new stdClass();
+    }
     $this->label->background->opacity = 1;
+    parent::__construct($settings);
   }
 
 }
@@ -466,10 +494,16 @@ class flotStylePie extends flotStyle {
     parent::__construct();
     $this->series->pie->show = TRUE;
     $this->series->pie->radius = 1;
+    if(!isset($this->series->pie->label)){
+      $this->series->pie->label = new stdClass();
+    }
     $this->series->pie->label->show = TRUE;
     $this->series->pie->label->radius = 2/3;
     $this->series->pie->label->threshold = 0.1;
+    if(!isset($this->series->pie->label->background)){
+      $this->series->pie->label->background = new stdClass();
+    }
     $this->series->pie->label->background->opacity = 1;
   }
- 
+
 }

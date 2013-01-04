@@ -1,8 +1,5 @@
-.views-flot .legend table {
-  margin: 0;
-  width: auto;
-}
+/* Bartik sets tables at 100% we need to prevent this for our legend */
 
-.views-flot .legend-bottom{
-  margin-bottom: 15px;
+.flot .legend table {
+	width: auto;
 }

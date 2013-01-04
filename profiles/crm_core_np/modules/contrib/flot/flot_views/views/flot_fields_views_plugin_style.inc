@@ -645,6 +645,7 @@ class flot_fields_views_plugin_style extends views_plugin_style {
     }
 
     foreach (array('xaxis', 'yaxis') as $axis) {
+      $style->{$axis} = new stdClass();
       $style->{$axis}->show = ($options['show' . $axis]) ? TRUE : FALSE;
       if ($style->{$axis}->show) {
         switch ($options[$axis]['granularity']) {
@@ -669,6 +670,8 @@ class flot_fields_views_plugin_style extends views_plugin_style {
     if ($fieldx->options['flot']['x']['mode'] == 'time') {
       $style->xaxis->mode = 'time';
     }
+    $style->legend = new stdClass();
+    
     $style->legend->show = (!isset($options['showlegend']) || $options['showlegend'] == 'yes') ? TRUE : FALSE;
     if ($style->legend->show) {
       foreach ($options['legend'] as $key => $val) {
@@ -744,9 +747,10 @@ class flot_fields_views_plugin_style extends views_plugin_style {
                 if (!in_array($row->{$fieldx->field_alias}, $ticks)) {
                   $ticks[] = $row->{$fieldx->field_alias};
                 }
+                $keys = array_keys($ticks, $row->{$fieldx->field_alias});
                 $datapoint = array(
-                  array_shift(array_keys($ticks, $row->{$fieldx->field_alias})),
-                    $row->{$y_alias},
+                  array_shift($keys),
+                  $row->{$y_alias},
                 );
               }
 

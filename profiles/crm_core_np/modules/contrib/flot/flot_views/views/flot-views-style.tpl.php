@@ -13,7 +13,7 @@
 
 <div class="views-flot">
   <?php
-    $vars = array('element' => $element, 'data' => $data, 'options' => $options, 'zoom' => $addselectionfilter);
+    $vars = array('element' => $element, 'data' => $data, 'options' => $options, 'zoom' => NULL);
     print theme('flot_graph', $vars);
   ?>
 </div>
