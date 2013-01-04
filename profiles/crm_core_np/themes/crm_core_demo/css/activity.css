@@ -40,3 +40,8 @@
 .activity_desc {
   margin-left: 53px;
 }
+.activity_desc .activity_date {
+  margin-top: 8px;
+  color: #0088cc;
+  font-size: .8em;
+}

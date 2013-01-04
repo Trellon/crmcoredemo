@@ -32,6 +32,7 @@
 <div class="activity_icon <?php print $row->icon_class; ?>"></div>
 <div class="activity_desc clearfix">
 	<?php print $row->activity_desc; ?>
+	<div class="activity_date"><?php print $fields['field_activity_date']->content; ?></div>
 </div>
 
 

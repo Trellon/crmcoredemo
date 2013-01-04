@@ -117,6 +117,8 @@ function crm_core_demo_views_pre_render(&$view) {
 	// a correlate function in the theme that can be loaded
 	// to preprocess variables within the view
 	
+  // dpm($view->name);
+  
 	if (isset($view->name)) {
 		$function = 'crm_core_demo_preprocess_views_view__'.$view->name;
 		if (function_exists($function)) {
@@ -187,7 +189,6 @@ function crm_core_demo_preprocess_views_view__crm_core_recent_activities(&$view)
 	}
 
 }
-
 
 /**
  * Implementation of hook_theme
