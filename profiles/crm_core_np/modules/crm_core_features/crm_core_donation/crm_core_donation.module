@@ -120,6 +120,10 @@ function crm_core_donation_permission() {
       'title' => t('Administer CRM Core donation'),
       'description' => t('Administer CRM Core donation'),
     ),
+    'view crm core donation reports' => array(
+      'title' => t('View CRM Core Donation reports'),
+      'description' => t('View reports related to donations and access widgets related to donations.'),
+    ),
     'access crm core donation page' => array(
       'title' => t('Access donation pages'),
       'description' => t('Ability to access donation pages and make online donations'),
@@ -130,6 +134,10 @@ function crm_core_donation_permission() {
     ),
   );
 }
+
+
+
+
 
 /**
  * Implements hook_theme().
@@ -1113,6 +1121,21 @@ function crm_core_donation_views_data() {
   // the affected tables are crm_core_activity and field_data_field_donation_campaign (which stores
   // the actual value of the donation page)
   // relationships between an activity and a donation page are not stored in the activity itself
+  
+  // attempting to sort this with Mike
+  $data['crm_core_activity']['table']['join'] = array(
+   'field_data_field_donation_campaign' => array(
+     'left_field' => 'activity_id', 
+     'field' => 'entity_id',
+   ),
+  );
+  $data['field_data_field_donation_campaign']['table']['join'] = array(
+   'crm_core_donation_page' => array(
+     'left_field' => 'field_donation_campaign_value', 
+     'field' => 'id',
+   ),
+ );
+  
 
   $data['crm_core_donation_page']['title'] = array(
     'title' => t('Donation page title'),
@@ -1263,9 +1286,144 @@ function crm_core_donation_views_data() {
     ),
   );
   
+  return $data;
+}
+
+
+/**
+ * Implementation of hook_preprocess_views_pre_render
+ * 
+ * This function is used as a preprocessing function for views
+ * within the theme. Each time a view is loaded, it directs 
+ * traffic to the appropriate preprocessing function.
+ * 
+ */
+function crm_core_donation_views_pre_render(&$view) {
+	
+	// check to see if the view has a name. if so, look for
+	// a correlate function in the theme that can be loaded
+	// to preprocess variables within the view
+	
+  // dpm($view->name);
+  
+	if (isset($view->name)) {
+		$function = 'crm_core_donation_preprocess_views_view__'.$view->name;
+		if (function_exists($function)) {
+			$function($view);
+		}
+	}
+	
+}
+
+function crm_core_donation_views_post_render(&$view) {
+  
+  return;
+	
+	// check to see if the view has a name. if so, look for
+	// a correlate function in the theme that can be loaded
+	// to preprocess variables within the view
+	
+  dpm($view->name);
+  dpm($view);
+  
+	if (isset($view->name)) {
+		$function = 'crm_core_donation_preprocess_views_view__'.$view->name;
+		if (function_exists($function)) {
+			// $function($view);
+		}
+	}
+	
+}
+
+
+/**
+ * Hack to deal with views grouping issue for dates.
+ * 
+ * TODO: move this to the donations module, as it will affect every installation of the feature
+ * 
+ */
+function crm_core_donation_preprocess_views_view__crm_core_donations_chart($view){
+  
+  if($view->current_display == 'page_1'){
+    
+    // this normalizes all timestamps to the day they occur, removing the time element
+    // and allowing the chart to group them properly
+    foreach ($view->result as $item => $value){
+      $existing_date = date('Y-m-d',$view->result[$item]->crm_core_activity_created);
+      $new_date = new DateTime($existing_date, new DateTimeZone(variable_get('date_default_timezone', 0)));
+      $view->result[$item]->crm_core_activity_created = date_timestamp_get($new_date);
+    }
+  
+    // all results should be set to a specific date at this point.
+    // now, loop through the results to find any duplicates. we are going to make them into a single point.
+    $tmp = array(); // used to track timestamps
+    
+    foreach ($view->result as $item => $value){
+      if(isset($tmp[$view->result[$item]->crm_core_activity_created])){
+        $view->result[$tmp[$view->result[$item]->crm_core_activity_created]]->activity_id_sum += $view->result[$item]->activity_id_sum;
+        unset($view->result[$item]);
+      } else {
+        $tmp[$view->result[$item]->crm_core_activity_created] = $item;
+      }
+    }
+    
+    // now, set days in between to display 0 donations
+    // this is done by calculating the number of days between each result
+    // adding the appropriate number of records between each
+    // and returning a new results array to views
+    
+    $new_results = array(); // new array of results
+    $last_result = ''; // the last result, used to figure out the difference between dates
+    $counter = 0; // used to count actual placement of values
+    
+    foreach ($view->result as $item => $value){
+      
+      // start by priming the array
+      if($last_result == ''){
+        $last_result = clone $view->result[$item];
+        $new_results[$counter] = clone $view->result[$item];
+      } else {
+        // we already have some results in the array, and we are interested in calculating the difference in dates
+        // first, get the current timestamp
+        $current = $view->result[$item]->crm_core_activity_created;
+        $diff = $current - $last_result->crm_core_activity_created;
+        $days = floor($diff/(60*60*24))-1;
+        
+        // insert the equivalent number of days
+        // then add the current item
+        for ($i = 0; $i < $days; $i++){
+          $new_results[$counter] = clone $new_results[$counter-1];
+          $new_results[$counter]->activity_id += $counter + $i;
+          $new_results[$counter]->activity_id_sum = 0;
+          $new_results[$counter]->crm_core_activity_created += (60*60*24);
+          $counter++;
+        }
+        $last_result = clone $view->result[$item];
+        $new_results[$counter] = clone $view->result[$item];
+      }
+      $counter++;
+    }  
+    $view->result = $new_results;
+    
+    $view->style_plugin->options['xaxis']['color'] = '#999';
+    // $view->style_plugin->options['xaxis']['tickColor'] = '#CCC';
+    $view->style_plugin->options['yaxis']['color'] = '#999';
+    $view->style_options['shadowSize'] = '5';
+    // $view->style_plugin->options['xaxis']['labelHeight'] = '80';
+    // $view->style_plugin->options['xaxis']['position'] = 'top';
+    
+    /*
+      dpm($view);
+      dpm($view->style_options);
+      dpm($view->style_plugin);
+      dpm($view->style_plugin->options);
+      dpm($view->style_plugin->options['xaxis']);
+    */
+    
+    
+  }
 
   
   
-  
-  return $data;
 }
+
