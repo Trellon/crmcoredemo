@@ -337,6 +337,11 @@ function crm_core_donation_crm_core_report_register() {
           'path'        => 'crm/reports/donations-overview',
           'description'	=> t('Details on donations recorded in the system.'),
         ),
+        'donations_overview'	=> array(
+          'title'       => t('Donations Time of Day'),
+          'path'        => 'crm/reports/crm-core-donations-time-of-day-report',
+          'description'	=> t('Time of day when donations are received.'),
+        ),
         'donation_page'	=> array(
           'title'       => t('Donations Pages'),
           'path'        => 'crm/donations/leaderboard',
@@ -1464,10 +1469,67 @@ function crm_core_donation_views_pre_render(&$view) {
 }
 
 /**
+ * Hack to deal with issues with views grouping around specific hours of the day
+ */
+
+function crm_core_donation_preprocess_views_view__crm_core_donations_time_of_day_report($view){
+  
+  
+  if($view->current_display == 'page'){
+    // dpm('yo yo yo');
+    
+    // dpm(sizeof($view->result));
+    
+    // this function goes through the values returned by the time of day report and groups them by hour
+    // if there are no results, we don't need to do anything
+    if(sizeof($view->result) > 0){
+      
+      // store new results here
+      $new_results = array();
+      
+      // create this so we have an exact copy of a record, don't want to mess up views
+      $result = clone $view;
+      
+      // get the timestamp for today at midnight
+      $time = strtotime("today midnight");
+      
+      $sample = $result->result[0];
+      $sample->crm_core_activity_created = $time; // set the number of donations to 0
+      $sample->activity_id = 0; // set the number of donations to 0
+      $sample->field_field_donation_amounts[0]['rendered']['#markup'] = 0; // set the amount of donations to 0
+      
+      // loop around this array to get all hours of the day
+      $times = array(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23); // hours of the day
+      
+      // create a new result for each hour of the day
+      // this will give us a fake set of results to populate with values from the real one
+      foreach ($times as $item){
+        $new_results[$item] = clone $sample;
+        $new_results[$item]->crm_core_activity_created = $time+(60*60*$item);
+      }
+      
+      // now, go through each result and get the real value
+      // to pass back to views
+      foreach ($result->result as $item => $value){
+        $hour = date('G', $result->result[$item]->crm_core_activity_created);
+        $new_results[$hour]->field_field_donation_amounts[0]['rendered']['#markup'] += $result->result[$item]->field_field_donation_amounts[0]['rendered']['#markup']; // set the amount of donations to 0        
+        $new_results[$hour]->activity_id += $result->result[$item]->activity_id; // set the number of donations to 0
+      }
+      
+      // set the new results to display with the view
+      // this should be a complete list of when donations are received, by time of day
+      $view->result = $new_results;
+    }
+    
+  }
+  
+}
+
+// crm_core_donations_time_of_day_report
+
+
+/**
  * Hack to deal with views grouping issue for dates.
- * 
- * TODO: move this to the donations module, as it will affect every installation of the feature
- * 
  */
 function crm_core_donation_preprocess_views_view__crm_core_donations_chart($view){
   

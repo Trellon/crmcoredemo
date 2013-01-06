@@ -192,6 +192,75 @@ function crm_core_donation_views_default_views() {
   $export['crm_core_donation_pages'] = $view;
 
   $view = new view();
+  $view->name = 'crm_core_donations_time_of_day_report';
+  $view->description = 'Shows the times of day donations have been received';
+  $view->tag = 'default';
+  $view->base_table = 'crm_core_activity';
+  $view->human_name = 'CRM Core Donations Time of Day Report';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'Donations Day of Week';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['group_by'] = TRUE;
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['perm'] = 'view crm core donation reports';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['style_plugin'] = 'table';
+  /* Field: CRM Activity: Date created */
+  $handler->display->display_options['fields']['created']['id'] = 'created';
+  $handler->display->display_options['fields']['created']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['created']['field'] = 'created';
+  $handler->display->display_options['fields']['created']['date_format'] = 'hour_of_the_day_long';
+  $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
+  /* Field: COUNT(DISTINCT CRM Activity: Activity ID) */
+  $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['group_type'] = 'count_distinct';
+  $handler->display->display_options['fields']['activity_id']['label'] = 'Donations Received';
+  /* Field: SUM(CRM Activity: Amount) */
+  $handler->display->display_options['fields']['field_donation_amounts']['id'] = 'field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts']['table'] = 'field_data_field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts']['field'] = 'field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts']['group_type'] = 'sum';
+  $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
+    'thousand_separator' => ' ',
+    'prefix_suffix' => 1,
+  );
+  /* Sort criterion: CRM Activity: Date created */
+  $handler->display->display_options['sorts']['created']['id'] = 'created';
+  $handler->display->display_options['sorts']['created']['table'] = 'crm_core_activity';
+  $handler->display->display_options['sorts']['created']['field'] = 'created';
+  /* Filter criterion: CRM Activity: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'donation' => 'donation',
+  );
+
+  /* Display: Page */
+  $handler = $view->new_display('page', 'Page', 'page');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Donations Time of Day';
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['path'] = 'crm/reports/crm-core-donations-time-of-day-report';
+
+  /* Display: Page */
+  $handler = $view->new_display('page', 'Page', 'page_1');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['path'] = 'crm-core-donations-day-of-week';
+  $export['crm_core_donations_time_of_day_report'] = $view;
+
+  $view = new view();
   $view->name = 'crm_core_donations_widget';
   $view->description = 'Displays some total values related to donations. Just an overview, to get people to the preview page.';
   $view->tag = 'default';
