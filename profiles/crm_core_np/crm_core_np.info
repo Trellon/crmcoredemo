@@ -98,13 +98,14 @@ dependencies[] = crm_core_profile_notification
 
 ; Enable demo specific configuration
 dependencies[] = crm_core_demo_settings
+dependencies[] = flot
 
 ; Install non essential modules.
 dependencies[] = diff
 dependencies[] = pathauto
 dependencies[] = rules
 dependencies[] = rules_admin
-dependencies[] = twitter_bootstrap_ui
+; dependencies[] = twitter_bootstrap_ui
 
 ; Install sample data requirements
 dependencies[] = devel
