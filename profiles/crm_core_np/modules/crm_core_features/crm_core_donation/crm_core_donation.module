@@ -158,6 +158,13 @@ function crm_core_donation_block_view($delta = '') {
   
   if($view->name == 'donations_overview_alt'){
     
+    $check = _flot_get_library_path();
+    drupal_add_js($check . '/jquery.flot.resize.js', array('weight' => 20));
+    
+    // first, make sure we are including the resizable library
+    // it's important
+    drupal_add_library('flot', 'jquery.flot.resize.js');
+    
     // this normalizes all timestamps to the day they occur, removing the time element
     // and allowing the chart to group them properly
     foreach ($view->result as $item => $value){
@@ -244,7 +251,7 @@ function crm_core_donation_block_view($delta = '') {
       'element' => array(
         'id' => 'crm-core-chart',
         'class' => 'crm-core-donations-flot',
-        'style' => "width:924px;height:200px",
+        'style' => "width:100%;height:200px",
       ),
       'options' => array(
         'xaxis' => array(
@@ -256,7 +263,7 @@ function crm_core_donation_block_view($delta = '') {
           'hoverable' => TRUE,
         ),
       ),
-      'legend' => TRUE,
+      'legend' => FALSE,
       'zoom' => FALSE,
     );
     $block['content'] = theme('flot_graph', $variables);   
@@ -1427,7 +1434,7 @@ function crm_core_donation_views_data() {
  * 
  */
 function crm_core_donation_views_pre_render(&$view) {
-	
+  
 	// check to see if the view has a name. if so, look for
 	// a correlate function in the theme that can be loaded
 	// to preprocess variables within the view
@@ -1442,27 +1449,6 @@ function crm_core_donation_views_pre_render(&$view) {
 	}
 	
 }
-
-function crm_core_donation_views_post_render(&$view) {
-  
-  return;
-	
-	// check to see if the view has a name. if so, look for
-	// a correlate function in the theme that can be loaded
-	// to preprocess variables within the view
-	
-  dpm($view->name);
-  dpm($view);
-  
-	if (isset($view->name)) {
-		$function = 'crm_core_donation_preprocess_views_view__'.$view->name;
-		if (function_exists($function)) {
-			// $function($view);
-		}
-	}
-	
-}
-
 
 /**
  * Hack to deal with views grouping issue for dates.
@@ -1532,22 +1518,6 @@ function crm_core_donation_preprocess_views_view__crm_core_donations_chart($view
       $counter++;
     }  
     $view->result = $new_results;
-    
-    $view->style_plugin->options['xaxis']['color'] = '#999';
-    // $view->style_plugin->options['xaxis']['tickColor'] = '#CCC';
-    $view->style_plugin->options['yaxis']['color'] = '#999';
-    $view->style_options['shadowSize'] = '5';
-    // $view->style_plugin->options['xaxis']['labelHeight'] = '80';
-    // $view->style_plugin->options['xaxis']['position'] = 'top';
-    
-    /*
-      dpm($view);
-      dpm($view->style_options);
-      dpm($view->style_plugin);
-      dpm($view->style_plugin->options);
-      dpm($view->style_plugin->options['xaxis']);
-    */
-    
     
   }
 
