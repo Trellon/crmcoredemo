@@ -247,7 +247,8 @@ function _decorator_file_cache($namespace, $definition) {
   $decorator_filepath = './' . $definition['path'] . '/' . $definition['file'];
   if (!is_file($decorator_filepath)) {
     // Create the cache directory if it not exist.
-    file_prepare_directory(_decorator_file_cache_path($namespace), FILE_CREATE_DIRECTORY);
+    $tmp = _decorator_file_cache_path($namespace);
+    file_prepare_directory($tmp, FILE_CREATE_DIRECTORY);
 
     // Load decorator class "code template" and modify it before saving.
     $decorator_template_filename = './' . $definition['template']['path'] . '/' . $definition['template']['file'];
