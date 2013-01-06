@@ -33,9 +33,6 @@
   </div>
 </div>
 
-
-
-
 <?php if ($page['marquee']): ?>
   <div class="masthead jumbotron">
     <div class="container">
@@ -62,7 +59,7 @@
       </aside>  <!-- /#sidebar-first -->
     <?php endif; ?>  
 	  
-	  <section class="<?php print _twitter_bootstrap_content_span($columns); ?>">
+	  <section class="<?php print _bootstrap_content_span($columns); ?>">
 	  
 	    <?php if ($page['top']): ?>
 	      <?php print render($page['top']); ?>

@@ -2,20 +2,16 @@
 
 /* widgets */
 .crm-core-widget {
-	border: 1px solid #cfcfcf;
-  -webkit-border-radius: 12px;
-          border-radius: 12px;
-  -moz-background-clip: padding; 
-  -webkit-background-clip: padding-box; 
-  background-clip: padding-box;
-  overflow: hidden;
-  background-color: #e1e1e1;
+  background-color: #f3f3f3;
+  border-bottom: 1px solid #CCC;
 }
 .crm-core-widget div.view-header {
   text-align: center !important;
 	display: table;
   width: 100%;
-  border-bottom: 1px solid White;
+  border-bottom: 1px solid #CCC;
+  padding: 0em;
+  margin: 0em;
 }
 .crm-core-widget .view-header .view-header {
   border-bottom: none;
@@ -29,7 +25,14 @@
 .crm-core-widget .view-header .view {
 	display: table-cell;
   text-align: left;
+  border-right: 1px solid #CCC;
+  padding: 0em;
 }
+.crm-core-widget .view-header .view:last-of-type {
+  border-right: none;
+}
+
+
 .crm-core-widget .view-header .view .view-header {
   font-weight: bold;
   display: block;
@@ -112,6 +115,12 @@
 }
 .view-donations-overview-alt .views-exposed-form {
   margin-top: 12px;
+}
+.view-donations-overview-alt .views-field-field-donation-amounts {
+  font-weight: 600;
+  text-align: center;
+  color: #777;
+  font-size: 1.2em;
 }
 .info-panel {
   border: 1px solid #CCC;

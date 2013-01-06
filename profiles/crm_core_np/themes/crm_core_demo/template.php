@@ -68,7 +68,7 @@ function crm_core_demo_preprocess_block(&$variables){
  *
  * @see page.tpl.php
  */
-function crm_core_demo_preprocess_page(&$variables) {
+function zzz_crm_core_demo_preprocess_page(&$variables) {
 	// mostly using this function for debugging
 	// TODO: remove this function at some point in the future
 }

@@ -28,13 +28,10 @@
   	  
   	  <div class="nav-collapse">
     	  <nav role="navigation">
-      		<?php if ($primary_nav): ?>
-      		  <?php print $primary_nav; ?>
+      		<?php if (isset($primary_nav)): ?>
+            <?php print render($primary_nav); ?>
       		<?php endif; ?>
       	  <div class="nav pull-right">
-        		<?php if ($search): ?>
-        		  <?php if ($search): print render($search); endif; ?>
-        		<?php endif; ?>
         		
         		
         		<!--  hard coded, need to move this into a menu. twitter bootstrap does not support multi level menus currently, need to do something interesting here  -->
@@ -122,7 +119,7 @@
       </aside>  <!-- /#sidebar-first -->
     <?php endif; ?>  
 	  
-	  <section class="<?php print _twitter_bootstrap_content_span($columns); ?>">
+	  <section class="<?php print _bootstrap_content_span($columns); ?>">
 	  
 	    <?php if ($page['top']): ?>
 	      <?php print render($page['top']); ?>

@@ -1,0 +1,48 @@
+
+LEGEND {
+	font-size: 1.2em;
+	font-weight: 600;
+}
+.field-type-datetime {
+}
+.field-type-datetime .date-float {
+  clear: both;
+  width: 100%;
+  display: block;
+}
+.field-type-datetime .date-float LABEL {
+	font-size: .9em;
+	font-weight: 600;
+}
+.field-type-datetime .date-no-float {
+  float: left;	
+  display: inline-block;
+  width: auto;
+  clear: none;
+}
+.field-type-datetime .date-no-float .control-group LABEL {
+  float: left;
+  margin-right: 8px;
+  padding-top: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: .9em;
+}
+.field-type-datetime .date-no-float .control-group .controls LABEL {
+  float: left;
+  margin-right: 8px;
+  padding-top: 4px;
+  text-transform: none;
+  font-weight: normal;
+  font-size: 1em;
+}
+.field-type-datetime .date-no-float .controls {
+  float: left;
+}
+.street-block {
+	display: table;
+}
+.street-block .control-group {
+  display: table-cell;
+  padding-right: 12px;
+}
