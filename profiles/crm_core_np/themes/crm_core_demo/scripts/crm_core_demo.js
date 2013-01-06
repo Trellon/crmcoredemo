@@ -61,7 +61,6 @@
       // set up all textareas to autosize
       $('textarea', context).each(function(idx, val){
         var item = $(this);
-        console.log('found one');
         item.expandingTextarea();
       });
 
