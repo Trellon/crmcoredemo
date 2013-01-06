@@ -227,7 +227,20 @@ function crm_core_donation_block_view($delta = '') {
       // dpm(date('M-j-Y', $val['date']) . ' - ' . $val['val']);
       $dat[] = array($val['date']*1000, $val['val']); 
     }
-    // dpm($dat);
+    
+    // if there is only one result being returned, add some dates before and after to make it look nice
+    if(sizeof($dat) == 1){
+      $first = $dat[0];
+      $last = $dat[sizeof($dat)-1];
+      
+      $first[0] = $first[0]+(60*60*24*1000);
+      $first[1] = 0;
+      $last[0] = $last[0]-(60*60*24*1000);
+      $last[1] = 0;
+      
+      array_unshift($dat, $first);
+      array_push($dat, $last);
+    }
 
     // Default display for flot data are lines.
     // $d1 = new flotData(array(array(0, 1), array(4, 8), array(8, 5)));
