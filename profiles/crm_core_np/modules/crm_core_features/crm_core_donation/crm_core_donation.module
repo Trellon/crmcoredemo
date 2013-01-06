@@ -337,7 +337,7 @@ function crm_core_donation_crm_core_report_register() {
           'path'        => 'crm/reports/donations-overview',
           'description'	=> t('Details on donations recorded in the system.'),
         ),
-        'donations_overview'	=> array(
+        'donations_time_of_day'	=> array(
           'title'       => t('Donations Time of Day'),
           'path'        => 'crm/reports/crm-core-donations-time-of-day-report',
           'description'	=> t('Time of day when donations are received.'),
