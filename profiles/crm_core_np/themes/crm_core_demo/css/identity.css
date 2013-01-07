@@ -66,6 +66,14 @@ BODY.front .jumbotron {
   margin: 12px 14px 12px 0px;
 }
 .crm-nav A {
+	color: #efeff1;
+}
+.crm-nav A.crm_link {
+  text-shadow: 3px 3px 0px #000;
+}
+.crm-nav A:hover {
+	color: White;
+  text-decoration: none;
 }
 
 .crm-nav .crm-opts-header {

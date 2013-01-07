@@ -52,10 +52,14 @@
   text-align: center;
   font-weight: 600;
   padding: 1em 0em 1.5em;
+  border-top: 1px solid White;
 }
 .crm-core-widget .view-content .field-content {
   text-align: center;
   font-size: 2em;
+}
+.crm-core-widget .view-header .view-content {
+  border-top: none;
 }
 .crm-core-widget .view-header .view-content .field-content {
   font-size: 1.5em;
