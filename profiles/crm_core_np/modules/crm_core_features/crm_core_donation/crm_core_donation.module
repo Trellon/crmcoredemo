@@ -337,15 +337,30 @@ function crm_core_donation_crm_core_report_register() {
           'path'        => 'crm/reports/donations-overview',
           'description'	=> t('Details on donations recorded in the system.'),
         ),
-        'donations_time_of_day'	=> array(
-          'title'       => t('Donations Time of Day'),
-          'path'        => 'crm/reports/crm-core-donations-time-of-day-report',
-          'description'	=> t('Time of day when donations are received.'),
+        'donations_lybunt'	=> array(
+          'title'       => t('LYBUNT'),
+          'path'        => 'crm/reports/lybunt',
+          'description'	=> t('Last year but not this year report.'),
+        ),
+        'donations_sybunt'	=> array(
+          'title'       => t('SYBUNT'),
+          'path'        => 'crm/reports/sybunt',
+          'description'	=> t('Some year but not this year report.'),
         ),
         'donation_page'	=> array(
           'title'       => t('Donations Pages'),
           'path'        => 'crm/donations/leaderboard',
           'description'	=> t('Details on the performance of individual donation pages.'),
+        ),
+        'donations_time_of_day'	=> array(
+          'title'       => t('Donations Time of Day'),
+          'path'        => 'crm/reports/crm-core-donations-time-of-day-report',
+          'description'	=> t('Time of day when donations are received.'),
+        ),
+        'donations_day_of_week'	=> array(
+          'title'       => t('Donations Day of Week'),
+          'path'        => 'crm/reports/crm-core-donations-day-of-week',
+          'description'	=> t('Time of day when donations are received.'),
         ),
   		 'leaderboard'	  => array(
           'title'       => t('Leaderboard'),
@@ -1456,9 +1471,6 @@ function crm_core_donation_views_pre_render(&$view) {
 	// check to see if the view has a name. if so, look for
 	// a correlate function in the theme that can be loaded
 	// to preprocess variables within the view
-	
-  // dpm($view->name);
-  
 	if (isset($view->name)) {
 		$function = 'crm_core_donation_preprocess_views_view__'.$view->name;
 		if (function_exists($function)) {
@@ -1469,17 +1481,49 @@ function crm_core_donation_views_pre_render(&$view) {
 }
 
 /**
+ * Hack to address issues with filters on donation reports, does some comparisons between dates
+ */
+function crm_core_donation_preprocess_views_view__crm_core_donation_sybunt_report($view){
+  
+  
+  // LYBUNT views adjustment
+  if($view->current_display == 'page_1'){
+      
+    // for the lybunt report, we need to make sure the results we return
+    // are limited to only the contacts that have not made a donation
+    // in the current year. Views allows us to filter contacts who have donated
+    // in the year before the previous year, but it cannot apply an additional
+    // filter to get rid of the ones who have donated this year. 
+    
+    // this function does a simple date comparison to remove any additional results.
+    // we are going to simply loop the results, do a simple date comparison on a hidden field,
+    // and remove any results that do not belong.
+    
+    // store the new results in this array
+    $new_results = array();
+    
+    // clone the existing view results
+    $results = clone $view;
+    
+    foreach ($results->result as $item => $value){
+      if($value->field_activity_participants_crm_core_contact_created == $value->field_activity_participants_crm_core_contact_1_created){
+        $new_results[] = $value;
+      }
+    }
+    $view->result = $new_results;
+  }
+  
+}
+
+/**
  * Hack to deal with issues with views grouping around specific hours of the day
+ * and for dealing with day of the week grouping issues
  */
 
 function crm_core_donation_preprocess_views_view__crm_core_donations_time_of_day_report($view){
   
-  
+  // this is used when we are displaying time of day values
   if($view->current_display == 'page'){
-    // dpm('yo yo yo');
-    
-    // dpm(sizeof($view->result));
-    
     // this function goes through the values returned by the time of day report and groups them by hour
     // if there are no results, we don't need to do anything
     if(sizeof($view->result) > 0){
@@ -1493,6 +1537,8 @@ function crm_core_donation_preprocess_views_view__crm_core_donations_time_of_day
       // get the timestamp for today at midnight
       $time = strtotime("today midnight");
       
+      // create a sample record, it will be an exact duplicate of any values returned from views
+      // in order to make sure we don't break anything
       $sample = $result->result[0];
       $sample->crm_core_activity_created = $time; // set the number of donations to 0
       $sample->activity_id = 0; // set the number of donations to 0
@@ -1523,9 +1569,56 @@ function crm_core_donation_preprocess_views_view__crm_core_donations_time_of_day
     
   }
   
+  // this function modifies days of the week views
+  if($view->current_display == 'page_1'){
+    
+    // store new results here, to replace the ones coming out of the view
+    $new_results = array();
+    
+    // create this so we have an exact copy of a record, don't want to mess up views
+    $result = clone $view;
+    
+    // days of the week
+    $days = array(t('Sunday'), t('Monday'), t('Tuesday'), t('Wednesday'), t('Thursday'), t('Friday'), t('Saturday'));
+    
+    // create a fake date to use for setting date values
+    // this might not work correctly for timezones outside north america
+    // TODO: put in a representational date based on someone's time zone
+    $fake_date = strtotime("10 September 2000");
+    
+    // create a sample record, it will be an exact duplicate of any values returned from views
+    // in order to make sure we don't break anything
+    $sample = $result->result[0];
+    // $sample->crm_core_activity_created = $time; // set the number of donations to 0
+    $sample->activity_id = 0; // set the number of donations to 0
+    $sample->field_field_donation_amounts[0]['rendered']['#markup'] = 0; // set the amount of donations to 0
+    
+    // we need to set each result to a common value
+    // loop around the days array, create a set of new results corresponding to each day
+    foreach ($days as $item => $val){
+      $new_results[] = clone $sample;
+      $new_results[$item]->crm_core_activity_created = $fake_date + (60*60*24*$item);
+    }
+    
+    // for each result
+    foreach ($result->result as $item => $value){
+      
+      // get the day of the week from the results, and find it's record based on the ordinal position in $days
+      $check = array_search(date('l',$value->crm_core_activity_created), $days);
+      
+      // add in the totals
+      // add in the number of donations
+      $new_results[$check]->field_field_donation_amounts[0]['rendered']['#markup'] += $result->result[$item]->field_field_donation_amounts[0]['rendered']['#markup']; // set the amount of donations to 0        
+      $new_results[$check]->activity_id += $result->result[$item]->activity_id; // set the number of donations to 0
+    }
+    
+    // set the new results to display with the view
+    // this should be a complete list of days and the number of donations / total amount of donations received
+    $view->result = $new_results;
+    
+  }
+  
 }
-
-// crm_core_donations_time_of_day_report
 
 
 /**
