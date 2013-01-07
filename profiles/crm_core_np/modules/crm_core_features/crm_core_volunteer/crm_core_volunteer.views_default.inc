@@ -203,19 +203,6 @@ function crm_core_volunteer_views_default_views() {
   $handler->display->display_options['fields']['activity_id']['group_type'] = 'count_distinct';
   $handler->display->display_options['fields']['activity_id']['label'] = 'Registered';
   $handler->display->display_options['filter_groups']['operator'] = 'OR';
-  $handler->display->display_options['filter_groups']['groups'] = array(
-    1 => 'AND',
-    2 => 'OR',
-  );
-  /* Filter criterion: CRM Contact: Volunteer (field_contact_volunteer) */
-  $handler->display->display_options['filters']['field_contact_volunteer_value']['id'] = 'field_contact_volunteer_value';
-  $handler->display->display_options['filters']['field_contact_volunteer_value']['table'] = 'field_data_field_contact_volunteer';
-  $handler->display->display_options['filters']['field_contact_volunteer_value']['field'] = 'field_contact_volunteer_value';
-  $handler->display->display_options['filters']['field_contact_volunteer_value']['operator'] = 'empty';
-  $handler->display->display_options['filters']['field_contact_volunteer_value']['value'] = array(
-    'all' => 'all',
-  );
-  $handler->display->display_options['filters']['field_contact_volunteer_value']['group'] = 2;
   /* Filter criterion: CRM Activity: Type */
   $handler->display->display_options['filters']['type_1']['id'] = 'type_1';
   $handler->display->display_options['filters']['type_1']['table'] = 'crm_core_activity';
@@ -224,7 +211,7 @@ function crm_core_volunteer_views_default_views() {
   $handler->display->display_options['filters']['type_1']['value'] = array(
     'volunteer_commitment' => 'volunteer_commitment',
   );
-  $handler->display->display_options['filters']['type_1']['group'] = 3;
+  $handler->display->display_options['filters']['type_1']['group'] = 2;
   /* Filter criterion: CRM Contact: Contact Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'crm_core_contact';
@@ -232,7 +219,7 @@ function crm_core_volunteer_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'individual' => 'individual',
   );
-  $handler->display->display_options['filters']['type']['group'] = 3;
+  $handler->display->display_options['filters']['type']['group'] = 2;
   /* Filter criterion: COUNT(DISTINCT CRM Activity: Activity ID) */
   $handler->display->display_options['filters']['activity_id']['id'] = 'activity_id';
   $handler->display->display_options['filters']['activity_id']['table'] = 'crm_core_activity';

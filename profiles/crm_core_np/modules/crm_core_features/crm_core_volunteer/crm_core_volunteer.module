@@ -126,16 +126,23 @@ function crm_core_volunteer_crm_core_report_register() {
       'title'	  => t('Volunteer Activity'),
       'reports'	=> array(
         'volunteer_overview'	=> array(
-          'title'       => t('Volunteer Activity Overview'),
+          'title'       => t('Service Overview'),
           'path'        => 'crm/reports/crm-core-volunteer-commitment-overview',
           'description'	=> t('Displays an overview of volunteer commitments in the system.'),
         ),
+        'volunteer_individual_overview'	=> array(
+          'title'       => t('Volunteer Overview'),
+          'path'        => 'crm/volunteer/crm-core-volunteer-overview',
+          'description'	=> t('Displays an overview of volunteer commitments in the system.'),
+        ),
+
+        
         
         // need the individual opportunity overview
         // need list of all people who have signed up as general volunteers
         
         'volunteer_commitment'	=> array(
-          'title'       => t('Volunteer Commitments - Individual'),
+          'title'       => t('Volunteer Overview - Depreciated'),
           'path'        => 'crm/reports/volunteer/detail',
           'description'	=> t('Displays volunteer commitments stored in the system.'),
         ),
