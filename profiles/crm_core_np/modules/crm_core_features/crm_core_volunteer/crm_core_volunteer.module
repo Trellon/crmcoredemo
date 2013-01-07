@@ -45,6 +45,10 @@ function crm_core_volunteer_permission() {
       'title' => t('Application for volunteer opportunities'),
       'description' => t('Allow user to commit to volunteer opportunities.'),
     ),
+    'view crm core volunteer reports' => array(
+      'title' => t('View volunteer reports'),
+      'description' => t('Allow user to view reports related to volunteer activity.'),
+    ),
   );
 }
 
@@ -119,10 +123,19 @@ function crm_core_volunteer_crm_core_report_register() {
 
   $reports = array(
     'volunteer' => array(
-      'title'	  => t('Volunteer'),
+      'title'	  => t('Volunteer Activity'),
       'reports'	=> array(
+        'volunteer_overview'	=> array(
+          'title'       => t('Volunteer Activity Overview'),
+          'path'        => 'crm/reports/crm-core-volunteer-commitment-overview',
+          'description'	=> t('Displays an overview of volunteer commitments in the system.'),
+        ),
+        
+        // need the individual opportunity overview
+        // need list of all people who have signed up as general volunteers
+        
         'volunteer_commitment'	=> array(
-          'title'       => t('Volunteer Commitments'),
+          'title'       => t('Volunteer Commitments - Individual'),
           'path'        => 'crm/reports/volunteer/detail',
           'description'	=> t('Displays volunteer commitments stored in the system.'),
         ),
