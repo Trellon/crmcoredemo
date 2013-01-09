@@ -15,6 +15,7 @@ function crm_core_mail_default_rules_configuration() {
     { "crm_core_mail_send_to_contact" : {
         "LABEL" : "Send email to the contact",
         "PLUGIN" : "action set",
+        "TAGS" : [ "CRM Core" ],
         "REQUIRES" : [ "crm_core_mail" ],
         "USES VARIABLES" : {
           "contact" : { "label" : "Contact", "type" : "crm_core_contact" },
