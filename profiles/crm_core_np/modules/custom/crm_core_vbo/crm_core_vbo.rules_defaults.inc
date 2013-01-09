@@ -9,17 +9,17 @@
  */
 function crm_core_vbo_default_rules_configuration() {
   $items = array();
-  $items['rules_delete_activity'] = entity_import('rules_config', '{ "rules_delete_activity" : {
-      "LABEL" : "Delete Activity",
+  $items['crm_core_activity_delete'] = entity_import('rules_config', '{ "crm_core_activity_delete" : {
+      "LABEL" : "Delete activity",
       "PLUGIN" : "action set",
-      "TAGS" : [ "CRM Core Activity" ],
+      "TAGS" : [ "CRM Core" ],
       "REQUIRES" : [ "rules" ],
       "USES VARIABLES" : { "crm_core_activity" : { "label" : "Activity", "type" : "crm_core_activity" } },
       "ACTION SET" : [ { "entity_delete" : { "data" : [ "crm-core-activity" ] } } ]
     }
   }');
-  $items['rules_delete_contact'] = entity_import('rules_config', '{ "rules_delete_contact" : {
-      "LABEL" : "Delete Contact",
+  $items['crm_core_contact_delete'] = entity_import('rules_config', '{ "crm_core_contact_delete" : {
+      "LABEL" : "Delete contact",
       "PLUGIN" : "action set",
       "TAGS" : [ "CRM Core" ],
       "REQUIRES" : [ "rules" ],
