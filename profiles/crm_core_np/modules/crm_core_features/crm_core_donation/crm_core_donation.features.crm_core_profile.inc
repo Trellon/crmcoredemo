@@ -19,10 +19,10 @@ $crm_core_profile = array();
       'field_billing_address' => 'field_billing_address',
       'field_contact_email' => 'field_contact_email',
       'contact_image' => 0,
-      'field_contact_volunteer' => 0,
       'field_contact_phone' => 0,
-      'field_contact_address' => 0,
+      'field_contact_volunteer' => 0,
     ),
+    'weight' => array(),
   ),
   'block' => '1',
   'path' => '',
@@ -32,20 +32,17 @@ $crm_core_profile = array();
   'uid' => '1',
   'created' => '1352343485',
   'create_contact_actions' => array(
-    'new' => array(
-      'weight' => '10',
-    ),
-    'duplicate' => array(
-      'weight' => '10',
-    ),
     'existing' => array(
-      'weight' => '10',
+      'weight' => '-10',
+    ),
+    'new' => array(
+      'weight' => '-8',
     ),
     'url' => array(
-      'weight' => '10',
+      'weight' => '-9',
     ),
   ),
-  'user_sync' => '',
+  'user_sync' => 'current',
 );
   $crm_core_profile['activity']['donation'] = array(
   'name' => 'donation',
@@ -72,7 +69,7 @@ $crm_core_profile = array();
   'created' => '1352343485',
   'create_activity_actions' => array(
     'new' => array(
-      'weight' => '10',
+      'weight' => '0',
     ),
     'recent' => array(
       'weight' => '10',

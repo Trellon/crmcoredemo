@@ -12,7 +12,7 @@
 		  <img src="<?php print base_path() . path_to_theme() . '/images/crmcorelogo.png'; ?>" style="float: left;" alt="<?php print t('Home'); ?>" />
 		</a>
   	<div class="crm-nav-header pull-left">
-  		<a href="<?php print base_path() . 'crm'; ?>" title="<?php print t('Home'); ?>">
+  		<a href="<?php print base_path() . 'crm'; ?>" title="<?php print t('Home'); ?>" class="crm_link">
 				CRM Core
   		</a>
   	</div>
@@ -32,9 +32,6 @@
     <?php print render($title_suffix); ?>
   </div>
 </div>
-
-
-
 
 <?php if ($page['marquee']): ?>
   <div class="masthead jumbotron">
@@ -62,7 +59,7 @@
       </aside>  <!-- /#sidebar-first -->
     <?php endif; ?>  
 	  
-	  <section class="<?php print _twitter_bootstrap_content_span($columns); ?>">
+	  <section class="<?php print _bootstrap_content_span($columns); ?>">
 	  
 	    <?php if ($page['top']): ?>
 	      <?php print render($page['top']); ?>

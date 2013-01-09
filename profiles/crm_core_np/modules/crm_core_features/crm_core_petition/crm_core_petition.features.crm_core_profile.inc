@@ -17,11 +17,10 @@ $crm_core_profile = array();
     'toggle' => array(
       'contact_name' => 'contact_name',
       'field_contact_email' => 'field_contact_email',
-      'field_contact_address' => 'field_contact_address',
       'contact_image' => 0,
       'field_billing_address' => 0,
-      'field_contact_volunteer' => 0,
       'field_contact_phone' => 0,
+      'field_contact_volunteer' => 0,
     ),
     'weight' => array(),
   ),
@@ -34,13 +33,13 @@ $crm_core_profile = array();
   'created' => '1351788224',
   'create_contact_actions' => array(
     'new' => array(
-      'weight' => '10',
+      'weight' => '-9',
     ),
     'existing' => array(
-      'weight' => '10',
+      'weight' => '-10',
     ),
     'url' => array(
-      'weight' => '10',
+      'weight' => '-8',
     ),
   ),
   'user_sync' => '',
@@ -56,7 +55,6 @@ $crm_core_profile = array();
       'field_activity_notes' => 0,
       'field_crm_petition_reference' => 0,
     ),
-    'weight' => array(),
   ),
   'status' => '1',
   'created' => '1351788224',

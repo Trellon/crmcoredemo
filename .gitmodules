@@ -13,3 +13,6 @@
 [submodule "profiles/crm_core_np/libraries/expanding"]
 	path = profiles/crm_core_np/libraries/expanding
 	url = https://github.com/bgrins/ExpandingTextareas.git
+[submodule "profiles/crm_core_np/libraries/flot"]
+	path = profiles/crm_core_np/libraries/flot
+	url = https://github.com/flot/flot.git

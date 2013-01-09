@@ -1,14 +1,39 @@
+.homebox-crm_core_dashboard .homebox-column-wrapper-2 {
+  -webkit-border-radius: 12px;
+          border-radius: 12px;
+  -moz-background-clip: border; 
+  -webkit-background-clip: border-box; 
+  background-clip: border-box;
+  overflow: hidden;
+  background-color: #f3f3f3;
+}
+#homebox .homebox-portlet {
+  background-color: transparent;
+}
 
 #homebox-buttons {
-  display: none;
 }
 #homebox .homebox-column {
   background-image: none;
 }
 #homebox .homebox-portlet  {
   border: none;
+  position: relative;
+}
+#homebox .homebox-portlet .portlet-icon {
+  display: none;
+}
+#homebox .homebox-portlet:hover .portlet-icon {
+  display: block;
 }
 #homebox .homebox-portlet .portlet-header {
+	background-color: transparent;
+	border: none;
+	position: absolute;
+	top: 4px;
+	right: 4px;
+}
+#homebox .homebox-portlet .portlet-header .portlet-title {
   display: none;
 }
 #homebox .homebox-portlet .portlet-content {

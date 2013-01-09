@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * Implements hook_views_api().
+ */
+function views_decorator_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function views_decorator_menu() {
+  // Purge views decorators' file cache on any event which causes a menu_rebuild, same as views clears its cache.
+  decorator_purge('views_decorator');
+}

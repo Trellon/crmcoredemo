@@ -1,12 +1,130 @@
 @CHARSET "UTF-8";
 
 /* widgets */
+.crm-core-widget {
+  background-color: #f3f3f3;
+  border-bottom: 1px solid #CCC;
+}
+.crm-core-widget div.view-header {
+  text-align: center !important;
+	display: table;
+  width: 100%;
+  border-bottom: 1px solid #CCC;
+  padding: 0em;
+  margin: 0em;
+}
+.crm-core-widget .view-header .view-header {
+  border-bottom: none;
+  text-align: center;
+}
+.crm-core-widget .view-header .view-header P {
+  padding: 0em;
+  margin: 0em;
+
+}
+.crm-core-widget .view-header .view {
+	display: table-cell;
+  text-align: left;
+  border-right: 1px solid #CCC;
+  padding: 0em;
+}
+.crm-core-widget .view-header .view:last-of-type {
+  border-right: none;
+}
+
+
+.crm-core-widget .view-header .view .view-header {
+  font-weight: bold;
+  display: block;
+  width: 100%;
+  padding: 0em;
+  margin: 0em;
+  text-align: center;
+  color: #777;
+}
+.crm-core-widget .view-header .crm-core-widget-info {
+}
+.crm-core-widget .view-header .crm-core-widget-info .view-content {
+	text-align: center;
+	font-weight: 600;
+}
+.crm-core-widget .view-content {
+  text-align: center;
+  font-weight: 600;
+  padding: 1em 0em 1.5em;
+  border-top: 1px solid White;
+}
+.crm-core-widget .view-content .field-content {
+  text-align: center;
+  font-size: 2em;
+}
+.crm-core-widget .view-header .view-content {
+  border-top: none;
+}
+.crm-core-widget .view-header .view-content .field-content {
+  font-size: 1.5em;
+}
+.crm-core-widget .view-content .views-label {
+	display: block;
+	width: 100%;
+	font-weight: 600;
+  color: #555;
+  margin-bottom: 1em;
+  font-size: 1.2em;
+}
+.crm-core-overview-widget {
+  border: 1px solid #CCC;
+  text-align: center;
+  padding-bottom: .8em;
+  -webkit-border-radius: 12px;
+          border-radius: 12px;
+  -moz-background-clip: padding; 
+  -webkit-background-clip: padding-box; 
+  background-clip: padding-box;
+  overflow: hidden;
+  background-color: #e1e1e1;
+  padding: .5em 0em .7em 0em;
+}
+.crm-core-overview-widget .views-row {
+	display: table;
+	width: 100%;
+}
+.crm-core-overview-widget .views-row .views-field {
+	display: table-cell;
+	width: 33%;
+}
+.crm-core-overview-widget .views-row .views-field .views-label {
+  text-transform: uppercase;
+  font-size: 0.8em;
+  font-weight: bold;
+  color: #777;
+  width: 100%;
+  display: block;
+  margin-bottom: 8px;
+}
+.crm-core-overview-widget .views-row .views-field .field-content {
+  text-transform: uppercase;
+  font-size: 2em;
+  font-weight: bold;
+  width: 100%;
+}
+
+
+
+
+
 .view-petition-totals,
 .view-donations-totals {
   margin-bottom: 12px;
 }
 .view-donations-overview-alt .views-exposed-form {
   margin-top: 12px;
+}
+.view-donations-overview-alt .views-field-field-donation-amounts {
+  font-weight: 600;
+  text-align: center;
+  color: #777;
+  font-size: 1.2em;
 }
 .info-panel {
   border: 1px solid #CCC;

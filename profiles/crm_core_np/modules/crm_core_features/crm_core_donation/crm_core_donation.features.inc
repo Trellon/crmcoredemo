@@ -23,6 +23,10 @@ function crm_core_donation_default_crm_core_activity_type() {
  */
 function crm_core_donation_ctools_plugin_api() {
   list($module, $api) = func_get_args();
+  if ($module == "context" && $api == "context") {
+    return array("version" => "3");
+  }
+  list($module, $api) = func_get_args();
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }

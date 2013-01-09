@@ -4,11 +4,11 @@ description = Uses Twitter Bootstrap for a base
 version = 1.0
 core = 7.x
 
-base theme = twitter_bootstrap
+base theme = bootstrap
 
 stylesheets[all][] = css/identity.css
 stylesheets[all][] = css/typography.css
-stylesheets[all][] = css/views.css
+stylesheets[all][] = css/crm-core-views.css
 stylesheets[all][] = css/forms.css
 stylesheets[all][] = css/elements.css
 stylesheets[all][] = css/homebox-alt.css

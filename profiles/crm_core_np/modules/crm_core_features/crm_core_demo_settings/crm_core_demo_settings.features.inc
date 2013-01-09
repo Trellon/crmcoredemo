@@ -112,6 +112,18 @@ function crm_core_demo_settings_homebox() {
         'title' => '',
         'weight' => -22,
       ),
+      'views_cff147d847be508f315012f24c5edc53' => 
+      array (
+        'module' => 'views',
+        'delta' => 'cff147d847be508f315012f24c5edc53',
+        'region' => 2,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -25,
+      ),
     ),
     'widths' => 
     array (

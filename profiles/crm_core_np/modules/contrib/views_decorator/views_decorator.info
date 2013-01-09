@@ -1,0 +1,16 @@
+name = Views Decorator
+description = "Decorates and registers views handlers using decorators."
+core = 7.x
+package = Decorator
+dependencies[] = decorator
+dependencies[] = views
+
+files[] = views_decorator.module
+files[] = views_decorator.views.inc
+
+; Information added by drupal.org packaging script on 2011-04-26
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "views_decorator"
+datestamp = "1303778024"
+

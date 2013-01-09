@@ -1,0 +1,378 @@
+<?php
+
+/**
+ * @file
+ * A file containing the Decorator module, an API module designed to help with
+ * accomplishing "horizontal extensibility".
+ *
+ * Structure of the module can be described as split into separate layers which
+ * are wrapped on each other.
+ *   - decorator:
+ *     - set:
+ *       - decorator_set_decorators
+ *     - get:
+ *       - decorator_get_decorators
+ *       - decorator_get_decorator
+ *     - delete:
+ *       - decorator_purge
+ *   - cache:
+ *     - set:
+ *       - _decorator_set_cache
+ *       - _decorator_save_cache
+ *     - get:
+ *       - _decorator_get_cache
+ *     - delete:
+ *       - _decorator_purge_cache
+ *     - helper:
+ *       - _decorator_static
+ *   - file cache:
+ *     - set:
+ *       - _decorator_file_cache
+ *     - delete:
+ *       - _decorator_purge_file_cache
+ *     - helper:
+ *       - _decorator_file_cache_path
+ *       - _decorator_namespaces
+ */
+
+/**
+ * Interface function for adding decorators.
+ *
+ * @param string $namespace
+ *   The cache namespace/directory.
+ * @param array $definitions
+ *   An asociated array of decorator definitions.
+ *     - info: Defaults for every decorator template.
+ *       - module: A module containing decorator templates.
+ *       - path: (optional) Path to decorator templates classes.
+ *     - templates: Decorator templates.
+ *       - template: (array key) Decorator template key.
+ *         - parent: Decorator template's parent class.
+ *         - module: (optional) A module containing the decorator template.
+ *         - path: (optional) Path to the decorator template class.
+ *         - file: (optional) Decorator template's class definition filename.
+ *         - class: (optional) Decorator template's class.
+ *         - decorators: Decorators.
+ *           - decorator: (array key) Decorator key.
+ *             - parent: Decorator's parent class.
+ *             - file: (optional) Decorator's class definition filename.
+ *             - class: (optional) Decorator's class.
+ */
+function decorator_set_decorators($namespace, $definitions) {
+  // Translate definitions from definition interface to internal definitions.
+  $template_module = isset($definitions['info']['module']) ? $definitions['info']['module'] : NULL;
+  $template_path = isset($definitions['info']['path']) ? $definitions['info']['path'] : drupal_get_path('module', $template_module);
+
+  if (isset($definitions['templates'])) {
+    foreach ($definitions['templates'] as $template => $template_definition) {
+      // Decorator template defaults.
+      if (!isset($template_definition['module'])) {
+        $template_definition['module'] = $template_module;
+      }
+      if (!isset($template_definition['path'])) {
+        $template_definition['path'] = $template_path;
+      }
+      if (!isset($template_definition['file'])) {
+        $template_definition['file'] = "$template.inc";
+      }
+      if (!isset($template_definition['class'])) {
+        $template_definition['class'] = $template;
+      }
+
+      if (isset($template_definition['decorators'])) {
+        foreach ($template_definition['decorators'] as $decorator => $decorator_definition) {
+          // Decorator defaults.
+          $decorator_definition['path'] = _decorator_file_cache_path($namespace);
+          if (!isset($decorator_definition['file'])) {
+            $decorator_definition['file'] = "$decorator.inc";
+          }
+          if (!isset($decorator_definition['class'])) {
+            $decorator_definition['class'] = $decorator;
+          }
+          // Append decorator template definition.
+          $decorator_definition['template'] = array(
+            'parent' => $template_definition['parent'],
+            'module' => $template_definition['module'],
+            'path' => $template_definition['path'],
+            'file' => $template_definition['file'],
+            'class' => $template_definition['class'],
+          );
+
+          // Run the cache.
+          if (!_decorator_get_cache($namespace, $decorator_definition)) {
+            if (_decorator_file_cache($namespace, $decorator_definition)) {
+              _decorator_set_cache($namespace, $decorator_definition);
+            }
+          }
+        }
+      }
+    }
+    _decorator_save_cache($namespace);
+    // Append decorator files to autoload registry in decorator_registry_files_alter() by triggering a registry update.
+    registry_update();
+  }
+}
+
+/**
+ * Return decorators' file cache directory path.
+ */
+function _decorator_file_cache_path($namespace = NULL) {
+  if ($namespace) {
+    return variable_get('file_public_path', conf_path() . '/files') . '/decorator/' . $namespace;
+  }
+  else {
+    return variable_get('file_public_path', conf_path() . '/files') . '/decorator';
+  }
+}
+
+/**
+ * Retrieve decorator definition(s) from the cache.
+ */
+function _decorator_get_cache($namespace = NULL, $definition = NULL) {
+  // Check static cache before the system cache bin.
+  $cache = &_decorator_static($namespace);
+  if (empty($cache)) {
+    if (!variable_get('decorator_skip_cache', FALSE)) {
+      if (isset($namespace)) {
+        $db_cache = cache_get('decorator:' . $namespace);
+        if ($db_cache && !empty($db_cache->data)) {
+          $cache = $db_cache->data;
+        }
+      }
+      else {
+        // Retrieve cache for all namespaces.
+        $db_cache = array();
+        foreach (_decorator_namespaces() as $namespace) {
+          $db_namespace_cache = cache_get('decorator:' . $namespace);
+          if ($db_namespace_cache && !empty($db_namespace_cache->data)) {
+            $db_cache[$namespace] = $db_namespace_cache->data;
+          }
+        }
+        if (!empty($db_cache)) {
+          $cache = $db_cache;
+        }
+      }
+    }
+  }
+
+  if (isset($definition) && isset($namespace)) {
+    // Search the cache.
+    if (isset($cache[$definition['class']])) {
+      return $cache[$definition['class']];
+    }
+  }
+  else {
+    if (!empty($cache)) {
+      return $cache;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Add decorator definition to the cache.
+ */
+function _decorator_set_cache($namespace, $definition) {
+  // Save decorator's definition to a static cache.
+  $cache = &_decorator_static($namespace);
+  $cache[$definition['class']] = $definition;
+}
+
+/**
+ * Save cached data to the system cache.
+ */
+function _decorator_save_cache($namespace) {
+  // Load the static cache.
+  $cache = &_decorator_static($namespace);
+  // Save it to the system cache.
+  if (!empty($cache)) {
+    if (!variable_get('decorator_skip_cache', FALSE)) {
+      cache_set('decorator:' . $namespace, $cache);
+    }
+  }
+}
+
+/**
+ * Static cache for decorator definitions.
+ */
+function &_decorator_static($namespace = NULL) {
+  static $cache = array();
+
+  if (!isset($namespace)) {
+    return $cache;
+  }
+
+  if (!isset($cache[$namespace])) {
+    $cache[$namespace] = array();
+  }
+  return $cache[$namespace];
+}
+
+/**
+ * Retrieve all decorator namespaces found in the file cache.
+ */
+function _decorator_namespaces() {
+  // Search the file cache path for directories.
+  $dir = file_scan_directory(_decorator_file_cache_path(), '/.*/', array('recurse' => FALSE));
+  if (is_array($dir)) {
+    $namespaces = array();
+    foreach ($dir as $file) {
+      if (is_dir($file->uri)) {
+        $namespaces[] = $file->filename;
+      }
+    }
+    return $namespaces;
+  }
+  return array();
+}
+
+/**
+ * A file cache for "decorators".
+ *
+ * Because of the capabilities of PHP we have to do some tricks to achieve something
+ * what we can call "horizontal extensibility" of classes. We chose generating of files,
+ * because in this case we don't need to do it on every page request. That is therefore
+ * faster than using complicated implementations of the Decorator design pattern hacked
+ * with magic methods :) maybe :) The second reason is it gives us the possibility to put
+ * a controlling code implementing this (or a wrapper object from the Decorator design
+ * pattern) outside of the module which uses those classes we want to decorate. The
+ * only requirement on that target module is then if it has an interface for registering
+ * new classes for use.
+ */
+function _decorator_file_cache($namespace, $definition) {
+  if (!isset($definition['path'])) {
+    $definition['path'] = _decorator_file_cache_path($namespace);
+  }
+
+  $decorator_filepath = './' . $definition['path'] . '/' . $definition['file'];
+  if (!is_file($decorator_filepath)) {
+    // Create the cache directory if it not exist.
+    $tmp = _decorator_file_cache_path($namespace);
+    file_prepare_directory($tmp, FILE_CREATE_DIRECTORY);
+
+    // Load decorator class "code template" and modify it before saving.
+    $decorator_template_filename = './' . $definition['template']['path'] . '/' . $definition['template']['file'];
+    $decorator_code = file_get_contents($decorator_template_filename);
+    $decorator_code = str_replace('class ' . $definition['template']['class'] . ' extends ' . $definition['template']['parent'], 'class ' . $definition['class'] . ' extends ' . $definition['parent'], $decorator_code);
+
+    // Save decorated code to a cache file.
+    if (!file_unmanaged_save_data($decorator_code, $decorator_filepath, FILE_EXISTS_REPLACE)) {
+      drupal_set_message(t('Cannot write cache file.'), 'error');
+      return FALSE;
+    }
+  }
+  return TRUE;
+}
+
+/**
+ * Interface function for retrieving decorators definitions.
+ *
+ * Return decorators' class definitions if they're in the cache (within a namespace).
+ *
+ * @param string $namespace
+ *   The cache namespace/directory.
+ *
+ * @return array
+ *   An asociated array of cached decorator definitions.
+ *     - decorator: (array key) Decorator key.
+ *       - parent: Decorator's parent class.
+ *       - path: Path to the decorator class.
+ *       - file: Decorator's class definition filename.
+ *       - class: Decorator's class.
+ *       - template: Decorator templates.
+ *         - template: (array key) Decorator template key.
+ *           - parent: Decorator template's parent class.
+ *           - module: A module containing the decorator template.
+ *           - path: Path to the decorator template class.
+ *           - file: Decorator template's class definition filename.
+ *           - class: Decorator template's class.
+ */
+function decorator_get_decorators($namespace) {
+  $cache = _decorator_get_cache($namespace);
+  if (!empty($cache)) {
+    return $cache;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Interface function for retrieving decorator's class.
+ *
+ * Return decorator's class name, according to parent class name, if it is in the cache
+ * (within a namespace).
+ *
+ * @param string $namespace
+ *   The cache namespace/directory.
+ * @param string $parent
+ *   Decorator's parent class.
+ *
+ * @return string
+ *   Decorator's class.
+ */
+function decorator_get_decorator($namespace, $parent) {
+  $cache = _decorator_get_cache($namespace);
+  if (!empty($cache)) {
+    foreach ($cache as $decorator => $definition) {
+      if ($definition['parent'] == $parent) {
+        return $decorator;
+      }
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Purge cached data.
+ *
+ * @param string $namespace
+ *   The cache namespace/directory.
+ */
+function decorator_purge($namespace) {
+  _decorator_purge_cache($namespace);
+  _decorator_purge_file_cache($namespace);
+  drupal_set_message(t('File cache for %namespace cleared.', array('%namespace' => $namespace)));
+  // Update the autoload registry to unset decorator files from it in decorator_registry_files_alter().
+  registry_update();
+}
+
+/**
+ * Purge definitions' cache.
+ */
+function _decorator_purge_cache($namespace) {
+  // Reset static cache.
+  $cache = &_decorator_static($namespace);
+  $cache = array();
+  // Clear definitions from the system cache.
+  cache_clear_all('decorator:' . $namespace, 'cache');
+}
+
+/**
+ * Delete all the cached decorators' class definition files.
+ */
+function _decorator_purge_file_cache($namespace) {
+  // Delete the namespace directory and its contents.
+  file_unmanaged_delete_recursive(_decorator_file_cache_path($namespace));
+}
+
+/**
+ * Implements hook_registry_files_alter().
+ */
+function decorator_registry_files_alter(&$files, $modules) {
+  // Retrieve definitions from cache and append to registry.
+  $cache = _decorator_get_cache();
+  if (!empty($cache)) {
+    foreach ($cache as $namespace_cache) {
+      foreach ($namespace_cache as $definition) {
+        $file = $definition['path'] . '/' . $definition['file'];
+        if (!in_array($file, $files)) {
+          $files[$file] = array(
+            'module' => 'decorator',
+            'weight' => 0,
+          );
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+VIEWS DECORATOR API
+-------------------
+
+For example usage see views_decorator.api.php file.

@@ -2,43 +2,37 @@
 
 /**
  * @file
- * Default simple view template to all the fields as a row.
- *
- * - $view: The view in use.
- * - $fields: an array of $field objects. Each one contains:
- *   - $field->content: The output of the field.
- *   - $field->raw: The raw data for the field, if it exists. This is NOT output safe.
- *   - $field->class: The safe class id to use.
- *   - $field->handler: The Views field handler object controlling this field. Do not use
- *     var_export to dump this object, as it can't handle the recursion.
- *   - $field->inline: Whether or not the field should be inline.
- *   - $field->inline_html: either div or span based on the above flag.
- *   - $field->wrapper_prefix: A complete wrapper containing the inline_html to use.
- *   - $field->wrapper_suffix: The closing tag for the wrapper.
- *   - $field->separator: an optional separator that may appear before a field.
- *   - $field->label: The wrap label text to use.
- *   - $field->label_html: The full HTML of the label to use including
- *     configured element type.
- * - $row: The raw result object from the query, with all data it fetched.
+ * Displays individual activity records.
+ * 
+ * Besides the typical views variables, this file uses several variables
+ * set as part of hook_views_pre_render in template.php.
+ * 
+ * The custom variables include:
+ * 
+ * - $row: Adding some variables
+ *   - $row->icon-class: custom class for displaying icons
+ *   - $row->activity_desc: a string of text summarizing the activity
  *
  * @ingroup views_templates
+ * @see template.php
  */
 
+	// TODO: remove debug inforamtion
 	// dpm($variables);
 	// dpm(array_keys(get_defined_vars()));
 	// dpm($view);
 	// dpm($variables);
 	// dpm($row);
 	// dpm($fields);
-
+	// dpm($view);
+	// dpm($yoyoyo);
+	// dpm($row);
+	
 ?>
-<?php foreach ($fields as $id => $field): ?>
-  <?php if (!empty($field->separator)): ?>
-    <?php print $field->separator; ?>
-  <?php endif; ?>
+<div class="activity_icon <?php print $row->icon_class; ?>"></div>
+<div class="activity_desc clearfix">
+	<?php print $row->activity_desc; ?>
+	<div class="activity_date"><?php print $fields['field_activity_date']->content; ?></div>
+</div>
 
-  <?php print $field->wrapper_prefix; ?>
-    <?php print $field->label_html; ?>
-    <?php print $field->content; ?>
-  <?php print $field->wrapper_suffix; ?>
-<?php endforeach; ?>
+

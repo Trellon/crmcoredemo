@@ -9,7 +9,39 @@
 .activity-record {
   border-bottom: 1px solid #CCC;
   padding: .5em;
+  font-size: 1.1em;
+}
+.activity-record .contact_name {
+  font-weight: 600;
 }
 .activity-list .activity-record:last-child {
   border-bottom: none;
+}
+.activity_icon {
+  float: left;
+  width: 31px;
+  height: 31px;
+  margin-left: 6px;
+}
+
+.activity-icon-default {
+  background: url(../images/activity-icons.png) 0px 0px no-repeat;
+}
+.activity-icon-donation {
+  background: url(../images/activity-icons.png) -30px 0px no-repeat;
+}
+.activity-icon-event-registration {
+  background: url(../images/activity-icons.png) -60px 0px no-repeat;
+}
+.activity-icon-petition-signature {
+  background: url(../images/activity-icons.png) -120px 0px no-repeat;
+}
+
+.activity_desc {
+  margin-left: 53px;
+}
+.activity_desc .activity_date {
+  margin-top: 8px;
+  color: #0088cc;
+  font-size: .8em;
 }
