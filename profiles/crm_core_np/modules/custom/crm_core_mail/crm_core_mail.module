@@ -9,7 +9,10 @@
  * Implements hook_form_alter().
  *
  * Alters VBO settings form.
+ * 
+ * TODO: see http://drupal.org/node/1286718.
  */
+
 function crm_core_mail_form_alter(&$form, &$form_state, $form_id) {
   if (strpos($form_id, 'views_form_') != 0 ||
       empty($form_state['values']['operation']) ||
@@ -34,3 +37,30 @@ function crm_core_mail_mail($key, &$message, $params) {
   $message['body'][] = drupal_html_to_text($params['body']);
 }
 
+
+/**
+ * Implements hook_views_default_views_alter().
+ * 
+ * Add email contact action to contact view.
+ */
+function crm_core_mail_views_default_views_alter(&$views) {
+  if (isset($views['crm_core_contacts_updates'])) {
+    foreach ($views['crm_core_contacts_updates']->display as $display_id => $display) {
+      if (!empty($display->display_options['fields'])) {
+        foreach($display->display_options['fields'] as $field_name => $field) {
+          if ($field['field'] == 'views_bulk_operations') {
+            
+            dpm($views['crm_core_contacts_updates']->display[$display_id ]->display_options['fields'][$field_name]);
+            $views['crm_core_contacts_updates']->display[$display_id ]->display_options['fields'][$field_name]['vbo_operations']['rules_component::crm_core_mail_send'] = array(
+              'selected' => 1,
+              'use_queue' => 0,
+              'skip_confirmation' => 1,
+              'override_label' => 1,
+              'label' => 'Send email to the contact',
+            );
+          }
+        }
+      }
+    }    
+  }
+}
