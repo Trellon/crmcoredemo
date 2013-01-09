@@ -166,7 +166,7 @@ X',
         ),
         'minimum_components' => array(
           'credentials' => 0,
-          'family' => 'family',
+          'family' => 0,
           'generational' => 0,
           'given' => 'given',
           'middle' => 0,
