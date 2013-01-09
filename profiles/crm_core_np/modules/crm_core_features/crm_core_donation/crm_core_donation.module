@@ -877,14 +877,14 @@ function crm_core_donation_form_submit($form, &$form_state) {
   // attach to order contact, donation page and activity id's
   $form_state['order']->data['crm_core_donation']['contact']['contact_id'] = $form_state['contact']->contact_id;
   $form_state['order']->data['crm_core_donation']['donation_page_submission_activity']['activity_id'] =
-    $form_state['crm_core_activity']->activity_id;
+  $form_state['activity']->activity_id;
   $order = $form_state['order'];
 
   // create and attach commerce_customer profile to an order
   _crm_core_donation_commerce_attach_profile($order, $form_state);
 
   // fill a created activity with a values
-  $activity_id = $form_state['crm_core_activity']->activity_id;
+  $activity_id = $form_state['activity']->activity_id;
   $activity = crm_core_activity_load($activity_id);
   // add last 4 cc
   if (isset($credit_card)) {
