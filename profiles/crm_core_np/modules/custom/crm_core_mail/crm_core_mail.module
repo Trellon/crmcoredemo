@@ -49,8 +49,6 @@ function crm_core_mail_views_default_views_alter(&$views) {
       if (!empty($display->display_options['fields'])) {
         foreach($display->display_options['fields'] as $field_name => $field) {
           if ($field['field'] == 'views_bulk_operations') {
-            
-            dpm($views['crm_core_contacts_updates']->display[$display_id ]->display_options['fields'][$field_name]);
             $views['crm_core_contacts_updates']->display[$display_id ]->display_options['fields'][$field_name]['vbo_operations']['rules_component::crm_core_mail_send'] = array(
               'selected' => 1,
               'use_queue' => 0,
