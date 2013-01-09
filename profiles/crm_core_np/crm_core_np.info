@@ -98,6 +98,7 @@ dependencies[] = crm_core_profile_notification
 
 ; Enable demo specific configuration
 dependencies[] = crm_core_demo_settings
+dependencies[] = crm_core_mail
 
 ; Install non essential modules.
 dependencies[] = diff
