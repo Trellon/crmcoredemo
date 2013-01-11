@@ -228,7 +228,11 @@ crm-core-profile-entry-form');
   variable_set('jquery_update_compression_type', 'min');
   variable_set('jquery_update_jquery_cdn', 'google');
   variable_set('jquery_update_jquery_version', '1.8');
-
+ 
+  // sync the admin user with a contact
+  if ($accout = user_load(1)) {
+	  crm_user_sync_sync($account);
+  }
 }
 
 /**

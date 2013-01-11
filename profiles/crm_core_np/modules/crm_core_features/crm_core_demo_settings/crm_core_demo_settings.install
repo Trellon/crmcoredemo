@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function crm_core_demo_settings_install() {
+  // Disable contacts view provided by crm_core_contacts module
+  $status = variable_get('views_defaults', array());
+  $status['crm_core_contacts'] = TRUE;
+  variable_set('views_defaults', $status);
+}

@@ -745,9 +745,6 @@ function crm_core_donation_form_crm_core_profile_entry_form_alter(&$form, &$form
     '#markup' => $footer['value'],
   );
 
-  // set campaign (the donation page id)
-  $form['activity']['field_donation_campaign'][LANGUAGE_NONE][0]['value']['#default_value'] = $donation_page['id'];
-
   // preset an amount on the donation form according to get
   if (isset($form['activity']['field_donation_amounts'][LANGUAGE_NONE]['#options'])) {
     $amount_set = array_keys($form['activity']['field_donation_amounts'][LANGUAGE_NONE]['#options']);
@@ -823,6 +820,10 @@ function crm_core_donation_form_crm_core_profile_entry_form_alter(&$form, &$form
 
 
 function crm_core_donation_form_validate($form, &$form_state) {
+	
+	// set campaign id to the activity
+	$form_state['activity']->field_donation_campaign[LANGUAGE_NONE][0]['value'] = $form_state['profile']['donation_page']['id'];
+
   // save an order if it was not saved before
   if (!empty($form_state['order']->order_id)) {
     $order = $form_state['order'];
@@ -877,15 +878,16 @@ function crm_core_donation_form_submit($form, &$form_state) {
   // attach to order contact, donation page and activity id's
   $form_state['order']->data['crm_core_donation']['contact']['contact_id'] = $form_state['contact']->contact_id;
   $form_state['order']->data['crm_core_donation']['donation_page_submission_activity']['activity_id'] =
-    $form_state['crm_core_activity']->activity_id;
+  $form_state['activity']->activity_id;
   $order = $form_state['order'];
 
   // create and attach commerce_customer profile to an order
   _crm_core_donation_commerce_attach_profile($order, $form_state);
 
   // fill a created activity with a values
-  $activity_id = $form_state['crm_core_activity']->activity_id;
+  $activity_id = $form_state['activity']->activity_id;
   $activity = crm_core_activity_load($activity_id);
+  
   // add last 4 cc
   if (isset($credit_card)) {
     $activity->field_donation_cc_last4[LANGUAGE_NONE][0]['value'] = trim(drupal_substr(trim($credit_card['number']), -4));
@@ -1439,18 +1441,16 @@ function crm_core_donation_views_data() {
   );
   
   // Activity id field
-  $data['field_data_field_donation_campaign']['entity_id'] = array(
-    'title' => t('Donation campaign source'),
+  $data['field_data_field_donation_campaign']['field_donation_campaign_value'] = array(
+    'title' => t('Donation campaign'),
     'help' => t('The source campaign of a donation.'),
-
     'relationship' => array(
-      'base' => 'crm_core_activity', // The name of the table to join with.
-      'base field' => 'activity_id', // The name of the field on the joined table.
-      // 'field' => 'nid' -- see hook_views_data_alter(); not needed here.
+      'base' => 'crm_core_donation_page', // The name of the table to join with.
+      'base field' => 'id', // The name of the field on the joined table.
       'handler' => 'views_handler_relationship',
       'label' => t('CRM Core Donation Source Field'),
       'title' => t('CRM Core Donation Source Field'),
-      'help' => t('Defines the source of a donation, typically a CRM Core Donation page'),
+      'help' => t('Reference to the CRM Core Donation page data'),
     ),
   );
   
