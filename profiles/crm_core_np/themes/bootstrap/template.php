@@ -59,6 +59,24 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
 }
 
 /**
+ * Preprocesses individual homebox blocks and gives them unique classes based on the name
+ * @param unknown_type $variables
+ */
+function crm_core_demo_preprocess_homebox(&$variables) {
+  $regions = $variables['regions'];
+  
+  foreach ($regions as $region){
+    foreach($region as $item => $value){
+      // dpm($region[$item][0]);
+      $new_class = check_plain(strtolower('crm_core_block_' . $region[$item][0]->subject));
+      $region[$item][0]->homebox_classes .= ' ' . $new_class;
+    }
+  }
+
+}
+
+
+/**
  * Override theme_breadrumb().
  *
  * Print breadcrumbs as a list, with separators.
