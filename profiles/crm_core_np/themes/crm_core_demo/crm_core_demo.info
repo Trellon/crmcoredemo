@@ -1,5 +1,4 @@
-
-name = CRM Core Demo theme
+name = CRM Core Demo
 description = Uses Twitter Bootstrap for a base
 version = 1.0
 core = 7.x
@@ -13,6 +12,7 @@ stylesheets[all][] = css/forms.css
 stylesheets[all][] = css/elements.css
 stylesheets[all][] = css/homebox-alt.css
 stylesheets[all][] = css/activity.css
+stylesheets[all][] = css/contacts.css
 
 
 regions[header]         = 'Top Bar'

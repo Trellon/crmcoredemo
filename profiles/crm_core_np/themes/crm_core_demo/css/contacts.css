@@ -1,0 +1,117 @@
+@CHARSET "UTF-8";
+.crm-core-contact-list {
+}
+.crm-core-contact-list TABLE {
+}
+.crm-core-contact-list .crm-core-contact-Individual {
+}
+.crm-core-contact-list  TBODY TR TD.views-field-contact-name {
+	font-weight: 600;
+}
+.crm-core-contact-list  TBODY TR TD.views-field-contact-name A {
+}
+.crm-core-contact-list TBODY TR TD.views-field-nothing-1 {
+	width: 28px;
+	text-align: center;
+}
+.crm-core-contact-list TBODY TR.crm-core-contact-Individual TD.views-field-nothing-1 .crm-icon {
+	background: url(../images/contact-icons.png) 0px -2px no-repeat;
+  height: 28px;
+  width: 28px;
+}
+.crm-core-contact-list TBODY TR.crm-core-contact-Individual TD.views-field-nothing A {
+	font-weight: bold;
+}
+
+/* main contact search page */
+.vbo_actions_holder {
+	display: none;
+	position: relative;
+}
+.vbo_btn_group {
+	position: relative;
+	width: 100%;
+}
+.vbo_btn_group .vbo_action_link {
+  position: absolute;
+  top: -95px;
+  right: 0px;
+}
+.vbo_btn_group .vbo_btn_options {
+  position: absolute;
+  top: -68px;
+}
+
+/* contact pages */
+.contact {
+  background-color: #e7e7e7;
+  background: url(../images/linen-light.png) top left repeat;
+}
+.contact .contact-upper {
+  border-bottom: 12px solid #ddc;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+}
+.contact .contact-upper .contact-title-ind {
+	font-weight: 600;
+	text-transform: uppercase;
+	font-size: 1.1em;
+	margin-bottom: 8px;
+}
+.contact .contact-upper .contact-details {
+  background-color: #edede3;
+  -webkit-box-shadow: 2px 3px 4px 0px #aaa;
+          box-shadow: 2px 3px 4px 0px #aaa;
+  
+}
+.contact .contact-upper .contact-details .contact-picture {
+  width: 100%;
+  background-color: #777;
+  text-align: center;
+}
+.contact .contact-upper .contact-details .contact-info {
+  padding: .5em;
+}
+.contact .contact-upper .contact-details .field-name-contact-name {
+}
+.contact .contact-upper .contact-details .field-name-contact-name .field-label {
+	display: none;
+}
+.contact .contact-upper .contact-details .field-name-contact-name .field-items {
+  font-weight: 600;
+  font-size: 1.2em;
+}
+.contact .crm-contact-activity-summary {
+}
+.contact .crm-contact-activity-summary .view-content {
+}
+.contact .crm-contact-activity-summary .view-content .views-row {
+	float: left;
+	border: 1px solid #CCC;
+	width: 150px;
+}
+.contact .crm-contact-activity-summary .view-content .views-row .views-field-activity-id {
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;	
+}
+.contact .crm-contact-activity-summary .view-content .views-row .views-field-type {
+  text-align: center;
+  font-weight: bold;  
+}
+
+
+
+
+.contact .contact-upper .contact-activity {
+  background-color: #edede3;
+  padding: .5em;
+  margin-bottom: .5em;
+}
+.contact .contact-upper .contact-overview {
+  background-color: #edede3;
+}
+	
+	
+.contact .contact-lower {
+}

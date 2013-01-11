@@ -129,6 +129,16 @@ function crm_core_demo_views_pre_render(&$view) {
 }
 
 /**
+ * Preprocessor for the contact list
+ * @param unknown_type $view
+ */
+function crm_core_demo_preprocess_views_view__crm_core_contacts_alt(&$view) {
+  
+// dpm($view->result);
+  
+}
+
+/**
  * Example of a theme preprocessing function. 
  * 
  * This function assigns several custom variables to the view being loaded. 
@@ -143,51 +153,59 @@ function crm_core_demo_preprocess_views_view__crm_core_recent_activities(&$view)
 	// some custom text and icons in the theme template file. Information about
 	// the icon and custom text are stored here as variables with each view result.
 	
-	foreach ($view->result as $item => $data){
+	if($view->current_display !== 'block_3'){
+	  
+  	foreach ($view->result as $item => $data){
+  
+  		// TODO: remove debugging
+  		// dpm($view->result[$item]);
+  		// dpm($view->result[$item]->crm_core_contact_field_data_field_activity_participants_cont);
+  		// dpm($view->result[$item]->field_contact_name[0]['rendered']['#markup']);
+  		// dpm($view->result[$item]->field_field_donation_amounts[0]['rendered']['#markup']);
+  
+  	  if(is_array($view->result[$item]->field_contact_name) && sizeof($view->result[$item]->field_contact_name) > 0){
+  	    
+  	    // dpm($view->result[$item]->crm_core_contact_field_data_field_activity_participants_cont);
+  	    
+  			$name = $view->result[$item]->field_contact_name[0]['rendered']['#markup'];
+  			$link = l($name,
+  					// 'crm/contact/' . $view->result[$item]->crm_core_contact_field_data_field_activity_participants_cont,
+  					'/crm/contact/' . $view->result[$item]->crm_core_contact_field_data_field_activity_participants_cont,
+  					array('attributes' => array(
+  							'class'	=> 'contact_name',
+  					)
+  				)
+  			);
+  	  } else {
+  			$name = 'An anonymous user';
+  			$link = $name;
+  		}
 
-		// TODO: remove debugging
-		// dpm($view->result[$item]);
-		// dpm($view->result[$item]->crm_core_contact_field_data_field_activity_participants_cont);
-		// dpm($view->result[$item]->field_contact_name[0]['rendered']['#markup']);
-		// dpm($view->result[$item]->field_field_donation_amounts[0]['rendered']['#markup']);
-
-		if(is_array($view->result[$item]->field_contact_name) && sizeof($view->result[$item]->field_contact_name) > 0){
-			$name = $view->result[$item]->field_contact_name[0]['rendered']['#markup'];
-			$link = l($name,
-					'crm/contact/' . $view->result[$item]->crm_core_contact_field_data_field_activity_participants_cont,
-					array('attributes' => array(
-							'class'	=> 'contact_name',
-					)
-				)
-			);
-		} else {
-			$name = 'An anonymous user';
-			$link = $name;
-		}
-
-		// add default icons and text to each activity item
-		$view->result[$item]->icon_class = 'activity-icon-default';
-		$view->result[$item]->activity_desc = $link . ' did something in the system';
-
-		// loop through the possible activity types
-		switch ($view->result[$item]->crm_core_activity_type){
-			case 'donation':
-				$view->result[$item]->icon_class = 'activity-icon-donation';
-				$view->result[$item]->activity_desc = $link . ' donated <strong>$' . $view->result[$item]->field_field_donation_amounts[0]['rendered']['#markup'] . '</strong>.' ;
-				break;
-			case 'event_registration':
-				$view->result[$item]->icon_class = 'activity-icon-event-registration';
-				$view->result[$item]->activity_desc = $link . ' registered for an event.';
-				break;
-			case 'petition_signature':
-				$view->result[$item]->icon_class = 'activity-icon-petition-signature';
-				$view->result[$item]->activity_desc = $link . ' signed a petition.';
-				break;
-			default:
-				break;
-		}
+  		
+  		// add default icons and text to each activity item
+  		$view->result[$item]->icon_class = 'activity-icon-default';
+  		$view->result[$item]->activity_desc = $link . ' did something in the system';
+  
+  		// loop through the possible activity types
+  		switch ($view->result[$item]->crm_core_activity_type){
+  			case 'donation':
+  				$view->result[$item]->icon_class = 'activity-icon-donation';
+  				$view->result[$item]->activity_desc = $link . ' donated <strong>$' . $view->result[$item]->field_field_donation_amounts[0]['rendered']['#markup'] . '</strong>.' ;
+  				break;
+  			case 'event_registration':
+  				$view->result[$item]->icon_class = 'activity-icon-event-registration';
+  				$view->result[$item]->activity_desc = $link . ' registered for an event.';
+  				break;
+  			case 'petition_signature':
+  				$view->result[$item]->icon_class = 'activity-icon-petition-signature';
+  				$view->result[$item]->activity_desc = $link . ' signed a petition.';
+  				break;
+  			default:
+  				break;
+  		}
+  	}
 	}
-
+	
 }
 
 /**
@@ -239,5 +257,71 @@ function crm_core_demo_btn_dropdown($variables) {
   
   return $output;
 }  
+/**
+ * Preprocesses a contact
+ * TODO: figure out if this belongs in the settings module (I think it does)
+ * 
+ */
+function crm_core_demo_preprocess_contact(&$variables) {
+  
+  $variables['pic'] = 'this is where the picture goes';
+  $variables['volunteer'] = '<span class="contact-volunteer">I am not a volunteer yet</span>';
+  $variables['email_button'] = '<a href="#" class="btn btn-mini btn-warning disabled"><i class="icon-envelope icon-white"></i></a>';
+  $variables['comments'] = '0';
+  $variables['donations'] = 0;
+  $variables['activities'] = '';
+  $variables['user'] = 'I do not have a user account yet';
+  
+  $cdat = $variables['contact_data'];
+  
+  // dpm($variables);
+  // dpm($cdat['field_contact_email']['#items'][0]['email']);
+  
+  // set the volunteer markup
+  if($cdat['field_contact_volunteer']['#items'][0]['value'] !== '0'){
+    $variables['volunteer'] = '<span class="contact-volunteer">I want to volunteer</span>';    
+  }
+  // set the email markup
+  if($cdat['field_contact_email']['#items'][0]['email'] !== ''){
+    $variables['email_button'] = '<a href="mailto:' . $cdat['field_contact_email']['#items'][0]['email'] . '" class="btn btn-mini btn-warning"><i class="icon-envelope icon-white"></i> Send a message</a>';    
+  }
+  
+  // set the image to appear
+  if($cdat['contact_image']){
+    
+    // format the image, it should be more wide than tall
+    // make sure there is a default image available for people to work with
+    $variables['pic'] = theme('image_style', array(
+      'style_name' => 'contact_main_image',
+      'path' => $cdat['contact_image'][0]['#item']['uri'],
+      'alt' => 'yo yo yo',
+      'attributes' => array('class' => 'contact-image'),
+    ));    
+    
+  }
+  
+  // get activity data about the user
+  
+  $variables['activity_summary'] = views_embed_view('crm_contacts_participation_details','default', $variables['cid']);
+  
+  
+  // check for a user account for this contact
+  // if one exists, include a link to it
+  
+  $cuser = crm_user_sync_get_user_from_contact_id($variables['cid']);
+  // dpm($cuser);
+  
+  if(isset($cuser->uid)){
+    $variables['user'] = 'I have a user account';    
+  }
+  
+  // get an activity feed for this contact
+  
+  $variables['activities'] = views_embed_view('crm_core_recent_activities','block_2', $variables['cid']);
+  
+  // get some other stuff...
+  
+  
 
+}
 

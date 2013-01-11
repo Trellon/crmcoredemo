@@ -4,7 +4,6 @@
   -moz-background-clip: border; 
   -webkit-background-clip: border-box; 
   background-clip: border-box;
-  overflow: hidden;
   background-color: #f3f3f3;
 }
 #homebox .homebox-portlet {
@@ -29,15 +28,18 @@
 #homebox .homebox-portlet .portlet-header {
 	background-color: transparent;
 	border: none;
-	position: absolute;
-	top: 4px;
-	right: 4px;
 }
 #homebox .homebox-portlet .portlet-header .portlet-title {
-  display: none;
+	position: absolute;
+  top: 4px;
+  left: -18px;
+  background-color: #fb3208;
+  padding: .4em .8em;
+  font-weight: 600;
+  line-height: 1.5em;
 }
 #homebox .homebox-portlet .portlet-content {
-  padding: 0em;
+  padding: 1em 0em 0em 0em;
 }
 #homebox .homebox-portlet .portlet-content .view-empty {
   margin: 0em;
@@ -45,4 +47,11 @@
 #homebox .homebox-portlet .homebox-portlet-inner {
   border: none;
 }
+/* donations header */
 
+#homebox .homebox-portlet.crm_core_block_petitions  .portlet-header .portlet-title {
+	background-color: #ece417;
+}
+#homebox .homebox-portlet.crm_core_block_donations  .portlet-header .portlet-title {
+	background-color: #85de25;
+}

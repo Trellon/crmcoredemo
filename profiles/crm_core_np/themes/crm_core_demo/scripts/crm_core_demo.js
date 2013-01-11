@@ -63,16 +63,29 @@
         var item = $(this);
         item.expandingTextarea();
       });
-
       
-      // console.log($('.tips', context).data());
-
-      /*
-      $(".toggler", context).once('custom-toggler').click(function(){
-        $(this).next().slideToggle("slow");
-        return false;
-      }).next().hide();*/
+      // mods for views bulk operations
+      // creates click events for 'altered' vbo menus using markup from bootstrap. 
+      $('.vbo_btn_group').each(function(){
+        var vbo_select = $(this).next().find('SELECT'),
+        vbo_submit = $(this).next().find('.form-submit');
+        $(this).find('.vbo_action').bind('click', function(){
+          vbo_select.val($(this).attr('href'));
+          vbo_submit.click();
+          return false;
+        });
+      });
       
+      // toggles disabled states on vbo forms
+      $('.vbo-select, .vbo-table-select-all').each(function(){
+        $(this).bind('click', function(){
+          $('.vbo_action_link').removeClass('disabled');
+          var any_selected = $('.vbo-select').is(':checked');
+          if(!any_selected){
+            $('.vbo_action_link').addClass('disabled');
+          }
+        });
+      });
       
       
     },

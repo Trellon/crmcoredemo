@@ -140,7 +140,11 @@ BODY.front .jumbotron {
 	margin: 20px 0px 14px;
 	border-bottom: none;	
 }
-
+UL.action-links {
+	font-size: 1.2em;
+	margin: .5em 0em 1em 0em;
+	padding: 0em 0em 0em 0em;
+}
 
 /* Blocks */
 .news_subscription .name-title-wrapper,
@@ -158,6 +162,30 @@ BODY.front .jumbotron {
 }
 
 
+/* various icons */
+.crm-core-content {
+	font-weight: 600;
+	font-size: 1.2em;
+	height: 30px;
+	padding-top: 4px;
+	padding-left: 30px;
+	margin-bottom: 8px;
+}
 
+.crm-core-content.crm-core-blog-post {
+	background: url(../images/new-activity-icons.png) 0px -0px no-repeat;
+}
+.crm-core-content.crm-core-donation-page {
+	background: url(../images/new-activity-icons.png) 0px -32px no-repeat;
+}
+.crm-core-content.crm-core-event {
+	background: url(../images/new-activity-icons.png) 0px -65px no-repeat;
+}
+.crm-core-content.crm-core-petition {
+	background: url(../images/new-activity-icons.png) 0px -130px no-repeat;
+}
+.crm-core-content.crm-core-volunteer {
+	background: url(../images/new-activity-icons.png) 0px -98px no-repeat;
+}
 
 

@@ -1,5 +1,22 @@
 @CHARSET "UTF-8";
 
+.view {
+}
+.view TABLE {
+}
+.view TABLE THEAD TR {
+  border-bottom: 3px solid #DDD;
+}
+.view TABLE THEAD TR TH {
+	border-bottom: 3px solid #DDD;
+}
+.view TABLE TBODY TR.even {
+	background-color: #e7e7f5;
+}
+.view TABLE TBODY TR:hover {
+	background-color: #e7e7e1;
+}
+
 /* widgets */
 .crm-core-widget {
   background-color: #f3f3f3;
@@ -27,6 +44,7 @@
   text-align: left;
   border-right: 1px solid #CCC;
   padding: 0em;
+  width: 50%;
 }
 .crm-core-widget .view-header .view:last-of-type {
   border-right: none;
@@ -271,3 +289,36 @@
   font-weight: 600;
   line-height: normal;
 }
+
+/* VBO */
+.views-above {
+	border: 1px solid #CCC;
+	padding: 0em;
+}
+.views-above .view-filters {
+	margin: 0em;
+	padding: 0em;
+}
+.views-above .view-filters FORM {
+	margin: 0em;
+	padding: 0em;
+}
+.views-above .views-exposed-form {
+	padding: 0em;
+}
+.views-above .views-exposed-form .views-exposed-widgets {
+	margin: 0em;
+	padding: 0em;
+}
+.views-above .views-exposed-form .views-exposed-widgets .views-exposed-widget {
+	padding: 8px 0px 0px 8px;
+}
+.views-above .views-exposed-form .views-exposed-widgets .views-exposed-widget LABEL {
+	display: inline-block;
+	padding: 0em .5em 0em 0em;
+}
+.views-above .views-exposed-form .views-exposed-widgets .views-exposed-widget .views-widget {
+	display: inline-block;
+	padding: 0em .5em 0em 0em;
+}
+
