@@ -1,0 +1,148 @@
+<?php
+/**
+ * @file
+ * Autorotate image based on EXIF Orientation tag.
+ * http://sylvana.net/jpegcrop/exif_orientation.html
+ *
+ * This mini-module contributed by jonathan_hunt http://drupal.org/user/28976
+ * September 1, 2009
+ *
+ * Tweaked by dman to add documentation
+ */
+
+/* In Adobe PNGs and TIFF, this information MAY be present in the XMP
+ * metadata like so:
+
+ <x:xmpmeta xmlns:x="adobe:ns:meta/">
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <rdf:Description rdf:about="" xmlns:tiff="http://ns.adobe.com/tiff/1.0/">
+ <tiff:Orientation>6</tiff:Orientation>
+ </rdf:Description>
+ </rdf:RDF>
+ </x:xmpmeta>
+
+ */
+
+function imagecache_autorotate_image_effect_info() {
+  $effects = array();
+
+  $effects['imagecache_autorotate'] = array(
+    'label' => t('Autorotate'),
+    'help' => t('Add autorotate image based on EXIF Orientation.'),
+    'effect callback' => 'imagecache_autorotate_image',
+    'dimensions callback' => 'imagecache_autorotate_dimensions',
+  );
+
+  return $effects;
+}
+
+/**
+ * @todo: This form is no longer needed nor defined in the hook above. If this
+ * information still needs to be displayed it should probably be moved to help.
+ */
+function imagecache_autorotate_form() {
+  $form = array();
+  $form['help'] = array(
+    '#type' => 'markup',
+    '#value' => "<p>
+      <b>There are no user-configurable options for this process.</b>
+      </p><p>
+      Certain cameras can embed <em>orientation</em> information into image
+      files when they save them. This information is embedded in an EXIF tag
+      and can be used to rotate images to their correct position for display.
+      </p><p>
+      <em>Not all cameras or images contain this information.</em>
+      This process is only useful for those that do.
+      </p><p>
+      The expected/supported values are
+      <br/><strong>Tag</strong>: <code>0x0112  Orientation</code>
+      </p>
+      <ul>
+      <li>1 = Horizontal (normal)</li>
+      <li>3 = Rotate 180</li>
+      <li>6 = Rotate 90 CW</li>
+      <li>8 = Rotate 270 CW</li>
+      </ul>
+      <p>
+      <a href='http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/EXIF.html'>
+EXIF Reference</a>
+      </p>
+    ",
+  );
+  return $form;
+}
+
+/**
+ * Autorotate image based on EXIF Orientation tag.
+ *
+ * See code at
+ * http://sylvana.net/jpegcrop/exif_orientation.html
+ *
+ * and reference at
+ * http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/EXIF.html
+ *
+ * @todo:
+ * Add horizontal and vertical flips etc.
+ * Need to create sample set for tests.
+ */
+function imagecache_autorotate_image($image, $data) {
+  // Test to see if EXIF is supported for image type (e.g. not PNG).
+  if ($image->info['mime_type'] == 'image/jpeg') {
+    if (!function_exists('exif_read_data')) {
+      watchdog('image', 'The image %file could not be auto-rotated because the exif_read_data() function is not available in this PHP installation. You probably will have to enable the exif extension.', array('%file' => $image->source));
+      return FALSE;
+    }
+    $exif = exif_read_data(drupal_realpath($image->source));
+    if (isset($exif['Orientation'])) {
+      switch ($exif['Orientation']) {
+        case 3:
+          $degrees = 180;
+          break;
+        case 6:
+          $degrees = 90;
+          break;
+        case 8:
+          $degrees = 270;
+          break;
+        default:
+          $degrees = 0;
+      }
+      if ($degrees != 0) {
+        $org_width = $image->info['width'];
+        $org_height = $image->info['height'];
+        image_rotate($image, $degrees);
+        if (($degrees === 90 || $degrees === 270) && $image->info['width'] === $org_width) {
+          // The toolkit failed to alter the dimensions (imagemagick currently
+          // fails to do so). So we do it ourselves.
+          $image->info['width'] = $org_height;
+          $image->info['height'] = $org_width;
+        }
+      }
+    }
+  }
+  else if ($image->source === 'modules/image/sample.png' && !function_exists('exif_read_data')) {
+    // Issue a warning if we are in the admin screen and the exif extension is
+    // not enabled.
+    drupal_set_message(t('The exif_read_data() function is not available in this PHP installation. You probably will have to enable the exif extension.'), 'warning');
+  }
+  return TRUE;
+}
+
+/**
+ * Image dimensions callback; Auto-rotate.
+ *
+ * @param array $dimensions
+ *   An array with the dimensions (in pixels) to be modified.
+ * @param array $data
+ *   An array of parameters for the autorotate effect (empty for this effect).
+*/
+function imagecache_autorotate_dimensions(array &$dimensions, array $data) {
+  // We can only know the resulting dimensions if both dimensions are equal.
+  // Otherwise we need to inspect the image itself, which is not passed in here.
+  // (this callback was introduced to enhance performance by not accessing the
+  // image file when rendering the width and height attributes of the html img
+  // tag).
+  if ($dimensions['width'] !== $dimensions['height']) {
+    $dimensions['width'] = $dimensions['height'] = NULL;
+  }
+}

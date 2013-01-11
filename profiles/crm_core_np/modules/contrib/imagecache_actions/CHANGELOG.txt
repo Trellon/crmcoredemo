@@ -1,0 +1,59 @@
+Imagecache Actions
+------------------
+
+Imagecache Actions 7.x-1.x-dev
+------------------------------
+- [#1591198]: Image dimensions callbacks should handle unknown (NULL) dimensions
+  as valid input.
+- [#464092]: Aspect Switcher -- Need to Flush Presets. Side-effect: now allows
+  to define no image style for either landscape or portrait.
+- [#1676924]: Autorotate: check for exif extension and test dimensions callback.
+- [#1849020]: Cant get text test examples to work.
+- [#1702716]: System Stream Wrappers Conflict.
+- [#1844298]: Remove dependency from entity module.
+- [#1778594]: Negative image effect does not work.
+- [#1778214]: Remove version from image_effects_text_test.info.
+- [#1752664]: Error on importing image style.
+- [#1676924]: Autorotate: check for exif extension.
+- [#1666912] by Dubs: Call to undefined function.
+  imagecache_actions_get_image_context() in imagecache_customactions.module.
+- [#1630194]: Custom actions broken after upgrading from dev to prod.
+- [#1591484] by epieddy: Underlay Center or Right parameter not working.
+- Moved the image styles administrative features to its own module.
+- Augment the duplicate with an export and import. This will allow users to
+  duplicate between sites or to post failing styles in the issue queue (without
+  using the features module).
+- Backport of patch from geoffreyr for [#1403962]: Add action "duplicate" to
+  image style admin screen. This will allow us to easily create large sets of
+  test/showcase styles and to fine tune this request before it lands in D8 core.
+
+
+Imagecache Actions 7.x-1.0 2012-05-19
+-------------------------------------
+Incompatibilities:
+- Effects that operate on the transparency layer, do not automatically change
+  the format anymore to png. You will have to add this as a separate effect.
+- File handling: the way that files (e.g. fonts, watermarks, backgrounds) are
+  searched for has been aligned over all effects that work with an additional
+  file. This may cause current styles to not being able to find specified files
+  anymore.
+- Custom actions: custom snippets are now executed using the PHP filter module,
+  meaning that the image syle editor must have the 'Use PHP for settings'
+  permission to be able to edit the custom action snippet.
+- Custom actions: information and variables that are available in your custom
+  snippet have changed. See the README.txt of the custom actions module.
+
+No changelog exists from before this 7.x-1.0 version. So the changelog starts
+from here. 7.x-1.0 is the first reasonably well working D7 version. The 7.x-0.0
+version was based on posted patches in the D7 port request issue and has never
+been tested well. This 7.x-1.0 version is also not extensively tested by the
+maintainers, but has been used in many (live) sites - currently (may 2012) over
+5.000 reported 7.x-1.x-dev installs - so has received fairly good "test
+coverage".
+
+
+Current and past maintainers for Imagecache Actions
+---------------------------------------------------
+- dman (http://drupal.org/user/33240)
+- sidneyshan (http://drupal.org/user/652426)
+- fietserwin (http://drupal.org/user/750928)
