@@ -18,7 +18,10 @@ function crm_core_demo_settings_menu_default_menu_links() {
     'link_title' => 'Add New Donation Page',
     'options' => array(
       'attributes' => array(
-        'title' => '',
+        'class' => array(
+          0 => 'crm-core-content',
+          1 => 'crm-core-donation-page',
+        ),
       ),
     ),
     'module' => 'menu',
@@ -36,7 +39,10 @@ function crm_core_demo_settings_menu_default_menu_links() {
     'link_title' => 'Add New Blog Post',
     'options' => array(
       'attributes' => array(
-        'title' => '',
+        'class' => array(
+          0 => 'crm-core-content',
+          1 => 'crm-core-blog-post',
+        ),
       ),
     ),
     'module' => 'menu',
@@ -54,7 +60,10 @@ function crm_core_demo_settings_menu_default_menu_links() {
     'link_title' => 'Add New Event',
     'options' => array(
       'attributes' => array(
-        'title' => '',
+        'class' => array(
+          0 => 'crm-core-content',
+          1 => 'crm-core-event',
+        ),
       ),
     ),
     'module' => 'menu',
@@ -72,7 +81,10 @@ function crm_core_demo_settings_menu_default_menu_links() {
     'link_title' => 'Add New Online Petition',
     'options' => array(
       'attributes' => array(
-        'title' => '',
+        'class' => array(
+          0 => 'crm-core-content',
+          1 => 'crm-core-petition',
+        ),
       ),
     ),
     'module' => 'menu',
@@ -90,7 +102,10 @@ function crm_core_demo_settings_menu_default_menu_links() {
     'link_title' => 'Add New Volunteer Opportunity',
     'options' => array(
       'attributes' => array(
-        'title' => '',
+        'class' => array(
+          0 => 'crm-core-content',
+          1 => 'crm-core-volunteer',
+        ),
       ),
     ),
     'module' => 'menu',

@@ -74,5 +74,6 @@ features[variable][] = sharethis_location
 features[variable][] = sharethis_service_option
 features[variable][] = sharethis_teaser_option
 features[variable][] = sharethis_widget_option
+features[views_view][] = crm_core_contacts_alt
 features[views_view][] = crm_core_contacts_updates
 features[views_view][] = crm_core_recent_activities

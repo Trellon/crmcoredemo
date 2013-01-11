@@ -88,29 +88,17 @@ function crm_core_demo_settings_homebox() {
     ),
     'blocks' => 
     array (
-      'menu_menu-crm-core-content' => 
-      array (
-        'module' => 'menu',
-        'delta' => 'menu-crm-core-content',
-        'region' => 2,
-        'movable' => 0,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 0,
-        'title' => '',
-        'weight' => -22,
-      ),
-      'views_d2b9063a2b28cbc611462754cfae32a3' => 
+      'views_038657316d71d4dab156a71ed24f2b25' => 
       array (
         'module' => 'views',
-        'delta' => 'd2b9063a2b28cbc611462754cfae32a3',
-        'region' => 1,
-        'movable' => 0,
+        'delta' => '038657316d71d4dab156a71ed24f2b25',
+        'region' => 2,
+        'movable' => 1,
         'status' => 1,
         'open' => 1,
-        'closable' => 0,
-        'title' => '',
-        'weight' => -22,
+        'closable' => 1,
+        'title' => 'Petitions',
+        'weight' => -29,
       ),
       'views_cff147d847be508f315012f24c5edc53' => 
       array (
@@ -121,14 +109,40 @@ function crm_core_demo_settings_homebox() {
         'status' => 1,
         'open' => 1,
         'closable' => 1,
-        'title' => '',
-        'weight' => -25,
+        'title' => 'Donations',
+        'weight' => -27,
+      ),
+      'menu_menu-crm-core-content' => 
+      array (
+        'module' => 'menu',
+        'delta' => 'menu-crm-core-content',
+        'region' => 2,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => 'Add New...',
+        'weight' => -26,
+      ),
+      'views_d2b9063a2b28cbc611462754cfae32a3' => 
+      array (
+        'module' => 'views',
+        'delta' => 'd2b9063a2b28cbc611462754cfae32a3',
+        'region' => 1,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => 'Recent Activity',
+        'weight' => -22,
       ),
     ),
     'widths' => 
     array (
+      1 => 58,
+      2 => 40,
     ),
-    'title' => 'Dashboard',
+    'title' => 'CRM Dashboard',
     'path' => 'crm/dashboard/hb',
     'menu' => 1,
     'enabled' => 1,

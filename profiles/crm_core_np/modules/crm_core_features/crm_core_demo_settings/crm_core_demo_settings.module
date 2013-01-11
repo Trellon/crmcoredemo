@@ -1,4 +1,4 @@
-<?php
+  <?php
 /**
  * @file
  * Code for the CRM Core Demo Settings feature.
@@ -72,6 +72,7 @@ function crm_core_demo_settings_library() {
 function crm_core_demo_settings_preprocess_page($vars){
   
   // add autosize library for textareas
+  // this should be on every page in the si  te
   drupal_add_library('crm_core_demo_settings', 'expanding');
   
 }	
@@ -87,7 +88,62 @@ function crm_core_demo_settings_menu_alter(&$items) {
 	// which could have varying business requirements
 	$items['crm']['page callback'] = 'homebox_build';
 	$items['crm']['page arguments'] = $items['crm/dashboard/hb']['page arguments'];
-
+	
+	// Sets the main contacts interface to use a different view
+	// this allows us to work with the main contacts interface
+	// without needing to change the default views crm core ships with
+	
+	// I think this gets overridden by views after I write it
+	// going to need something else
+	$items['crm/contacts']['page arguments'][0] = 'crm_core_contacts_alt';
+	
 }
 
+function crm_core_demo_settings_views_bulk_operations_form_alter(&$form, &$form_state, &$vbo){
+  
+  // views bulk operations doesn't fit conveniently into the layout on some of the reports pages
+  // it needs to be a little more intuitive for users
+  // we are going to hide all the options available in the form
+  // and make it part of a menu instead of a straight up form
+  // this function probably belongs in the theme instead of this module
+  // TODO: move this to the theme
+  // TODO: make the button a drop down
+  // TODO: create a script that handles the form submission when a link from a menu is selected
+  if($form['#form_id'] == 'views_form_crm_core_contacts_alt_page_1'){
+    
+    if(isset($form['select']) && sizeof($form['select']['operation']['#options']) > 0){
+      
+      $options = array();
+      $links = '';
+      
+      // construct the drop down button
+      foreach ($form['select']['operation']['#options'] as $item => $val){
+        $options[$item] = $val;
+        if($item !== 0){
+          $links .= '<li><a href="' . $item . '" class="vbo_action">' . $val . '</a></li>';
+        }
+      }
+      
+      $btn = <<<BTN
+  <div class="btn-group vbo_btn_group">
+    <a class="btn dropdown-toggle disabled btn-warning btn-small vbo_action_link pull-right" data-toggle="dropdown"  href="#">
+    	<i class="icon-play-circle icon-white"></i> 
+    	With Selected 
+    	<span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu pull-right vbo_btn_options">
+  		$links
+    </ul>
+  </div>
+BTN;
 
+      $form['select']['#type'] = 'markup';
+      $form['select']['#prefix'] = $btn . '<div class="vbo_actions_holder">';
+      $form['select']['#suffix'] = '</div>';
+    }
+
+  }
+    
+
+  
+}
