@@ -60,6 +60,7 @@ features[variable][] = menu_parent_online_petition
 features[variable][] = node_options_online_petition
 features[variable][] = node_preview_online_petition
 features[variable][] = node_submitted_online_petition
+features[views_view][] = crm_core_petitions_widget
 features[views_view][] = crm_petitions_list
 features[views_view][] = petition_report
 features[views_view][] = petition_totals

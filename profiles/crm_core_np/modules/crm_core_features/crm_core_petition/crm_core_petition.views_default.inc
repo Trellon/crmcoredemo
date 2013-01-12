@@ -11,6 +11,95 @@ function crm_core_petition_views_default_views() {
   $export = array();
 
   $view = new view();
+  $view->name = 'crm_core_petitions_widget';
+  $view->description = 'Displays some total values related to donations. Just an overview, to get people to the preview page.';
+  $view->tag = 'default';
+  $view->base_table = 'crm_core_activity';
+  $view->human_name = 'CRM Core Petitions Widget';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['css_class'] = 'crm-core-widget-info';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['group_by'] = TRUE;
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['perm'] = 'crm_core petition reports';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['content'] = 'Donors';
+  $handler->display->display_options['header']['area']['format'] = 'filtered_html';
+  /* Header: Global: View area */
+  $handler->display->display_options['header']['view']['id'] = 'view';
+  $handler->display->display_options['header']['view']['table'] = 'views';
+  $handler->display->display_options['header']['view']['field'] = 'view';
+  $handler->display->display_options['header']['view']['view_to_insert'] = 'crm_core_donations_widget:block_2';
+  /* Field: COUNT(CRM Activity: Activity ID) */
+  $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['group_type'] = 'count';
+  $handler->display->display_options['fields']['activity_id']['label'] = 'Total Signatures';
+  $handler->display->display_options['fields']['activity_id']['element_label_type'] = 'p';
+  $handler->display->display_options['fields']['activity_id']['element_label_colon'] = FALSE;
+  /* Filter criterion: CRM Activity: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'petition_signature' => 'petition_signature',
+  );
+
+  /* Display: Block - Total Signatures */
+  $handler = $view->new_display('block', 'Block - Total Signatures', 'block_1');
+  $handler->display->display_options['defaults']['css_class'] = FALSE;
+  $handler->display->display_options['css_class'] = 'crm_core_widget';
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  /* Header: Global: View area */
+  $handler->display->display_options['header']['view_1']['id'] = 'view_1';
+  $handler->display->display_options['header']['view_1']['table'] = 'views';
+  $handler->display->display_options['header']['view_1']['field'] = 'view';
+  $handler->display->display_options['header']['view_1']['empty'] = TRUE;
+  $handler->display->display_options['header']['view_1']['view_to_insert'] = 'crm_core_petition_count:block';
+  /* Header: Global: View area */
+  $handler->display->display_options['header']['view']['id'] = 'view';
+  $handler->display->display_options['header']['view']['table'] = 'views';
+  $handler->display->display_options['header']['view']['field'] = 'view';
+  $handler->display->display_options['header']['view']['view_to_insert'] = 'crm_core_petitions_widget:block_2';
+
+  /* Display: Block - Respondents */
+  $handler = $view->new_display('block', 'Block - Respondents', 'block_2');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['content'] = 'Unique Respondents';
+  $handler->display->display_options['header']['area']['format'] = 'filtered_html';
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: COUNT(DISTINCT CRM Activity: Participants) */
+  $handler->display->display_options['fields']['field_activity_participants']['id'] = 'field_activity_participants';
+  $handler->display->display_options['fields']['field_activity_participants']['table'] = 'field_data_field_activity_participants';
+  $handler->display->display_options['fields']['field_activity_participants']['field'] = 'field_activity_participants';
+  $handler->display->display_options['fields']['field_activity_participants']['group_type'] = 'count_distinct';
+  $handler->display->display_options['fields']['field_activity_participants']['label'] = '';
+  $handler->display->display_options['fields']['field_activity_participants']['element_label_colon'] = FALSE;
+  $export['crm_core_petitions_widget'] = $view;
+
+  $view = new view();
   $view->name = 'crm_petitions_list';
   $view->description = '';
   $view->tag = 'default';
@@ -990,7 +1079,8 @@ function crm_core_petition_views_default_views() {
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['group_by'] = TRUE;
-  $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['perm'] = 'crm_core petition reports';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
