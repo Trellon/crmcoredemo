@@ -1129,33 +1129,6 @@ function crm_core_donation_views_default_views() {
   $handler = $view->new_display('block', 'Block', 'block_1');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
-  $handler->display->display_options['style_plugin'] = 'flot_fields';
-  $handler->display->display_options['style_options']['size'] = '924x200';
-  $handler->display->display_options['style_options']['showlegend'] = 'no';
-  $handler->display->display_options['style_options']['zoomable'] = 0;
-  $handler->display->display_options['style_options']['legend'] = array(
-    'noColumns' => '1',
-    'labelBoxBorderColor' => '#ccc',
-    'position' => 'bottom',
-    'margin' => array(
-      'x' => '5',
-      'y' => '5',
-    ),
-    'backgroundColor' => '',
-    'backgroundOpacity' => '0.85',
-  );
-  $handler->display->display_options['style_options']['yaxis'] = array(
-    'label' => 'default',
-    'position' => 'left',
-    'color' => '',
-    'tickColor' => '',
-    'min' => '',
-    'max' => '',
-    'autoscaleMargin' => '0.02',
-    'granularity' => 'auto',
-    'labelWidth' => '',
-    'labelHeight' => '',
-  );
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
@@ -1173,17 +1146,6 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
     'thousand_separator' => ',',
     'prefix_suffix' => 1,
-  );
-  $handler->display->display_options['fields']['field_donation_amounts']['flot'] = array(
-    'axis' => 'y',
-    'x' => array(
-      'mode' => '',
-    ),
-    'y' => array(
-      'type' => 'line',
-      'color' => '',
-      'function' => 'count',
-    ),
   );
   /* Field: CRM Activity: Date */
   $handler->display->display_options['fields']['field_activity_date']['id'] = 'field_activity_date';
