@@ -38,6 +38,9 @@ function crm_core_demo_settings_date_format_types() {
  * Implements hook_permission().
  */
 function crm_core_demo_settings_permission() {
+  
+  // TODO: figure out whether or not this is still necessary, now that CRM Core Reports is itself a module.
+  // some views and other features may be keyed to use this permission.
   return array(
     'view crm core reports' => array(
       'title' => t('View CRM Core reports'), 
@@ -50,8 +53,8 @@ function crm_core_demo_settings_permission() {
  */
 function crm_core_demo_settings_library() {
 	
-	// libraries for the basic interface
-	// Helper functions for prototype inheritance - allows objects to be bound to jquery plug ins.
+	// libraries for the basic interface in CRM Core Demo.
+	// expanding - allows text areas to automatically expand.
 	$libraries['expanding'] = array(
     'title' => 'Expanding Textareas', 
     'website' => 'https://github.com/bgrins/ExpandingTextareas', 
@@ -67,12 +70,15 @@ function crm_core_demo_settings_library() {
 }
 
 /**
- * Page preprocessor
+ * Implementation of template_preprocess_page.
+ * 
+ * This function simply adds some jquery libraries that are needed on every page that loads in the site.
+ * 
  */
 function crm_core_demo_settings_preprocess_page($vars){
   
-  // add autosize library for textareas
-  // this should be on every page in the si  te
+  // add autosize library.
+  // This library allows textareas to autosize, instead of having them resize through handles.
   drupal_add_library('crm_core_demo_settings', 'expanding');
   
 }	
@@ -89,16 +95,26 @@ function crm_core_demo_settings_menu_alter(&$items) {
 	$items['crm']['page callback'] = 'homebox_build';
 	$items['crm']['page arguments'] = $items['crm/dashboard/hb']['page arguments'];
 	
-	// Sets the main contacts interface to use a different view
-	// this allows us to work with the main contacts interface
-	// without needing to change the default views crm core ships with
-	
-	// I think this gets overridden by views after I write it
-	// going to need something else
+	// Sets the main contacts list to use a different view, allowing us to override it without changing the default settings from CRM Core.
+	// There is an order of operations problem at work here - this fires before the views menu_alter, meaning it is getting overwritten
+	// later in the bootstrap process. We need to find a way to trigger it at another stage in the page load, after views has
+	// done it's thing.
+	// TODO: make sure we are really overriding the path to the contacts page.
 	$items['crm/contacts']['page arguments'][0] = 'crm_core_contacts_alt';
 	
 }
 
+/**
+ * Implementation of hook_form_FORM_ID_alter.
+ * 
+ * Modifies views bulk operations controls to make them a little more user friendly.
+ * This function adds some markup to the controls for views bulk operations to make them easier to work with
+ * and style. It replaces the default drop down with a drop down menu and some jquery.
+ * 
+ * TODO: move this function into the theme, once it is properly tested. It should only be running
+ *       under the bootstrap theme.
+ * 
+ */
 function crm_core_demo_settings_views_bulk_operations_form_alter(&$form, &$form_state, &$vbo){
   
   // views bulk operations doesn't fit conveniently into the layout on some of the reports pages
@@ -124,6 +140,7 @@ function crm_core_demo_settings_views_bulk_operations_form_alter(&$form, &$form_
         }
       }
       
+      // create some markup, and embed links for all the VBO options
       $btn = <<<BTN
   <div class="btn-group vbo_btn_group">
     <a class="btn dropdown-toggle disabled btn-warning btn-small vbo_action_link pull-right" data-toggle="dropdown"  href="#">
@@ -137,13 +154,103 @@ function crm_core_demo_settings_views_bulk_operations_form_alter(&$form, &$form_
   </div>
 BTN;
 
+  		// set up the form controls
       $form['select']['#type'] = 'markup';
       $form['select']['#prefix'] = $btn . '<div class="vbo_actions_holder">';
       $form['select']['#suffix'] = '</div>';
     }
 
   }
-    
-
   
 }
+
+
+/**
+ * Preprocesses a contact.
+ * This function sets several variables for templates to use when displaying a contact, really just
+ * to make them easier to theme. 
+ * Different variables will be displayed, depending on whether the contact is an individual, household or organization.
+ * 
+ * For individuals:
+ * - creates markup for the contact image
+ * - creates markup indicating whether or not the contact is a volunteer
+ * - creates markup for email, comments, etc
+ * - loads a display of the contact address on a map
+ * - loads a short run down of activities
+ * - indicates whether or not the contact has an associated user account
+ * 
+ * TODO: replace alt text on user image with the contact's name.
+ * 
+ */
+function crm_core_demo_settings_preprocess_contact(&$variables) {
+  
+  if($variables['type'] === 'individual'){
+    
+    // set some basic variables as placeholders
+    $variables['pic'] = ''; // holds the contact picture
+    $variables['volunteer'] = '<span class="contact-volunteer">I am not a volunteer yet</span>'; // markup indicating whether or not the contact is a volunteer
+    $variables['email_button'] = '<a href="#" class="btn btn-mini btn-warning disabled"><i class="icon-envelope icon-white"></i></a>'; // displays a fancy link for email
+    $variables['activities'] = ''; // holds markup for an activity feed
+    $variables['user'] = 'I do not have a user account yet'; // holds markup for user account information
+    $variables['map'] = ''; // holds a map, displaying the user address
+    
+    // summary activity data - not sure if this is going to be used, or if we are going to get another view going
+    // TODO: decide how to handle the activity summary
+    $variables['comments'] = '0'; // markup for comments
+    $variables['donations'] = 0; // markup for donations
+    
+    // put the actual contact data into a temporary variable, for convenience.
+    $cdat = $variables['contact_data'];
+    
+    // Indicate whether or not the contact seeks to volunteer
+    if($cdat['field_contact_volunteer']['#items'][0]['value'] !== '0'){
+      $variables['volunteer'] = '<span class="contact-volunteer">I want to volunteer</span>';    
+    }
+    // set the email markup
+    if($cdat['field_contact_email']['#items'][0]['email'] !== ''){
+      $variables['email_button'] = '<a href="mailto:' . $cdat['field_contact_email']['#items'][0]['email'] . '" class="btn btn-mini btn-warning"><i class="icon-envelope icon-white"></i> Send a message</a>';
+    }
+    
+    // format the contact image properly for this page
+    // 
+    if($cdat['contact_image']){
+      // format the image, it should be more wide than tall
+      // make sure there is a default image available for people to work with
+      $variables['pic'] = theme('image_style', array(
+        'style_name' => 'contact_main_image',
+        'path' => $cdat['contact_image'][0]['#item']['uri'],
+        'alt' => 'The contact\'s name',
+        'attributes' => array('class' => 'contact-image'),
+      ));    
+    }
+    
+    // check to see if the contact has an associated user account
+    // if so, create some markup around it
+    $cuser = crm_user_sync_get_user_from_contact_id($variables['cid']);
+    if(isset($cuser->uid)){
+      $variables['user'] = 'I have a user account';    
+    }
+    
+    // generates a short activity feed for the contact using views
+    $variables['activities'] = views_embed_view('crm_core_recent_activities','block_2', $variables['cid']);
+    
+    // get a map for the street address for the contact using views and openlayers
+    $variables['map'] = views_embed_view('crm_core_contact_map_display_individual','page_1', $variables['cid']);
+    
+    // get activity data about the contact.
+    // this provides a summary of activities based on type.
+    // we probably don't need to use views here, it might make more sense to generate this information through a custom query
+    // for performance reasons, and also because of some limitations in views
+    $variables['activity_summary'] = views_embed_view('crm_contacts_participation_details','default', $variables['cid']);
+    
+    
+  }
+  
+
+  // get other information for households and organizations
+
+}
+
+
+
+

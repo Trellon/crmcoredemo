@@ -58,6 +58,7 @@ features[field][] = crm_core_contact-organization-contact_image
 features[field][] = crm_core_contact-organization-contact_name
 features[field][] = crm_core_contact-organization-field_billing_address
 features[homebox][] = crm_core_dashboard
+features[image][] = contact_main_image
 features[menu_custom][] = menu-crm-core-content
 features[menu_links][] = menu-crm-core-content:crm/donations/new
 features[menu_links][] = menu-crm-core-content:node/add/blog-post

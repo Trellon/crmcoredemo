@@ -161,3 +161,29 @@ function crm_core_demo_settings_homebox() {
 
   return $homeboxes;
 }
+
+/**
+ * Implements hook_image_default_styles().
+ */
+function crm_core_demo_settings_image_default_styles() {
+  $styles = array();
+
+  // Exported image style: contact_main_image.
+  $styles['contact_main_image'] = array(
+    'name' => 'contact_main_image',
+    'effects' => array(
+      4 => array(
+        'label' => 'Desaturate',
+        'help' => 'Desaturate converts an image to grayscale.',
+        'effect callback' => 'image_desaturate_effect',
+        'dimensions passthrough' => TRUE,
+        'module' => 'image',
+        'name' => 'image_desaturate',
+        'data' => array(),
+        'weight' => '-8',
+      ),
+    ),
+  );
+
+  return $styles;
+}
