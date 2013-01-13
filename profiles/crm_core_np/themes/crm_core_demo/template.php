@@ -271,11 +271,14 @@ function crm_core_demo_preprocess_contact(&$variables) {
   $variables['donations'] = 0;
   $variables['activities'] = '';
   $variables['user'] = 'I do not have a user account yet';
+  $variables['map'] = 'I do not have a user account yet';
   
   $cdat = $variables['contact_data'];
   
   // dpm($variables);
   // dpm($cdat['field_contact_email']['#items'][0]['email']);
+  
+  // dpm($cdat['field_billing_address']);
   
   // set the volunteer markup
   if($cdat['field_contact_volunteer']['#items'][0]['value'] !== '0'){
@@ -300,10 +303,11 @@ function crm_core_demo_preprocess_contact(&$variables) {
     
   }
   
-  // get activity data about the user
+  // get a map for the street address for the contact
+  $variables['map'] = views_embed_view('testtesttest','page_1', $variables['cid']);
   
+  // get activity data about the contact
   $variables['activity_summary'] = views_embed_view('crm_contacts_participation_details','default', $variables['cid']);
-  
   
   // check for a user account for this contact
   // if one exists, include a link to it
@@ -320,8 +324,7 @@ function crm_core_demo_preprocess_contact(&$variables) {
   $variables['activities'] = views_embed_view('crm_core_recent_activities','block_2', $variables['cid']);
   
   // get some other stuff...
-  
-  
 
 }
+
 

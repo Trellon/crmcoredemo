@@ -49,13 +49,12 @@
 }
 .contact .contact-upper {
   border-bottom: 12px solid #ddc;
-  margin-bottom: 8px;
   padding-bottom: 8px;
 }
+.contact .contact-lower .contact-title-ind,
 .contact .contact-upper .contact-title-ind {
-	font-weight: 600;
 	text-transform: uppercase;
-	font-size: 1.1em;
+	font-size: 1.3em;
 	margin-bottom: 8px;
 }
 .contact .contact-upper .contact-details {
@@ -79,7 +78,8 @@
 }
 .contact .contact-upper .contact-details .field-name-contact-name .field-items {
   font-weight: 600;
-  font-size: 1.2em;
+  font-size: 1.7em;
+  margin: .4em 0em;
 }
 .contact .crm-contact-activity-summary {
 }
@@ -100,18 +100,24 @@
   font-weight: bold;  
 }
 
-
-
-
 .contact .contact-upper .contact-activity {
+  background-color: #edede3;
+  padding: .5em;
+}
+.contact .contact-upper .contact-overview {
   background-color: #edede3;
   padding: .5em;
   margin-bottom: .5em;
 }
-.contact .contact-upper .contact-overview {
-  background-color: #edede3;
+.contact .contact-upper .contact-overview .field-name-field-billing-address .field-label {
+  display: none;
 }
-	
-	
+.contact .contact-upper .contact-overview .field-name-field-billing-address {
+  margin-bottom: .5em;
+}
 .contact .contact-lower {
+}
+.contact .contact-lower .contact-other {
+  background-color: #edede3;
+  padding: 8px;
 }

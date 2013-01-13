@@ -2,6 +2,7 @@
   // contact.tpl.php
   // generic contact display template
   
+  hide($contact_data['contact_image']);
   hide($contact_data['field_contact_volunteer']);
   hide($contact_data['field_contact_email']);
   
@@ -9,20 +10,6 @@
 
 ?>
 <article id="contact-<?php print $type . '-' . $cid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-
-  <?php 
-    // first off, add a block that appears to the right
-    // this all needs to be in a row for bootstrap
-      // needs to have a pic
-      // needs to have the name
-      // needs to have the location
-      // needs to have links for email etc
-    // then, add some widgets
-      // information about recent event registrations
-      // information about donations
-      // information about other stuff
-      
-  ?>
   
   <?php if ($view_mode !== 'full'): ?>
 	  <h2<?php print $title_attributes; ?>><a href="<?php print base_path(); ?>crm/contact/<?php print $cid; ?>"><?php print render($contact_data['contact_name']); ?></a></h2>
@@ -49,19 +36,16 @@
     	</div>
   		<div class="span5 contact-overview">
     	  <div class="contact-title-ind">Address</div>
-    	  there is a map below it
-  		
+	    	  <?php print render($contact_data['field_billing_address']); ?>
+	    	  <?php print $variables['map']; ?>
   		</div>
     </div>
   
     <div class="row-fluid contact-lower">
-    
-    	<div class="span3 contact-address">
-    	</div>
-    	<div class="span3 contact-other">
+    	<div class="span12 contact-other">
+    	  <div class="contact-title-ind">Additional information</div>
       	  <?php print render($contact_data); ?>
     	</div>
-    
     </div>
   <?php endif; ?>
   
