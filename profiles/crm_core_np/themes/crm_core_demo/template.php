@@ -259,10 +259,13 @@ function crm_core_demo_btn_dropdown($variables) {
 }  
 /**
  * Preprocesses a contact
- * TODO: figure out if this belongs in the settings module (I think it does)
+ * 
+ * This has been moved to CRM Core Demo Settings module. Will remove it once everything has been tested.
+ * 
+ * TODO: Remove this function.
  * 
  */
-function crm_core_demo_preprocess_contact(&$variables) {
+function crm_core_demo_preprocess_contact_zzz(&$variables) {
   
   $variables['pic'] = 'this is where the picture goes';
   $variables['volunteer'] = '<span class="contact-volunteer">I am not a volunteer yet</span>';
