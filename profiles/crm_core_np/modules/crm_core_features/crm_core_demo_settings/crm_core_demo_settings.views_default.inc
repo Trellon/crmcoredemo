@@ -11,6 +11,101 @@ function crm_core_demo_settings_views_default_views() {
   $export = array();
 
   $view = new view();
+  $view->name = 'crm_core_contact_map_display_individual';
+  $view->description = '';
+  $view->tag = 'default';
+  $view->base_table = 'crm_core_contact';
+  $view->human_name = 'CRM Core Contact Map Display Individual';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'Contact Location';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['perm'] = 'create crm_core_contact entities of bundle individual';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['style_plugin'] = 'openlayers_data';
+  $handler->display->display_options['style_options']['data_source'] = array(
+    'value' => 'wkt',
+    'other_lat' => 'field_geopoints',
+    'other_lon' => 'field_geopoints',
+    'wkt' => 'field_geopoints',
+    'other_top' => 'contact_id',
+    'other_right' => 'contact_id',
+    'other_bottom' => 'contact_id',
+    'other_left' => 'contact_id',
+    'name_field' => 'contact_name',
+    'description_field' => 'field_billing_address',
+  );
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* Field: CRM Contact: Contact ID */
+  $handler->display->display_options['fields']['contact_id']['id'] = 'contact_id';
+  $handler->display->display_options['fields']['contact_id']['table'] = 'crm_core_contact';
+  $handler->display->display_options['fields']['contact_id']['field'] = 'contact_id';
+  $handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['contact_id']['link_to_contact'] = 0;
+  /* Field: CRM Contact: Billing Address */
+  $handler->display->display_options['fields']['field_billing_address']['id'] = 'field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address']['table'] = 'field_data_field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address']['field'] = 'field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_billing_address']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  /* Field: CRM Contact: Geopoints */
+  $handler->display->display_options['fields']['field_geopoints']['id'] = 'field_geopoints';
+  $handler->display->display_options['fields']['field_geopoints']['table'] = 'field_data_field_geopoints';
+  $handler->display->display_options['fields']['field_geopoints']['field'] = 'field_geopoints';
+  $handler->display->display_options['fields']['field_geopoints']['click_sort_column'] = 'wkt';
+  $handler->display->display_options['fields']['field_geopoints']['settings'] = array(
+    'data' => 'full',
+  );
+  /* Field: CRM Contact: Household name */
+  $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
+  $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
+  $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
+  $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
+  $handler->display->display_options['fields']['contact_name']['settings'] = array(
+    'format' => 'default',
+    'markup' => 0,
+    'output' => 'default',
+    'multiple' => 'default',
+    'multiple_delimiter' => ', ',
+    'multiple_and' => 'text',
+    'multiple_delimiter_precedes_last' => 'never',
+    'multiple_el_al_min' => '3',
+    'multiple_el_al_first' => '1',
+  );
+
+  /* Display: OpenLayers Data Overlay */
+  $handler = $view->new_display('openlayers', 'OpenLayers Data Overlay', 'openlayers_1');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+
+  /* Display: Page */
+  $handler = $view->new_display('page', 'Page', 'page_1');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'openlayers_map';
+  $handler->display->display_options['style_options']['map'] = 'crm_core_contacts_individual_loc';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['path'] = 'testtesttest';
+  $export['crm_core_contact_map_display_individual'] = $view;
+
+  $view = new view();
   $view->name = 'crm_core_contacts_alt';
   $view->description = 'Overrides the default view for displaying contacts. Used in CRM Core to display lists of contact information.';
   $view->tag = '';
