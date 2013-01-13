@@ -47,6 +47,12 @@ dependencies[] = views
 dependencies[] = views_ui
 dependencies[] = views_data_export
 dependencies[] = pathologic
+dependencies[] = geofield
+dependencies[] = geophp
+dependencies[] = geocoder
+dependencies[] = openlayers
+dependencies[] = openlayers_ui
+dependencies[] = openlayers_views
 
 ; Install CRM Core modules.
 dependencies[] = crm_core
@@ -106,7 +112,6 @@ dependencies[] = diff
 dependencies[] = pathauto
 dependencies[] = rules
 dependencies[] = rules_admin
-; dependencies[] = twitter_bootstrap_ui
 
 ; Install sample data requirements
 dependencies[] = devel
