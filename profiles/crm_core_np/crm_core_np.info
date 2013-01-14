@@ -20,6 +20,7 @@ dependencies[] = file
 dependencies[] = search
 dependencies[] = strongarm
 dependencies[] = libraries
+dependencies[] = rdf
 
 
 ; Install CRM Core dependencies.
@@ -37,6 +38,8 @@ dependencies[] = entity
 dependencies[] = entityreference
 dependencies[] = entity_token
 dependencies[] = features
+dependencies[] = uuid
+dependencies[] = uuid_features
 dependencies[] = field_group
 dependencies[] = link
 dependencies[] = name
