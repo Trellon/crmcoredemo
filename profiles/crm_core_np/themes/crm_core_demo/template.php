@@ -65,12 +65,71 @@ function crm_core_demo_preprocess_block(&$variables){
 
 /**
  * Preprocess variables for page.tpl.php
+ * 
+ * This function sets some variables around menus, contact information for the current user and such.
+ * 
+ * Information on the variables being set is provided within the function itself.
  *
  * @see page.tpl.php
  */
-function zzz_crm_core_demo_preprocess_page(&$variables) {
-	// mostly using this function for debugging
-	// TODO: remove this function at some point in the future
+function crm_core_demo_preprocess_page(&$variables) {
+  
+  // this function sets some variables used on most pages of the site.
+  // we are going to set the following:
+  // - contact information for the current user
+  // - a menu with administrative links
+  // - links back to the real site (since the page title only takes you back as far as the admin)
+	
+  
+  // only set these variables in the admin section of the site. If someone needs these variables elsewhere, move them around 
+  // in the function.
+  if(arg(0) == 'crm'){
+    
+    global $user;
+    
+    $variables['site_link'] = l('Back to Full Site', '', array('absolute' => TRUE)); // set a link returning users to the full site
+    $variables['logout'] = l('Logout', 'user/logout'); // set a link allowing users to log out
+    $variables['contact_name'] = $user->name; // set the name of the user
+    $variables['crm_admin_menu'] = '';
+    
+    // get the contact record for the current user
+    $contact = crm_user_sync_get_contact_from_uid($user->uid);
+    
+    // set the contact name for the user, if it exists. otherwise, use the name for the user account.
+    if($contact->contact_name[LANGUAGE_NONE][0]['given']){
+      $variables['contact_name'] = $contact->contact_name[LANGUAGE_NONE][0]['given'] . ' ' . $contact->contact_name[LANGUAGE_NONE][0]['family'];
+    }
+    $variables['contact_name'] = l('Logged in as ' . $variables['contact_name'], 'users/' . $user->name);
+    
+    // create a menu for CRM Core administrative links. output it as a drop down menu
+    $menu = menu_tree('menu-crm-core-administrative-fea');
+    $links = array();
+    foreach ($menu as $item => $value){
+      if(strpos($item, '#') === FALSE){
+        $links[] = array(
+          'title' => $value['#title'],
+          'href' => $value['#href'],
+        );
+      }
+    }
+    $variables['crm_admin_menu'] = theme('bootstrap_btn_dropdown', array('label' => 'Settings ', 'links' => $links, 'type' => 'link btn-small', 'holder_class' => array('pull-right')));
+    
+    // create a menu for CRM Core navigation and place it in the layout.
+    // TODO: add in icons. You may need a custom theming function for this.
+    // TODO: make the name of the menu customizable within the theme.
+    $nav_links = menu_navigation_links('menu-crm-core-basic-nav');
+    $variables['crm_nav'] = theme('links', array('links' => $nav_links, 'attributes' => array('class'=> array('nav-tabs', 'nav')) ));
+    
+    // dpm($nav_links);
+    
+    
+    // only display the tabs when we are viewing a contact, in order to avoid any wierd stuff
+    if(arg(1) == '' || (arg(1) === 'contact' && arg(2) == '') || (arg(1) === 'reports' && arg(2) == '')){
+      $variables['tabs'] = '';
+    }
+    
+  }
+  
 }
 
 /**
@@ -257,77 +316,56 @@ function crm_core_demo_btn_dropdown($variables) {
   
   return $output;
 }  
+
 /**
- * Preprocesses a contact
+ * theme_bootstrap_btn_dropdown
  * 
- * This has been moved to CRM Core Demo Settings module. Will remove it once everything has been tested.
- * 
- * TODO: Remove this function.
+ * This overrides the function in bootstrap.inc to include support for classes
+ * on dropdown menus.
  * 
  */
-function crm_core_demo_preprocess_contact_zzz(&$variables) {
-  
-  $variables['pic'] = 'this is where the picture goes';
-  $variables['volunteer'] = '<span class="contact-volunteer">I am not a volunteer yet</span>';
-  $variables['email_button'] = '<a href="#" class="btn btn-mini btn-warning disabled"><i class="icon-envelope icon-white"></i></a>';
-  $variables['comments'] = '0';
-  $variables['donations'] = 0;
-  $variables['activities'] = '';
-  $variables['user'] = 'I do not have a user account yet';
-  $variables['map'] = 'I do not have a user account yet';
-  
-  $cdat = $variables['contact_data'];
-  
-  // dpm($variables);
-  // dpm($cdat['field_contact_email']['#items'][0]['email']);
-  
-  // dpm($cdat['field_billing_address']);
-  
-  // set the volunteer markup
-  if($cdat['field_contact_volunteer']['#items'][0]['value'] !== '0'){
-    $variables['volunteer'] = '<span class="contact-volunteer">I want to volunteer</span>';    
+function crm_core_demo_bootstrap_btn_dropdown($variables) {
+  $type_class = '';
+  $sub_links ='';
+
+  $variables['attributes']['class'][] = 'btn-group';
+  // Type class
+  if (isset($variables['type'])) {
+    $type_class = ' btn-'. $variables['type'];
   }
-  // set the email markup
-  if($cdat['field_contact_email']['#items'][0]['email'] !== ''){
-    $variables['email_button'] = '<a href="mailto:' . $cdat['field_contact_email']['#items'][0]['email'] . '" class="btn btn-mini btn-warning"><i class="icon-envelope icon-white"></i> Send a message</a>';    
+
+  // Start markup
+  $output = '<div'. drupal_attributes($variables['attributes']) .'>';
+
+  // Ad as string if its not a link
+  if (is_array($variables['label'])) {
+    $output .= l($variables['label']['title'], $$variables['label']['href'], $variables['label']);
   }
-  
-  // set the image to appear
-  if($cdat['contact_image']){
+
+  $output .= '<a class="btn'. $type_class .' dropdown-toggle" data-toggle="dropdown" href="#">';
+
+  // Its a link so create one
+  if (is_string($variables['label'])) {
+    $output .= check_plain($variables['label']);
+  }
+
+  if (is_array($variables['links'])) {
     
-    // format the image, it should be more wide than tall
-    // make sure there is a default image available for people to work with
-    $variables['pic'] = theme('image_style', array(
-      'style_name' => 'contact_main_image',
-      'path' => $cdat['contact_image'][0]['#item']['uri'],
-      'alt' => 'yo yo yo',
-      'attributes' => array('class' => 'contact-image'),
-    ));    
+    $holder_class = array();
+    $holder_class[] = 'dropdown-menu';
+    if(isset($variables['holder_class'])){
+      foreach ($variables['holder_class'] as $item => $val){
+        $holder_class[] = $val;
+      }
+    }
+    
+    $sub_links = theme('links', array('links' => $variables['links'],'attributes' => array('class' => $holder_class)));
     
   }
-  
-  // get a map for the street address for the contact
-  $variables['map'] = views_embed_view('testtesttest','page_1', $variables['cid']);
-  
-  // get activity data about the contact
-  $variables['activity_summary'] = views_embed_view('crm_contacts_participation_details','default', $variables['cid']);
-  
-  // check for a user account for this contact
-  // if one exists, include a link to it
-  
-  $cuser = crm_user_sync_get_user_from_contact_id($variables['cid']);
-  // dpm($cuser);
-  
-  if(isset($cuser->uid)){
-    $variables['user'] = 'I have a user account';    
-  }
-  
-  // get an activity feed for this contact
-  
-  $variables['activities'] = views_embed_view('crm_core_recent_activities','block_2', $variables['cid']);
-  
-  // get some other stuff...
 
-}
+  // Finish markup
+  $output .= '<span class="caret"></span></a>' . $sub_links . '</div>';
 
+  return $output;
+}  
 

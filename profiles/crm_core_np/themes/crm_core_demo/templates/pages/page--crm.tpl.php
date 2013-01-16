@@ -3,7 +3,18 @@
 
 <div class="user-nav">
   <div class="container">
-    this is where the user information goes
+  
+  	<div class="row-fluid crm-user-links">
+  		<div class="span6">
+				<?php print $site_link; ?>
+  		</div>
+    	<div class="crm-admin-links span6 pull-left crm-user-id">
+  	    <?php print $contact_name; ?>
+  	    <?php print $crm_admin_menu; ?>
+  	    <?php print $logout; ?>
+  	  </div>
+  	</div>
+    
   </div>
 </div>
 <div class="crm-nav">
@@ -17,14 +28,15 @@
   		</a>
   	</div>
     <div class="crm-opts-header pull-right">
-      <?php if ($tabs): ?>
-        <?php print render($tabs); ?>
+      <?php if ($crm_nav): ?>
+        <?php print $crm_nav; ?>
       <?php endif; ?>
     </div>
   </div>
 </div>
 <div class="title-container">
   <div class="container">
+    <?php print render($tabs); ?>
     <?php print render($title_prefix); ?>
     <?php if ($title): ?>
       <h2 class="page-header"><?php print $title; ?></h2>

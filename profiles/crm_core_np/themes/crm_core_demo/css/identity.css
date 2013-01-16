@@ -45,7 +45,44 @@ BODY.front .jumbotron {
 	background-color: #16283a;
 	color: #80a7cf;
 	padding: .5em 0em;
+	font-size: 0.95em;
 }
+.user-nav DIV {
+  min-height: 0px;
+}
+.user-nav .span6 {
+  min-height: 0px;
+}
+.user-nav .crm-user-links A {
+  color: #80a7cf;
+}
+.user-nav .crm-user-links .crm-user-id {
+	text-align: right;
+}
+.user-nav .crm-user-links .crm-user-id .btn {
+	text-shadow: none;
+	font-size: 12px;
+}
+.user-nav .crm-user-links .crm-user-id .btn .caret {
+	border-top: 4px solid #80a7cf;
+}
+.user-nav .crm-user-links .crm-user-id .dropdown-menu {
+	text-align: left;
+	font-size: 12px;
+}
+.user-nav .crm-user-links .crm-user-id .btn-group.open A {
+	color: #444;
+}
+
+.user-nav .crm-user-links .crm-user-id .dropdown-menu A {
+	color: #444;
+	font-weight: bold;
+}
+.user-nav .crm-user-links .crm-user-id A {
+  margin-right: 12px;
+}
+
+/* CRM Navigation */
 .crm-nav {
   background-color: #1d354d;
   background: url(../images/linen-dark.png) top left repeat;
@@ -87,18 +124,41 @@ BODY.front .jumbotron {
   margin-bottom: 0px;
 }
 .crm-nav .nav-tabs > li {
-	border-top: 1px solid #5c5c67;
-	border-right: 1px solid #1D1E21;
-	border-left: 1px solid #4A4A54;  
+	border-top: 1px solid #9cb1ef;
+	border-right: 1px solid #333;
+	border-left: 1px solid #6a84cd;  
+	border-bottom: 1px solid #333;  
+  background-color: #435386;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#435386), to(#3a4563));
+  background-image: -webkit-linear-gradient(top, #435386, #3a4563);
+  background-image:    -moz-linear-gradient(top, #435386, #3a4563);
+  background-image:      -o-linear-gradient(top, #435386, #3a4563);
+  background-image:         linear-gradient(to bottom, #435386, #3a4563);
+  margin-left: 4px;
+  -webkit-border-radius: 4px 4px 0px 0px;
+  border-radius: 4px 4px 0px 0px;
+  -moz-background-clip: padding; 
+  -webkit-background-clip: padding-box; 
+  background-clip: padding-box;
+  overflow: hidden;
 }
 .crm-nav .nav-tabs > li > a {
 	color: White;
+  font-weight: 600;
+  text-shadow: 2px 1px 3px #333;
 }
+.crm-nav .nav-tabs > li .item-icon {
+  border: 1px solid Red;
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+}
+
 .crm-nav .nav > li > a:hover {
   border-width: none;
   border-style: none;
   border-color: none;
-  background-color: #282632;
+  background-color: #4561b3;
   padding-top: 9px;
   padding-left: 13px;
   padding-right: 13px;
@@ -109,7 +169,7 @@ BODY.front .jumbotron {
 }
 .crm-nav .nav > li.active > A {
   background-color: #e1e1e1;
-  border: 1px solid #CCC;
+  border: 1px solid transparent;
   padding-top: 9px;
   padding-left: 13px;
   padding-right: 13px;
@@ -119,12 +179,14 @@ BODY.front .jumbotron {
   -webkit-border-radius: 0em;
   margin-right: 0px;
   background-color: White;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(White), to(#aaaaaa));
-  background-image: -webkit-linear-gradient(top, White, #aaaaaa);
-  background-image:    -moz-linear-gradient(top, White, #aaaaaa);
-  background-image:      -o-linear-gradient(top, White, #aaaaaa);
-  background-image:         linear-gradient(to bottom, White, #aaaaaa);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(White), to(#e1e1e1));
+  background-image: -webkit-linear-gradient(top, White, #e1e1e1);
+  background-image:    -moz-linear-gradient(top, White, #e1e1e1);
+  background-image:      -o-linear-gradient(top, White, #e1e1e1);
+  background-image:         linear-gradient(to bottom, White, #e1e1e1);
+  text-shadow: none;
 }
+
 .title-container {
   background-color: #e1e1e1;
   background: url(../images/linen-light.png) top left repeat;
@@ -145,6 +207,42 @@ UL.action-links {
 	margin: .5em 0em 1em 0em;
 	padding: 0em 0em 0em 0em;
 }
+
+.title-container .nav-tabs {
+	border: none;
+	float: right;
+	margin-top: 20px;
+}
+.title-container .nav-tabs LI A {
+	cursor: pointer;
+	background-color: #264b70;
+	color: White;
+	font-weight: 600;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	line-height: 20px;
+	border: 1px solid #999;
+  -webkit-border-radius: 8px;
+          border-radius: 8px;
+  -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+  margin-left: 4px;
+}
+.title-container .nav-tabs LI A:hover {
+  background-color: #3c6d9e;
+  color: White;
+}
+.title-container .nav-tabs LI A.active {
+  border: 1px solid #BBB;
+  cursor: pointer;
+  background-color: White;
+	color: #444;
+}
+.title-container .nav-tabs LI A.active:hover {
+	background-color: #f4f4e6;
+	color: #444;
+}
+
+
 
 /* Blocks */
 .news_subscription .name-title-wrapper,
