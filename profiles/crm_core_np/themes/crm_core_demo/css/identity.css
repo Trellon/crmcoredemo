@@ -217,6 +217,10 @@ BODY.front .jumbotron {
   border-top: 1px solid #bbb;
   border-bottom: 1px solid #aaa;
 }
+.title-container .container {
+  position: relative;
+}
+
 .title-container H2 {
 	border: none;
 	padding-bottom: 0em;
@@ -229,6 +233,9 @@ UL.action-links {
 	padding: 0em 0em 0em 0em;
 }
 
+.title-container .nav-pills {
+	display: none;
+}
 .title-container .nav-tabs {
 	border: none;
 	float: right;
