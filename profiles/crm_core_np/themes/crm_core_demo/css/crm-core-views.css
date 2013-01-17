@@ -21,6 +21,7 @@
 .crm-core-widget {
   background-color: #f3f3f3;
   border-bottom: 1px solid #CCC;
+  border-top: 1px solid #CCC;
 }
 .crm-core-widget div.view-header {
   text-align: center !important;
@@ -35,9 +36,8 @@
   text-align: center;
 }
 .crm-core-widget .view-header .view-header P {
-  padding: 0em;
+  padding: .5em 0em 0em 0em;
   margin: 0em;
-
 }
 .crm-core-widget .view-header .view {
 	display: table-cell;

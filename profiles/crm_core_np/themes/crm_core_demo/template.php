@@ -74,11 +74,13 @@ function crm_core_demo_preprocess_block(&$variables){
  */
 function crm_core_demo_preprocess_page(&$variables) {
   
-  // this function sets some variables used on most pages of the site.
-  // we are going to set the following:
-  // - contact information for the current user
-  // - a menu with administrative links
-  // - links back to the real site (since the page title only takes you back as far as the admin)
+  // this function sets some variables used for controlling navigation in various sections of the site.
+  // it is mostly concerned with creating navigation within the CRM sections. we are using this instead of a context, for various reasons
+  // having to do with the logic related to triggers.
+  // In terms of what we are doing:
+  // - setting contact information for the current user
+  // - creating menus with administrative links
+  // - employing some other, general functional / navigation items
 	
   
   // only set these variables in the admin section of the site. If someone needs these variables elsewhere, move them around 
@@ -87,6 +89,7 @@ function crm_core_demo_preprocess_page(&$variables) {
     
     global $user;
     
+    // create some variables to be used in the main layout of the site
     $variables['site_link'] = l('Back to Full Site', '', array('absolute' => TRUE)); // set a link returning users to the full site
     $variables['logout'] = l('Logout', 'user/logout'); // set a link allowing users to log out
     $variables['contact_name'] = $user->name; // set the name of the user
@@ -102,6 +105,7 @@ function crm_core_demo_preprocess_page(&$variables) {
     $variables['contact_name'] = l('Logged in as ' . $variables['contact_name'], 'users/' . $user->name);
     
     // create a menu for CRM Core administrative links. output it as a drop down menu
+    // TODO: make this a settable variable in the crm admin
     $menu = menu_tree('menu-crm-core-administrative-fea');
     $links = array();
     foreach ($menu as $item => $value){
@@ -115,15 +119,26 @@ function crm_core_demo_preprocess_page(&$variables) {
     $variables['crm_admin_menu'] = theme('bootstrap_btn_dropdown', array('label' => 'Settings ', 'links' => $links, 'type' => 'link btn-small', 'holder_class' => array('pull-right')));
     
     // create a menu for CRM Core navigation and place it in the layout.
-    // TODO: add in icons. You may need a custom theming function for this.
     // TODO: make the name of the menu customizable within the theme.
     $nav_links = menu_navigation_links('menu-crm-core-basic-nav');
+    // add some classes to the links, to make them prettier
+    foreach ($nav_links as $item => $val){
+      // add in some markup for the item
+      if(stripos($nav_links[$item]['title'], 'Report') !== FALSE){
+        $nav_links[$item]['icon'] = '<div class="nav_icon nav_icon_reports"></div>';
+      }
+      if(stripos($nav_links[$item]['title'], 'Dashboard') !== FALSE){
+        $nav_links[$item]['icon'] = '<div class="nav_icon nav_icon_dashboard"></div>';
+      }
+      if(stripos($nav_links[$item]['title'], 'Contact') !== FALSE){
+        $nav_links[$item]['icon'] = '<div class="nav_icon nav_icon_contacts"></div>';
+      }
+    }
+    // output the tabs. These will be the main navigation for the CRM section and appear at the top of each page.
     $variables['crm_nav'] = theme('links', array('links' => $nav_links, 'attributes' => array('class'=> array('nav-tabs', 'nav')) ));
     
-    // dpm($nav_links);
-    
-    
-    // only display the tabs when we are viewing a contact, in order to avoid any wierd stuff
+    // only display the tabs when we are viewing a contact. Some of the features are built so they will work with 
+    // other Drupal themes, and will need tabs. This theme only needs them selectively.
     if(arg(1) == '' || (arg(1) === 'contact' && arg(2) == '') || (arg(1) === 'reports' && arg(2) == '')){
       $variables['tabs'] = '';
     }
@@ -283,7 +298,108 @@ function crm_core_demo_theme() {
 }
 
 /**
+ * Implementation of theme_links
+ * 
+ * This override creates some settings for icons that will appear next to menu items.
+ * 
+ * To use it, pass rendered markup for the icon as part of each link. i.e.:
+ * $link['icon'] = '<div class="icon some-class"></div>'
+ * 
+ */
+function crm_core_demo_links($variables) {
+  
+  $links = $variables['links'];
+  $attributes = $variables['attributes'];
+  $heading = $variables['heading'];
+  global $language_url;
+  $output = '';
+
+  if (count($links) > 0) {
+    $output = '';
+
+    // Treat the heading first if it is present to prepend it to the
+    // list of links.
+    if (!empty($heading)) {
+      if (is_string($heading)) {
+        // Prepare the array that will be used when the passed heading
+        // is a string.
+        $heading = array(
+          'text' => $heading,
+          // Set the default level of the heading. 
+          'level' => 'h2',
+        );
+      }
+      $output .= '<' . $heading['level'];
+      if (!empty($heading['class'])) {
+        $output .= drupal_attributes(array('class' => $heading['class']));
+      }
+      $output .= '>' . check_plain($heading['text']) . '</' . $heading['level'] . '>';
+    }
+
+    $output .= '<ul' . drupal_attributes($attributes) . '>';
+
+    $num_links = count($links);
+    $i = 1;
+
+    foreach ($links as $key => $link) {
+      $class = array($key);
+      
+      // adding in some settings to detect an icon.
+      // an icon should be pre-rendered HTML that will display to the side of the link.
+      // in terms of theming, position it absolutely and make the LI display: relative
+      $icon = '';
+      
+      if (isset($link['icon'])) {
+        $icon = $link['icon'];
+      }
+      
+      // Add first, last and active classes to the list of links to help out themers.
+      if ($i == 1) {
+        $class[] = 'first';
+      }
+      if ($i == $num_links) {
+        $class[] = 'last';
+      }
+      if (isset($link['href']) && ($link['href'] == $_GET['q'] || ($link['href'] == '<front>' && drupal_is_front_page()))
+           && (empty($link['language']) || $link['language']->language == $language_url->language)) {
+        $class[] = 'active';
+      }
+      $output .= '<li' . drupal_attributes(array('class' => $class)) . '>';
+
+      if (isset($link['href'])) {
+        // Pass in $link as $options, they share the same keys.
+        $output .= $icon . l($link['title'], $link['href'], $link);
+      }
+      elseif (!empty($link['title'])) {
+        // Some links are actually not links, but we wrap these in <span> for adding title and class attributes.
+        if (empty($link['html'])) {
+          $link['title'] = check_plain($link['title']);
+        }
+        $span_attributes = '';
+        
+        if (isset($link['attributes'])) {
+          $span_attributes = drupal_attributes($link['attributes']);
+        }
+        $output .= '<span' . $span_attributes . '>' . $icon .  $link['title'] . '</span>';
+      }
+
+      $i++;
+      $output .= "</li>\n";
+    }
+
+    $output .= '</ul>';
+  }
+
+  return $output;
+}
+
+
+
+/**
  * copy of theme_twitter_bootstrap_btn_dropdown
+ * 
+ * We need to be able to add pull-left and pull-right to some dropdowns. This lets us do that.
+ * 
  */
 function crm_core_demo_btn_dropdown($variables) {
   $type_class = '';
@@ -322,6 +438,8 @@ function crm_core_demo_btn_dropdown($variables) {
  * 
  * This overrides the function in bootstrap.inc to include support for classes
  * on dropdown menus.
+ * 
+ * We need to be able to add pull-left and pull-right to some dropdowns. This lets us do that.
  * 
  */
 function crm_core_demo_bootstrap_btn_dropdown($variables) {
