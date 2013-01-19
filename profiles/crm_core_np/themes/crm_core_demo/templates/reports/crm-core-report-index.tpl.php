@@ -27,6 +27,10 @@
     $donations = theme('crm_core_report_index_item', array('title' => $donations['title'], 'report' => $donations['reports']));
 	  unset($reports['donations']);
   
+	  $donors = $reports['donors'];
+    $donors = theme('crm_core_report_index_item', array('title' => $donors['title'], 'report' => $donors['reports']));
+	  unset($reports['donors']);
+  
 	  $volunteer = $reports['volunteer'];
     $volunteer = theme('crm_core_report_index_item', array('title' => $volunteer['title'], 'report' => $volunteer['reports']));
 	  unset($reports['volunteer']);
@@ -37,7 +41,7 @@
 	  $counter = sizeof($reports);
 	  
 	  foreach($reports as $item => $val){
-	    if($counter%3){
+	    if($counter%2 === 1){
 	      $first[$item] = $val; 
 	    } else {
 	      $second[$item] = $val; 
@@ -59,6 +63,7 @@
 		</div>
 		<div class="span6">
 			<?php 
+			  print $donors;
 			  print $volunteer;
     	  foreach($second as $item => $listing){
     	    print theme('crm_core_report_index_item', array('title' => $second[$item]['title'], 'report' => $second[$item]['reports']));

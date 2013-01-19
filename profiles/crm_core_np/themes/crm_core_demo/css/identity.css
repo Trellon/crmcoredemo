@@ -36,7 +36,17 @@ BODY.front .jumbotron {
   float: left;
   margin-right: 1em;
 }
-
+.pill {
+  color: White;
+  background-color: #777;
+  padding: 8px 12px;
+  margin: 2px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;	
+	display: inline-block;
+	font-weight: 600;
+}
 
 /**
  * page elements
