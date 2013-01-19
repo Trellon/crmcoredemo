@@ -385,3 +385,37 @@ function crm_core_donation_page_delete($id) {
   ->condition('id', $id)
   ->execute();
 }
+
+
+/**
+ * Creates the time of day reports using views 
+ */
+function crm_core_donation_time_of_day($page = NULL){
+  
+  if(!is_numeric($page)){  
+    $page = 'none';
+  }
+  
+  $output = '<div class="report_holder">';
+  $output .= '<div class="container">';
+  $output .= '<div class="row-fluid">';
+  $output .= '<div class="span12">';
+  $output .= t('<h2>Based on when donations have been received by your system, here are the best times of day / days of week for receiving donations.</h2>');
+  $output .= '</div>';
+  $output .= '</div>';
+  $output .= '<div class="row-fluid">';
+  $output .= '<div class="span6">';
+  $output .= t('<h3>Times of Day</h3>');
+  $output .= views_embed_view('crm_core_donations_time_of_day_report', 'page', $page);
+  $output .= '</div>';
+  $output .= '<div class="span6">';
+  $output .= t('<h3>Days of Week</h3>');
+  $output .= views_embed_view('crm_core_donations_time_of_day_report', 'page_1', $page);
+  $output .= '</div>';
+  $output .= '</div>';
+  $output .= '</div>';
+  $output .= '</div>';
+  
+  return $output;
+}
+

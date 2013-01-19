@@ -55,6 +55,7 @@ features[variable][] = crm_core_donation_profile
 features[variable][] = crm_core_donation_redirect_message
 features[views_view][] = crm_core_donation_lybunt_report
 features[views_view][] = crm_core_donation_pages
+features[views_view][] = crm_core_donation_pages_alt
 features[views_view][] = crm_core_donation_sybunt_report
 features[views_view][] = crm_core_donations_time_of_day_report
 features[views_view][] = crm_core_donations_widget

@@ -14,12 +14,13 @@ function crm_core_donation_context_default_contexts() {
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
   $context->name = 'crm_core_donation_reports';
-  $context->description = 'Displays summary information along with reports in the system.';
+  $context->description = 'Presents additional information for overview pages.';
   $context->tag = 'crm-core-report';
   $context->conditions = array(
     'path' => array(
       'values' => array(
-        'crm/reports/donations-overview' => 'crm/reports/donations-overview',
+        'crm/reports/donations' => 'crm/reports/donations',
+        'crm/reports/donations/overview' => 'crm/reports/donations/overview',
       ),
     ),
   );
@@ -45,7 +46,7 @@ function crm_core_donation_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Displays summary information along with reports in the system.');
+  t('Presents additional information for overview pages.');
   t('crm-core-report');
   $export['crm_core_donation_reports'] = $context;
 

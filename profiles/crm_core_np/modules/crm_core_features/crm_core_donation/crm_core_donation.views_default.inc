@@ -324,6 +324,150 @@ function crm_core_donation_views_default_views() {
   $export['crm_core_donation_pages'] = $view;
 
   $view = new view();
+  $view->name = 'crm_core_donation_pages_alt';
+  $view->description = 'Describes fundraising activity from donation pages';
+  $view->tag = 'default';
+  $view->base_table = 'crm_core_activity';
+  $view->human_name = 'CRM Core Donation Pages';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'Donation Pages';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['group_by'] = TRUE;
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['perm'] = 'view crm core donation reports';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['style_plugin'] = 'table';
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['content'] = 'Donation page performance report. <a href="crm/donations">Click here to manage individual donation pages.</a>';
+  $handler->display->display_options['header']['area']['format'] = 'full_html';
+  /* Relationship: CRM Activity: CRM Core Donation Source Field */
+  $handler->display->display_options['relationships']['field_donation_campaign_value']['id'] = 'field_donation_campaign_value';
+  $handler->display->display_options['relationships']['field_donation_campaign_value']['table'] = 'field_data_field_donation_campaign';
+  $handler->display->display_options['relationships']['field_donation_campaign_value']['field'] = 'field_donation_campaign_value';
+  /* Field: CRM Donation: Donation page ID */
+  $handler->display->display_options['fields']['id']['id'] = 'id';
+  $handler->display->display_options['fields']['id']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['fields']['id']['field'] = 'id';
+  $handler->display->display_options['fields']['id']['relationship'] = 'field_donation_campaign_value';
+  $handler->display->display_options['fields']['id']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['id']['element_type'] = 'em';
+  /* Field: CRM Donation: Donation page title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['relationship'] = 'field_donation_campaign_value';
+  $handler->display->display_options['fields']['title']['label'] = 'Title';
+  $handler->display->display_options['fields']['title']['element_type'] = 'strong';
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title']['empty'] = '--- Other Sources ---';
+  /* Field: SUM(CRM Activity: Amount) */
+  $handler->display->display_options['fields']['field_donation_amounts']['id'] = 'field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts']['table'] = 'field_data_field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts']['field'] = 'field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts']['group_type'] = 'sum';
+  $handler->display->display_options['fields']['field_donation_amounts']['label'] = 'Totals';
+  $handler->display->display_options['fields']['field_donation_amounts']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_donation_amounts']['alter']['text'] = '$[field_donation_amounts]';
+  $handler->display->display_options['fields']['field_donation_amounts']['element_class'] = 'pill';
+  $handler->display->display_options['fields']['field_donation_amounts']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
+    'thousand_separator' => ',',
+    'prefix_suffix' => 1,
+  );
+  /* Field: MAX(CRM Activity: Date created) */
+  $handler->display->display_options['fields']['created']['id'] = 'created';
+  $handler->display->display_options['fields']['created']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['created']['field'] = 'created';
+  $handler->display->display_options['fields']['created']['group_type'] = 'max';
+  $handler->display->display_options['fields']['created']['label'] = 'Last Donation Date';
+  $handler->display->display_options['fields']['created']['date_format'] = 'date_format_slim';
+  $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
+  /* Field: CRM Donation: Status */
+  $handler->display->display_options['fields']['status']['id'] = 'status';
+  $handler->display->display_options['fields']['status']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['fields']['status']['field'] = 'status';
+  $handler->display->display_options['fields']['status']['relationship'] = 'field_donation_campaign_value';
+  $handler->display->display_options['fields']['status']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['status']['alter']['text'] = 'Active';
+  $handler->display->display_options['fields']['status']['empty'] = 'Not Active';
+  $handler->display->display_options['fields']['status']['empty_zero'] = TRUE;
+  /* Field: CRM Donation: Path */
+  $handler->display->display_options['fields']['path']['id'] = 'path';
+  $handler->display->display_options['fields']['path']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['fields']['path']['field'] = 'path';
+  $handler->display->display_options['fields']['path']['relationship'] = 'field_donation_campaign_value';
+  $handler->display->display_options['fields']['path']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['path']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['path']['alter']['text'] = 'Live Page';
+  $handler->display->display_options['fields']['path']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['path']['alter']['path'] = '[path]';
+  /* Field: CRM Donation: Donation page ID */
+  $handler->display->display_options['fields']['id_1']['id'] = 'id_1';
+  $handler->display->display_options['fields']['id_1']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['fields']['id_1']['field'] = 'id';
+  $handler->display->display_options['fields']['id_1']['relationship'] = 'field_donation_campaign_value';
+  $handler->display->display_options['fields']['id_1']['label'] = 'Manage Link';
+  $handler->display->display_options['fields']['id_1']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['id_1']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['id_1']['alter']['text'] = 'Manage';
+  $handler->display->display_options['fields']['id_1']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['id_1']['alter']['path'] = 'crm/donations/[id]';
+  $handler->display->display_options['fields']['id_1']['empty'] = ' ';
+  $handler->display->display_options['fields']['id_1']['empty_zero'] = TRUE;
+  /* Field: CRM Donation: Donation page ID */
+  $handler->display->display_options['fields']['id_2']['id'] = 'id_2';
+  $handler->display->display_options['fields']['id_2']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['fields']['id_2']['field'] = 'id';
+  $handler->display->display_options['fields']['id_2']['relationship'] = 'field_donation_campaign_value';
+  $handler->display->display_options['fields']['id_2']['label'] = 'Overview Link';
+  $handler->display->display_options['fields']['id_2']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['id_2']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['id_2']['alter']['text'] = 'Overview';
+  $handler->display->display_options['fields']['id_2']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['id_2']['alter']['path'] = 'crm/reports/donations-page/[id]/overview';
+  $handler->display->display_options['fields']['id_2']['empty'] = ' ';
+  $handler->display->display_options['fields']['id_2']['empty_zero'] = TRUE;
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = 'Operations';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '[id_2] [id_1] [path]
+';
+  /* Filter criterion: CRM Activity: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'donation' => 'donation',
+  );
+
+  /* Display: Page */
+  $handler = $view->new_display('page', 'Page', 'page');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['path'] = 'crm/reports/donations/crm-core-donation-pages';
+  $handler->display->display_options['menu']['type'] = 'tab';
+  $handler->display->display_options['menu']['title'] = 'Donation Pages';
+  $handler->display->display_options['menu']['weight'] = '1';
+  $handler->display->display_options['menu']['context'] = 0;
+  $handler->display->display_options['tab_options']['type'] = 'normal';
+  $handler->display->display_options['tab_options']['title'] = 'Donations';
+  $handler->display->display_options['tab_options']['weight'] = '0';
+  $export['crm_core_donation_pages_alt'] = $view;
+
+  $view = new view();
   $view->name = 'crm_core_donation_sybunt_report';
   $view->description = 'Standard LYBUNT report for CRM Core Donations';
   $view->tag = 'default';
@@ -517,7 +661,6 @@ function crm_core_donation_views_default_views() {
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Donations Day of Week';
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['group_by'] = TRUE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['access']['perm'] = 'view crm core donation reports';
   $handler->display->display_options['cache']['type'] = 'none';
@@ -532,13 +675,13 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['created']['field'] = 'created';
   $handler->display->display_options['fields']['created']['date_format'] = 'day_of_week';
   $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
-  /* Field: COUNT(DISTINCT CRM Activity: Activity ID) */
+  /* Field: CRM Activity: Activity ID */
   $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
   $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
   $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
   $handler->display->display_options['fields']['activity_id']['group_type'] = 'count_distinct';
   $handler->display->display_options['fields']['activity_id']['label'] = 'Donations Received';
-  /* Field: SUM(CRM Activity: Amount) */
+  /* Field: CRM Activity: Amount */
   $handler->display->display_options['fields']['field_donation_amounts']['id'] = 'field_donation_amounts';
   $handler->display->display_options['fields']['field_donation_amounts']['table'] = 'field_data_field_donation_amounts';
   $handler->display->display_options['fields']['field_donation_amounts']['field'] = 'field_donation_amounts';
@@ -553,6 +696,18 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'crm_core_activity';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
+  /* Contextual filter: CRM Activity: Campaign (field_donation_campaign) */
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['id'] = 'field_donation_campaign_value';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['table'] = 'field_data_field_donation_campaign';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['field'] = 'field_donation_campaign_value';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['specify_validation'] = TRUE;
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['validate']['type'] = 'numeric';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['validate']['fail'] = 'ignore';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['limit'] = '0';
   /* Filter criterion: CRM Activity: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
@@ -561,8 +716,8 @@ function crm_core_donation_views_default_views() {
     'donation' => 'donation',
   );
 
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page');
+  /* Display: Time of Day */
+  $handler = $view->new_display('page', 'Time of Day', 'page');
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'Donations Time of Day';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
@@ -573,13 +728,13 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['created']['field'] = 'created';
   $handler->display->display_options['fields']['created']['date_format'] = 'hour_of_the_day_long';
   $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
-  /* Field: COUNT(DISTINCT CRM Activity: Activity ID) */
+  /* Field: CRM Activity: Activity ID */
   $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
   $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
   $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
   $handler->display->display_options['fields']['activity_id']['group_type'] = 'count_distinct';
   $handler->display->display_options['fields']['activity_id']['label'] = 'Donations Received';
-  /* Field: SUM(CRM Activity: Amount) */
+  /* Field: CRM Activity: Amount */
   $handler->display->display_options['fields']['field_donation_amounts']['id'] = 'field_donation_amounts';
   $handler->display->display_options['fields']['field_donation_amounts']['table'] = 'field_data_field_donation_amounts';
   $handler->display->display_options['fields']['field_donation_amounts']['field'] = 'field_donation_amounts';
@@ -590,11 +745,15 @@ function crm_core_donation_views_default_views() {
     'thousand_separator' => ',',
     'prefix_suffix' => 1,
   );
-  $handler->display->display_options['path'] = 'crm/reports/crm-core-donations-time-of-day-report';
+  $handler->display->display_options['path'] = 'crm/reports/donations/crm-core-donations-time-of-day-report';
+  $handler->display->display_options['menu']['title'] = 'Time / Day';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
 
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page_1');
+  /* Display: Day of Week */
+  $handler = $view->new_display('page', 'Day of Week', 'page_1');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['group_by'] = FALSE;
   $handler->display->display_options['path'] = 'crm/reports/crm-core-donations-day-of-week';
   $export['crm_core_donations_time_of_day_report'] = $view;
 
@@ -871,7 +1030,8 @@ function crm_core_donation_views_default_views() {
     'created' => 'created',
     'contact_name' => 'contact_name',
     'field_billing_address' => 'field_billing_address',
-    'field_donation_campaign' => 'field_donation_campaign',
+    'id' => 'id',
+    'title' => 'title',
   );
   $handler->display->display_options['style_options']['default'] = 'created';
   $handler->display->display_options['style_options']['info'] = array(
@@ -910,8 +1070,15 @@ function crm_core_donation_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_donation_campaign' => array(
+    'id' => array(
       'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'title' => array(
+      'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
@@ -948,6 +1115,10 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['relationships']['field_activity_participants_target_id']['id'] = 'field_activity_participants_target_id';
   $handler->display->display_options['relationships']['field_activity_participants_target_id']['table'] = 'field_data_field_activity_participants';
   $handler->display->display_options['relationships']['field_activity_participants_target_id']['field'] = 'field_activity_participants_target_id';
+  /* Relationship: CRM Activity: CRM Core Donation Source Field */
+  $handler->display->display_options['relationships']['field_donation_campaign_value']['id'] = 'field_donation_campaign_value';
+  $handler->display->display_options['relationships']['field_donation_campaign_value']['table'] = 'field_data_field_donation_campaign';
+  $handler->display->display_options['relationships']['field_donation_campaign_value']['field'] = 'field_donation_campaign_value';
   /* Field: CRM Contact: Contact ID */
   $handler->display->display_options['fields']['contact_id']['id'] = 'contact_id';
   $handler->display->display_options['fields']['contact_id']['table'] = 'crm_core_contact';
@@ -1005,15 +1176,36 @@ function crm_core_donation_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: CRM Activity: Campaign */
-  $handler->display->display_options['fields']['field_donation_campaign']['id'] = 'field_donation_campaign';
-  $handler->display->display_options['fields']['field_donation_campaign']['table'] = 'field_data_field_donation_campaign';
-  $handler->display->display_options['fields']['field_donation_campaign']['field'] = 'field_donation_campaign';
+  /* Field: CRM Donation: Donation page ID */
+  $handler->display->display_options['fields']['id']['id'] = 'id';
+  $handler->display->display_options['fields']['id']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['fields']['id']['field'] = 'id';
+  $handler->display->display_options['fields']['id']['relationship'] = 'field_donation_campaign_value';
+  $handler->display->display_options['fields']['id']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['id']['separator'] = '';
+  /* Field: CRM Donation: Donation page title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['relationship'] = 'field_donation_campaign_value';
+  $handler->display->display_options['fields']['title']['label'] = 'Donation Page';
+  $handler->display->display_options['fields']['title']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['title']['alter']['path'] = 'crm/reports/donations-page/overview/[id]';
   /* Sort criterion: CRM Activity: Date (field_activity_date) */
   $handler->display->display_options['sorts']['field_activity_date_value']['id'] = 'field_activity_date_value';
   $handler->display->display_options['sorts']['field_activity_date_value']['table'] = 'field_data_field_activity_date';
   $handler->display->display_options['sorts']['field_activity_date_value']['field'] = 'field_activity_date_value';
   $handler->display->display_options['sorts']['field_activity_date_value']['order'] = 'DESC';
+  /* Contextual filter: CRM Donation: Donation page ID */
+  $handler->display->display_options['arguments']['id']['id'] = 'id';
+  $handler->display->display_options['arguments']['id']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['arguments']['id']['field'] = 'id';
+  $handler->display->display_options['arguments']['id']['relationship'] = 'field_donation_campaign_value';
+  $handler->display->display_options['arguments']['id']['default_action'] = 'empty';
+  $handler->display->display_options['arguments']['id']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['id']['summary_options']['items_per_page'] = '25';
   /* Filter criterion: CRM Activity: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
@@ -1037,8 +1229,8 @@ function crm_core_donation_views_default_views() {
     1 => 0,
   );
 
-  /* Display: Page View */
-  $handler = $view->new_display('page', 'Page View', 'page');
+  /* Display: Overview */
+  $handler = $view->new_display('page', 'Overview', 'page');
   $handler->display->display_options['display_description'] = 'Online view of donations, including filters for date and amount.';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['header'] = FALSE;
@@ -1046,7 +1238,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['header']['result']['id'] = 'result';
   $handler->display->display_options['header']['result']['table'] = 'views';
   $handler->display->display_options['header']['result']['field'] = 'result';
-  $handler->display->display_options['header']['result']['content'] = 'Displaying @start - @end of @total donations stored in the system.';
+  $handler->display->display_options['header']['result']['content'] = 'Displaying @start - @end of @total donations stored in the system. <a href="crm/reports/donations-overview/view-all">View All</a>';
   /* Header: Global: Text area */
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
@@ -1054,11 +1246,15 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-warning" href="/crm/reports/donations-overview/export"><i class="icon-download icon-white"></i> Export to CSV</a></div>';
   $handler->display->display_options['header']['area']['format'] = 'full_html';
   $handler->display->display_options['header']['area']['tokenize'] = TRUE;
-  $handler->display->display_options['path'] = 'crm/reports/donations-overview';
-  $handler->display->display_options['menu']['type'] = 'normal';
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  $handler->display->display_options['path'] = 'crm/reports/donations/overview';
+  $handler->display->display_options['menu']['type'] = 'default tab';
   $handler->display->display_options['menu']['title'] = 'Donations Overview';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['context'] = 0;
+  $handler->display->display_options['tab_options']['type'] = 'normal';
+  $handler->display->display_options['tab_options']['title'] = 'Overview';
+  $handler->display->display_options['tab_options']['weight'] = '-1';
 
   /* Display: Data export */
   $handler = $view->new_display('views_data_export', 'Data export', 'views_data_export_1');
@@ -1119,55 +1315,86 @@ function crm_core_donation_views_default_views() {
       'address' => 'address',
     ),
   );
-  $handler->display->display_options['path'] = 'crm/reports/donations-overview/export';
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: CRM Donation: Donation page ID */
+  $handler->display->display_options['arguments']['id']['id'] = 'id';
+  $handler->display->display_options['arguments']['id']['table'] = 'crm_core_donation_page';
+  $handler->display->display_options['arguments']['id']['field'] = 'id';
+  $handler->display->display_options['arguments']['id']['relationship'] = 'field_donation_campaign_value';
+  $handler->display->display_options['arguments']['id']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['id']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['path'] = 'crm/reports/donations-overview/export/%';
   $handler->display->display_options['displays'] = array(
     'default' => 0,
     'page' => 0,
   );
 
-  /* Display: Block */
-  $handler = $view->new_display('block', 'Block', 'block_1');
+  /* Display: Overview: View All */
+  $handler = $view->new_display('page', 'Overview: View All', 'page_2');
+  $handler->display->display_options['display_description'] = 'Online view of donations, including filters for date and amount.';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
-  $handler->display->display_options['defaults']['style_options'] = FALSE;
-  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
-  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['defaults']['header'] = FALSE;
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: CRM Activity: Amount */
-  $handler->display->display_options['fields']['field_donation_amounts']['id'] = 'field_donation_amounts';
-  $handler->display->display_options['fields']['field_donation_amounts']['table'] = 'field_data_field_donation_amounts';
-  $handler->display->display_options['fields']['field_donation_amounts']['field'] = 'field_donation_amounts';
-  $handler->display->display_options['fields']['field_donation_amounts']['group_type'] = 'sum';
-  $handler->display->display_options['fields']['field_donation_amounts']['label'] = '';
-  $handler->display->display_options['fields']['field_donation_amounts']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_donation_amounts']['alter']['text'] = '$[field_donation_amounts] ';
-  $handler->display->display_options['fields']['field_donation_amounts']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
-    'thousand_separator' => ',',
-    'prefix_suffix' => 1,
-  );
-  /* Field: CRM Activity: Date */
-  $handler->display->display_options['fields']['field_activity_date']['id'] = 'field_activity_date';
-  $handler->display->display_options['fields']['field_activity_date']['table'] = 'field_data_field_activity_date';
-  $handler->display->display_options['fields']['field_activity_date']['field'] = 'field_activity_date';
-  $handler->display->display_options['fields']['field_activity_date']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_activity_date']['settings'] = array(
-    'format_type' => 'short',
-    'fromto' => 'both',
-    'multiple_number' => '',
-    'multiple_from' => '',
-    'multiple_to' => '',
-  );
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: CRM Activity: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'donation' => 'donation',
-  );
+  /* Header: Global: Result summary */
+  $handler->display->display_options['header']['result']['id'] = 'result';
+  $handler->display->display_options['header']['result']['table'] = 'views';
+  $handler->display->display_options['header']['result']['field'] = 'result';
+  $handler->display->display_options['header']['result']['content'] = 'Displaying @start - @end of @total donations stored in the system.';
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-warning" href="/crm/reports/donations-overview/export"><i class="icon-download icon-white"></i> Export to CSV</a></div>';
+  $handler->display->display_options['header']['area']['format'] = 'full_html';
+  $handler->display->display_options['header']['area']['tokenize'] = TRUE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  $handler->display->display_options['path'] = 'crm/reports/donations/overview/all';
+  $handler->display->display_options['menu']['type'] = 'default tab';
+  $handler->display->display_options['menu']['title'] = 'Donations Overview';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
+  $handler->display->display_options['tab_options']['weight'] = '0';
+
+  /* Display: Individual Page */
+  $handler = $view->new_display('page', 'Individual Page', 'page_1');
+  $handler->display->display_options['display_description'] = 'Online view of donations for a specific donation page.';
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  /* Header: Global: Result summary */
+  $handler->display->display_options['header']['result']['id'] = 'result';
+  $handler->display->display_options['header']['result']['table'] = 'views';
+  $handler->display->display_options['header']['result']['field'] = 'result';
+  $handler->display->display_options['header']['result']['content'] = 'Displaying @start - @end of @total donations stored in the system. <a href="crm/reports/donations-overview/view-all">View All</a>';
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-warning" href="/crm/reports/donations-overview/export"><i class="icon-download icon-white"></i> Export to CSV</a></div>';
+  $handler->display->display_options['header']['area']['format'] = 'full_html';
+  $handler->display->display_options['header']['area']['tokenize'] = TRUE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: CRM Activity: Campaign (field_donation_campaign) */
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['id'] = 'field_donation_campaign_value';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['table'] = 'field_data_field_donation_campaign';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['field'] = 'field_donation_campaign_value';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['default_action'] = 'empty';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_donation_campaign_value']['limit'] = '0';
+  $handler->display->display_options['path'] = 'crm/reports/donations-page/%/overview';
+  $handler->display->display_options['menu']['type'] = 'default tab';
+  $handler->display->display_options['menu']['title'] = 'Donations Overview';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
+  $handler->display->display_options['tab_options']['type'] = 'normal';
+  $handler->display->display_options['tab_options']['title'] = 'Overview';
+  $handler->display->display_options['tab_options']['weight'] = '-1';
   $export['donations_overview_alt'] = $view;
 
   $view = new view();
