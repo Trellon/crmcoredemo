@@ -444,23 +444,19 @@ function crm_core_donation_crm_core_report_register() {
           'path'        => 'crm/reports/donations/overview',
           'description'	=> t('Details on donations recorded in the system.'),
         ),
+        'donations_time_of_day'	=> array(
+          'title'       => t('Donations Time and Day'),
+          'path'        => 'crm/reports/donations/time_and_day',
+          'description'	=> t('Information about when donations are received.'),
+        ),
         'donation_page'	=> array(
-          'title'       => t('Donations Pages'),
+          'title'       => t('Donations Page Performance'),
           'path'        => 'crm/reports/donations/crm-core-donation-pages',
           'description'	=> t('Details on the performance of individual donation pages.'),
         ),
-        'donations_time_of_day'	=> array(
-          'title'       => t('Donations Time of Day'),
-          'path'        => 'crm/reports/crm-core-donations-time-of-day-report',
-          'description'	=> t('Time of day when donations are received.'),
-        ),
-        'donations_day_of_week'	=> array(
-          'title'       => t('Donations Day of Week'),
-          'path'        => 'crm/reports/crm-core-donations-day-of-week',
-          'description'	=> t('Time of day when donations are received.'),
-        ),
+        
   		 'leaderboard'	  => array(
-          'title'       => t('Leaderboard'),
+          'title'       => t('Leaderboard - Depreciated'),
           'path'        => 'crm/donations/leaderboard',
           'description'	=> t('Who is raising the most through their personal donation pages?'),
         ),
@@ -473,17 +469,17 @@ function crm_core_donation_crm_core_report_register() {
       'reports'	=> array(
         'donor_overview'	=> array(
           'title'       => t('Donor Overview'),
-          'path'        => 'crm/reports/donor/overview',
+          'path'        => 'crm/reports/donors/overview',
           'description'	=> t('List of donors.'),
         ),
         'donations_lybunt'	=> array(
           'title'       => t('LYBUNT'),
-          'path'        => 'crm/reports/lybunt',
+          'path'        => 'crm/reports/donors/lybunt',
           'description'	=> t('Last year but not this year report.'),
         ),
         'donations_sybunt'	=> array(
           'title'       => t('SYBUNT'),
-          'path'        => 'crm/reports/sybunt',
+          'path'        => 'crm/reports/donors/sybunt',
           'description'	=> t('Some year but not this year report.'),
         ),
       ),

@@ -139,7 +139,11 @@ function crm_core_donation_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'crm/reports/lybunt';
+  $handler->display->display_options['path'] = 'crm/reports/donors/lybunt';
+  $handler->display->display_options['menu']['type'] = 'tab';
+  $handler->display->display_options['menu']['title'] = 'LYBUNT';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
   $export['crm_core_donation_lybunt_report'] = $view;
 
   $view = new view();
@@ -644,7 +648,11 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['filters']['created']['operator'] = '<';
   $handler->display->display_options['filters']['created']['value']['value'] = '-1 year';
   $handler->display->display_options['filters']['created']['value']['type'] = 'offset';
-  $handler->display->display_options['path'] = 'crm/reports/sybunt';
+  $handler->display->display_options['path'] = 'crm/reports/donors/sybunt';
+  $handler->display->display_options['menu']['type'] = 'tab';
+  $handler->display->display_options['menu']['title'] = 'SYBUNT';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
   $export['crm_core_donation_sybunt_report'] = $view;
 
   $view = new view();
