@@ -1382,6 +1382,9 @@ function crm_core_donation_form_theme($variables) {
 /**
  * Implements hook_views_data().
  */
+/**
+ * Implements hook_views_data().
+ */
 function crm_core_donation_views_data() {
   $data = array();
 
@@ -1408,8 +1411,8 @@ function crm_core_donation_views_data() {
     'argument' => array(
       'handler' => 'views_handler_argument_numeric',
     ),
-  );  
-
+  );
+ 
   $data['crm_core_donation_page']['title'] = array(
     'title' => t('Donation page title'),
     'help' => t('Title of the donation page'),
@@ -1531,14 +1534,7 @@ function crm_core_donation_views_data() {
     ),
   );
 
-
-  // TODO: need a relationship between crm_core_donation_page and the donation activity type
-  // this will be a complex relationship, spanning multiple tables
-  // the affected tables are crm_core_activity and field_data_field_donation_campaign (which stores
-  // the actual value of the donation page)
-  // relationships between an activity and a donation page are not stored in the activity itself
-  
-  // attempting to sort this with Mike
+  // Building a relationship handler to connect activity to a donation page
   $data['crm_core_activity']['table']['join'] = array(
    'field_data_field_donation_campaign' => array(
      'left_field' => 'activity_id', 
@@ -1550,8 +1546,8 @@ function crm_core_donation_views_data() {
      'left_field' => 'field_donation_campaign_value', 
      'field' => 'id',
    ),
- );  
-  
+ );
+
   // defining relationship to donation campaign table
   // can be used to find the real name of a donation form
   $data['field_data_field_donation_campaign']['table']['group'] = t('Donation Campaign Table');
@@ -1563,9 +1559,21 @@ function crm_core_donation_views_data() {
     'weight' => -10,
   );
   
+
+    
+  return $data;
+}
+
+/**
+ * Implements hook_views_data_alter
+ */
+function crm_core_donation_views_data_alter(&$data) {
+
   // Activity id field
+  // To avoid issue with multiple titles passed into the views data (because this is also
+  // ddelcared by the entity api views integration
   $data['field_data_field_donation_campaign']['field_donation_campaign_value'] = array(
-    //'title' => t('Donation campaign'),
+    'title' => t('Donation campaign'),
     'help' => t('The source campaign of a donation.'),
     'relationship' => array(
       'base' => 'crm_core_donation_page', // The name of the table to join with.
@@ -1576,10 +1584,7 @@ function crm_core_donation_views_data() {
       'help' => t('Reference to the CRM Core Donation page data'),
     ),
   );
-  
-  return $data;
 }
-
 
 /**
  * Implementation of hook_preprocess_views_pre_render
