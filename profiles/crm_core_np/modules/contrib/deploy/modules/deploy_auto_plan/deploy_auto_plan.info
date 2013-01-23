@@ -1,0 +1,12 @@
+name = Auto Deployment Plans
+description = "Automagically add all modified entities to a deployment plan."
+core = 7.x
+
+dependencies[] = deploy
+
+; Information added by drupal.org packaging script on 2012-11-05
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "deploy"
+datestamp = "1352119556"
+

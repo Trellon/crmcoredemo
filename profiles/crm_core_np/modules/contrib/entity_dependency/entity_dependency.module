@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * Include core hook implementations.
+ */
+module_load_include('inc', 'entity_dependency', 'entity_dependency.core');
+
+/**
+ * Factory function for an entity dependency iterator.
+ *
+ * The $entities array should be structured as below, where all string keys
+ * are entity types and the numeric keys are entity ids.
+ * @code
+ *   $entities = array(
+ *     'node' => array(10, 12),
+ *     'taxonomy_term' => array(16),
+ *   );
+ * @endcode
+ */
+function entity_dependency_iterator($entities) {
+  $iterator = new EntityDependencyIterator($entities);
+  return new EntityDependencyIteratorIterator($iterator);
+}
+
+/**
+ * Helper function to add entity dependencies to a dependency array.
+ *
+ * We never treat user UID 0 or 1 as dependencies. Those are low level user
+ * accounts ("anonymous" and "root") that already exists in most systems.
+ *
+ * @param $dependencies
+ *   The dependency array.
+ * @param $objects
+ *   Array of objects that should be checked for dependencies in $properties.
+ * @param $entity_type
+ *   The type of entity that $properties will add dependency on.
+ * @param $properties
+ *   An array of properties that adds dependencies to $objects. All properties
+ *   must only point to one entity type at the time.
+ *
+ * @see entity_dependency.core.inc
+ */
+function entity_dependency_add(&$dependencies, $objects, $entity_type, $properties) {
+  if (!is_array($objects)) {
+    $objects = array($objects);
+  }
+  if (!is_array($properties)) {
+    $properties = array($properties);
+  }
+
+  foreach ($objects as $object) {
+    foreach ($properties as $property) {
+      $value = NULL;
+      if (is_object($object) && isset($object->{$property})) {
+        $value = $object->{$property};
+      }
+      elseif (is_array($object) && isset($object[$property])) {
+        $value = $object[$property];
+      }
+      if (!empty($value) && !($entity_type == 'user' && ((int)$value == 0 || (int)$value == 1))) {
+        $dependencies[] = array('type' => $entity_type, 'id' => $value);
+      }
+    }
+  }
+}

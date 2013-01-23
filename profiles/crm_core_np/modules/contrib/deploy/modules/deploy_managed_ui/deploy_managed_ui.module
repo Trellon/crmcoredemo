@@ -1,0 +1,149 @@
+<?php
+
+/**
+ * @file
+ * Deploy Managed UI module functions.
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function deploy_managed_ui_permission() {
+  return array(
+    'access managed aggregator ui' => array(
+      'title' => t('Access Managed Aggregator UI'),
+      'description' => t('Add items to the managed deployment aggregator when editing entities.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook form_alter().
+ */
+function deploy_managed_ui_form_alter(&$form, &$form_state, $form_id) {
+
+  if (!empty($form['#node_edit_form'])) {
+    deploy_managed_ui_form_elements($form, 'deploy_managed_ui_node_form_submit', TRUE);
+  }
+
+  // For the rest we only support edit forms following the Entity API convention.
+  if (!empty($form['#entity_type'])) {
+    $entity_type = $form['#entity_type'];
+    if (isset($form[$entity_type]) && is_object($form[$entity_type]['#value'])) {
+      deploy_managed_ui_form_elements($form, 'deploy_managed_ui_entity_form_submit');
+    }
+  }
+}
+
+/**
+ * Generates form elements for hook_form_alter() implementations to call.
+ */
+function deploy_managed_ui_form_elements(&$form, $submit_handler, $vertical_tabs = FALSE) {
+
+  $weight = 999;
+  if ($vertical_tabs) {
+    $weight = -999;
+  }
+
+  if (!user_access('access managed aggregator ui')) {
+    return;
+  }
+
+  $plans = deploy_manager_plan_get_options();
+  if (!count($plans)) {
+    return;
+  }
+
+  $form['deploy_managed_ui'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Deployment plans'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#group' => 'additional_settings',
+/*
+    // Skipping fancy JS for now.
+    '#attached' => array(
+      'js' => array(
+        'vertical-tabs' => drupal_get_path('module', 'deploy_managed_ui') . '/deploy_managed_ui.js',
+      ),
+    ),
+*/
+    '#tree' => TRUE, 
+    '#weight' => $weight,
+  );
+
+  $form['deploy_managed_ui']['text'] = array(
+    '#markup' => t('Select the plans to include these chanages in.'),
+  );
+
+  $form['deploy_managed_ui']['plans'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Plans'),
+    '#options' => $plans,
+  );
+
+  if (!$vertical_tabs) {
+    $form['actions']['#weight'] = ($weight + 1);
+  }
+
+  $form['#submit'][] = $submit_handler;
+}
+
+/**
+ * Submit handler for node forms supporting managed UI.
+ */
+function deploy_managed_ui_node_form_submit(&$form, &$form_state) {
+  $form_state['node']->___deploy_plans = array();
+  foreach ($form_state['values']['deploy_managed_ui']['plans'] as $plan => $checked) {
+    if ($checked) {
+      $form_state['node']->___deploy_plans[$plan] = $plan;
+    }
+  }
+}
+
+/**
+ * Submit handler for entity forms supporting managed UI.
+ */
+function deploy_managed_ui_entity_form_submit(&$form, &$form_state) {
+  $entity_type = $form['#entity_type'];
+  $entity = $form_state[$entity_type];
+  $form_state[$entity_type]->___deploy_plans = array();
+  foreach ($form_state['values']['deploy_managed_ui']['plans'] as $plan => $checked) {
+    if ($checked) {
+      $form_state[$entity_type]->___deploy_plans[$plan] = $plan;
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function deploy_managed_ui_entity_insert($entity, $type) {
+  _deploy_managed_ui_entity_save($entity, $type);
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function deploy_managed_ui_entity_update($entity, $type) {
+  _deploy_managed_ui_entity_save($entity, $type);
+}
+
+/**
+ * Handled deployment plans attached to entities being saved.
+ *
+ * @param object
+ *   $entity The entity being saved.
+ * @param string
+ *   $entity_type The type of entity being saved.
+ */
+function _deploy_managed_ui_entity_save($entity, $type) {
+  // Ignore all entities which don't have plans attached.
+  if (empty($entity->___deploy_plans)) {
+    return;
+  }
+
+  foreach ($entity->___deploy_plans as $plan) {
+    deploy_manager_add_to_plan($plan, $type, $entity);
+  }
+}

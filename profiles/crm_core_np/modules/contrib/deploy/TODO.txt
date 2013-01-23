@@ -1,0 +1,35 @@
+
+GENERAL TODO'S
+--------------
+
+ * Conditionally integrate with Encrypt (http://drupal.org/project/encrypt) to
+   store all config data for all authenticators.
+
+ * Cosider making aggregators return full entities instead of keys. Views
+   supports this with its function called something like
+   $views->query->get_result_entities(). This could potentially save some code.
+
+ * Better test coverage
+     - Test the fetch-only functionality
+     - Test the dashboard and other cruical UI elements like the "Deploy" button
+
+ * Implement hook_help() where needed.
+
+ * Implement granular permissions, including:
+     - administer deployment plans
+     - administer deployment endpoints
+     - access deployment overview
+     - make deployments
+
+ * Make all plugins more private and isolate necessary methods and parameters
+     - Oversee how plugins are sharing/add config between each other.
+     - Oversee how default config keys should be set in plugin objects.
+
+ * See if we can integrate with Entity API and hook_entity_property_info() in a
+   way. Would be nice if we just could mark properties and fields as holding
+   a dependency, eventually with a 'dependency callback' similar to the
+   'getter callback'. This would save a lot of dependency code and make
+   'hook_deploy_entity_dependency' redundant.
+
+ * See if we really need to define plugins through hooks. Is $plugin enough
+   maybe, like 'content_types' etc. are defined. Performance implications?

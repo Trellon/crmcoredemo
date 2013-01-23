@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Deploy Example feature.
+ */
+
+include_once('deploy_example.features.inc');

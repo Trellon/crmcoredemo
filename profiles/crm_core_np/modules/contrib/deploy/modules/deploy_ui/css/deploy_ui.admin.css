@@ -1,0 +1,18 @@
+.deploy-panel .messages {
+  padding: 5px 5px 5px 30px;
+  background-position: 8px 4px;
+  font-size: 0.923em;
+  line-height: 1.231em;
+}
+.deploy-panel div.status {
+  background-image: url(../../../../../../../misc/message-16-ok.png);
+}
+.deploy-panel div.warning {
+  background-image: url(../../../../../../../misc/message-16-warning.png);
+}
+.deploy-panel div.error {
+  background-image: url(../../../../../../../misc/message-16-error.png);
+}
+.deploy-panel ul.action-links {
+  margin: 0.5em 0;
+}

@@ -1,0 +1,311 @@
+<?php
+
+/**
+ * Implementation of hook_schema().
+ *
+ * @todo
+ *   Add indexes.
+ */
+function deploy_schema() {
+  $schema = array();
+
+  $schema['deploy_plans'] = array(
+    'description' => 'Base table holding deployment plans.',
+    'export' => array(
+      'api' => array(
+        'owner' => 'deploy',
+        'api' => 'deploy_plans',
+        'minimum_version' => 1,
+        'current_version' => 1,
+      ),
+      'key' => 'name',
+      'key name' => 'Name',
+      'primary key' => 'pid',
+      'identifier' => 'plan',
+      'object factory' => 'deploy_plan_create',
+      'load callback' => 'deploy_plan_load',
+      'load all callback' => 'deploy_plan_load_all',
+      'default hook' => 'deploy_plans_default',
+    ),
+    'fields' => array(
+      'pid' => array(
+        'description' => 'Serial id for this plan. Only used for internal lookups.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'no export' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'Machine-readable name for this plan.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ),
+      'title' => array(
+        'description' => 'Administrative title for this plan.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ),
+      'description' => array(
+        'description' => 'Administrative description for this plan.',
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+      ),
+      'debug' => array(
+        'description' => 'Debug mode.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'aggregator_plugin' => array(
+        'description' => 'Aggregator plugin used for this plan.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ),
+      'aggregator_config' => array(
+        'description' => "Serialized configuration data this plan's aggregator plugin.",
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+        'serialize' => TRUE,
+      ),
+      'fetch_only' => array(
+        'description' => 'Indicates if this plan is fetch-only.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'processor_plugin' => array(
+        'description' => 'Processor plugin used for this plan.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'processor_config' => array(
+        'description' => "Serialized configuration data this plan's processor plugin.",
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+        'serialize' => TRUE,
+      ),
+      'endpoints' => array(
+        'description' => 'Serialized array of all endpoints for this plan.',
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+        'serialize' => TRUE,
+      ),
+    ),
+    'primary key' => array('pid'),
+    'indexes' => array(
+      'name' => array('name'),
+      'fetch_only' => array('fetch_only'),
+      'aggregator_plugin' => array('aggregator_plugin'),
+    ),
+  );
+
+  $schema['deploy_endpoints'] = array(
+    'description' => 'Base table holding deployment endpoints.',
+    'export' => array(
+      'api' => array(
+        'owner' => 'deploy',
+        'api' => 'deploy_endpoints',
+        'minimum_version' => 1,
+        'current_version' => 1,
+      ),
+      'key' => 'name',
+      'key name' => 'Name',
+      'primary key' => 'eid',
+      'identifier' => 'endpoint',
+      'object factory' => 'deploy_endpoint_create',
+      'load callback' => 'deploy_endpoint_load',
+      'load all callback' => 'deploy_endpoint_load_all',
+      'default hook' => 'deploy_endpoints_default',
+    ),
+    'fields' => array(
+      'eid' => array(
+        'description' => 'Serial id for this endpoint. Only used for internal lookups.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'no export' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'Machine-readable name for this endpoint.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ),
+      'title' => array(
+        'description' => 'Administrative title for this endpoint.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ),
+      'description' => array(
+        'description' => 'Administrative description for this endpoint.',
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+      ),
+      'debug' => array(
+        'description' => 'Debug mode.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'authenticator_plugin' => array(
+        'description' => 'Authenticator plugin used for this endpoint.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ),
+      'authenticator_config' => array(
+        'description' => "Serialized configuration data for this endpoint's authenticator plugin.",
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+        'serialize' => TRUE,
+      ),
+      'service_plugin' => array(
+        'description' => 'Service plugin used for this endpoint.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ),
+      'service_config' => array(
+        'description' => "Serialized configuration data this endpoint's service plugin.",
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+        'serialize' => TRUE,
+      ),
+    ),
+    'primary key' => array('eid'),
+    'indexes' => array(
+      'name' => array('name'),
+    ),
+  );
+
+  $schema['deploy_deployments'] = array(
+    'description' => 'Log of all deployments pushed from this site.',
+    'fields' => array(
+      'did' => array(
+        'description' => 'Deployment ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'no export' => TRUE,
+      ),
+      'plan_name' => array(
+        'description' => 'Plan name responsible for this deployment.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ),
+      'uuid' => array(
+        'description' => 'UUID key for tracking a deployment.',
+        'type' => 'char',
+        'length' => 36,
+        'not null' => TRUE,
+      ),
+      'lid' => array(
+        'description' => 'Pointer to the latest log entry for this deployment (deploy_log.lid).',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('did'),
+    'indexes' => array(
+      'uuid' => array('uuid'),
+      'plan_name' => array('plan_name'),
+      'uuid_plan_name' => array('uuid', 'plan_name'),
+    ),
+  );
+
+  $schema['deploy_log'] = array(
+    'description' => 'Log of all status updates for a deployment.',
+    'fields' => array(
+      'lid' => array(
+        'description' => 'Log ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'no export' => TRUE,
+      ),
+      'uuid' => array(
+        'description' => 'UUID reference to a deployment (deploy_deployments.uuid).',
+        'type' => 'char',
+        'length' => 36,
+        'not null' => TRUE,
+      ),
+      'status' => array(
+        'description' => 'A status code for the deployment.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'timestamp' => array(
+        'description' => 'Timestamp when this log entry was updated.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'message' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'big',
+        'description' => 'Complementary message, e.g. the exception in case of a failure.',
+      ),
+    ),
+    'primary key' => array('lid'),
+    'indexes' => array(
+      'uuid' => array('uuid'),
+    ),
+  );
+
+  $schema['deploy_manager_entities'] = array(
+    'description' => 'Holds entities to be deployed for managed plans.',
+    'fields' => array(
+      'plan_name' => array(
+        'description' => 'The name of the deployment plan this item applies to.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'entity_type' => array(
+        'description' => 'The type of entity, e.g. "node", "user".',
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE,
+      ),
+      'entity_id' => array(
+        'description' => 'The entity ID to be deployed.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'revision_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The entity revision ID to be deployed.',
+      ),
+      'timestamp' => array(
+        'description' => 'The unix timestamp indicating when this item was added to the deployment plan.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('plan_name', 'entity_type', 'entity_id', 'revision_id'),
+  );
+
+  return $schema;
+}

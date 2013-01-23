@@ -1,0 +1,230 @@
+<?php
+
+/**
+ * @file
+ * Entity Dependency tests.
+ */
+
+/**
+ * Tests the entity dependency iterator.
+ */
+class EntityDependencyTestCase extends DrupalWebTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Entity dependency iterator',
+      'description' => 'Test the EntityDependencyIterator class.',
+      'group' => 'Entity Dependency'
+    );
+  }
+
+  function setUp() {
+    parent::setUp('entity_dependency');
+  }
+
+  /**
+   * Helper method to return the iterator.
+   */
+  function getIterator() {
+    return entity_dependency_iterator($this->entities);
+  }
+
+  /**
+   * Code taken from TaxonomyWebTestCase::createTerm() since we can't extend
+   * that test case. Some simplifications are made though.
+   *
+   * @todo
+   *   This will probably not work when the Testing profile is used. Then we
+   *   need to create the vocabulary manually.
+   *
+   * @see TaxonomyWebTestCase::createTerm()
+   */
+  function createTerm() {
+    $term = new stdClass();
+    $term->name = $this->randomName();
+    $term->description = $this->randomName();
+    // Use the first available text format.
+    $term->format = db_query_range('SELECT format FROM {filter_format}', 0, 1)->fetchField();
+    // For our test cases it's enough to rely on the standard 'tags' vocabulary.
+    $term->vid = 1;
+    taxonomy_term_save($term);
+    return $term;
+  }
+
+  function assertCorrectEntityOrder($entity, $correct_type, $entity_id_name, $correct_id) {
+    $test = $entity->__metadata['type'] == $correct_type && $entity->{$entity_id_name} == $correct_id;
+    $placeholders = array('%entity_type' => $entity->__metadata['type'], '%entity_id' => $entity->{$entity_id_name});
+    $this->assertTrue($test, t('%entity_type %entity_id was iterated over, in correct order.', $placeholders));
+  }
+
+  /**
+   * Test if single node passes iterator.
+   */
+  function testNode() {
+    $node = $this->drupalCreateNode(array(
+      'type' => 'article',
+      'uid' => 1
+    ));
+
+    $this->entities = array(
+      array('id' => $node->nid, 'type' => 'node'),
+    );
+
+    $i = 0;
+    foreach ($this->getIterator() as $entity) {
+      switch ($i) {
+        case 0:
+          $this->assertCorrectEntityOrder($entity, 'node', 'nid', $node->nid);
+          break;
+      }
+      $i++;
+    }
+    $this->assertEqual($i, 1, 'Correct number of entities was iterated over.');
+  }
+
+  /**
+   * Test basic scenario with node & author.
+   */
+  function testNodeUser() {
+    $author = $this->drupalCreateUser();
+    $node = $this->drupalCreateNode(array(
+      'type' => 'article',
+      'uid' => $author->uid
+    ));
+
+    $this->entities = array(
+      array('id' => $node->nid, 'type' => 'node'),
+    );
+
+    $i = 0;
+    foreach ($this->getIterator() as $entity) {
+      switch ($i) {
+        case 0:
+          $this->assertCorrectEntityOrder($entity, 'user', 'uid', $author->uid);
+          break;
+        case 1:
+          $this->assertCorrectEntityOrder($entity, 'node', 'nid', $node->nid);
+          break;
+      }
+      $i++;
+    }
+    $this->assertEqual($i, 2, 'Correct number of entities was iterated over.');
+  }
+
+  /**
+   * Test basic scenario with node & author & comment & commentor.
+   */
+  function testNodeUserComment() {
+    $author = $this->drupalCreateUser();
+    $node = $this->drupalCreateNode(array(
+      'type' => 'article',
+      'uid' => $author->uid
+    ));
+
+    $commentor = $this->drupalCreateUser();
+    $comment = new stdClass();
+    $comment->cid = 0;
+    $comment->pid = 0;
+    $comment->nid = $node->nid;
+    $comment->uid = $commentor->uid;
+    comment_save($comment);
+
+    $this->entities = array(
+      array('id' => $comment->cid, 'type' => 'comment'),
+    );
+
+    $i = 0;
+    foreach ($this->getIterator() as $entity) {
+      switch ($i) {
+        case 0:
+          $this->assertCorrectEntityOrder($entity, 'user', 'uid', $commentor->uid);
+          break;
+        case 1:
+          $this->assertCorrectEntityOrder($entity, 'user', 'uid', $author->uid);
+          break;
+        case 2:
+          $this->assertCorrectEntityOrder($entity, 'node', 'nid', $node->nid);
+          break;
+        case 3:
+          $this->assertCorrectEntityOrder($entity, 'comment', 'cid', $comment->cid);
+          break;
+      }
+      $i++;
+    }
+    $this->assertEqual($i, 4, 'Correct number of entities was iterated over.');
+  }
+
+  /**
+   * Test cumbersome scenario with nodes, taxonomy and users.
+   */
+  function testCumbersomeIterator() {
+    // Add the 'field_tags' field.
+    $user = $this->drupalCreateUser();
+    $term1 = $this->createTerm();
+    $term2 = $this->createTerm();
+    $term3 = $this->createTerm();
+    $term4 = $this->createTerm();
+    $term1->parent = array($term3->tid);
+    taxonomy_term_save($term1);
+
+    $node1 = $this->drupalCreateNode(array(
+      'type' => 'article',
+      'uid' => $user->uid,
+      'field_tags' => array(LANGUAGE_NONE => array(array('tid' => $term1->tid), array('tid' => $term2->tid))),
+    ));
+    $node2 = $this->drupalCreateNode(array(
+      'type' => 'article',
+      'uid' => $user->uid,
+      // We fake that nid 1 is the translation of this node, just to test if
+      // the dependency works. We don't want to depend on a node reference.
+      'tnid' => $node1->nid,
+      'field_tags' => array(LANGUAGE_NONE => array(array('tid' => $term1->tid), array('tid' => $term2->tid), array('tid' => $term3->tid), array('tid' => $term4->tid))),
+    ));
+    // This node only has dependencies that should be detected by $node2
+    // already.
+    $node3 = $this->drupalCreateNode(array(
+      'type' => 'article',
+      'uid' => $user->uid,
+      'field_tags' => array(LANGUAGE_NONE => array(array('tid' => $term1->tid), array('tid' => $term2->tid), array('tid' => $term3->tid))),
+    ));
+
+    // Add only the last node to the collection. What should come out of the
+    // iterator should be all it's dependencies, and last the node it self.
+    $this->entities = array(
+      array('id' => $node2->nid, 'type' => 'node'),
+      array('id' => $node3->nid, 'type' => 'node'),
+    );
+ 
+    $i = 0;
+    foreach ($this->getIterator() as $entity) {
+      switch ($i) {
+        case 0:
+          $this->assertCorrectEntityOrder($entity, 'taxonomy_term', 'tid', $term3->tid);
+          break;
+        case 1:
+          $this->assertCorrectEntityOrder($entity, 'taxonomy_term', 'tid', $term1->tid);
+          break;
+        case 2:
+          $this->assertCorrectEntityOrder($entity, 'taxonomy_term', 'tid', $term2->tid);
+          break;
+        case 3:
+          $this->assertCorrectEntityOrder($entity, 'taxonomy_term', 'tid', $term4->tid);
+          break;
+        case 4:
+          $this->assertCorrectEntityOrder($entity, 'user', 'uid', $user->uid);
+          break;
+        case 5:
+          $this->assertCorrectEntityOrder($entity, 'node', 'nid', $node1->nid);
+          break;
+        case 6:
+          $this->assertCorrectEntityOrder($entity, 'node', 'nid', $node2->nid);
+          break;
+        case 7:
+          $this->assertCorrectEntityOrder($entity, 'node', 'nid', $node3->nid);
+          break;
+      }
+      $i++;
+    }
+    $this->assertEqual($i, 8, 'Correct number of entities was iterated over.');
+  }
+}

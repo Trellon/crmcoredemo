@@ -1,0 +1,34 @@
+name = Deployment
+description = Allows content to be deployed between servers. Either to be used as a content staging solution or to deploy content across a cluster of different sites.
+package = Deployment
+core = 7.x
+
+dependencies[] = ctools
+dependencies[] = entity_dependency
+dependencies[] = uuid
+
+files[] = includes/DeployAggregator.inc
+files[] = includes/DeployAuthenticator.inc
+files[] = includes/DeployEndpoint.inc
+files[] = includes/DeployIterator.inc
+files[] = includes/DeployPlan.inc
+files[] = includes/DeployProcessor.inc
+files[] = includes/DeployService.inc
+files[] = includes/DeployServiceRest.inc
+
+files[] = plugins/DeployAggregatorManaged.inc
+files[] = plugins/DeployAuthenticatorSession.inc
+files[] = plugins/DeployAuthenticatorOAuth.inc
+files[] = plugins/DeployProcessorMemory.inc
+files[] = plugins/DeployProcessorQueue.inc
+files[] = plugins/DeployProcessorBatch.inc
+files[] = plugins/DeployServiceRestJSON.inc
+
+files[] = deploy.test
+
+; Information added by drupal.org packaging script on 2012-11-05
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "deploy"
+datestamp = "1352119556"
+

@@ -1,0 +1,455 @@
+<?php
+
+/**
+ * Include core implementations and Deploy's own implementations.
+ *
+ * @todo
+ *   Do this properly with hook_hook_info().
+ */
+module_load_include('inc', 'deploy', 'deploy.manager');
+module_load_include('inc', 'deploy', 'deploy.core');
+module_load_include('inc', 'deploy', 'deploy.deploy');
+
+/**
+ * Deployment statuses.
+ */
+define('DEPLOY_STATUS_FAILED', 0);
+define('DEPLOY_STATUS_STARTED', 1);
+define('DEPLOY_STATUS_PROCESSING', 2);
+define('DEPLOY_STATUS_DEPLOYED', 3);
+define('DEPLOY_STATUS_PUBLISHED', 4);
+
+/**
+ * Implements hook_permission().
+ */
+function deploy_permission() {
+  return array(
+    'administer deployments' => array(
+      'title' => t('Administer deployments'),
+      'description' => t('Perform administrative tasks around deployments, like plans and endpoints.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_ctools_plugin_type().
+ */
+function deploy_ctools_plugin_type() {
+  return array(
+    'authenticators' => array(
+      'cache' => TRUE,
+      'use hooks' => TRUE,
+      'classes' => array('handler'),
+    ),
+    'services' => array(
+      'cache' => TRUE,
+      'use hooks' => TRUE,
+      'classes' => array('handler'),
+    ),
+    'aggregators' => array(
+      'cache' => TRUE,
+      'use hooks' => TRUE,
+      'classes' => array('handler'),
+    ),
+    'processors' => array(
+      'cache' => TRUE,
+      'use hooks' => TRUE,
+      'classes' => array('handler'),
+    ),
+  );
+}
+
+/**
+ * Get all aggregator plugins.
+ */
+function deploy_get_aggregator_plugins() {
+  ctools_include('plugins');
+  return ctools_get_plugins('deploy', 'aggregators');
+}
+
+/**
+ * Get one aggregator plugin.
+ */
+function deploy_get_aggregator_plugin($name) {
+  ctools_include('plugins');
+  return ctools_get_plugins('deploy', 'aggregators', $name);
+}
+
+/**
+ * Get all processor plugins.
+ */
+function deploy_get_processor_plugins() {
+  ctools_include('plugins');
+  return ctools_get_plugins('deploy', 'processors');
+}
+
+/**
+ * Get one processor plugin.
+ */
+function deploy_get_processor_plugin($name) {
+  ctools_include('plugins');
+  return ctools_get_plugins('deploy', 'processors', $name);
+}
+
+/**
+ * Get all authenticator plugins.
+ */
+function deploy_get_authenticator_plugins() {
+  ctools_include('plugins');
+  return ctools_get_plugins('deploy', 'authenticators');
+}
+
+/**
+ * Get one authenticator plugin.
+ */
+function deploy_get_authenticator_plugin($name) {
+  ctools_include('plugins');
+  return ctools_get_plugins('deploy', 'authenticators', $name);
+}
+
+/**
+ * Get all service plugins.
+ */
+function deploy_get_service_plugins() {
+  ctools_include('plugins');
+  return ctools_get_plugins('deploy', 'services');
+}
+
+/**
+ * Get one service plugin.
+ */
+function deploy_get_service_plugin($name) {
+  ctools_include('plugins');
+  return ctools_get_plugins('deploy', 'services', $name);
+}
+
+/**
+ * Object factory for a deployment plan.
+ */
+function deploy_plan_create($schema, $item) {
+  $plan = new DeployPlan;
+  // Unserialize our serialized params.
+  foreach ($schema['fields'] as $field => $info) {
+    if (!empty($info['serialize'])) {
+      $plan->{$field} = unserialize($item->{$field});
+    }
+    else {
+      $plan->{$field} = $item->{$field};
+    }
+  }
+  return $plan;
+}
+
+/**
+ * Loader callback for a deployment plan.
+ */
+function deploy_plan_load($name) {
+  $plans = deploy_plan_load_all();
+  if (isset($plans[$name])) {
+    return $plans[$name];
+  }
+  return FALSE;
+}
+
+/**
+ * Loader callback for all deployment plans.
+ */
+function deploy_plan_load_all($args = array()) {
+  $type = !empty($args) ? 'conditions' : 'all';
+  ctools_include('export');
+  $plans = ctools_export_load_object('deploy_plans', $type, $args);
+  if (isset($plans)) {
+    // Load each plan's configuration into itself.
+    foreach ($plans as &$plan) {
+      $plan->load();
+    }
+    return $plans;
+  }
+}
+
+/**
+ * Options callback for the deploy_plan data type.
+ */
+function deploy_plan_get_options($args = array()) {
+  $plans = deploy_plan_load_all($args);
+  $options = array();
+  foreach ($plans as $plan_name => $info) {
+    $options[$plan_name] = $info->title;
+  }
+  return $options;
+}
+
+/**
+ * Helper function to recieve the status of a plan.
+ */
+function deploy_plan_get_status($name) {
+  $query = db_select('deploy_deployments', 'dd');
+  $query->join('deploy_log', 'dl', 'dd.lid = dl.lid');
+
+  $status = $query
+    ->fields('dl', array('status'))
+    ->condition('dd.plan_name', $name)
+    ->orderBy('dl.timestamp', 'DESC')
+    ->range(0, 1)
+    ->execute()
+    ->fetchField();
+  return $status;
+}
+
+/**
+ * Object factory for a deployment endpoint.
+ */
+function deploy_endpoint_create($schema, $item) {
+  $endpoint = new DeployEndpoint;
+  // Unserialize our serialized params.
+  foreach ($schema['fields'] as $field => $info) {
+    if (!empty($info['serialize'])) {
+      $endpoint->{$field} = unserialize($item->{$field});
+    }
+    else {
+      $endpoint->{$field} = $item->{$field};
+    }
+  }
+  return $endpoint;
+}
+
+/**
+ * Loader callback for a deployment endpoint.
+ */
+function deploy_endpoint_load($name) {
+  $endpoints = deploy_endpoint_load_all();
+  if (isset($endpoints[$name])) {
+    return $endpoints[$name];
+  }
+  return FALSE;
+}
+
+/**
+ * Loader callback for a deployment endpoint.
+ */
+function deploy_endpoint_load_all() {
+  ctools_include('export');
+  $endpoints = ctools_export_load_object('deploy_endpoints', 'all');
+  if (isset($endpoints)) {
+    return $endpoints;
+  }
+}
+
+/**
+ * Writes a deployment plan.
+ */
+function deploy_plan_save($data) {
+
+  $plan = new DeployPlan();
+  foreach ($data as $key => $value) {
+    $plan->{$key} = $value;
+  }
+  
+  $returned = ctools_export_crud_save('deploy_plans', $plan);
+  if (SAVED_NEW !== $returned && SAVED_UPDATED !== $returned) {
+    throw new DeployPlanException('Failed to create plan.');
+  }
+
+  return $plan;
+}
+
+/**
+ * Constructs a deployment iterator, which is the core of the dependency
+ * framework.
+ */
+function deploy_iterator($entities) {
+  $iterator = new DeployIterator($entities);
+  return new EntityDependencyIteratorIterator($iterator);
+}
+
+/**
+ * Helper function to get operation info.
+ */
+function deploy_get_operation_info($event_name = NULL) {
+  $cache = &drupal_static(__FUNCTION__);
+  if (empty($cache)) {
+    $operations = module_invoke_all('deploy_operation_info');
+    foreach (array('preprocess', 'postprocess') as $event) {
+      // Avoid empty keys.
+      if (!isset($operations[$event])) {
+        $operations[$event] = array();
+      }
+    }
+    $cache = $operations;
+  }
+  if (!empty($event_name)) {
+    return $cache[$event_name];
+  }
+  return $cache;
+}
+
+/**
+ * Implements hook_cron_queue_info().
+ */
+function deploy_cron_queue_info() {
+  return array(
+    'deploy_deploy' => array(
+      'worker callback' => 'deploy_queue_worker_deploy',
+      'time' => 60,
+    ),
+    'deploy_publish' => array(
+      'worker callback' => 'deploy_queue_worker_publish',
+      'time' => 60,
+    ),
+  );
+}
+
+/**
+ * Processes a single queued item for deployment.
+ */
+function deploy_queue_worker_deploy($entity, &$context = NULL) {
+  $endpoint = deploy_endpoint_load($entity->__metadata['endpoint_name']);
+  $plan = deploy_plan_load($entity->__metadata['plan_name']);
+
+  if ($plan && $endpoint) {
+    $entities = array(array('type' => $entity->__metadata['type'], 'id' => $entity->__metadata['id']));
+    $iterator = deploy_iterator($entities);
+    $endpoint->deploy($entity->__metadata['deployment_key'], $iterator, $entity->__metadata['lock_name']);
+  }
+}
+
+/**
+ * Processes a single queued item for publishing.
+ */
+function deploy_queue_worker_publish($entity, &$context = NULL) {
+  $endpoint = deploy_endpoint_load($entity->__metadata['endpoint_name']);
+  $plan = deploy_plan_load($entity->__metadata['plan_name']);
+
+  if ($plan && $endpoint) {
+    $entities = array(array('type' => $entity->__metadata['type'], 'id' => $entity->__metadata['id']));
+    $iterator = deploy_iterator($entities);
+    $endpoint->publish($entity->__metadata['deployment_key'], $iterator, $entity->__metadata['lock_name']);
+    $context['results'][$entity->__metadata['endpoint_name']] = $entity->__metadata['plan_name'];
+  }
+}
+
+/**
+ * Batch API 'finished' callback.
+ */
+function deploy_batch_finished_operation($success, $results, $operations) {
+  if ($success) {
+    foreach ($results as $endpoint_name => $plan_name) {
+      $endpoint = deploy_endpoint_load($endpoint_name);
+      $plan = deploy_plan_load($plan_name);
+      drupal_set_message(t('Plan %plan has been deployed and published to %endpoint.', array('%plan' => $plan->title, '%endpoint' => $endpoint->title)));
+    }
+  }
+}
+
+/**
+ * Helper function to retrieve relevant information about a deployment status.
+ */
+function deploy_status_info($status = NULL, $key = NULL) {
+  $info = array(
+    DEPLOY_STATUS_FAILED => array(
+      'title' => t('Failed'),
+      'keyed message' => 'Deployment %key failed.',
+      'watchdog' => WATCHDOG_ERROR,
+      'class' => 'error',
+    ),
+    DEPLOY_STATUS_STARTED => array(
+      'title' => t('Started'),
+      'keyed message' => 'Deployment of %key started.',
+      'watchdog' => WATCHDOG_INFO,
+      'class' => 'warning',
+    ),
+    DEPLOY_STATUS_PROCESSING => array(
+      'title' => t('Processing'),
+      'keyed message' => 'Deployment %key is processing.',
+      'watchdog' => WATCHDOG_INFO,
+      'class' => 'warning',
+    ),
+    DEPLOY_STATUS_DEPLOYED => array(
+      'title' => t('Deployed'),
+      'watchdog' => WATCHDOG_INFO,
+      'keyed message' => 'Deployment %key was deployed.',
+      'class' => 'warning',
+    ),
+    DEPLOY_STATUS_PUBLISHED => array(
+      'title' => t('Published'),
+      'keyed message' => 'Deployment %key was published.',
+      'watchdog' => WATCHDOG_INFO,
+      'class' => 'status',
+    ),
+  );
+  if ($status === NULL && $key === NULL) {
+    return $info;
+  }
+  elseif ($status !== NULL && $status !== FALSE && $key === NULL) {
+    if (isset($info[$status])) {
+      return $info[$status];
+    }
+  }
+  elseif ($status !== NULL && $status !== FALSE && $key !== NULL && $key !== FALSE) {
+    if (isset($info[$status][$key])) {
+      return $info[$status][$key];
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Helper function to log deployments.
+ *
+ * This function also logs to the watchdog log for more visibility.
+ *
+ * @param mixed $key
+ *   Can be either an existing key (UUID) or a string of a plan name indicating
+ *   that a new deployment is started and a key needs to be generated.
+ * @param integer $status
+ *   Status code.
+ * @param string $message
+ *   A message to log.
+ * @param array $variables
+ *   Placeholder variables to be used in $message.
+ */
+function deploy_log($key, $status, $message = '', $variables = array(), $timestamp = NULL) {
+  // Log to watchdog for more visibility.
+  $info = deploy_status_info($status);
+  if ($status == DEPLOY_STATUS_FAILED) {
+    watchdog_exception('deploy', $message);
+  }
+  else {
+    watchdog('deploy', $info['keyed message'], array('%key' => $key), $info['watchdog']);
+  }
+  if ($timestamp === NULL) {
+    $timestamp = time();
+  }
+  // If the key isn't a UUID, then it's a plan name indicating that a new
+  // deployment has started.
+  if ($key && !uuid_is_valid($key)) {
+    $plan_name = $key;
+    $key = uuid_generate();
+    db_insert('deploy_deployments')
+      ->fields(array(
+        'plan_name' => $plan_name,
+        'uuid' => $key,
+      ))
+      ->execute();
+  }
+  if (uuid_is_valid($key)) {
+    // Add the log entry for this deployment.
+    $lid = db_insert('deploy_log')
+      ->fields(array(
+        'uuid' => $key,
+        'status' => $status,
+        'message' => $message,
+        'timestamp' => $timestamp,
+      ))
+      ->execute();
+    // Update the log pointer for this deployment.
+    db_update('deploy_deployments')
+      ->fields(array(
+        'lid' => $lid,
+      ))
+      ->condition('uuid', $key)
+      ->execute();
+    return $key;
+  }
+  return FALSE;
+}
