@@ -393,6 +393,17 @@ function _crm_core_np_features_form_submit($form, &$form_state) {
   }
 
   module_enable($modules);
+  
+  // let's install test data and turn on modules that might be breaking other things
+  $other_modules = array(
+    'uuid',
+    'uuid_features',
+    'deploy',
+    'crm_core_content_test_content'
+  );
+  
+  module_enable($other_modules);  
+  
 }
 
 /**
@@ -468,6 +479,10 @@ function _crm_core_np_feature_config_form_submit($form, &$form_state) {
       }
     }
   }
+  
+  
+
+  
 }
 
 /**
