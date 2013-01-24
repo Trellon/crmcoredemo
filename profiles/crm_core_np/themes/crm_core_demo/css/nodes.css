@@ -1,0 +1,73 @@
+@CHARSET "UTF-8";
+
+
+
+/* blog posts */
+.crm-core-blog-main-view .view-content .views-row {
+  width: 270px;
+  margin: 10px;
+  float: left;
+  border-bottom: 1px solid #CCC;
+}
+
+
+
+/* Large desktop */
+@media (min-width: 1200px) {
+}
+ 
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+	
+  .crm-core-blog-main-view .view-content .views-row {
+    width: 100%;
+    float: none;
+  }
+	
+	
+}
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+	
+  .crm-core-blog-main-view .view-content .views-row {
+    width: 100%;
+    float: none;
+  }
+  
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) {
+	.crm-core-blog-main-view .view-content .views-row {
+	  width: 100%;
+	  float: none;
+	}
+}
+
+	
+.masonry,
+.masonry .masonry-brick {
+  -webkit-transition-duration: 0.7s;
+     -moz-transition-duration: 0.7s;
+      -ms-transition-duration: 0.7s;
+       -o-transition-duration: 0.7s;
+          transition-duration: 0.7s;
+}
+
+.masonry {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.masonry .masonry-brick {
+  -webkit-transition-property: left, right, top;
+     -moz-transition-property: left, right, top;
+      -ms-transition-property: left, right, top;
+       -o-transition-property: left, right, top;
+          transition-property: left, right, top;
+}
+
