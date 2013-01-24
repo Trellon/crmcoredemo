@@ -2,6 +2,7 @@ name = CRM Core Demo Content
 description = Content for CRM Core Demo
 core = 7.x
 package = CRM Core
+php = 5.2.4
 version = 7.x-1.0
 project = crm_core_demo_content
 dependencies[] = crm_core_blog

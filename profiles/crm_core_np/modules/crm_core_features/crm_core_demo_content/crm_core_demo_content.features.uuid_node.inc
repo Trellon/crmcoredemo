@@ -53,7 +53,25 @@ There is a lot more you can do with CRM Core.
       ),
     ),
   ),
-  'field_header_image' => array(),
+  'field_header_image' => array(
+    'und' => array(
+      0 => array(
+        'fid' => '15',
+        'alt' => '',
+        'title' => '',
+        'width' => '900',
+        'height' => '280',
+        'uid' => '1',
+        'filename' => 'why.jpg',
+        'uri' => 'public://why.jpg',
+        'filemime' => 'image/jpeg',
+        'filesize' => '141576',
+        'status' => '1',
+        'timestamp' => '1359060811',
+        'uuid' => '44cfb332-ee78-4d79-a269-41a85ff4fa1d',
+      ),
+    ),
+  ),
   'field_tags' => array(),
   'cid' => '0',
   'last_comment_name' => NULL,
@@ -275,16 +293,48 @@ A Parents\' Choice Award winner, he has written songs for Sesame Street and is o
   'body' => array(
     'und' => array(
       0 => array(
-        'value' => 'This is a description of how we built the petitions feature',
+        'value' => 'Recipe for a great citizen feedback and online activity tool.
+
+Contents:
+
+- one content type
+- one CRM Core Profile
+- one activity type
+- several views, to create fancy reports
+- a little code on the backend for seasoning',
         'summary' => '',
         'format' => 'filtered_html',
-        'safe_value' => '<p>This is a description of how we built the petitions feature</p>
+        'safe_value' => '<p>Recipe for a great citizen feedback and online activity tool.</p>
+<p>Contents:</p>
+<p>- one content type<br />
+- one CRM Core Profile<br />
+- one activity type<br />
+- several views, to create fancy reports<br />
+- a little code on the backend for seasoning</p>
 ',
         'safe_summary' => '',
       ),
     ),
   ),
-  'field_header_image' => array(),
+  'field_header_image' => array(
+    'und' => array(
+      0 => array(
+        'fid' => '13',
+        'alt' => '',
+        'title' => '',
+        'width' => '900',
+        'height' => '280',
+        'uid' => '1',
+        'filename' => 'hands.jpg',
+        'uri' => 'public://hands.jpg',
+        'filemime' => 'image/jpeg',
+        'filesize' => '193696',
+        'status' => '1',
+        'timestamp' => '1359059897',
+        'uuid' => '17ee2f29-0f7d-44eb-9759-c201599b1820',
+      ),
+    ),
+  ),
   'field_tags' => array(),
   'cid' => '0',
   'last_comment_name' => NULL,
@@ -314,12 +364,25 @@ A Parents\' Choice Award winner, he has written songs for Sesame Street and is o
   'body' => array(
     'und' => array(
       0 => array(
-        'value' => 'This is a short description of how Drupal commerce fits into things',
-        'summary' => '',
+        'value' => 'We have 2 different examples of how to integrate CRM Core with Drupal commerce.
+
+Drupal commerce is used to process payments for donations and event registration. 
+
+Event registration uses a traditional cart approach.
+
+Donations is an inline form for processing payments through the site.',
+        'summary' => 'We have 2 different examples of how to integrate CRM Core with Drupal commerce.
+
+Drupal commerce is used to process payments for donations and event registration. ',
         'format' => 'filtered_html',
-        'safe_value' => '<p>This is a short description of how Drupal commerce fits into things</p>
+        'safe_value' => '<p>We have 2 different examples of how to integrate CRM Core with Drupal commerce.</p>
+<p>Drupal commerce is used to process payments for donations and event registration. </p>
+<p>Event registration uses a traditional cart approach.</p>
+<p>Donations is an inline form for processing payments through the site.</p>
 ',
-        'safe_summary' => '',
+        'safe_summary' => '<p>We have 2 different examples of how to integrate CRM Core with Drupal commerce.</p>
+<p>Drupal commerce is used to process payments for donations and event registration.</p>
+',
       ),
     ),
   ),
@@ -394,7 +457,25 @@ A Parents\' Choice Award winner, he has written songs for Sesame Street and is o
       ),
     ),
   ),
-  'field_header_image' => array(),
+  'field_header_image' => array(
+    'und' => array(
+      0 => array(
+        'fid' => '14',
+        'alt' => '',
+        'title' => '',
+        'width' => '900',
+        'height' => '280',
+        'uid' => '1',
+        'filename' => 'donations.jpg',
+        'uri' => 'public://donations.jpg',
+        'filemime' => 'image/jpeg',
+        'filesize' => '294026',
+        'status' => '1',
+        'timestamp' => '1359060200',
+        'uuid' => '0df0fff6-6301-4237-bac5-9acfcda9c723',
+      ),
+    ),
+  ),
   'field_tags' => array(),
   'cid' => '0',
   'last_comment_name' => NULL,
@@ -520,7 +601,25 @@ Activities - keep a record of everything someone has done with your site.</p>
       ),
     ),
   ),
-  'field_header_image' => array(),
+  'field_header_image' => array(
+    'und' => array(
+      0 => array(
+        'fid' => '12',
+        'alt' => '',
+        'title' => '',
+        'width' => '900',
+        'height' => '280',
+        'uid' => '1',
+        'filename' => 'profile.jpg',
+        'uri' => 'public://profile_0.jpg',
+        'filemime' => 'image/jpeg',
+        'filesize' => '337342',
+        'status' => '1',
+        'timestamp' => '1359057086',
+        'uuid' => 'f26d58fe-3962-43c3-9430-c5c59bd70e85',
+      ),
+    ),
+  ),
   'field_tags' => array(),
   'cid' => '0',
   'last_comment_name' => NULL,
