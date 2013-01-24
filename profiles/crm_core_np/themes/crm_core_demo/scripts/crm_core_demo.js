@@ -96,7 +96,7 @@
         isResizable   : true,
         isAnimated: true,
         animationOptions: {
-          duration: 240,
+          duration: 460,
           easing: 'linear',
           queue: false
         }        

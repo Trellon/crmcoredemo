@@ -4,10 +4,13 @@
 
 /* blog posts */
 .crm-core-blog-main-view .view-content .views-row {
-  width: 270px;
+  width: 400px;
   margin: 10px;
   float: left;
   border-bottom: 1px solid #CCC;
+}
+.crm-core-blog-main-view .view-content .views-row IMG {
+	min-height: 120px;
 }
 
 
