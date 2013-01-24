@@ -58,7 +58,7 @@
 	<div class="row">
 	  
     <?php if ($page['sidebar_first']): ?>
-      <aside class="span3" role="complementary">
+      <aside class="span3 hidden-phone" role="complementary">
         <?php print render($page['sidebar_first']); ?>
       </aside>  <!-- /#sidebar-first -->
     <?php endif; ?>  

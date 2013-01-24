@@ -87,6 +87,23 @@
         });
       });
       
+      // sets up masonry for blog posts
+      var container = $('.view-crm-core-blog > .view-content');
+      
+      container.masonry({
+        // options
+        itemSelector  : '.views-row',
+        isResizable   : true,
+        isAnimated: true,
+        animationOptions: {
+          duration: 240,
+          easing: 'linear',
+          queue: false
+        }        
+        
+      });
+      
+      
       
     },
   };

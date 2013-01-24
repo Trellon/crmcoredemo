@@ -66,6 +66,17 @@ function crm_core_demo_settings_library() {
 			),
 		),
 	);
+	$libraries['masonry'] = array(
+    'title' => 'Masonry', 
+    'website' => 'https://github.com/desandro/masonry.git', 
+    'version' => 'master', 
+    'js' => array(
+			libraries_get_path('masonry') . '/jquery.masonry.min.js' => array(
+        'group' => JS_LIBRARY,
+        'weight' => 0,
+			),
+		),
+	);
 	return $libraries;
 }
 
@@ -78,9 +89,8 @@ function crm_core_demo_settings_library() {
 function crm_core_demo_settings_preprocess_page($vars){
   
   // add autosize library.
-  // This library allows textareas to autosize, instead of having them resize through handles.
   drupal_add_library('crm_core_demo_settings', 'expanding');
-  
+  drupal_add_library('crm_core_demo_settings', 'masonry');
 }	
 
 

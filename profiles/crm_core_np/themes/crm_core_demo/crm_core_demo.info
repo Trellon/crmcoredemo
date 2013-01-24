@@ -13,6 +13,7 @@ stylesheets[all][] = css/elements.css
 stylesheets[all][] = css/homebox-alt.css
 stylesheets[all][] = css/activity.css
 stylesheets[all][] = css/contacts.css
+stylesheets[all][] = css/nodes.css
 
 
 regions[header]         = 'Top Bar'
