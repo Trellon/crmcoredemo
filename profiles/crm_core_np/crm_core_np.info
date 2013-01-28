@@ -54,6 +54,10 @@ dependencies[] = geocoder
 dependencies[] = openlayers
 dependencies[] = openlayers_ui
 dependencies[] = openlayers_views
+; dependencies[] = uuid
+; dependencies[] = uuid_features
+; dependencies[] = uuid_node
+; dependencies[] = uuid_file
 
 ; Install CRM Core modules.
 dependencies[] = crm_core
