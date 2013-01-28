@@ -1,0 +1,12 @@
+name = CRM Core Demo Sample Content
+description = Sample content for CRM Core Demo. Includes some documentation around how the demo was built,
+core = 7.x
+package = CRM Core
+version = 7.x-1.0
+project = crm_core_demo_sample_content
+dependencies[] = ctools
+dependencies[] = deploy
+features[ctools][] = deploy:deploy_plans:1
+features[deploy_plans][] = crm_core_demo_sample_content
+features[features_api][] = api:1
+features[uuid_entities][] = crm_core_demo_sample_content

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CRM Core Demo Sample Content feature.
+ */
+
+include_once 'crm_core_demo_sample_content.features.inc';
