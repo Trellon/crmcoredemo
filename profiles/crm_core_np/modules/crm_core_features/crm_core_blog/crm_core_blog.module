@@ -7,7 +7,7 @@
 include_once 'crm_core_blog.features.inc';
 
 /**
- * Implements hook_permission
+ * Implements hook_permission().
  */
 function crm_core_blog_permission() {
   return array(
@@ -19,54 +19,37 @@ function crm_core_blog_permission() {
 }
 
 /**
- * Implements hook_crm_core_report_register
+ * Implements hook_crm_core_report_register().
  */
 function crm_core_blog_crm_core_report_register() {
-
   $reports = array(
     'blogs' => array(
-      'title'	  => t('Comments'),
-      'reports'	=> array(
-        'comment_overview'	=> array(
-          // this should be a list of recent blog articles, including the number of comments on each post
-          'title'       => t('Blog Comment Overview'),
+      'title'   => t('Comments'),
+      'reports' => array(
+        'comment_overview' => array(
+          'title'       => t('Blog comment overview'),
           'path'        => 'crm/reports/crm-core-blog-comment-overview',
-          'description'	=> t('Overview of blog activity on the site.'),
+          'description' => t('Overview of blog activity on the site.'),
         ),
-        'comment_authors'	=> array(
-          // this should be a list of blog article authors, with details about the number of comments on each post
-          // it should link to a detail page
-          'title'       => t('Blog Author Report'),
+        'comment_authors' => array(
+          'title'       => t('Blog author report'),
           'path'        => 'crm/reports/blog/commenters',
-          'description'	=> t('Details about activity around posts from individual blog authors.'),
+          'description' => t('Details about activity around posts from individual blog authors.'),
         ),
-        'comment_activity'	=> array(
-          // this should be a list of people commenting on the blog, sorted by total number of posts
-          'title'       => t('Comment Activity Report'),
+        'comment_activity' => array(
+          'title'       => t('Comment activity report'),
           'path'        => 'crm/reports/blog/commenters',
-          'description'	=> t('Details about the most active commenters on the blog.'),
+          'description' => t('Details about the most active commenters on the blog.'),
         ),
-        'comment_topics'	=> array(
-          // this should be a list of topics attached to blog posts, listing the number of comments related to each
-          'title'       => t('Comment Topics Report'),
+        'comment_topics' => array(
+          'title'       => t('Comment topics report'),
           'path'        => 'crm/reports/blog/commenters',
-          'description'	=> t('What topics are generating the most activity on the blog?'),
+          'description' => t('What topics are generating the most activity on the blog?'),
         ),
       ),
-      'widgets'	=> array(),
+      'widgets' => array(),
     ),
   );
 
   return $reports;
-}
-
-// going to need a relationship that links comments to contacts
-/**
- * Implements hook_views_data().
- */
-function crm_core_blog_views_data() {
-  $data = array();
-  
-  
-  return $data;
 }
