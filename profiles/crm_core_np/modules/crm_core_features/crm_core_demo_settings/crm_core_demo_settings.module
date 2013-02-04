@@ -217,13 +217,14 @@ function crm_core_demo_settings_preprocess_contact(&$variables) {
       $variables['volunteer'] = '<span class="contact-volunteer">I want to volunteer</span>';    
     }
     // set the email markup
-    if($cdat['field_contact_email']['#items'][0]['email'] !== ''){
-      $variables['email_button'] = '<a href="mailto:' . $cdat['field_contact_email']['#items'][0]['email'] . '" class="btn btn-mini btn-warning"><i class="icon-envelope icon-white"></i> Send a message</a>';
+    if (!empty($cdat['field_contact_email'])) {
+      if($cdat['field_contact_email']['#items'][0]['email'] !== ''){
+        $variables['email_button'] = '<a href="mailto:' . $cdat['field_contact_email']['#items'][0]['email'] . '" class="btn btn-mini btn-warning"><i class="icon-envelope icon-white"></i> Send a message</a>';
+      }
     }
-    
+
     // format the contact image properly for this page
-    // 
-    if($cdat['contact_image']){
+    if(!empty($cdat['contact_image'])){
       // format the image, it should be more wide than tall
       // make sure there is a default image available for people to work with
       $variables['pic'] = theme('image_style', array(
@@ -231,7 +232,7 @@ function crm_core_demo_settings_preprocess_contact(&$variables) {
         'path' => $cdat['contact_image'][0]['#item']['uri'],
         'alt' => 'The contact\'s name',
         'attributes' => array('class' => 'contact-image'),
-      ));    
+      ));
     }
     
     // check to see if the contact has an associated user account
