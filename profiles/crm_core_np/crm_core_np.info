@@ -33,6 +33,7 @@ dependencies[] = date
 dependencies[] = date_api
 dependencies[] = date_popup
 dependencies[] = date_views
+dependencies[] = editablefields
 dependencies[] = email
 dependencies[] = entity
 dependencies[] = entityreference
