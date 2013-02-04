@@ -12,10 +12,10 @@ function crm_core_blog_views_default_views() {
 
   $view = new view();
   $view->name = 'crm_core_blog';
-  $view->description = '';
+  $view->description = 'The primary stream of recent blog posts.';
   $view->tag = 'default';
   $view->base_table = 'node';
-  $view->human_name = 'Blog';
+  $view->human_name = 'CRM Core Blog';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
@@ -69,7 +69,6 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['fields']['created']['table'] = 'node';
   $handler->display->display_options['fields']['created']['field'] = 'created';
   $handler->display->display_options['fields']['created']['date_format'] = 'date_format_slim';
-  $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -126,10 +125,10 @@ function crm_core_blog_views_default_views() {
     'page' => 'page',
   );
 
-  /* Display: Recent Blog Posts Block */
-  $handler = $view->new_display('block', 'Recent Blog Posts Block', 'block');
+  /* Display: Recent blog posts */
+  $handler = $view->new_display('block', 'Recent blog posts', 'block');
   $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Recent Blog Posts';
+  $handler->display->display_options['title'] = 'Recent blog posts';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['pager'] = FALSE;
   $handler->display->display_options['pager']['type'] = 'some';
@@ -159,8 +158,8 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['block_description'] = 'Recent Blog Posts';
 
-  /* Display: Blog Author Block */
-  $handler = $view->new_display('block', 'Blog Author Block', 'block_1');
+  /* Display: Blog author */
+  $handler = $view->new_display('block', 'Blog author', 'block_1');
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'Blog Posts by Author';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
@@ -182,8 +181,8 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['sorts']['name']['field'] = 'name';
   $handler->display->display_options['sorts']['name']['relationship'] = 'uid';
 
-  /* Display: Blog Posts */
-  $handler = $view->new_display('block', 'Blog Posts', 'block_2');
+  /* Display: Blog posts */
+  $handler = $view->new_display('block', 'Blog posts', 'block_2');
   $handler->display->display_options['defaults']['css_class'] = FALSE;
   $handler->display->display_options['css_class'] = 'hidden-phone';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
@@ -207,7 +206,6 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['fields']['created']['label'] = '';
   $handler->display->display_options['fields']['created']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['created']['date_format'] = 'date_format_slim';
-  $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
   $export['crm_core_blog'] = $view;
 
   $view = new view();
@@ -258,17 +256,17 @@ function crm_core_blog_views_default_views() {
 
   $view = new view();
   $view->name = 'crm_core_blog_comment_overview';
-  $view->description = 'Overview of blog comment activity';
+  $view->description = 'Overview of blog activity on the site.';
   $view->tag = 'default';
   $view->base_table = 'node';
-  $view->human_name = 'CRM Core Blog Comment Overview';
+  $view->human_name = 'CRM Core Blog comment overview';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Blog Comment Overview';
+  $handler->display->display_options['title'] = 'Blog comment overview';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['access']['perm'] = 'view crm core blog comment reports';
@@ -287,30 +285,40 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['header']['area']['field'] = 'area';
   $handler->display->display_options['header']['area']['content'] = 'Recent blog posts and comment activity.';
   $handler->display->display_options['header']['area']['format'] = 'filtered_html';
+  /* Relationship: Content: Author */
+  $handler->display->display_options['relationships']['uid']['id'] = 'uid';
+  $handler->display->display_options['relationships']['uid']['table'] = 'node';
+  $handler->display->display_options['relationships']['uid']['field'] = 'uid';
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: User: Name */
+  $handler->display->display_options['fields']['name']['id'] = 'name';
+  $handler->display->display_options['fields']['name']['table'] = 'users';
+  $handler->display->display_options['fields']['name']['field'] = 'name';
+  $handler->display->display_options['fields']['name']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['name']['label'] = 'Author';
+  /* Field: Content: Updated date */
+  $handler->display->display_options['fields']['changed']['id'] = 'changed';
+  $handler->display->display_options['fields']['changed']['table'] = 'node';
+  $handler->display->display_options['fields']['changed']['field'] = 'changed';
+  $handler->display->display_options['fields']['changed']['label'] = 'Updated';
+  $handler->display->display_options['fields']['changed']['date_format'] = 'short';
   /* Field: Content: Comment count */
   $handler->display->display_options['fields']['comment_count']['id'] = 'comment_count';
   $handler->display->display_options['fields']['comment_count']['table'] = 'node_comment_statistics';
   $handler->display->display_options['fields']['comment_count']['field'] = 'comment_count';
   $handler->display->display_options['fields']['comment_count']['label'] = 'Comments';
-  /* Field: Content: Post date */
-  $handler->display->display_options['fields']['created']['id'] = 'created';
-  $handler->display->display_options['fields']['created']['table'] = 'node';
-  $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['label'] = 'Date';
-  $handler->display->display_options['fields']['created']['date_format'] = 'date_format_slim';
-  $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
   /* Field: Content: Last comment time */
   $handler->display->display_options['fields']['last_comment_timestamp']['id'] = 'last_comment_timestamp';
   $handler->display->display_options['fields']['last_comment_timestamp']['table'] = 'node_comment_statistics';
   $handler->display->display_options['fields']['last_comment_timestamp']['field'] = 'last_comment_timestamp';
-  $handler->display->display_options['fields']['last_comment_timestamp']['label'] = 'Last Comment';
-  $handler->display->display_options['fields']['last_comment_timestamp']['date_format'] = 'date_format_slim';
+  $handler->display->display_options['fields']['last_comment_timestamp']['label'] = 'Last comment';
+  $handler->display->display_options['fields']['last_comment_timestamp']['hide_empty'] = TRUE;
+  $handler->display->display_options['fields']['last_comment_timestamp']['date_format'] = 'short';
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';

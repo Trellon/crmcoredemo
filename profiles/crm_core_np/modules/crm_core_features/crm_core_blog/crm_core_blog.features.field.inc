@@ -116,7 +116,7 @@ function crm_core_blog_field_default_fields() {
     'field_instance' => array(
       'bundle' => 'blog_post',
       'deleted' => '0',
-      'description' => 'This is a header image for a blog post. When no image is provided, the post will appear without the image.',
+      'description' => '',
       'display' => array(
         'default' => array(
           'label' => 'hidden',
@@ -141,7 +141,7 @@ function crm_core_blog_field_default_fields() {
       ),
       'entity_type' => 'node',
       'field_name' => 'field_header_image',
-      'label' => 'Image',
+      'label' => 'Header image',
       'required' => 0,
       'settings' => array(
         'alt_field' => 0,
@@ -244,9 +244,8 @@ function crm_core_blog_field_default_fields() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Body');
-  t('Image');
+  t('Header image');
   t('Tags');
-  t('This is a header image for a blog post. When no image is provided, the post will appear without the image.');
 
   return $fields;
 }

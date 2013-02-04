@@ -33,6 +33,7 @@ function crm_core_blog_crm_core_report_register() {
         ),
         'comment_authors' => array(
           'title'       => t('Blog author report'),
+          // @todo #11952 Points to same place as below.
           'path'        => 'crm/reports/blog/commenters',
           'description' => t('Details about activity around posts from individual blog authors.'),
         ),
