@@ -24,23 +24,24 @@ function crm_core_blog_permission() {
 function crm_core_blog_crm_core_report_register() {
   $reports = array(
     'blogs' => array(
-      'title'   => t('Comments'),
+      'title'   => t('Blogs'),
       'reports' => array(
         'comment_overview' => array(
-          'title'       => t('Blog comment overview'),
-          'path'        => 'crm/reports/crm-core-blog-comment-overview',
-          'description' => t('Overview of blog activity on the site.'),
-        ),
-        'comment_authors' => array(
-          'title'       => t('Blog author report'),
-          // @todo #11952 Points to same place as below.
-          'path'        => 'crm/reports/blog/commenters',
-          'description' => t('Details about activity around posts from individual blog authors.'),
+          'title'       => t('Post and comment overview'),
+          'path'        => 'crm/reports/blog/overview',
+          'description' => t('An overview of recent blog posts and comment activity.'),
         ),
         'comment_activity' => array(
-          'title'       => t('Comment activity report'),
+          'title'       => t('Commenter activity report'),
           'path'        => 'crm/reports/blog/commenters',
           'description' => t('Details about the most active commenters on the blog.'),
+        ),
+
+        // @todo #11952 and #11954.
+        'comment_authors' => array(
+          'title'       => t('Blog author report'),
+          'path'        => 'crm/reports/blog/commenters',
+          'description' => t('Details about activity around posts from individual blog authors.'),
         ),
         'comment_topics' => array(
           'title'       => t('Comment topics report'),

@@ -256,17 +256,17 @@ function crm_core_blog_views_default_views() {
 
   $view = new view();
   $view->name = 'crm_core_blog_comment_overview';
-  $view->description = 'Overview of blog activity on the site.';
+  $view->description = 'An overview of recent blog posts and comment activity.';
   $view->tag = 'default';
   $view->base_table = 'node';
-  $view->human_name = 'CRM Core Blog comment overview';
+  $view->human_name = 'CRM Core Blog post and comment overview';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Blog comment overview';
+  $handler->display->display_options['title'] = 'Blog post and comment overview';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['access']['perm'] = 'view crm core blog comment reports';
@@ -279,11 +279,56 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['pager']['options']['id'] = '0';
   $handler->display->display_options['pager']['options']['quantity'] = '9';
   $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'title' => 'title',
+    'name' => 'name',
+    'changed' => 'changed',
+    'comment_count' => 'comment_count',
+    'last_comment_timestamp' => 'last_comment_timestamp',
+  );
+  $handler->display->display_options['style_options']['default'] = 'changed';
+  $handler->display->display_options['style_options']['info'] = array(
+    'title' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'name' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'changed' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'comment_count' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'last_comment_timestamp' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
   /* Header: Global: Text area */
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = 'Recent blog posts and comment activity.';
+  $handler->display->display_options['header']['area']['content'] = 'An overview of recent blog posts and comment activity.';
   $handler->display->display_options['header']['area']['format'] = 'filtered_html';
   /* Relationship: Content: Author */
   $handler->display->display_options['relationships']['uid']['id'] = 'uid';
@@ -316,14 +361,9 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['fields']['last_comment_timestamp']['id'] = 'last_comment_timestamp';
   $handler->display->display_options['fields']['last_comment_timestamp']['table'] = 'node_comment_statistics';
   $handler->display->display_options['fields']['last_comment_timestamp']['field'] = 'last_comment_timestamp';
-  $handler->display->display_options['fields']['last_comment_timestamp']['label'] = 'Last comment';
+  $handler->display->display_options['fields']['last_comment_timestamp']['label'] = 'Latest comment';
   $handler->display->display_options['fields']['last_comment_timestamp']['hide_empty'] = TRUE;
   $handler->display->display_options['fields']['last_comment_timestamp']['date_format'] = 'short';
-  /* Sort criterion: Content: Post date */
-  $handler->display->display_options['sorts']['created']['id'] = 'created';
-  $handler->display->display_options['sorts']['created']['table'] = 'node';
-  $handler->display->display_options['sorts']['created']['field'] = 'created';
-  $handler->display->display_options['sorts']['created']['order'] = 'DESC';
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
@@ -342,22 +382,22 @@ function crm_core_blog_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'crm/reports/crm-core-blog-comment-overview';
+  $handler->display->display_options['path'] = 'crm/reports/blog/overview';
   $export['crm_core_blog_comment_overview'] = $view;
 
   $view = new view();
   $view->name = 'crm_core_blog_comment_report';
-  $view->description = '';
+  $view->description = 'Details about the most active commenters on the blog.';
   $view->tag = 'default';
   $view->base_table = 'comment';
-  $view->human_name = 'Blog Comment Report';
+  $view->human_name = 'CRM Core Blog commenter activity report';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Blog Comment Report';
+  $handler->display->display_options['title'] = 'Blog commenter activity report';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['group_by'] = TRUE;
   $handler->display->display_options['access']['type'] = 'perm';
@@ -503,100 +543,10 @@ function crm_core_blog_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['path'] = 'crm/reports/blog/commenters';
-  $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Blog Comment Report';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['context'] = 0;
   $export['crm_core_blog_comment_report'] = $view;
-
-  $view = new view();
-  $view->name = 'crm_core_blog_commenters';
-  $view->description = 'Top commenters in the blog';
-  $view->tag = 'default';
-  $view->base_table = 'comment';
-  $view->human_name = 'CRM Core Blog Commenters';
-  $view->core = 7;
-  $view->api_version = '3.0';
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-
-  /* Display: Master */
-  $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'CRM Core Blog Commenters';
-  $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['group_by'] = TRUE;
-  $handler->display->display_options['access']['type'] = 'perm';
-  $handler->display->display_options['cache']['type'] = 'none';
-  $handler->display->display_options['query']['type'] = 'views_query';
-  $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '50';
-  $handler->display->display_options['style_plugin'] = 'table';
-  /* Relationship: Comment: Content */
-  $handler->display->display_options['relationships']['nid']['id'] = 'nid';
-  $handler->display->display_options['relationships']['nid']['table'] = 'comment';
-  $handler->display->display_options['relationships']['nid']['field'] = 'nid';
-  $handler->display->display_options['relationships']['nid']['required'] = TRUE;
-  /* Relationship: Comment: Author */
-  $handler->display->display_options['relationships']['uid']['id'] = 'uid';
-  $handler->display->display_options['relationships']['uid']['table'] = 'comment';
-  $handler->display->display_options['relationships']['uid']['field'] = 'uid';
-  /* Relationship: User: Relation: Contact (user -&gt; crm_core_contact) */
-  $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['id'] = 'relation_crm_user_sync_crm_core_contact';
-  $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['table'] = 'users';
-  $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['field'] = 'relation_crm_user_sync_crm_core_contact';
-  $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['relationship'] = 'uid';
-  $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['r_index'] = '-1';
-  $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['entity_deduplication_left'] = 0;
-  $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['entity_deduplication_right'] = 0;
-  /* Field: CRM Contact: Household name */
-  $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
-  $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name']['relationship'] = 'relation_crm_user_sync_crm_core_contact';
-  $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
-  $handler->display->display_options['fields']['contact_name']['settings'] = array(
-    'format' => 'default',
-    'markup' => 0,
-    'output' => 'default',
-    'multiple' => 'default',
-    'multiple_delimiter' => ', ',
-    'multiple_and' => 'text',
-    'multiple_delimiter_precedes_last' => 'never',
-    'multiple_el_al_min' => '3',
-    'multiple_el_al_first' => '1',
-  );
-  $handler->display->display_options['fields']['contact_name']['group_column'] = 'entity_id';
-  /* Field: COUNT(DISTINCT Comment: ID) */
-  $handler->display->display_options['fields']['cid']['id'] = 'cid';
-  $handler->display->display_options['fields']['cid']['table'] = 'comment';
-  $handler->display->display_options['fields']['cid']['field'] = 'cid';
-  $handler->display->display_options['fields']['cid']['group_type'] = 'count_distinct';
-  /* Sort criterion: Comment: Post date */
-  $handler->display->display_options['sorts']['created']['id'] = 'created';
-  $handler->display->display_options['sorts']['created']['table'] = 'comment';
-  $handler->display->display_options['sorts']['created']['field'] = 'created';
-  $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Filter criterion: Comment: Approved */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'comment';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = 1;
-  $handler->display->display_options['filters']['status']['group'] = 1;
-  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: Content: Published */
-  $handler->display->display_options['filters']['status_node']['id'] = 'status_node';
-  $handler->display->display_options['filters']['status_node']['table'] = 'node';
-  $handler->display->display_options['filters']['status_node']['field'] = 'status';
-  $handler->display->display_options['filters']['status_node']['relationship'] = 'nid';
-  $handler->display->display_options['filters']['status_node']['value'] = 1;
-  $handler->display->display_options['filters']['status_node']['group'] = 1;
-  $handler->display->display_options['filters']['status_node']['expose']['operator'] = FALSE;
-
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'crm-core-blog-commenters';
-  $export['crm_core_blog_commenters'] = $view;
 
   return $export;
 }
