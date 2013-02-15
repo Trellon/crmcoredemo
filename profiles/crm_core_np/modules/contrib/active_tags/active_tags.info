@@ -1,0 +1,14 @@
+
+name = Active Tags
+description = Enhanced tag widget for free tagging vocabularies.
+dependencies[] = taxonomy
+dependencies[] = field
+package = User interface
+core = 7.x
+
+; Information added by drupal.org packaging script on 2011-09-29
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "active_tags"
+datestamp = "1317254520"
+

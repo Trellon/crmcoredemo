@@ -1,0 +1,149 @@
+<?php
+
+/**
+ * @file
+ *  Active Tags widget for free tagging taxonomies
+ */
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function active_tags_field_widget_info() {
+  return array(
+    'active_tags_taxonomy_autocomplete' => array(
+      'label' => t('Active Tags autocomplete term widget (tagging)'),
+      'field types' => array('taxonomy_term_reference'),
+      'settings' => array(
+        'size' => 60,
+        'autocomplete_path' => 'taxonomy/autocomplete',
+        'mode' => 'single',
+      ),
+      'behaviors' => array(
+        'multiple values' => FIELD_BEHAVIOR_CUSTOM,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function active_tags_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $settings = $instance['widget']['settings'];
+
+  $tags = array();
+  foreach ($items as $item) {
+    $tags[$item['tid']] = isset($item['taxonomy_term']) ? $item['taxonomy_term'] : taxonomy_term_load($item['tid']);
+  }
+
+  $element += array(
+    '#type' => 'item',
+    '#markup' => '',
+    '#element_validate' => array('active_tags_taxonomy_autocomplete_validate'),
+  );
+  $element['field_terms'] = array(
+    '#markup' => theme('active_tags_term_list_remove', array('terms' => $tags)),
+  );
+  $element['term_entry'] = array(
+    '#type' => 'textfield',
+    '#default_value' => '',
+    '#autocomplete_path' => $settings['autocomplete_path'] . '/' . $field['field_name'],
+    '#size' => $settings['size'],
+    '#maxlength' => 1024,
+    '#attributes' => array('class' => array('at-term-entry')),
+    '#theme_wrappers' => array(),
+  );
+  $element['add_button'] = array(
+    '#type' => 'button',
+    '#value' => t('Add'),
+    '#attributes' => array('class' => array('at-add-btn')),
+  );
+  $element['terms'] = array(
+    '#type' => 'hidden',
+    '#default_value' => taxonomy_implode_tags($tags),
+    '#size' => $settings['size'],
+    '#maxlength' => 1024,
+    //'#element_validate' => array('active_tags_taxonomy_autocomplete_validate'),
+    '#attributes' => array('class' => array('at-terms')),
+    '#theme_wrappers' => array(),
+  );
+
+  drupal_add_css(drupal_get_path('module', 'active_tags') . '/active_tags.css');
+  drupal_add_js(array('activeTags' => array('mode' => $settings['mode'])), 'setting');
+  drupal_add_js(drupal_get_path('module', 'active_tags') . '/active_tags.js');
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_widget_error().
+ */
+function active_tags_field_widget_error($element, $error, $form, &$form_state) {
+  form_error($element, $error['message']);
+}
+
+function active_tags_taxonomy_autocomplete_validate($element, &$form_state) {
+  $element['#value'] = $element['terms']['#value'];
+  taxonomy_autocomplete_validate($element, $form_state);
+}
+
+/**
+ * Implements hook_field_widget_settings_form().
+ */
+function active_tags_field_widget_settings_form($field, $instance) {
+  $widget = $instance['widget'];
+  $settings = $widget['settings'];
+
+  $options = array(
+    'single' => t('Single mode: Include commas in tag'),
+    'csv'  => t('CSV mode: Multiple tags with comma seperation'),
+  );
+
+  $form['mode'] = array(
+    '#type' => 'radios',
+    '#title' => t('Entry mode'),
+    '#default_value' => isset($settings['mode']) ? $settings['mode'] : 'single',
+    '#options' => $options,
+    '#required' => TRUE,
+  );
+
+  return $form;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function active_tags_theme($existing, $type, $theme, $path) {
+  return array(
+    'active_tags_term_list_remove' => array(
+      'variables' => array('terms' => NULL),
+    ),
+    'active_tags_term_list_add' => array(
+      'variables' => array('terms' => NULL),
+    ),
+  );
+}
+
+/**
+ * Theme a list of taxonomy terms with remove action.
+ */
+function theme_active_tags_term_list_remove($variables) {
+  $output = '<div class="at-term-list">';
+  foreach ($variables['terms'] as $term) {
+    // @todo add field level id for div id to prevent collisions.
+    $output .= '<div id="at-term-' . $term->tid . '" class="at-term at-term-remove"><span class="at-term-text">' . $term->name . '</span><span class="at-term-action-remove">x</span></div> ';
+  }
+  $output .= '</div>';
+  return $output;
+}
+
+/**
+ * Theme a list of taxonomy terms with add action.
+ */
+function theme_active_tags_term_list_add($variables) {
+  $output = '';
+  foreach ($variables['terms'] as $term) {
+    $output .= '<div id="at-term-' . $term->tid . '" class="at-term at-term-add"><span class="at-term-text">' . $term->name . '</span><span class="at-term-action-add">x</span></div> ';
+  }
+  return $output;
+}
