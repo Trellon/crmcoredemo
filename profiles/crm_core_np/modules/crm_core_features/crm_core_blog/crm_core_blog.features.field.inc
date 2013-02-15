@@ -229,13 +229,14 @@ function crm_core_blog_field_default_fields() {
         'user_register_form' => FALSE,
       ),
       'widget' => array(
-        'active' => 0,
-        'module' => 'taxonomy',
+        'active' => 1,
+        'module' => 'active_tags',
         'settings' => array(
           'autocomplete_path' => 'taxonomy/autocomplete',
+          'mode' => 'csv',
           'size' => 60,
         ),
-        'type' => 'taxonomy_autocomplete',
+        'type' => 'active_tags_taxonomy_autocomplete',
         'weight' => '1',
       ),
     ),

@@ -5,6 +5,7 @@ package = CRM Core
 php = 5.2.4
 version = 7.x-1.0
 project = crm_core_blog
+dependencies[] = active_tags
 dependencies[] = context
 dependencies[] = ctools
 dependencies[] = features
