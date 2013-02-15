@@ -70,7 +70,7 @@ function crm_core_demo_settings_views_default_views() {
   $handler->display->display_options['fields']['field_geopoints']['settings'] = array(
     'data' => 'full',
   );
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
@@ -349,7 +349,7 @@ function crm_core_demo_settings_views_default_views() {
   $handler->display->display_options['fields']['name']['exclude'] = TRUE;
   $handler->display->display_options['fields']['name']['empty'] = 'No user account';
   $handler->display->display_options['fields']['name']['link_to_user'] = FALSE;
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['entity_id']['id'] = 'entity_id';
   $handler->display->display_options['fields']['entity_id']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['entity_id']['field'] = 'contact_name';
@@ -369,7 +369,7 @@ function crm_core_demo_settings_views_default_views() {
     'multiple_el_al_min' => '3',
     'multiple_el_al_first' => '1',
   );
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
@@ -416,7 +416,6 @@ function crm_core_demo_settings_views_default_views() {
   $handler->display->display_options['fields']['created']['label'] = 'Added';
   $handler->display->display_options['fields']['created']['empty'] = '---';
   $handler->display->display_options['fields']['created']['date_format'] = 'date_format_slim';
-  $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
   /* Field: User: Uid */
   $handler->display->display_options['fields']['uid']['id'] = 'uid';
   $handler->display->display_options['fields']['uid']['table'] = 'users';
@@ -436,18 +435,17 @@ function crm_core_demo_settings_views_default_views() {
   $handler->display->display_options['fields']['access']['relationship'] = 'relation_crm_user_sync_user';
   $handler->display->display_options['fields']['access']['empty'] = '---';
   $handler->display->display_options['fields']['access']['date_format'] = 'date_format_slim';
-  $handler->display->display_options['fields']['access']['format_date_sql'] = 0;
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
   $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['label'] = 'Actions';
   $handler->display->display_options['fields']['nothing']['alter']['text'] = '<A href="contact/[contact_id]/activity">Activity</a> | <a href="contact/[contact_id]/relationships">Relationships</a> | <A href="contact/[contact_id]/edit">Edit</a> | <a href="contact/[contact_id]/delete">Delete</a>';
-  /* Sort criterion: CRM Contact: Household name (contact_name:family) */
+  /* Sort criterion: CRM Contact: Organization name (contact_name:family) */
   $handler->display->display_options['sorts']['contact_name_family']['id'] = 'contact_name_family';
   $handler->display->display_options['sorts']['contact_name_family']['table'] = 'field_data_contact_name';
   $handler->display->display_options['sorts']['contact_name_family']['field'] = 'contact_name_family';
-  /* Sort criterion: CRM Contact: Household name (contact_name:given) */
+  /* Sort criterion: CRM Contact: Organization name (contact_name:given) */
   $handler->display->display_options['sorts']['contact_name_given']['id'] = 'contact_name_given';
   $handler->display->display_options['sorts']['contact_name_given']['table'] = 'field_data_contact_name';
   $handler->display->display_options['sorts']['contact_name_given']['field'] = 'contact_name_given';
@@ -473,7 +471,7 @@ function crm_core_demo_settings_views_default_views() {
   $handler->display->display_options['filters']['type']['expose']['label'] = 'Contact Type';
   $handler->display->display_options['filters']['type']['expose']['operator'] = 'type_op';
   $handler->display->display_options['filters']['type']['expose']['identifier'] = 'type';
-  /* Filter criterion: CRM Contact: Household name */
+  /* Filter criterion: CRM Contact: Organization name */
   $handler->display->display_options['filters']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['filters']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['filters']['contact_name']['field'] = 'contact_name';
@@ -641,6 +639,13 @@ function crm_core_demo_settings_views_default_views() {
       'override_label' => 0,
       'label' => '',
     ),
+    'rules_component::crm_core_mail_send' => array(
+      'selected' => 1,
+      'use_queue' => 0,
+      'skip_confirmation' => 1,
+      'override_label' => 1,
+      'label' => 'Send email to the contact',
+    ),
   );
   /* Field: CRM Contact: Contact Type */
   $handler->display->display_options['fields']['type']['id'] = 'type';
@@ -654,7 +659,7 @@ function crm_core_demo_settings_views_default_views() {
   $handler->display->display_options['fields']['contact_id']['field'] = 'contact_id';
   $handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
   $handler->display->display_options['fields']['contact_id']['link_to_contact'] = 0;
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['entity_id']['id'] = 'entity_id';
   $handler->display->display_options['fields']['entity_id']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['entity_id']['field'] = 'contact_name';
@@ -705,7 +710,7 @@ function crm_core_demo_settings_views_default_views() {
   $handler->display->display_options['filters']['type']['expose']['label'] = 'Contact Type';
   $handler->display->display_options['filters']['type']['expose']['operator'] = 'type_op';
   $handler->display->display_options['filters']['type']['expose']['identifier'] = 'type';
-  /* Filter criterion: CRM Contact: Household name */
+  /* Filter criterion: CRM Contact: Organization name */
   $handler->display->display_options['filters']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['filters']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['filters']['contact_name']['field'] = 'contact_name';
@@ -770,7 +775,7 @@ function crm_core_demo_settings_views_default_views() {
   $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
   $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
   $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';

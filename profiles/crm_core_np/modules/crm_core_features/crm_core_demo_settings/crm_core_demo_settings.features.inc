@@ -17,7 +17,8 @@ function crm_core_demo_settings_default_crm_core_contact_type() {
     "description" : "A collection of individuals generally located at the same residence.",
     "custom" : "0",
     "disabled" : "0",
-    "locked" : "1"
+    "locked" : "1",
+    "rdf_mapping" : [  ]
   }');
   $items['individual'] = entity_import('crm_core_contact_type', '{
     "type" : "individual",
@@ -27,7 +28,8 @@ function crm_core_demo_settings_default_crm_core_contact_type() {
     "description" : "A single individual.",
     "custom" : "0",
     "disabled" : "0",
-    "locked" : "1"
+    "locked" : "1",
+    "rdf_mapping" : [  ]
   }');
   $items['organization'] = entity_import('crm_core_contact_type', '{
     "type" : "organization",
@@ -37,7 +39,8 @@ function crm_core_demo_settings_default_crm_core_contact_type() {
     "description" : "A collection of individuals or other organizations that has additional contact data.",
     "custom" : "0",
     "disabled" : "0",
-    "locked" : "1"
+    "locked" : "1",
+    "rdf_mapping" : [  ]
   }');
   return $items;
 }
