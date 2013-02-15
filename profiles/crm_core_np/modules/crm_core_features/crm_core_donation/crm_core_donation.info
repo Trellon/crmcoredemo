@@ -53,7 +53,6 @@ features[variable][] = crm_core_donation_imo_message
 features[variable][] = crm_core_donation_pdp
 features[variable][] = crm_core_donation_profile
 features[variable][] = crm_core_donation_redirect_message
-features[views_view][] = crm_core_donation_lybunt_report
 features[views_view][] = crm_core_donation_pages
 features[views_view][] = crm_core_donation_pages_alt
 features[views_view][] = crm_core_donation_sybunt_report

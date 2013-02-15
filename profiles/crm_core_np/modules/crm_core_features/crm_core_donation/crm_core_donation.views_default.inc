@@ -11,142 +11,6 @@ function crm_core_donation_views_default_views() {
   $export = array();
 
   $view = new view();
-  $view->name = 'crm_core_donation_lybunt_report';
-  $view->description = 'Standard LYBUNT report for CRM Core Donations';
-  $view->tag = 'default';
-  $view->base_table = 'crm_core_contact';
-  $view->human_name = 'CRM Core Donation LYBUNT Report';
-  $view->core = 7;
-  $view->api_version = '3.0';
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-
-  /* Display: Master */
-  $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'LYBUNT';
-  $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['group_by'] = TRUE;
-  $handler->display->display_options['access']['type'] = 'none';
-  $handler->display->display_options['cache']['type'] = 'none';
-  $handler->display->display_options['query']['type'] = 'views_query';
-  $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '50';
-  $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['pager']['options']['id'] = '0';
-  $handler->display->display_options['pager']['options']['quantity'] = '9';
-  $handler->display->display_options['style_plugin'] = 'table';
-  /* Header: Global: Text area */
-  $handler->display->display_options['header']['area']['id'] = 'area';
-  $handler->display->display_options['header']['area']['table'] = 'views';
-  $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = 'List of donors who donated last year but not this year.';
-  $handler->display->display_options['header']['area']['format'] = 'filtered_html';
-  /* No results behavior: Global: Text area */
-  $handler->display->display_options['empty']['area']['id'] = 'area';
-  $handler->display->display_options['empty']['area']['table'] = 'views';
-  $handler->display->display_options['empty']['area']['field'] = 'area';
-  $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = 'No results found. Either you don\'t have many donations, or your donors are really committed.';
-  $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
-  /* Relationship: Entity Reference: Referencing entity */
-  $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity']['id'] = 'reverse_field_activity_participants_crm_core_activity';
-  $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity']['table'] = 'crm_core_contact';
-  $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity']['field'] = 'reverse_field_activity_participants_crm_core_activity';
-  /* Relationship: Entity Reference: Referencing entity */
-  $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity_1']['id'] = 'reverse_field_activity_participants_crm_core_activity_1';
-  $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity_1']['table'] = 'crm_core_contact';
-  $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity_1']['field'] = 'reverse_field_activity_participants_crm_core_activity';
-  $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity_1']['label'] = 'CRM Activity Reference 2, to give us maximum amounts';
-  /* Field: CRM Contact: Household name */
-  $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
-  $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name']['label'] = 'Name';
-  $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
-  $handler->display->display_options['fields']['contact_name']['settings'] = array(
-    'format' => 'default',
-    'markup' => 0,
-    'output' => 'default',
-    'multiple' => 'default',
-    'multiple_delimiter' => ', ',
-    'multiple_and' => 'text',
-    'multiple_delimiter_precedes_last' => 'never',
-    'multiple_el_al_min' => '3',
-    'multiple_el_al_first' => '1',
-  );
-  $handler->display->display_options['fields']['contact_name']['group_column'] = 'entity_id';
-  /* Field: SUM(CRM Activity: Amount) */
-  $handler->display->display_options['fields']['field_donation_amounts']['id'] = 'field_donation_amounts';
-  $handler->display->display_options['fields']['field_donation_amounts']['table'] = 'field_data_field_donation_amounts';
-  $handler->display->display_options['fields']['field_donation_amounts']['field'] = 'field_donation_amounts';
-  $handler->display->display_options['fields']['field_donation_amounts']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
-  $handler->display->display_options['fields']['field_donation_amounts']['group_type'] = 'sum';
-  $handler->display->display_options['fields']['field_donation_amounts']['label'] = 'Total';
-  $handler->display->display_options['fields']['field_donation_amounts']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_donation_amounts']['alter']['text'] = '$[field_donation_amounts]';
-  $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
-    'thousand_separator' => ',',
-    'prefix_suffix' => 1,
-  );
-  /* Field: MAX(CRM Activity: Date created) */
-  $handler->display->display_options['fields']['created']['id'] = 'created';
-  $handler->display->display_options['fields']['created']['table'] = 'crm_core_activity';
-  $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
-  $handler->display->display_options['fields']['created']['group_type'] = 'max';
-  $handler->display->display_options['fields']['created']['label'] = 'Last Donation Date';
-  $handler->display->display_options['fields']['created']['date_format'] = 'date_format_slim';
-  $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
-  /* Field: CRM Contact: Contact ID */
-  $handler->display->display_options['fields']['contact_id']['id'] = 'contact_id';
-  $handler->display->display_options['fields']['contact_id']['table'] = 'crm_core_contact';
-  $handler->display->display_options['fields']['contact_id']['field'] = 'contact_id';
-  $handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['contact_id']['link_to_contact'] = 0;
-  /* Field: MAX(CRM Activity: Date created) */
-  $handler->display->display_options['fields']['created_1']['id'] = 'created_1';
-  $handler->display->display_options['fields']['created_1']['table'] = 'crm_core_activity';
-  $handler->display->display_options['fields']['created_1']['field'] = 'created';
-  $handler->display->display_options['fields']['created_1']['relationship'] = 'reverse_field_activity_participants_crm_core_activity_1';
-  $handler->display->display_options['fields']['created_1']['group_type'] = 'max';
-  $handler->display->display_options['fields']['created_1']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['created_1']['date_format'] = 'date_format_slim';
-  $handler->display->display_options['fields']['created_1']['format_date_sql'] = 0;
-  /* Filter criterion: CRM Contact: Contact Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'crm_core_contact';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'individual' => 'individual',
-  );
-  /* Filter criterion: CRM Activity: Type */
-  $handler->display->display_options['filters']['type_1']['id'] = 'type_1';
-  $handler->display->display_options['filters']['type_1']['table'] = 'crm_core_activity';
-  $handler->display->display_options['filters']['type_1']['field'] = 'type';
-  $handler->display->display_options['filters']['type_1']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
-  $handler->display->display_options['filters']['type_1']['value'] = array(
-    'donation' => 'donation',
-  );
-  /* Filter criterion: CRM Activity: Date created */
-  $handler->display->display_options['filters']['created']['id'] = 'created';
-  $handler->display->display_options['filters']['created']['table'] = 'crm_core_activity';
-  $handler->display->display_options['filters']['created']['field'] = 'created';
-  $handler->display->display_options['filters']['created']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
-  $handler->display->display_options['filters']['created']['operator'] = '<';
-  $handler->display->display_options['filters']['created']['value']['value'] = '-1 year';
-  $handler->display->display_options['filters']['created']['value']['type'] = 'offset';
-
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'crm/reports/donors/lybunt';
-  $handler->display->display_options['menu']['type'] = 'tab';
-  $handler->display->display_options['menu']['title'] = 'LYBUNT';
-  $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['context'] = 0;
-  $export['crm_core_donation_lybunt_report'] = $view;
-
-  $view = new view();
   $view->name = 'crm_core_donation_pages';
   $view->description = 'Displays a list of donation pages';
   $view->tag = 'default';
@@ -473,10 +337,10 @@ function crm_core_donation_views_default_views() {
 
   $view = new view();
   $view->name = 'crm_core_donation_sybunt_report';
-  $view->description = 'Standard LYBUNT report for CRM Core Donations';
+  $view->description = 'Standard LYBUNT/SYBUNT reports for CRM Core Donations';
   $view->tag = 'default';
   $view->base_table = 'crm_core_contact';
-  $view->human_name = 'CRM Core Donation SYBUNT Report';
+  $view->human_name = 'CRM Core Donation LYBUNT/SYBUNT Reports';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
@@ -489,6 +353,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['access']['type'] = 'none';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['distinct'] = TRUE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '50';
@@ -502,6 +367,10 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['header']['area']['field'] = 'area';
   $handler->display->display_options['header']['area']['content'] = 'List of donors who donated last year but not this year.';
   $handler->display->display_options['header']['area']['format'] = 'filtered_html';
+  /* Header: Global: Result summary */
+  $handler->display->display_options['header']['result']['id'] = 'result';
+  $handler->display->display_options['header']['result']['table'] = 'views';
+  $handler->display->display_options['header']['result']['field'] = 'result';
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
   $handler->display->display_options['empty']['area']['table'] = 'views';
@@ -513,16 +382,18 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity']['id'] = 'reverse_field_activity_participants_crm_core_activity';
   $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity']['table'] = 'crm_core_contact';
   $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity']['field'] = 'reverse_field_activity_participants_crm_core_activity';
-  /* Relationship: Entity Reference: Referencing entity */
-  $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity_1']['id'] = 'reverse_field_activity_participants_crm_core_activity_1';
-  $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity_1']['table'] = 'crm_core_contact';
-  $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity_1']['field'] = 'reverse_field_activity_participants_crm_core_activity';
-  $handler->display->display_options['relationships']['reverse_field_activity_participants_crm_core_activity_1']['label'] = 'CRM Activity Reference 2, to give us maximum amounts';
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Contact ID */
+  $handler->display->display_options['fields']['contact_id']['id'] = 'contact_id';
+  $handler->display->display_options['fields']['contact_id']['table'] = 'crm_core_contact';
+  $handler->display->display_options['fields']['contact_id']['field'] = 'contact_id';
+  $handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['contact_id']['link_to_contact'] = 0;
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['label'] = 'Name';
+  $handler->display->display_options['fields']['contact_name']['element_type'] = 'strong';
   $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
   $handler->display->display_options['fields']['contact_name']['settings'] = array(
     'format' => 'default',
@@ -545,34 +416,55 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['field_donation_amounts']['label'] = 'Total';
   $handler->display->display_options['fields']['field_donation_amounts']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['field_donation_amounts']['alter']['text'] = '$[field_donation_amounts]';
+  $handler->display->display_options['fields']['field_donation_amounts']['element_class'] = 'pill';
   $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
     'thousand_separator' => ',',
     'prefix_suffix' => 1,
   );
-  /* Field: MAX(CRM Activity: Date created) */
-  $handler->display->display_options['fields']['created']['id'] = 'created';
-  $handler->display->display_options['fields']['created']['table'] = 'crm_core_activity';
-  $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
-  $handler->display->display_options['fields']['created']['group_type'] = 'max';
-  $handler->display->display_options['fields']['created']['label'] = 'Last Donation Date';
-  $handler->display->display_options['fields']['created']['date_format'] = 'date_format_slim';
-  $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
-  /* Field: CRM Contact: Contact ID */
-  $handler->display->display_options['fields']['contact_id']['id'] = 'contact_id';
-  $handler->display->display_options['fields']['contact_id']['table'] = 'crm_core_contact';
-  $handler->display->display_options['fields']['contact_id']['field'] = 'contact_id';
-  $handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['contact_id']['link_to_contact'] = 0;
-  /* Field: MAX(CRM Activity: Date created) */
-  $handler->display->display_options['fields']['created_1']['id'] = 'created_1';
-  $handler->display->display_options['fields']['created_1']['table'] = 'crm_core_activity';
-  $handler->display->display_options['fields']['created_1']['field'] = 'created';
-  $handler->display->display_options['fields']['created_1']['relationship'] = 'reverse_field_activity_participants_crm_core_activity_1';
-  $handler->display->display_options['fields']['created_1']['group_type'] = 'max';
-  $handler->display->display_options['fields']['created_1']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['created_1']['date_format'] = 'date_format_slim';
-  $handler->display->display_options['fields']['created_1']['format_date_sql'] = 0;
+  /* Field: MAX(CRM Activity: Received Date) */
+  $handler->display->display_options['fields']['field_donation_receive_date']['id'] = 'field_donation_receive_date';
+  $handler->display->display_options['fields']['field_donation_receive_date']['table'] = 'field_data_field_donation_receive_date';
+  $handler->display->display_options['fields']['field_donation_receive_date']['field'] = 'field_donation_receive_date';
+  $handler->display->display_options['fields']['field_donation_receive_date']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
+  $handler->display->display_options['fields']['field_donation_receive_date']['group_type'] = 'max';
+  $handler->display->display_options['fields']['field_donation_receive_date']['label'] = 'Last Donation Date';
+  $handler->display->display_options['fields']['field_donation_receive_date']['settings'] = array(
+    'format_type' => 'date_format_slim',
+    'fromto' => '',
+    'multiple_number' => '',
+    'multiple_from' => '',
+    'multiple_to' => '',
+  );
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = 'View Contact';
+  $handler->display->display_options['fields']['nothing']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = 'View Contact';
+  $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'crm/contact/[contact_id]';
+  $handler->display->display_options['fields']['nothing']['alter']['absolute'] = TRUE;
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
+  $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_1']['label'] = 'Activities';
+  $handler->display->display_options['fields']['nothing_1']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['nothing_1']['alter']['text'] = 'View Activities';
+  $handler->display->display_options['fields']['nothing_1']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'crm/contact/[contact_id]/activity';
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing_2']['id'] = 'nothing_2';
+  $handler->display->display_options['fields']['nothing_2']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing_2']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_2']['label'] = 'Operations';
+  $handler->display->display_options['fields']['nothing_2']['alter']['text'] = '[nothing] | [nothing_1]';
+  /* Sort criterion: CRM Activity: Received Date (field_donation_receive_date) */
+  $handler->display->display_options['sorts']['field_donation_receive_date_value']['id'] = 'field_donation_receive_date_value';
+  $handler->display->display_options['sorts']['field_donation_receive_date_value']['table'] = 'field_data_field_donation_receive_date';
+  $handler->display->display_options['sorts']['field_donation_receive_date_value']['field'] = 'field_donation_receive_date_value';
+  $handler->display->display_options['sorts']['field_donation_receive_date_value']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
   /* Filter criterion: CRM Contact: Contact Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'crm_core_contact';
@@ -588,31 +480,33 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['filters']['type_1']['value'] = array(
     'donation' => 'donation',
   );
-  /* Filter criterion: CRM Activity: Date created */
-  $handler->display->display_options['filters']['created']['id'] = 'created';
-  $handler->display->display_options['filters']['created']['table'] = 'crm_core_activity';
-  $handler->display->display_options['filters']['created']['field'] = 'created';
-  $handler->display->display_options['filters']['created']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
-  $handler->display->display_options['filters']['created']['operator'] = '<';
-  $handler->display->display_options['filters']['created']['value']['value'] = '-1 year';
-  $handler->display->display_options['filters']['created']['value']['type'] = 'offset';
-  /* Filter criterion: CRM Activity: Date created */
-  $handler->display->display_options['filters']['created_1']['id'] = 'created_1';
-  $handler->display->display_options['filters']['created_1']['table'] = 'crm_core_activity';
-  $handler->display->display_options['filters']['created_1']['field'] = 'created';
-  $handler->display->display_options['filters']['created_1']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
-  $handler->display->display_options['filters']['created_1']['operator'] = '>';
-  $handler->display->display_options['filters']['created_1']['value']['value'] = '-2 years';
-  $handler->display->display_options['filters']['created_1']['value']['type'] = 'offset';
+  /* Filter criterion: CRM Activity: Received Date (field_donation_receive_date) */
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['id'] = 'field_donation_receive_date_value';
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['table'] = 'field_data_field_donation_receive_date';
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['field'] = 'field_donation_receive_date_value';
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['operator'] = '<';
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['default_date'] = '-1 year';
+  /* Filter criterion: CRM Activity: Received Date (field_donation_receive_date) */
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['id'] = 'field_donation_receive_date_value_1';
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['table'] = 'field_data_field_donation_receive_date';
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['field'] = 'field_donation_receive_date_value';
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['operator'] = '>';
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['default_date'] = '-2 year';
 
   /* Display: Page - LYBUNT */
-  $handler = $view->new_display('page', 'Page - LYBUNT', 'page');
+  $handler = $view->new_display('page', 'Page - LYBUNT', 'lybunt');
   $handler->display->display_options['display_description'] = 'Display of the LYBUNT report.';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'crm/reports/lybunt';
+  $handler->display->display_options['path'] = 'crm/reports/donors/lybunt';
+  $handler->display->display_options['menu']['type'] = 'tab';
+  $handler->display->display_options['menu']['title'] = 'LYBUNT';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
 
   /* Display: Page - SYBUNT */
-  $handler = $view->new_display('page', 'Page - SYBUNT', 'page_1');
+  $handler = $view->new_display('page', 'Page - SYBUNT', 'sybunt');
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'SYBUNT';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
@@ -623,6 +517,10 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['header']['area']['field'] = 'area';
   $handler->display->display_options['header']['area']['content'] = 'List of donors who donated some year but not this year.';
   $handler->display->display_options['header']['area']['format'] = 'filtered_html';
+  /* Header: Global: Result summary */
+  $handler->display->display_options['header']['result']['id'] = 'result';
+  $handler->display->display_options['header']['result']['table'] = 'views';
+  $handler->display->display_options['header']['result']['field'] = 'result';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
   /* Filter criterion: CRM Contact: Contact Type */
@@ -640,14 +538,14 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['filters']['type_1']['value'] = array(
     'donation' => 'donation',
   );
-  /* Filter criterion: CRM Activity: Date created */
-  $handler->display->display_options['filters']['created']['id'] = 'created';
-  $handler->display->display_options['filters']['created']['table'] = 'crm_core_activity';
-  $handler->display->display_options['filters']['created']['field'] = 'created';
-  $handler->display->display_options['filters']['created']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
-  $handler->display->display_options['filters']['created']['operator'] = '<';
-  $handler->display->display_options['filters']['created']['value']['value'] = '-1 year';
-  $handler->display->display_options['filters']['created']['value']['type'] = 'offset';
+  /* Filter criterion: CRM Activity: Received Date (field_donation_receive_date) */
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['id'] = 'field_donation_receive_date_value';
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['table'] = 'field_data_field_donation_receive_date';
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['field'] = 'field_donation_receive_date_value';
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['operator'] = '<';
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['default_date'] = '-2 year';
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['year_range'] = '-10:+0';
   $handler->display->display_options['path'] = 'crm/reports/donors/sybunt';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'SYBUNT';
@@ -978,7 +876,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['contact_id']['relationship'] = 'field_activity_participants_target_id';
   $handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
   $handler->display->display_options['fields']['contact_id']['link_to_contact'] = 0;
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
@@ -997,7 +895,7 @@ function crm_core_donation_views_default_views() {
     'multiple_el_al_first' => '1',
   );
   $handler->display->display_options['fields']['contact_name']['group_column'] = 'entity_id';
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['contact_name_1']['id'] = 'contact_name_1';
   $handler->display->display_options['fields']['contact_name_1']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name_1']['field'] = 'contact_name';
@@ -1141,7 +1039,7 @@ function crm_core_donation_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
@@ -1330,7 +1228,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['created']['label'] = 'Date';
   $handler->display->display_options['fields']['created']['date_format'] = 'long';
   $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
@@ -1471,7 +1369,7 @@ function crm_core_donation_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';

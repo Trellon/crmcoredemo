@@ -1612,8 +1612,9 @@ function crm_core_donation_views_pre_render(&$view) {
  * Hack to address issues with filters on donation reports, does some comparisons between dates
  */
 function crm_core_donation_preprocess_views_view__crm_core_donation_sybunt_report($view){
-  
-  
+  // TODO: This hack currently doesn't work. We must discover better way to filter out peoples that did donation
+  // in current year(e.g. less than 365 days from now).
+
   // LYBUNT views adjustment
   if($view->current_display == 'page_1'){
       
