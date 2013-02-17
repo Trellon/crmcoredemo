@@ -1254,14 +1254,32 @@ function crm_core_donation_views_default_views() {
     'multiple_to' => '',
   );
   /* Field: CRM Contact: Organization name */
-  $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
-  $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name']['relationship'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['fields']['contact_name']['label'] = 'Donor';
-  $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
-  $handler->display->display_options['fields']['contact_name']['settings'] = array(
-    'format' => 'default',
+  $handler->display->display_options['fields']['contact_name_2']['id'] = 'contact_name_2';
+  $handler->display->display_options['fields']['contact_name_2']['table'] = 'field_data_contact_name';
+  $handler->display->display_options['fields']['contact_name_2']['field'] = 'contact_name';
+  $handler->display->display_options['fields']['contact_name_2']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['contact_name_2']['label'] = 'First Name';
+  $handler->display->display_options['fields']['contact_name_2']['click_sort_column'] = 'title';
+  $handler->display->display_options['fields']['contact_name_2']['settings'] = array(
+    'format' => 'given',
+    'markup' => 0,
+    'output' => 'default',
+    'multiple' => 'default',
+    'multiple_delimiter' => ', ',
+    'multiple_and' => 'text',
+    'multiple_delimiter_precedes_last' => 'never',
+    'multiple_el_al_min' => '3',
+    'multiple_el_al_first' => '1',
+  );
+  /* Field: CRM Contact: Organization name */
+  $handler->display->display_options['fields']['contact_name_1']['id'] = 'contact_name_1';
+  $handler->display->display_options['fields']['contact_name_1']['table'] = 'field_data_contact_name';
+  $handler->display->display_options['fields']['contact_name_1']['field'] = 'contact_name';
+  $handler->display->display_options['fields']['contact_name_1']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['contact_name_1']['label'] = 'Last Name';
+  $handler->display->display_options['fields']['contact_name_1']['click_sort_column'] = 'title';
+  $handler->display->display_options['fields']['contact_name_1']['settings'] = array(
+    'format' => 'family',
     'markup' => 0,
     'output' => 'default',
     'multiple' => 'default',
@@ -1276,9 +1294,86 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['field_billing_address']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['field'] = 'field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['relationship'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['fields']['field_billing_address']['label'] = 'Address';
+  $handler->display->display_options['fields']['field_billing_address']['label'] = 'Country';
+  $handler->display->display_options['fields']['field_billing_address']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_billing_address']['alter']['text'] = '[field_billing_address-country]';
   $handler->display->display_options['fields']['field_billing_address']['click_sort_column'] = 'country';
   $handler->display->display_options['fields']['field_billing_address']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  /* Field: CRM Contact: Billing Address */
+  $handler->display->display_options['fields']['field_billing_address_1']['id'] = 'field_billing_address_1';
+  $handler->display->display_options['fields']['field_billing_address_1']['table'] = 'field_data_field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_1']['field'] = 'field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_1']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['field_billing_address_1']['label'] = 'Administrative Area';
+  $handler->display->display_options['fields']['field_billing_address_1']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_billing_address_1']['alter']['text'] = '[field_billing_address_1-administrative_area]';
+  $handler->display->display_options['fields']['field_billing_address_1']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_billing_address_1']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  /* Field: CRM Contact: Billing Address */
+  $handler->display->display_options['fields']['field_billing_address_2']['id'] = 'field_billing_address_2';
+  $handler->display->display_options['fields']['field_billing_address_2']['table'] = 'field_data_field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_2']['field'] = 'field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_2']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['field_billing_address_2']['label'] = 'Locality';
+  $handler->display->display_options['fields']['field_billing_address_2']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_billing_address_2']['alter']['text'] = '[field_billing_address_2-locality]';
+  $handler->display->display_options['fields']['field_billing_address_2']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_billing_address_2']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  /* Field: CRM Contact: Billing Address */
+  $handler->display->display_options['fields']['field_billing_address_5']['id'] = 'field_billing_address_5';
+  $handler->display->display_options['fields']['field_billing_address_5']['table'] = 'field_data_field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_5']['field'] = 'field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_5']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['field_billing_address_5']['label'] = 'Premise';
+  $handler->display->display_options['fields']['field_billing_address_5']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_billing_address_5']['alter']['text'] = '[field_billing_address_5-premise]';
+  $handler->display->display_options['fields']['field_billing_address_5']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_billing_address_5']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  /* Field: CRM Contact: Billing Address */
+  $handler->display->display_options['fields']['field_billing_address_4']['id'] = 'field_billing_address_4';
+  $handler->display->display_options['fields']['field_billing_address_4']['table'] = 'field_data_field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_4']['field'] = 'field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_4']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['field_billing_address_4']['label'] = 'Thoroughfare';
+  $handler->display->display_options['fields']['field_billing_address_4']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_billing_address_4']['alter']['text'] = '[field_billing_address_4-thoroughfare]';
+  $handler->display->display_options['fields']['field_billing_address_4']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_billing_address_4']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  /* Field: CRM Contact: Billing Address */
+  $handler->display->display_options['fields']['field_billing_address_3']['id'] = 'field_billing_address_3';
+  $handler->display->display_options['fields']['field_billing_address_3']['table'] = 'field_data_field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_3']['field'] = 'field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_3']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['field_billing_address_3']['label'] = 'Postal Code';
+  $handler->display->display_options['fields']['field_billing_address_3']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_billing_address_3']['alter']['text'] = '[field_billing_address_3-postal_code]';
+  $handler->display->display_options['fields']['field_billing_address_3']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_billing_address_3']['settings'] = array(
     'use_widget_handlers' => 1,
     'format_handlers' => array(
       'address' => 'address',
