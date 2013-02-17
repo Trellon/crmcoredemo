@@ -1201,12 +1201,12 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['header']['result']['id'] = 'result';
   $handler->display->display_options['header']['result']['table'] = 'views';
   $handler->display->display_options['header']['result']['field'] = 'result';
-  $handler->display->display_options['header']['result']['content'] = 'Displaying @start - @end of @total donations stored in the system. <a href="crm/reports/donations-overview/view-all">View All</a>';
+  $handler->display->display_options['header']['result']['content'] = 'Displaying @start - @end of @total donations stored in the system. <a href="/crm/reports/donations/overview/all">View All</a>';
   /* Header: Global: Text area */
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-warning" href="/crm/reports/donations-overview/export"><i class="icon-download icon-white"></i> Export to CSV</a></div>';
+  $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-warning" href="/crm/reports/donations/overview/export/all"><i class="icon-download icon-white"></i> Export to CSV</a></div>';
   $handler->display->display_options['header']['area']['format'] = 'full_html';
   $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
@@ -1225,6 +1225,12 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'views_data_export_csv';
+  $handler->display->display_options['style_options']['provide_file'] = 1;
+  $handler->display->display_options['style_options']['parent_sort'] = 0;
+  $handler->display->display_options['style_options']['quote'] = 1;
+  $handler->display->display_options['style_options']['trim'] = 0;
+  $handler->display->display_options['style_options']['replace_newlines'] = 0;
+  $handler->display->display_options['style_options']['header'] = 1;
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: CRM Activity: Amount */
   $handler->display->display_options['fields']['field_donation_amounts']['id'] = 'field_donation_amounts';
@@ -1288,7 +1294,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['arguments']['id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['path'] = 'crm/reports/donations-overview/export/%';
+  $handler->display->display_options['path'] = 'crm/reports/donations/overview/export/%';
   $handler->display->display_options['displays'] = array(
     'default' => 0,
     'page' => 0,
@@ -1311,7 +1317,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-warning" href="/crm/reports/donations-overview/export"><i class="icon-download icon-white"></i> Export to CSV</a></div>';
+  $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-warning" href="/crm/reports/donations/overview/export/all"><i class="icon-download icon-white"></i> Export to CSV</a></div>';
   $handler->display->display_options['header']['area']['format'] = 'full_html';
   $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
