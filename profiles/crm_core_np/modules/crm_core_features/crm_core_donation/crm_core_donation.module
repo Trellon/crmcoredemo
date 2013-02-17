@@ -256,7 +256,7 @@ function crm_core_donation_block_view($delta = '') {
     foreach ($view->result as $item => $value){
       $existing_date = date('Y-m-d',$view->result[$item]->crm_core_activity_created);
       $new_date = new DateTime($existing_date, new DateTimeZone(variable_get('date_default_timezone', 0)));
-      $view->result[$item]->crm_core_activity_created = date_timestamp_get($new_date);
+      $view->result[$item]->crm_core_activity_created = $new_date->format('U');
     }
     
     // all results should be set to a specific date at this point.
