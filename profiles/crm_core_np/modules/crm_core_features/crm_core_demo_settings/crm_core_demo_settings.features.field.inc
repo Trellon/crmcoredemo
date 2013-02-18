@@ -678,7 +678,7 @@ Prof.',
       ),
       'entity_type' => 'crm_core_contact',
       'field_name' => 'field_billing_address',
-      'label' => 'Billing Address',
+      'label' => 'Home Address',
       'required' => 0,
       'settings' => array(
         'user_register_form' => FALSE,
@@ -1485,6 +1485,258 @@ Prof.',
     ),
   );
 
+  // Exported field: 'crm_core_contact-individual-field_ind_sm_fb'.
+  $fields['crm_core_contact-individual-field_ind_sm_fb'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_ind_sm_fb',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'individual',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 13,
+        ),
+      ),
+      'entity_type' => 'crm_core_contact',
+      'field_name' => 'field_ind_sm_fb',
+      'label' => 'Facebook',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '14',
+      ),
+    ),
+  );
+
+  // Exported field: 'crm_core_contact-individual-field_ind_sm_googleplus'.
+  $fields['crm_core_contact-individual-field_ind_sm_googleplus'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_ind_sm_googleplus',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'individual',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 16,
+        ),
+      ),
+      'entity_type' => 'crm_core_contact',
+      'field_name' => 'field_ind_sm_googleplus',
+      'label' => 'Google Plus',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '17',
+      ),
+    ),
+  );
+
+  // Exported field: 'crm_core_contact-individual-field_ind_sm_linkedin'.
+  $fields['crm_core_contact-individual-field_ind_sm_linkedin'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_ind_sm_linkedin',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'individual',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 15,
+        ),
+      ),
+      'entity_type' => 'crm_core_contact',
+      'field_name' => 'field_ind_sm_linkedin',
+      'label' => 'LinkedIn',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '16',
+      ),
+    ),
+  );
+
+  // Exported field: 'crm_core_contact-individual-field_ind_sm_twitter'.
+  $fields['crm_core_contact-individual-field_ind_sm_twitter'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_ind_sm_twitter',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'individual',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 14,
+        ),
+      ),
+      'entity_type' => 'crm_core_contact',
+      'field_name' => 'field_ind_sm_twitter',
+      'label' => 'Twitter',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '15',
+      ),
+    ),
+  );
+
   // Exported field: 'crm_core_contact-individual-field_tags'.
   $fields['crm_core_contact-individual-field_tags'] = array(
     'field_config' => array(
@@ -1820,7 +2072,17 @@ Prof.',
     ),
     'field_instance' => array(
       'bundle' => 'organization',
-      'default_value' => NULL,
+      'default_value' => array(
+        0 => array(
+          'element_key' => 'crm_core_contact|organization|field_billing_address|und|0',
+          'thoroughfare' => '',
+          'premise' => '',
+          'locality' => '',
+          'administrative_area' => '',
+          'postal_code' => '',
+          'country' => 'US',
+        ),
+      ),
       'deleted' => '0',
       'description' => '',
       'display' => array(
@@ -1839,17 +2101,22 @@ Prof.',
       ),
       'entity_type' => 'crm_core_contact',
       'field_name' => 'field_billing_address',
-      'label' => 'Billing Address',
-      'required' => FALSE,
+      'label' => 'Business Address',
+      'required' => 0,
       'settings' => array(
         'user_register_form' => FALSE,
       ),
       'widget' => array(
+        'active' => 1,
         'module' => 'addressfield',
         'settings' => array(
           'available_countries' => array(),
           'format_handlers' => array(
-            0 => 'address',
+            'address' => 'address',
+            'address-hide-country' => 0,
+            'organisation' => 0,
+            'name-full' => 0,
+            'name-oneline' => 0,
           ),
         ),
         'type' => 'addressfield_standard',
@@ -1929,20 +2196,26 @@ Prof.',
   // Translatables
   // Included for use with string extractors like potx.
   t('Billing Address');
+  t('Business Address');
   t('Do not Email');
   t('Do not Mail');
   t('Do not SMS');
   t('Do not contact');
   t('Email');
+  t('Facebook');
   t('Geopoints');
+  t('Google Plus');
+  t('Home Address');
   t('Household name');
   t('Image');
   t('Indicate if a user has indicated he/she is interested in volunteering');
+  t('LinkedIn');
   t('Name');
   t('Organization name');
   t('Phone');
   t('Preferred communication method');
   t('Tags');
+  t('Twitter');
   t('Volunteer');
 
   return $fields;

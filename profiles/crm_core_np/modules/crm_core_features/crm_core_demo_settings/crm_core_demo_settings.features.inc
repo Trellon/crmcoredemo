@@ -58,6 +58,10 @@ function crm_core_demo_settings_ctools_plugin_api() {
     return array("version" => "3");
   }
   list($module, $api) = func_get_args();
+  if ($module == "field_group" && $api == "field_group") {
+    return array("version" => "1");
+  }
+  list($module, $api) = func_get_args();
   if ($module == "openlayers" && $api == "openlayers_maps") {
     return array("version" => "1");
   }

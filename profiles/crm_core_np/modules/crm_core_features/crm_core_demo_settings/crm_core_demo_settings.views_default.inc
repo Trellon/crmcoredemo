@@ -51,7 +51,7 @@ function crm_core_demo_settings_views_default_views() {
   $handler->display->display_options['fields']['contact_id']['field'] = 'contact_id';
   $handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
   $handler->display->display_options['fields']['contact_id']['link_to_contact'] = 0;
-  /* Field: CRM Contact: Billing Address */
+  /* Field: CRM Contact: Business Address */
   $handler->display->display_options['fields']['field_billing_address']['id'] = 'field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['field'] = 'field_billing_address';
@@ -390,7 +390,7 @@ function crm_core_demo_settings_views_default_views() {
     'multiple_el_al_min' => '3',
     'multiple_el_al_first' => '1',
   );
-  /* Field: CRM Contact: Billing Address */
+  /* Field: CRM Contact: Business Address */
   $handler->display->display_options['fields']['field_billing_address']['id'] = 'field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['field'] = 'field_billing_address';
@@ -678,7 +678,7 @@ function crm_core_demo_settings_views_default_views() {
     'multiple_el_al_min' => '3',
     'multiple_el_al_first' => '1',
   );
-  /* Field: CRM Contact: Billing Address */
+  /* Field: CRM Contact: Business Address */
   $handler->display->display_options['fields']['field_billing_address']['id'] = 'field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['field'] = 'field_billing_address';
