@@ -1397,6 +1397,21 @@ function crm_core_donation_views_default_views() {
     2 => '2',
     1 => 0,
   );
+  /* Filter criterion: CRM Activity: Date (field_activity_date) */
+  $handler->display->display_options['filters']['field_activity_date_value']['id'] = 'field_activity_date_value';
+  $handler->display->display_options['filters']['field_activity_date_value']['table'] = 'field_data_field_activity_date';
+  $handler->display->display_options['filters']['field_activity_date_value']['field'] = 'field_activity_date_value';
+  $handler->display->display_options['filters']['field_activity_date_value']['operator'] = 'between';
+  $handler->display->display_options['filters']['field_activity_date_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_activity_date_value']['expose']['operator_id'] = 'field_activity_date_value_op';
+  $handler->display->display_options['filters']['field_activity_date_value']['expose']['label'] = 'Date Between';
+  $handler->display->display_options['filters']['field_activity_date_value']['expose']['operator'] = 'field_activity_date_value_op';
+  $handler->display->display_options['filters']['field_activity_date_value']['expose']['identifier'] = 'field_activity_date_value';
+  $handler->display->display_options['filters']['field_activity_date_value']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+  );
+  $handler->display->display_options['filters']['field_activity_date_value']['form_type'] = 'date_popup';
 
   /* Display: Overview */
   $handler = $view->new_display('page', 'Overview', 'page');
