@@ -1823,3 +1823,20 @@ function crm_core_donation_preprocess_views_view__crm_core_donations_chart($view
   
 }
 
+/**
+ * hook_form_FORM_ID_alter implementation
+ * alter views_exposed_form form
+ */
+function crm_core_donation_form_views_exposed_form_alter (&$form , &$form_state) {
+  if ($form['#id'] == 'views-exposed-form-donations-overview-alt-page'
+  || $form['#id'] == 'views-exposed-form-donations-overview-alt-page-2') {
+    $form['field_activity_date_value']['min']['#title'] = '';
+    $form['field_activity_date_value']['min']['#size'] = 20;
+    $form['field_activity_date_value']['max']['#title'] = t('And');
+    $form['field_activity_date_value']['max']['#size'] = 20;
+
+    $form['field_donation_amounts_value']['max']['#title'] = t('And');
+    $form['field_donation_amounts_value']['max']['#size'] = 20;
+    $form['field_donation_amounts_value']['min']['#size'] = 20;
+  }
+}

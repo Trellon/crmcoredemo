@@ -209,11 +209,20 @@
 #edit-field-activity-date-value-wrapper LABEL {
   font-size: inherit;
   margin: 0em;
-  padding: 0em 1em 0em 0em;
   width: auto;
   display: table-cell;
   vertical-align: middle;
   color: #777;
+}
+
+#edit-field-donation-amounts-value-wrapper > LABEL,
+#edit-field-activity-date-value-wrapper > LABEL {
+  width: 200px;
+}
+#edit-field-donation-amounts-value-wrapper .form-item-field-donation-amounts-value-max LABEL,
+#edit-field-activity-date-value-wrapper .form-item-field-activity-date-value-max LABEL {
+  padding: 0em .5em 0em .5em;
+  margin: 0em;
 }
 #edit-field-donation-amounts-value-wrapper .views-widget,
 #edit-field-activity-date-value-wrapper .views-widget {
@@ -239,22 +248,20 @@
   display: table;
   vertical-align: top;
 }
-
 #edit-field-donation-amounts-value-wrapper .views-widget .control-group,
 #edit-field-activity-date-value-wrapper .views-widget .control-group {
   display: table-cell;
-  padding: 0em .5em 0em 0em;
+  padding: 0em;
+  margin: 0em;
 }
 #edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper, 
 #edit-field-activity-date-value-wrapper #edit-field-activity-date-value-max-wrapper {
   display: table-cell;
 }
-#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper LABEL, 
+#edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper LABEL,
 #edit-field-activity-date-value-wrapper #edit-field-activity-date-value-max-wrapper LABEL {
   display: table-cell;
-  vertical-align: middle;
   margin: 0em;
-  padding: 0em .5em 0em 0em;
 }
 #edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper .controls, 
 #edit-field-activity-date-value-wrapper #edit-field-activity-date-value-max-wrapper .controls {
