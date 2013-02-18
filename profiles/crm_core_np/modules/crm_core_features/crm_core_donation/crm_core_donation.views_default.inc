@@ -550,6 +550,54 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['menu']['title'] = 'SYBUNT';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['context'] = 0;
+
+  /* Display: LYBUNT export */
+  $handler = $view->new_display('views_data_export', 'LYBUNT export', 'views_data_export_1');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['style_plugin'] = 'views_data_export_csv';
+  $handler->display->display_options['path'] = 'crm/reports/donors/lybunt/export';
+  $handler->display->display_options['displays'] = array(
+    'lybunt' => 'lybunt',
+    'default' => 0,
+    'sybunt' => 0,
+  );
+
+  /* Display: SYBUNT export */
+  $handler = $view->new_display('views_data_export', 'SYBUNT export', 'views_data_export_2');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['style_plugin'] = 'views_data_export_csv';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: CRM Contact: Contact Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'crm_core_contact';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'individual' => 'individual',
+  );
+  /* Filter criterion: CRM Activity: Type */
+  $handler->display->display_options['filters']['type_1']['id'] = 'type_1';
+  $handler->display->display_options['filters']['type_1']['table'] = 'crm_core_activity';
+  $handler->display->display_options['filters']['type_1']['field'] = 'type';
+  $handler->display->display_options['filters']['type_1']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
+  $handler->display->display_options['filters']['type_1']['value'] = array(
+    'donation' => 'donation',
+  );
+  /* Filter criterion: CRM Activity: Received Date (field_donation_receive_date) */
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['id'] = 'field_donation_receive_date_value_1';
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['table'] = 'field_data_field_donation_receive_date';
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['field'] = 'field_donation_receive_date_value';
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['operator'] = '<';
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['default_date'] = '-2 year';
+  $handler->display->display_options['path'] = 'crm/reports/donors/sybunt/export';
+  $handler->display->display_options['displays'] = array(
+    'sybunt' => 'sybunt',
+    'default' => 0,
+    'lybunt' => 0,
+  );
   $export['crm_core_donation_sybunt_report'] = $view;
 
   $view = new view();

@@ -14,7 +14,7 @@ function crm_core_donation_default_crm_core_activity_type() {
     "label" : "Donation",
     "weight" : 0,
     "description" : "A monetary donation",
-    "rdf_mapping" : [  ]
+    "rdf_mapping" : []
   }');
   return $items;
 }
