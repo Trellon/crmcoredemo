@@ -261,7 +261,6 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['created']['group_type'] = 'max';
   $handler->display->display_options['fields']['created']['label'] = 'Last Donation Date';
   $handler->display->display_options['fields']['created']['date_format'] = 'date_format_slim';
-  $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
   /* Field: CRM Donation: Status */
   $handler->display->display_options['fields']['status']['id'] = 'status';
   $handler->display->display_options['fields']['status']['table'] = 'crm_core_donation_page';
@@ -580,7 +579,6 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['created']['table'] = 'crm_core_activity';
   $handler->display->display_options['fields']['created']['field'] = 'created';
   $handler->display->display_options['fields']['created']['date_format'] = 'day_of_week';
-  $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
   /* Field: CRM Activity: Activity ID */
   $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
   $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
@@ -881,7 +879,6 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['relationship'] = 'field_activity_participants_target_id';
   $handler->display->display_options['fields']['contact_name']['label'] = 'First';
-  $handler->display->display_options['fields']['contact_name']['element_type'] = 'strong';
   $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
   $handler->display->display_options['fields']['contact_name']['settings'] = array(
     'format' => 'given',
@@ -901,7 +898,6 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['contact_name_1']['field'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name_1']['relationship'] = 'field_activity_participants_target_id';
   $handler->display->display_options['fields']['contact_name_1']['label'] = 'Last';
-  $handler->display->display_options['fields']['contact_name_1']['element_type'] = 'strong';
   $handler->display->display_options['fields']['contact_name_1']['click_sort_column'] = 'title';
   $handler->display->display_options['fields']['contact_name_1']['settings'] = array(
     'format' => 'family',
@@ -922,24 +918,17 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['field_donation_amounts']['group_type'] = 'sum';
   $handler->display->display_options['fields']['field_donation_amounts']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['field_donation_amounts']['alter']['text'] = '$[field_donation_amounts] ';
-  $handler->display->display_options['fields']['field_donation_amounts']['element_class'] = 'pill';
   $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
     'thousand_separator' => ',',
     'prefix_suffix' => 1,
   );
-  /* Field: MAX(CRM Activity: Received Date) */
-  $handler->display->display_options['fields']['field_donation_receive_date']['id'] = 'field_donation_receive_date';
-  $handler->display->display_options['fields']['field_donation_receive_date']['table'] = 'field_data_field_donation_receive_date';
-  $handler->display->display_options['fields']['field_donation_receive_date']['field'] = 'field_donation_receive_date';
-  $handler->display->display_options['fields']['field_donation_receive_date']['group_type'] = 'max';
-  $handler->display->display_options['fields']['field_donation_receive_date']['label'] = 'Last Donation';
-  $handler->display->display_options['fields']['field_donation_receive_date']['settings'] = array(
-    'format_type' => 'crm_core_month_year',
-    'fromto' => 'both',
-    'multiple_number' => '',
-    'multiple_from' => '',
-    'multiple_to' => '',
-  );
+  /* Field: MAX(CRM Activity: Date created) */
+  $handler->display->display_options['fields']['created']['id'] = 'created';
+  $handler->display->display_options['fields']['created']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['created']['field'] = 'created';
+  $handler->display->display_options['fields']['created']['group_type'] = 'max';
+  $handler->display->display_options['fields']['created']['label'] = 'Last Donation';
+  $handler->display->display_options['fields']['created']['date_format'] = 'date_format_slim';
   /* Field: CRM Contact: Billing Address */
   $handler->display->display_options['fields']['field_billing_address']['id'] = 'field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['table'] = 'field_data_field_billing_address';
@@ -953,36 +942,6 @@ function crm_core_donation_views_default_views() {
     ),
   );
   $handler->display->display_options['fields']['field_billing_address']['group_column'] = 'entity_id';
-  /* Field: Global: Custom text */
-  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
-  $handler->display->display_options['fields']['nothing']['table'] = 'views';
-  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
-  $handler->display->display_options['fields']['nothing']['label'] = 'View Contact';
-  $handler->display->display_options['fields']['nothing']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['nothing']['alter']['text'] = 'View Contact';
-  $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'crm/contact/[contact_id]';
-  /* Field: Global: Custom text */
-  $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
-  $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
-  $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
-  $handler->display->display_options['fields']['nothing_1']['label'] = 'View Donations';
-  $handler->display->display_options['fields']['nothing_1']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['nothing_1']['alter']['text'] = 'View Donations';
-  $handler->display->display_options['fields']['nothing_1']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'crm/contact/[contact_id]/activity';
-  /* Field: Global: Custom text */
-  $handler->display->display_options['fields']['nothing_2']['id'] = 'nothing_2';
-  $handler->display->display_options['fields']['nothing_2']['table'] = 'views';
-  $handler->display->display_options['fields']['nothing_2']['field'] = 'nothing';
-  $handler->display->display_options['fields']['nothing_2']['label'] = 'Operations';
-  $handler->display->display_options['fields']['nothing_2']['alter']['text'] = '[nothing] | [nothing_1]';
-  /* Sort criterion: MAX(CRM Activity: Received Date (field_donation_receive_date)) */
-  $handler->display->display_options['sorts']['field_donation_receive_date_value']['id'] = 'field_donation_receive_date_value';
-  $handler->display->display_options['sorts']['field_donation_receive_date_value']['table'] = 'field_data_field_donation_receive_date';
-  $handler->display->display_options['sorts']['field_donation_receive_date_value']['field'] = 'field_donation_receive_date_value';
-  $handler->display->display_options['sorts']['field_donation_receive_date_value']['group_type'] = 'max';
-  $handler->display->display_options['sorts']['field_donation_receive_date_value']['order'] = 'DESC';
   /* Filter criterion: CRM Activity: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
@@ -990,39 +949,10 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'donation' => 'donation',
   );
-  /* Filter criterion: CRM Activity: Received Date (field_donation_receive_date) */
-  $handler->display->display_options['filters']['field_donation_receive_date_value']['id'] = 'field_donation_receive_date_value';
-  $handler->display->display_options['filters']['field_donation_receive_date_value']['table'] = 'field_data_field_donation_receive_date';
-  $handler->display->display_options['filters']['field_donation_receive_date_value']['field'] = 'field_donation_receive_date_value';
-  $handler->display->display_options['filters']['field_donation_receive_date_value']['operator'] = 'between';
-  $handler->display->display_options['filters']['field_donation_receive_date_value']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['field_donation_receive_date_value']['expose']['operator_id'] = 'field_donation_receive_date_value_op';
-  $handler->display->display_options['filters']['field_donation_receive_date_value']['expose']['label'] = 'Last Donation';
-  $handler->display->display_options['filters']['field_donation_receive_date_value']['expose']['operator'] = 'field_donation_receive_date_value_op';
-  $handler->display->display_options['filters']['field_donation_receive_date_value']['expose']['identifier'] = 'field_donation_receive_date_value';
-  $handler->display->display_options['filters']['field_donation_receive_date_value']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-  );
-  $handler->display->display_options['filters']['field_donation_receive_date_value']['form_type'] = 'date_popup';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['defaults']['use_more'] = FALSE;
-  $handler->display->display_options['defaults']['use_more_always'] = FALSE;
-  $handler->display->display_options['defaults']['use_more_always'] = FALSE;
-  $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['defaults']['use_more_text'] = FALSE;
-  $handler->display->display_options['use_more_text'] = 'View All';
-  $handler->display->display_options['defaults']['footer'] = FALSE;
-  /* Footer: Global: Text area */
-  $handler->display->display_options['footer']['area']['id'] = 'area';
-  $handler->display->display_options['footer']['area']['table'] = 'views';
-  $handler->display->display_options['footer']['area']['field'] = 'area';
-  $handler->display->display_options['footer']['area']['content'] = '<a href=\'/crm/reports/donors/overview/all\'>View All</a>';
-  $handler->display->display_options['footer']['area']['format'] = 'filtered_html';
-  $handler->display->display_options['footer']['area']['tokenize'] = TRUE;
   $handler->display->display_options['path'] = 'crm/reports/donors/overview';
   $handler->display->display_options['menu']['type'] = 'default tab';
   $handler->display->display_options['menu']['title'] = 'Donors';
@@ -1031,262 +961,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['tab_options']['type'] = 'normal';
   $handler->display->display_options['tab_options']['title'] = 'Donors';
   $handler->display->display_options['tab_options']['weight'] = '0';
-
-  /* Display: Page Full */
-  $handler = $view->new_display('page', 'Page Full', 'page_full');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['defaults']['pager'] = FALSE;
-  $handler->display->display_options['pager']['type'] = 'none';
-  $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['path'] = 'crm/reports/donors/overview/all';
-  $handler->display->display_options['menu']['title'] = 'Donors';
-  $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['context'] = 0;
-  $handler->display->display_options['tab_options']['type'] = 'normal';
-  $handler->display->display_options['tab_options']['title'] = 'Donors';
-  $handler->display->display_options['tab_options']['weight'] = '0';
-
-  /* Display: Data export */
-  $handler = $view->new_display('views_data_export', 'Data export', 'views_data_export_1');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['pager']['type'] = 'none';
-  $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['style_plugin'] = 'views_data_export_csv';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: CRM Contact: Contact ID */
-  $handler->display->display_options['fields']['contact_id']['id'] = 'contact_id';
-  $handler->display->display_options['fields']['contact_id']['table'] = 'crm_core_contact';
-  $handler->display->display_options['fields']['contact_id']['field'] = 'contact_id';
-  $handler->display->display_options['fields']['contact_id']['relationship'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['contact_id']['link_to_contact'] = 0;
-  /* Field: CRM Contact: Organization name */
-  $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
-  $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name']['relationship'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['fields']['contact_name']['label'] = 'First';
-  $handler->display->display_options['fields']['contact_name']['element_type'] = 'strong';
-  $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
-  $handler->display->display_options['fields']['contact_name']['settings'] = array(
-    'format' => 'given',
-    'markup' => 0,
-    'output' => 'default',
-    'multiple' => 'default',
-    'multiple_delimiter' => ', ',
-    'multiple_and' => 'text',
-    'multiple_delimiter_precedes_last' => 'never',
-    'multiple_el_al_min' => '3',
-    'multiple_el_al_first' => '1',
-  );
-  $handler->display->display_options['fields']['contact_name']['group_column'] = 'entity_id';
-  /* Field: CRM Contact: Organization name */
-  $handler->display->display_options['fields']['contact_name_1']['id'] = 'contact_name_1';
-  $handler->display->display_options['fields']['contact_name_1']['table'] = 'field_data_contact_name';
-  $handler->display->display_options['fields']['contact_name_1']['field'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name_1']['relationship'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['fields']['contact_name_1']['label'] = 'Last';
-  $handler->display->display_options['fields']['contact_name_1']['element_type'] = 'strong';
-  $handler->display->display_options['fields']['contact_name_1']['click_sort_column'] = 'title';
-  $handler->display->display_options['fields']['contact_name_1']['settings'] = array(
-    'format' => 'family',
-    'markup' => 0,
-    'output' => 'default',
-    'multiple' => 'default',
-    'multiple_delimiter' => ', ',
-    'multiple_and' => 'text',
-    'multiple_delimiter_precedes_last' => 'never',
-    'multiple_el_al_min' => '3',
-    'multiple_el_al_first' => '1',
-  );
-  $handler->display->display_options['fields']['contact_name_1']['group_column'] = 'entity_id';
-  /* Field: SUM(CRM Activity: Amount) */
-  $handler->display->display_options['fields']['field_donation_amounts']['id'] = 'field_donation_amounts';
-  $handler->display->display_options['fields']['field_donation_amounts']['table'] = 'field_data_field_donation_amounts';
-  $handler->display->display_options['fields']['field_donation_amounts']['field'] = 'field_donation_amounts';
-  $handler->display->display_options['fields']['field_donation_amounts']['group_type'] = 'sum';
-  $handler->display->display_options['fields']['field_donation_amounts']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_donation_amounts']['alter']['text'] = '$[field_donation_amounts] ';
-  $handler->display->display_options['fields']['field_donation_amounts']['element_class'] = 'pill';
-  $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
-    'thousand_separator' => ',',
-    'prefix_suffix' => 1,
-  );
-  /* Field: MAX(CRM Activity: Received Date) */
-  $handler->display->display_options['fields']['field_donation_receive_date']['id'] = 'field_donation_receive_date';
-  $handler->display->display_options['fields']['field_donation_receive_date']['table'] = 'field_data_field_donation_receive_date';
-  $handler->display->display_options['fields']['field_donation_receive_date']['field'] = 'field_donation_receive_date';
-  $handler->display->display_options['fields']['field_donation_receive_date']['group_type'] = 'max';
-  $handler->display->display_options['fields']['field_donation_receive_date']['label'] = 'Last Donation';
-  $handler->display->display_options['fields']['field_donation_receive_date']['settings'] = array(
-    'format_type' => 'crm_core_month_year',
-    'fromto' => 'both',
-    'multiple_number' => '',
-    'multiple_from' => '',
-    'multiple_to' => '',
-  );
-  /* Field: CRM Contact: Billing Address */
-  $handler->display->display_options['fields']['field_billing_address']['id'] = 'field_billing_address';
-  $handler->display->display_options['fields']['field_billing_address']['table'] = 'field_data_field_billing_address';
-  $handler->display->display_options['fields']['field_billing_address']['field'] = 'field_billing_address';
-  $handler->display->display_options['fields']['field_billing_address']['relationship'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['fields']['field_billing_address']['click_sort_column'] = 'country';
-  $handler->display->display_options['fields']['field_billing_address']['settings'] = array(
-    'use_widget_handlers' => 1,
-    'format_handlers' => array(
-      'address' => 'address',
-    ),
-  );
-  $handler->display->display_options['fields']['field_billing_address']['group_column'] = 'entity_id';
-  /* Field: Global: Custom text */
-  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
-  $handler->display->display_options['fields']['nothing']['table'] = 'views';
-  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
-  $handler->display->display_options['fields']['nothing']['label'] = 'View Contact';
-  $handler->display->display_options['fields']['nothing']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['nothing']['alter']['text'] = 'View Contact';
-  $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'crm/contact/[contact_id]';
-  /* Field: Global: Custom text */
-  $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
-  $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
-  $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
-  $handler->display->display_options['fields']['nothing_1']['label'] = 'View Donations';
-  $handler->display->display_options['fields']['nothing_1']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['nothing_1']['alter']['text'] = 'View Donations';
-  $handler->display->display_options['fields']['nothing_1']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'crm/contact/[contact_id]/activity';
-  /* Field: Global: Custom text */
-  $handler->display->display_options['fields']['nothing_2']['id'] = 'nothing_2';
-  $handler->display->display_options['fields']['nothing_2']['table'] = 'views';
-  $handler->display->display_options['fields']['nothing_2']['field'] = 'nothing';
-  $handler->display->display_options['fields']['nothing_2']['label'] = 'Operations';
-  $handler->display->display_options['fields']['nothing_2']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['nothing_2']['alter']['text'] = '[nothing] | [nothing_1]';
-  $handler->display->display_options['path'] = 'crm/reports/donors/overview/all/export';
-  $handler->display->display_options['displays'] = array(
-    'page' => 'page',
-    'default' => 0,
-    'page_full' => 0,
-  );
   $export['crm_core_donor'] = $view;
-
-  $view = new view();
-  $view->name = 'donations_individual';
-  $view->description = 'Lists donations by individual.';
-  $view->tag = 'default';
-  $view->base_table = 'crm_core_activity';
-  $view->human_name = 'donations_individual';
-  $view->core = 7;
-  $view->api_version = '3.0';
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-
-  /* Display: Master */
-  $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Individual Donations';
-  $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'perm';
-  $handler->display->display_options['access']['perm'] = 'administer crm core donation';
-  $handler->display->display_options['cache']['type'] = 'none';
-  $handler->display->display_options['query']['type'] = 'views_query';
-  $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'none';
-  $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['style_plugin'] = 'table';
-  /* Header: Global: Text area */
-  $handler->display->display_options['header']['area']['id'] = 'area';
-  $handler->display->display_options['header']['area']['table'] = 'views';
-  $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = 'Showing donations for <a href="/crm/contact/%1">[contact_name]</a>.';
-  $handler->display->display_options['header']['area']['format'] = 'filtered_html';
-  $handler->display->display_options['header']['area']['tokenize'] = TRUE;
-  /* Header: Global: Result summary */
-  $handler->display->display_options['header']['result']['id'] = 'result';
-  $handler->display->display_options['header']['result']['table'] = 'views';
-  $handler->display->display_options['header']['result']['field'] = 'result';
-  $handler->display->display_options['header']['result']['content'] = 'Displaying @start - @end of @total donations.';
-  /* No results behavior: Global: Text area */
-  $handler->display->display_options['empty']['area']['id'] = 'area';
-  $handler->display->display_options['empty']['area']['table'] = 'views';
-  $handler->display->display_options['empty']['area']['field'] = 'area';
-  $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = 'Sorry, there are no donations recorded for [contact_name].';
-  $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
-  $handler->display->display_options['empty']['area']['tokenize'] = TRUE;
-  /* Relationship: Entity Reference: Referenced Entity */
-  $handler->display->display_options['relationships']['field_activity_participants_target_id']['id'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['relationships']['field_activity_participants_target_id']['table'] = 'field_data_field_activity_participants';
-  $handler->display->display_options['relationships']['field_activity_participants_target_id']['field'] = 'field_activity_participants_target_id';
-  /* Field: CRM Activity: Activity ID */
-  $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
-  $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
-  $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
-  $handler->display->display_options['fields']['activity_id']['exclude'] = TRUE;
-  /* Field: CRM Activity: Amount */
-  $handler->display->display_options['fields']['field_donation_amounts']['id'] = 'field_donation_amounts';
-  $handler->display->display_options['fields']['field_donation_amounts']['table'] = 'field_data_field_donation_amounts';
-  $handler->display->display_options['fields']['field_donation_amounts']['field'] = 'field_donation_amounts';
-  $handler->display->display_options['fields']['field_donation_amounts']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_donation_amounts']['alter']['text'] = '$[field_donation_amounts]';
-  $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
-    'thousand_separator' => ',',
-    'prefix_suffix' => 1,
-  );
-  /* Field: CRM Activity: Date */
-  $handler->display->display_options['fields']['field_activity_date']['id'] = 'field_activity_date';
-  $handler->display->display_options['fields']['field_activity_date']['table'] = 'field_data_field_activity_date';
-  $handler->display->display_options['fields']['field_activity_date']['field'] = 'field_activity_date';
-  $handler->display->display_options['fields']['field_activity_date']['settings'] = array(
-    'format_type' => 'medium',
-    'fromto' => 'both',
-    'multiple_number' => '',
-    'multiple_from' => '',
-    'multiple_to' => '',
-  );
-  /* Field: CRM Contact: Organization name */
-  $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
-  $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name']['relationship'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['fields']['contact_name']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
-  $handler->display->display_options['fields']['contact_name']['settings'] = array(
-    'format' => 'default',
-    'markup' => 0,
-    'output' => 'default',
-    'multiple' => 'default',
-    'multiple_delimiter' => ', ',
-    'multiple_and' => 'text',
-    'multiple_delimiter_precedes_last' => 'never',
-    'multiple_el_al_min' => '3',
-    'multiple_el_al_first' => '1',
-  );
-  /* Contextual filter: CRM Contact: Contact ID */
-  $handler->display->display_options['arguments']['contact_id']['id'] = 'contact_id';
-  $handler->display->display_options['arguments']['contact_id']['table'] = 'crm_core_contact';
-  $handler->display->display_options['arguments']['contact_id']['field'] = 'contact_id';
-  $handler->display->display_options['arguments']['contact_id']['relationship'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['arguments']['contact_id']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['contact_id']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['contact_id']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['contact_id']['summary_options']['items_per_page'] = '25';
-  /* Filter criterion: CRM Activity: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'donation' => 'donation',
-  );
-
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'crm/reports/donations-individual';
-  $handler->display->display_options['menu']['type'] = 'normal';
-  $handler->display->display_options['menu']['title'] = 'Individual Donations';
-  $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['context'] = 0;
-  $export['donations_individual'] = $view;
 
   $view = new view();
   $view->name = 'donations_overview_alt';
@@ -1431,7 +1106,6 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['created']['field'] = 'created';
   $handler->display->display_options['fields']['created']['label'] = 'Date';
   $handler->display->display_options['fields']['created']['date_format'] = 'long';
-  $handler->display->display_options['fields']['created']['format_date_sql'] = 0;
   /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
@@ -1439,7 +1113,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['contact_name']['relationship'] = 'field_activity_participants_target_id';
   $handler->display->display_options['fields']['contact_name']['label'] = 'Donor';
   $handler->display->display_options['fields']['contact_name']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['contact_name']['alter']['path'] = 'crm/reports/donations-individual/[contact_id]';
+  $handler->display->display_options['fields']['contact_name']['alter']['path'] = 'crm/contact/[contact_id]/activity/donation';
   $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
   $handler->display->display_options['fields']['contact_name']['settings'] = array(
     'format' => 'default',
@@ -1527,12 +1201,12 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['header']['result']['id'] = 'result';
   $handler->display->display_options['header']['result']['table'] = 'views';
   $handler->display->display_options['header']['result']['field'] = 'result';
-  $handler->display->display_options['header']['result']['content'] = 'Displaying @start - @end of @total donations stored in the system. <a href="crm/reports/donations-overview/view-all">View All</a>';
+  $handler->display->display_options['header']['result']['content'] = 'Displaying @start - @end of @total donations stored in the system. <a href="/crm/reports/donations/overview/all">View All</a>';
   /* Header: Global: Text area */
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-warning" href="/crm/reports/donations-overview/export"><i class="icon-download icon-white"></i> Export to CSV</a></div>';
+  $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-warning" href="/crm/reports/donations/overview/export/all"><i class="icon-download icon-white"></i> Export to CSV</a></div>';
   $handler->display->display_options['header']['area']['format'] = 'full_html';
   $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
@@ -1551,6 +1225,12 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'views_data_export_csv';
+  $handler->display->display_options['style_options']['provide_file'] = 1;
+  $handler->display->display_options['style_options']['parent_sort'] = 0;
+  $handler->display->display_options['style_options']['quote'] = 1;
+  $handler->display->display_options['style_options']['trim'] = 0;
+  $handler->display->display_options['style_options']['replace_newlines'] = 0;
+  $handler->display->display_options['style_options']['header'] = 1;
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: CRM Activity: Amount */
   $handler->display->display_options['fields']['field_donation_amounts']['id'] = 'field_donation_amounts';
@@ -1574,14 +1254,32 @@ function crm_core_donation_views_default_views() {
     'multiple_to' => '',
   );
   /* Field: CRM Contact: Organization name */
-  $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
-  $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
-  $handler->display->display_options['fields']['contact_name']['relationship'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['fields']['contact_name']['label'] = 'Donor';
-  $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
-  $handler->display->display_options['fields']['contact_name']['settings'] = array(
-    'format' => 'default',
+  $handler->display->display_options['fields']['contact_name_2']['id'] = 'contact_name_2';
+  $handler->display->display_options['fields']['contact_name_2']['table'] = 'field_data_contact_name';
+  $handler->display->display_options['fields']['contact_name_2']['field'] = 'contact_name';
+  $handler->display->display_options['fields']['contact_name_2']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['contact_name_2']['label'] = 'First Name';
+  $handler->display->display_options['fields']['contact_name_2']['click_sort_column'] = 'title';
+  $handler->display->display_options['fields']['contact_name_2']['settings'] = array(
+    'format' => 'given',
+    'markup' => 0,
+    'output' => 'default',
+    'multiple' => 'default',
+    'multiple_delimiter' => ', ',
+    'multiple_and' => 'text',
+    'multiple_delimiter_precedes_last' => 'never',
+    'multiple_el_al_min' => '3',
+    'multiple_el_al_first' => '1',
+  );
+  /* Field: CRM Contact: Organization name */
+  $handler->display->display_options['fields']['contact_name_1']['id'] = 'contact_name_1';
+  $handler->display->display_options['fields']['contact_name_1']['table'] = 'field_data_contact_name';
+  $handler->display->display_options['fields']['contact_name_1']['field'] = 'contact_name';
+  $handler->display->display_options['fields']['contact_name_1']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['contact_name_1']['label'] = 'Last Name';
+  $handler->display->display_options['fields']['contact_name_1']['click_sort_column'] = 'title';
+  $handler->display->display_options['fields']['contact_name_1']['settings'] = array(
+    'format' => 'family',
     'markup' => 0,
     'output' => 'default',
     'multiple' => 'default',
@@ -1596,9 +1294,86 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['field_billing_address']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['field'] = 'field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['relationship'] = 'field_activity_participants_target_id';
-  $handler->display->display_options['fields']['field_billing_address']['label'] = 'Address';
+  $handler->display->display_options['fields']['field_billing_address']['label'] = 'Country';
+  $handler->display->display_options['fields']['field_billing_address']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_billing_address']['alter']['text'] = '[field_billing_address-country]';
   $handler->display->display_options['fields']['field_billing_address']['click_sort_column'] = 'country';
   $handler->display->display_options['fields']['field_billing_address']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  /* Field: CRM Contact: Billing Address */
+  $handler->display->display_options['fields']['field_billing_address_1']['id'] = 'field_billing_address_1';
+  $handler->display->display_options['fields']['field_billing_address_1']['table'] = 'field_data_field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_1']['field'] = 'field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_1']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['field_billing_address_1']['label'] = 'Administrative Area';
+  $handler->display->display_options['fields']['field_billing_address_1']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_billing_address_1']['alter']['text'] = '[field_billing_address_1-administrative_area]';
+  $handler->display->display_options['fields']['field_billing_address_1']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_billing_address_1']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  /* Field: CRM Contact: Billing Address */
+  $handler->display->display_options['fields']['field_billing_address_2']['id'] = 'field_billing_address_2';
+  $handler->display->display_options['fields']['field_billing_address_2']['table'] = 'field_data_field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_2']['field'] = 'field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_2']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['field_billing_address_2']['label'] = 'Locality';
+  $handler->display->display_options['fields']['field_billing_address_2']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_billing_address_2']['alter']['text'] = '[field_billing_address_2-locality]';
+  $handler->display->display_options['fields']['field_billing_address_2']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_billing_address_2']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  /* Field: CRM Contact: Billing Address */
+  $handler->display->display_options['fields']['field_billing_address_5']['id'] = 'field_billing_address_5';
+  $handler->display->display_options['fields']['field_billing_address_5']['table'] = 'field_data_field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_5']['field'] = 'field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_5']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['field_billing_address_5']['label'] = 'Premise';
+  $handler->display->display_options['fields']['field_billing_address_5']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_billing_address_5']['alter']['text'] = '[field_billing_address_5-premise]';
+  $handler->display->display_options['fields']['field_billing_address_5']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_billing_address_5']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  /* Field: CRM Contact: Billing Address */
+  $handler->display->display_options['fields']['field_billing_address_4']['id'] = 'field_billing_address_4';
+  $handler->display->display_options['fields']['field_billing_address_4']['table'] = 'field_data_field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_4']['field'] = 'field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_4']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['field_billing_address_4']['label'] = 'Thoroughfare';
+  $handler->display->display_options['fields']['field_billing_address_4']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_billing_address_4']['alter']['text'] = '[field_billing_address_4-thoroughfare]';
+  $handler->display->display_options['fields']['field_billing_address_4']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_billing_address_4']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  /* Field: CRM Contact: Billing Address */
+  $handler->display->display_options['fields']['field_billing_address_3']['id'] = 'field_billing_address_3';
+  $handler->display->display_options['fields']['field_billing_address_3']['table'] = 'field_data_field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_3']['field'] = 'field_billing_address';
+  $handler->display->display_options['fields']['field_billing_address_3']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['field_billing_address_3']['label'] = 'Postal Code';
+  $handler->display->display_options['fields']['field_billing_address_3']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_billing_address_3']['alter']['text'] = '[field_billing_address_3-postal_code]';
+  $handler->display->display_options['fields']['field_billing_address_3']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_billing_address_3']['settings'] = array(
     'use_widget_handlers' => 1,
     'format_handlers' => array(
       'address' => 'address',
@@ -1614,7 +1389,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['arguments']['id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['path'] = 'crm/reports/donations-overview/export/%';
+  $handler->display->display_options['path'] = 'crm/reports/donations/overview/export/%';
   $handler->display->display_options['displays'] = array(
     'default' => 0,
     'page' => 0,
@@ -1637,7 +1412,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-warning" href="/crm/reports/donations-overview/export"><i class="icon-download icon-white"></i> Export to CSV</a></div>';
+  $handler->display->display_options['header']['area']['content'] = '<div class="pull-right"><a class="btn btn-small btn-warning" href="/crm/reports/donations/overview/export/all"><i class="icon-download icon-white"></i> Export to CSV</a></div>';
   $handler->display->display_options['header']['area']['format'] = 'full_html';
   $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
