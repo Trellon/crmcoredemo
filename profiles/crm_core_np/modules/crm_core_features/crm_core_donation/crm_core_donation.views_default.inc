@@ -1170,6 +1170,132 @@ function crm_core_donation_views_default_views() {
   $export['crm_core_donor'] = $view;
 
   $view = new view();
+  $view->name = 'crm_donation_activities_by_contact';
+  $view->description = 'List of activities of the contact';
+  $view->tag = 'default';
+  $view->base_table = 'crm_core_activity';
+  $view->human_name = 'CRM Donation Activities by contact';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'Donation activities by contact';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
+  $handler->display->display_options['style_plugin'] = 'table';
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['content'] = 'This contact has no activity, add an activity above.';
+  $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
+  /* Field: Global: View result counter */
+  $handler->display->display_options['fields']['counter']['id'] = 'counter';
+  $handler->display->display_options['fields']['counter']['table'] = 'views';
+  $handler->display->display_options['fields']['counter']['field'] = 'counter';
+  $handler->display->display_options['fields']['counter']['label'] = '';
+  $handler->display->display_options['fields']['counter']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['counter']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['counter']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['counter']['counter_start'] = '1';
+  /* Field: CRM Activity: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
+  /* Field: CRM Activity: Activity ID */
+  $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['label'] = '';
+  $handler->display->display_options['fields']['activity_id']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['activity_id']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['activity_id']['hide_alter_empty'] = FALSE;
+  /* Field: CRM Activity: Participants */
+  $handler->display->display_options['fields']['field_activity_participants']['id'] = 'field_activity_participants';
+  $handler->display->display_options['fields']['field_activity_participants']['table'] = 'field_data_field_activity_participants';
+  $handler->display->display_options['fields']['field_activity_participants']['field'] = 'field_activity_participants';
+  $handler->display->display_options['fields']['field_activity_participants']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['field_activity_participants']['settings'] = array(
+    'link' => 0,
+  );
+  $handler->display->display_options['fields']['field_activity_participants']['delta_offset'] = '0';
+  /* Field: CRM Activity: Link */
+  $handler->display->display_options['fields']['view_crm_activity']['id'] = 'view_crm_activity';
+  $handler->display->display_options['fields']['view_crm_activity']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['view_crm_activity']['field'] = 'view_crm_activity';
+  $handler->display->display_options['fields']['view_crm_activity']['label'] = '';
+  $handler->display->display_options['fields']['view_crm_activity']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['view_crm_activity']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['view_crm_activity']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['view_crm_activity']['text'] = 'View';
+  /* Field: CRM Activity: Edit link */
+  $handler->display->display_options['fields']['edit_crm_activity']['id'] = 'edit_crm_activity';
+  $handler->display->display_options['fields']['edit_crm_activity']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['edit_crm_activity']['field'] = 'edit_crm_activity';
+  $handler->display->display_options['fields']['edit_crm_activity']['label'] = '';
+  $handler->display->display_options['fields']['edit_crm_activity']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['edit_crm_activity']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['edit_crm_activity']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['edit_crm_activity']['text'] = 'Edit';
+  $handler->display->display_options['fields']['edit_crm_activity']['redirect'] = 1;
+  /* Field: CRM Activity: Delete link */
+  $handler->display->display_options['fields']['delete_crm_activity']['id'] = 'delete_crm_activity';
+  $handler->display->display_options['fields']['delete_crm_activity']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['delete_crm_activity']['field'] = 'delete_crm_activity';
+  $handler->display->display_options['fields']['delete_crm_activity']['label'] = '';
+  $handler->display->display_options['fields']['delete_crm_activity']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['delete_crm_activity']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['delete_crm_activity']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['delete_crm_activity']['text'] = 'Delete';
+  $handler->display->display_options['fields']['delete_crm_activity']['redirect'] = 1;
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = 'Operations';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div class="ctools-no-js ctools-dropbutton ctools-button" id="ctools-button-[counter]">
+  <div class="ctools-link"><a href="#" class="ctools-twisty ctools-text">open</a></div>
+  <div class="ctools-content">
+  <ul>
+          <li>[view_crm_activity]</li>
+          <li>[edit_crm_activity]</li>
+          <li>[delete_crm_activity]</li>
+  </ul>
+  </div>
+  </div>';
+  /* Contextual filter: CRM Activity: Participants (field_activity_participants) */
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['id'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['table'] = 'field_data_field_activity_participants';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['field'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['default_action'] = 'not found';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_activity_participants_target_id']['summary_options']['items_per_page'] = '25';
+  /* Filter criterion: CRM Activity: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'donation' => 'donation',
+  );
+
+  /* Display: Page */
+  $handler = $view->new_display('page', 'Page', 'page');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['path'] = 'crm/contact/%/activity/donation';
+  $export['crm_donation_activities_by_contact'] = $view;
+
+  $view = new view();
   $view->name = 'donations_overview_alt';
   $view->description = 'A list of all donations recorded in the system. Filterable by date.';
   $view->tag = 'default';
