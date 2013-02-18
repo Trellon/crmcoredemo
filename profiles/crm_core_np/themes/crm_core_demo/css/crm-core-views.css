@@ -254,6 +254,9 @@
   padding: 0em;
   margin: 0em;
 }
+.view-donations-overview-alt .views-field-title {
+  text-align: center;
+}
 #edit-field-activity-date-value-wrapper #edit-field-activity-date-value-min-wrapper, 
 #edit-field-activity-date-value-wrapper #edit-field-activity-date-value-max-wrapper {
   display: table-cell;
