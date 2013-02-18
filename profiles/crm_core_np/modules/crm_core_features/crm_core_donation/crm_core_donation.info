@@ -59,6 +59,7 @@ features[views_view][] = crm_core_donation_sybunt_report
 features[views_view][] = crm_core_donations_time_of_day_report
 features[views_view][] = crm_core_donations_widget
 features[views_view][] = crm_core_donor
+features[views_view][] = donations_individual
 features[views_view][] = donations_overview_alt
 features[views_view][] = donations_totals
 files[] = views_handler_field_text_format.inc
