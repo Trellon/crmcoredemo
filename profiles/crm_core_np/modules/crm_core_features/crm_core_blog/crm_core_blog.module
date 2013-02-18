@@ -28,12 +28,12 @@ function crm_core_blog_crm_core_report_register() {
       'reports' => array(
         'comment_overview' => array(
           'title'       => t('Post and comment overview'),
-          'path'        => 'crm/reports/blog/overview',
+          'path'        => 'crm/reports/blog-comments/overview',
           'description' => t('An overview of recent blog posts and comment activity.'),
         ),
         'comment_activity' => array(
           'title'       => t('Commenter activity report'),
-          'path'        => 'crm/reports/blog/commenters',
+          'path'        => 'crm/reports/blog-comments/commenters',
           'description' => t('Details about the most active commenters on the blog.'),
         ),
 

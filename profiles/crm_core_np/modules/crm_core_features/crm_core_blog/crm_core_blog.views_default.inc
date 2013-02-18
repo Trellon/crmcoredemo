@@ -382,7 +382,16 @@ function crm_core_blog_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'crm/reports/blog/overview';
+  $handler->display->display_options['path'] = 'crm/reports/blog-comments/overview';
+  $handler->display->display_options['menu']['type'] = 'default tab';
+  $handler->display->display_options['menu']['title'] = 'Post and comment overview';
+  $handler->display->display_options['menu']['description'] = 'An overview of recent blog posts and comment activity.';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
+  $handler->display->display_options['tab_options']['type'] = 'normal';
+  $handler->display->display_options['tab_options']['title'] = 'Post and comment overview';
+  $handler->display->display_options['tab_options']['description'] = 'An overview of recent blog posts and comment activity.';
+  $handler->display->display_options['tab_options']['weight'] = '0';
   $export['crm_core_blog_comment_overview'] = $view;
 
   $view = new view();
@@ -542,9 +551,11 @@ function crm_core_blog_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'crm/reports/blog/commenters';
-  $handler->display->display_options['menu']['title'] = 'Blog Comment Report';
-  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['path'] = 'crm/reports/blog-comments/commenters';
+  $handler->display->display_options['menu']['type'] = 'tab';
+  $handler->display->display_options['menu']['title'] = 'Commenter activity report';
+  $handler->display->display_options['menu']['description'] = 'Details about the most active commenters on the blog.';
+  $handler->display->display_options['menu']['weight'] = '1';
   $handler->display->display_options['menu']['context'] = 0;
   $export['crm_core_blog_comment_report'] = $view;
 
