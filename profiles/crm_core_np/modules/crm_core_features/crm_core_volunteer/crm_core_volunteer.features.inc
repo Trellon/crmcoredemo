@@ -13,7 +13,8 @@ function crm_core_volunteer_default_crm_core_activity_type() {
     "type" : "volunteer_commitment",
     "label" : "Volunteer Commitment",
     "weight" : 0,
-    "description" : "This activity will record user volunteer application to a volunteer opportunity"
+    "description" : "This activity will record user volunteer application to a volunteer opportunity",
+    "rdf_mapping" : []
   }');
   return $items;
 }

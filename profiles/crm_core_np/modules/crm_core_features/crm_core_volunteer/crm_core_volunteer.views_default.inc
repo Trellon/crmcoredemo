@@ -166,7 +166,7 @@ function crm_core_volunteer_views_default_views() {
   $handler->display->display_options['fields']['contact_id']['field'] = 'contact_id';
   $handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
   $handler->display->display_options['fields']['contact_id']['link_to_contact'] = 0;
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
@@ -336,7 +336,7 @@ function crm_core_volunteer_views_default_views() {
   $handler->display->display_options['fields']['created']['relationship'] = 'reverse_field_volunteer_opportunity_crm_core_activity';
   $handler->display->display_options['fields']['created']['label'] = 'Commitment date';
   $handler->display->display_options['fields']['created']['date_format'] = 'short';
-  /* Field: CRM Contact: Household name */
+  /* Field: CRM Contact: Organization name */
   $handler->display->display_options['fields']['contact_name']['id'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';

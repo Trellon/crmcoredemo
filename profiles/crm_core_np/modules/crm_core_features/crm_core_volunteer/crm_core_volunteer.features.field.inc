@@ -25,6 +25,8 @@ function crm_core_volunteer_field_default_fields() {
       'locked' => '0',
       'module' => 'date',
       'settings' => array(
+        'cache_count' => '4',
+        'cache_enabled' => 0,
         'granularity' => array(
           'day' => 'day',
           'hour' => 'hour',
@@ -583,7 +585,7 @@ function crm_core_volunteer_field_default_fields() {
           'text_parts' => array(),
           'year_range' => '-3:+3',
         ),
-        'type' => 'date_select',
+        'type' => 'date_popup',
         'weight' => '7',
       ),
     ),
