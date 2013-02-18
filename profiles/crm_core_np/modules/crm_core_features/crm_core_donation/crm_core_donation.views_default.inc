@@ -986,7 +986,7 @@ function crm_core_donation_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Field: CRM Contact: Billing Address */
+  /* Field: CRM Contact: Business Address */
   $handler->display->display_options['fields']['field_billing_address']['id'] = 'field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['field'] = 'field_billing_address';
@@ -1171,7 +1171,7 @@ function crm_core_donation_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Field: CRM Contact: Billing Address */
+  /* Field: CRM Contact: Business Address */
   $handler->display->display_options['fields']['field_billing_address']['id'] = 'field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['field'] = 'field_billing_address';
@@ -1506,7 +1506,7 @@ function crm_core_donation_views_default_views() {
     'multiple_el_al_min' => '3',
     'multiple_el_al_first' => '1',
   );
-  /* Field: CRM Contact: Billing Address */
+  /* Field: CRM Contact: Business Address */
   $handler->display->display_options['fields']['field_billing_address']['id'] = 'field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['field'] = 'field_billing_address';
@@ -1534,6 +1534,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['fields']['title']['label'] = 'Donation Page';
   $handler->display->display_options['fields']['title']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['title']['alter']['path'] = 'crm/reports/donations-page/overview/[id]';
+  $handler->display->display_options['fields']['title']['empty'] = '---';
   /* Sort criterion: CRM Activity: Date (field_activity_date) */
   $handler->display->display_options['sorts']['field_activity_date_value']['id'] = 'field_activity_date_value';
   $handler->display->display_options['sorts']['field_activity_date_value']['table'] = 'field_data_field_activity_date';
@@ -1684,7 +1685,7 @@ function crm_core_donation_views_default_views() {
     'multiple_el_al_min' => '3',
     'multiple_el_al_first' => '1',
   );
-  /* Field: CRM Contact: Billing Address */
+  /* Field: CRM Contact: Business Address */
   $handler->display->display_options['fields']['field_billing_address']['id'] = 'field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address']['field'] = 'field_billing_address';
@@ -1699,7 +1700,7 @@ function crm_core_donation_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: CRM Contact: Billing Address */
+  /* Field: CRM Contact: Business Address */
   $handler->display->display_options['fields']['field_billing_address_1']['id'] = 'field_billing_address_1';
   $handler->display->display_options['fields']['field_billing_address_1']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address_1']['field'] = 'field_billing_address';
@@ -1714,7 +1715,7 @@ function crm_core_donation_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: CRM Contact: Billing Address */
+  /* Field: CRM Contact: Business Address */
   $handler->display->display_options['fields']['field_billing_address_2']['id'] = 'field_billing_address_2';
   $handler->display->display_options['fields']['field_billing_address_2']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address_2']['field'] = 'field_billing_address';
@@ -1729,7 +1730,7 @@ function crm_core_donation_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: CRM Contact: Billing Address */
+  /* Field: CRM Contact: Business Address */
   $handler->display->display_options['fields']['field_billing_address_5']['id'] = 'field_billing_address_5';
   $handler->display->display_options['fields']['field_billing_address_5']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address_5']['field'] = 'field_billing_address';
@@ -1744,7 +1745,7 @@ function crm_core_donation_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: CRM Contact: Billing Address */
+  /* Field: CRM Contact: Business Address */
   $handler->display->display_options['fields']['field_billing_address_4']['id'] = 'field_billing_address_4';
   $handler->display->display_options['fields']['field_billing_address_4']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address_4']['field'] = 'field_billing_address';
@@ -1759,7 +1760,7 @@ function crm_core_donation_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: CRM Contact: Billing Address */
+  /* Field: CRM Contact: Business Address */
   $handler->display->display_options['fields']['field_billing_address_3']['id'] = 'field_billing_address_3';
   $handler->display->display_options['fields']['field_billing_address_3']['table'] = 'field_data_field_billing_address';
   $handler->display->display_options['fields']['field_billing_address_3']['field'] = 'field_billing_address';
