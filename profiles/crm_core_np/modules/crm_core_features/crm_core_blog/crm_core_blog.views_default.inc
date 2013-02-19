@@ -650,7 +650,7 @@ function crm_core_blog_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'crm/reports/blog-comments/topics-report';
+  $handler->display->display_options['path'] = 'crm/reports/blog-comments/topics';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'Comment topics report';
   $handler->display->display_options['menu']['description'] = 'What topics are generating the most activity on the blog?';

@@ -45,7 +45,7 @@ function crm_core_blog_crm_core_report_register() {
         ),
         'comment_topics' => array(
           'title'       => t('Comment topics report'),
-          'path'        => 'crm/reports/blog-comments/topics-report',
+          'path'        => 'crm/reports/blog-comments/topics',
           'description' => t('What topics are generating the most activity on the blog?'),
         ),
       ),
