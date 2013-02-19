@@ -13,6 +13,32 @@
  */
 
 /**
+ * template_preprocess_hook
+ *
+ * Dividing the layout into 2 columns
+ */
+function crm_core_demo_preprocess_crm_core_report_index(&$variables) {  
+  $items = $variables['report_items'];
+  
+  $col1 = array();
+  $col2 = array();
+  
+  if (!empty($items)) {
+    $first_col_count = ceil(count($items) / 2);
+    for ($i = 0; $i < count($items); $i++) {
+      if ($i < $first_col_count) {
+        $col1[] = $items[$i];
+      } else {
+        $col2[] = $items[$i];
+      }
+    }  
+  }
+  
+  $variables['col1'] = $col1;
+  $variables['col2'] = $col2;
+}
+
+/**
  * Preprocess variables for block.tpl.php
  * 
  * @see block.tpl.php
