@@ -41,5 +41,6 @@ features[views_view][] = crm_core_blog
 features[views_view][] = crm_core_blog_author_overview
 features[views_view][] = crm_core_blog_comment_overview
 features[views_view][] = crm_core_blog_comment_report
+features[views_view][] = crm_core_blog_comment_topics_report
 features[views_view][] = crm_core_blog_comments_chart_block
 features[views_view][] = crm_core_blog_widget
