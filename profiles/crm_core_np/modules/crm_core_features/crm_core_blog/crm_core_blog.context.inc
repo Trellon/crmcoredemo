@@ -53,7 +53,7 @@ function crm_core_blog_context_default_contexts() {
   $context->conditions = array(
     'path' => array(
       'values' => array(
-        'crm/reports/blog-comments/blog-comments' => 'crm/reports/blog-comments/blog-comments',
+        'crm/reports/blog-comments' => 'crm/reports/blog-comments',
       ),
     ),
   );

@@ -80,7 +80,7 @@ function crm_core_blog_block_view($delta = '') {
       // first, make sure we are including the resizable library
       // it's important
       drupal_add_library('flot', 'jquery.flot.resize.js');
-      $view = views_get_view('crmcore_blog_comments_report', TRUE);
+      $view = views_get_view('crm_core_blog_comments_chart_block', TRUE);
       $view->set_display('chart');
       // No we have view results.
       $view->execute('chart');
@@ -90,9 +90,8 @@ function crm_core_blog_block_view($delta = '') {
       foreach ($view->result as $item => $value){
         $existing_date = date('Y-m-d',$view->result[$item]->comment_created);
         $new_date = new DateTime($existing_date, new DateTimeZone(variable_get('date_default_timezone', 0)));
-        $float_data[$item] = array($new_date->format('U'), $view->result[$item]->cid);
+        $float_data[$item] = array((int) $new_date->format('U') * 1000, (int) $view->result[$item]->cid);
       }
-dpm($float_data);
       $fd = new flotData($float_data);
       $fd->label = t('Comments per day, for last month');
       $fd->mode = 'time';
