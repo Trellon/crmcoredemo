@@ -54,6 +54,7 @@ function crm_core_blog_context_default_contexts() {
     'path' => array(
       'values' => array(
         'crm/reports/blog-comments' => 'crm/reports/blog-comments',
+        'crm/reports/blog-comments/overview' => 'crm/reports/blog-comments/overview',
       ),
     ),
   );
