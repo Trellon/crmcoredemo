@@ -159,6 +159,18 @@ function crm_core_demo_settings_homebox() {
         'title' => 'Recent Activity',
         'weight' => -22,
       ),
+      'views_crm_core_blog_widget-comments' => 
+      array (
+        'module' => 'views',
+        'delta' => 'crm_core_blog_widget-comments',
+        'region' => 2,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => 'Blog',
+        'weight' => -32,
+      ),
     ),
     'widths' => 
     array (
