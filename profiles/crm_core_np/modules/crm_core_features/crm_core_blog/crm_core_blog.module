@@ -55,3 +55,71 @@ function crm_core_blog_crm_core_report_register() {
 
   return $reports;
 }
+
+/**
+ * Implements hook_block_info().
+ */
+function crm_core_blog_block_info() {
+  $blocks = array();
+  $blocks['crm_core_blog_reports_chart'] = array(
+    'info' => t('Chart for "Blog comments report".'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function crm_core_blog_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'crm_core_blog_reports_chart':
+      $check = _flot_get_library_path();
+      drupal_add_js($check . '/jquery.flot.resize.js', array('weight' => 20));
+      // first, make sure we are including the resizable library
+      // it's important
+      drupal_add_library('flot', 'jquery.flot.resize.js');
+      $view = views_get_view('crmcore_blog_comments_report', TRUE);
+      $view->set_display('chart');
+      // No we have view results.
+      $view->execute('chart');
+      // This normalizes all timestamps to the day they occur, removing the time element
+      // and allowing the chart to group them properly
+      $float_data = array();
+      foreach ($view->result as $item => $value){
+        $existing_date = date('Y-m-d',$view->result[$item]->comment_created);
+        $new_date = new DateTime($existing_date, new DateTimeZone(variable_get('date_default_timezone', 0)));
+        $float_data[$item] = array($new_date->format('U'), $view->result[$item]->cid);
+      }
+dpm($float_data);
+      $fd = new flotData($float_data);
+      $fd->label = t('Comments per day, for last month');
+      $fd->mode = 'time';
+      $fd->color = '#85de25';
+      $fd->lines = new flotLine(array('lineWidth' => 5));
+      $fd->points = new flotPoint(array('radius' => 5));
+      // Set the variables array and pass it to theme('flot_graph').
+      $variables = array(
+        'data' => array($fd),
+        'element' => array(
+          'id' => 'crm-core-chart',
+          'class' => 'crm-core-comments-flot',
+          'style' => "width:100%;height:200px",
+        ),
+        'options' => array(
+          'xaxis' => array(
+            'mode'	=> 'time',
+            'timeformat' => "%m/%d/%y",
+          ),
+          'grid' => array(
+            'hoverable' => TRUE,
+          ),
+        ),
+        'legend' => FALSE,
+        'zoom' => FALSE,
+      );
+      $block['content'] = theme('flot_graph', $variables);
+      return $block;
+  }
+}
