@@ -543,7 +543,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['filters']['field_donation_receive_date_value']['field'] = 'field_donation_receive_date_value';
   $handler->display->display_options['filters']['field_donation_receive_date_value']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
   $handler->display->display_options['filters']['field_donation_receive_date_value']['operator'] = '<';
-  $handler->display->display_options['filters']['field_donation_receive_date_value']['default_date'] = '-2 year';
+  $handler->display->display_options['filters']['field_donation_receive_date_value']['default_date'] = '-1 year';
   $handler->display->display_options['filters']['field_donation_receive_date_value']['year_range'] = '-10:+0';
   $handler->display->display_options['path'] = 'crm/reports/donors/sybunt';
   $handler->display->display_options['menu']['type'] = 'tab';
@@ -591,7 +591,7 @@ function crm_core_donation_views_default_views() {
   $handler->display->display_options['filters']['field_donation_receive_date_value_1']['field'] = 'field_donation_receive_date_value';
   $handler->display->display_options['filters']['field_donation_receive_date_value_1']['relationship'] = 'reverse_field_activity_participants_crm_core_activity';
   $handler->display->display_options['filters']['field_donation_receive_date_value_1']['operator'] = '<';
-  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['default_date'] = '-2 year';
+  $handler->display->display_options['filters']['field_donation_receive_date_value_1']['default_date'] = '-1 year';
   $handler->display->display_options['path'] = 'crm/reports/donors/sybunt/export';
   $handler->display->display_options['displays'] = array(
     'sybunt' => 'sybunt',
