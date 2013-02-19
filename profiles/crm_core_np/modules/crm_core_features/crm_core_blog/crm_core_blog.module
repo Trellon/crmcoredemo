@@ -36,11 +36,9 @@ function crm_core_blog_crm_core_report_register() {
           'path'        => 'crm/reports/blog-comments/activity',
           'description' => t('Details about the most active commenters on the blog.'),
         ),
-
-        // @todo #11952 and #11954.
-        'comment_authors' => array(
+        'blog_author' => array(
           'title'       => t('Blog author report'),
-          'path'        => 'crm/reports/blog/commenters',
+          'path'        => 'crm/reports/blog-comments/author',
           'description' => t('Details about activity around posts from individual blog authors.'),
         ),
         'comment_topics' => array(
