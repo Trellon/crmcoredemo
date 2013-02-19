@@ -418,7 +418,7 @@ function crm_core_blog_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Commenter activity report';
+  $handler->display->display_options['title'] = 'Comment activity report';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['group_by'] = TRUE;
   $handler->display->display_options['access']['type'] = 'perm';
@@ -441,7 +441,7 @@ function crm_core_blog_views_default_views() {
     'last_comment_timestamp' => 'last_comment_timestamp',
     'view' => 'view',
   );
-  $handler->display->display_options['style_options']['default'] = 'name';
+  $handler->display->display_options['style_options']['default'] = 'cid';
   $handler->display->display_options['style_options']['info'] = array(
     'contact_id' => array(
       'sortable' => 0,
@@ -539,7 +539,7 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['fields']['contact_name']['table'] = 'field_data_contact_name';
   $handler->display->display_options['fields']['contact_name']['field'] = 'contact_name';
   $handler->display->display_options['fields']['contact_name']['relationship'] = 'relation_crm_user_sync_crm_core_contact';
-  $handler->display->display_options['fields']['contact_name']['label'] = 'Name';
+  $handler->display->display_options['fields']['contact_name']['label'] = 'Contact';
   $handler->display->display_options['fields']['contact_name']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['contact_name']['alter']['path'] = 'crm/contact/[contact_id]';
   $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
@@ -617,9 +617,9 @@ function crm_core_blog_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'crm/reports/blog-comments/commenters';
+  $handler->display->display_options['path'] = 'crm/reports/blog-comments/activity';
   $handler->display->display_options['menu']['type'] = 'tab';
-  $handler->display->display_options['menu']['title'] = 'Commenter activity report';
+  $handler->display->display_options['menu']['title'] = 'Comment activity report';
   $handler->display->display_options['menu']['description'] = 'Details about the most active commenters on the blog.';
   $handler->display->display_options['menu']['weight'] = '1';
   $handler->display->display_options['menu']['context'] = 0;
@@ -679,6 +679,10 @@ function crm_core_blog_views_default_views() {
       'empty_column' => 0,
     ),
   );
+  /* Header: Global: Result summary */
+  $handler->display->display_options['header']['result']['id'] = 'result';
+  $handler->display->display_options['header']['result']['table'] = 'views';
+  $handler->display->display_options['header']['result']['field'] = 'result';
   /* Relationship: Comment: Content */
   $handler->display->display_options['relationships']['nid']['id'] = 'nid';
   $handler->display->display_options['relationships']['nid']['table'] = 'comment';
@@ -749,7 +753,7 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'Comment topics report';
   $handler->display->display_options['menu']['description'] = 'What topics are generating the most activity on the blog?';
-  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['weight'] = '3';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['tab_options']['weight'] = '0';
   $export['crm_core_blog_comment_topics_report'] = $view;

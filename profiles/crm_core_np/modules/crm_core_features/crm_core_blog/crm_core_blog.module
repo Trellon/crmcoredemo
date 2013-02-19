@@ -33,7 +33,7 @@ function crm_core_blog_crm_core_report_register() {
         ),
         'comment_activity' => array(
           'title'       => t('Commenter activity report'),
-          'path'        => 'crm/reports/blog-comments/commenters',
+          'path'        => 'crm/reports/blog-comments/activity',
           'description' => t('Details about the most active commenters on the blog.'),
         ),
 
