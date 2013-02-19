@@ -99,6 +99,18 @@ function crm_core_demo_settings_homebox() {
     ),
     'blocks' => 
     array (
+      'views_crm_core_donor_widget-average' => 
+      array (
+        'module' => 'views',
+        'delta' => 'crm_core_donor_widget-average',
+        'region' => 2,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => 'Donors',
+        'weight' => -30,
+      ),
       'views_038657316d71d4dab156a71ed24f2b25' => 
       array (
         'module' => 'views',

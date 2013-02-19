@@ -1218,6 +1218,151 @@ function crm_core_donation_views_default_views() {
   $export['crm_core_donor'] = $view;
 
   $view = new view();
+  $view->name = 'crm_core_donor_widget';
+  $view->description = 'Displays some total values related to donors. Just an overview, to get people to the preview page.';
+  $view->tag = 'default';
+  $view->base_table = 'crm_core_activity';
+  $view->human_name = 'CRM Core Donor Widget';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['css_class'] = 'crm-core-widget-info';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* Field: CRM Activity: Activity ID */
+  $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
+  /* Filter criterion: CRM Activity: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'crm_core_activity';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'donation' => 'donation',
+  );
+
+  /* Display: Donors */
+  $handler = $view->new_display('block', 'Donors', 'donors');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['group_by'] = FALSE;
+  $handler->display->display_options['group_by'] = TRUE;
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_activity_participants_target_id']['id'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['relationships']['field_activity_participants_target_id']['table'] = 'field_data_field_activity_participants';
+  $handler->display->display_options['relationships']['field_activity_participants_target_id']['field'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['relationships']['field_activity_participants_target_id']['label'] = 'Participants';
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: CRM Contact: Contact ID */
+  $handler->display->display_options['fields']['contact_id']['id'] = 'contact_id';
+  $handler->display->display_options['fields']['contact_id']['table'] = 'crm_core_contact';
+  $handler->display->display_options['fields']['contact_id']['field'] = 'contact_id';
+  $handler->display->display_options['fields']['contact_id']['relationship'] = 'field_activity_participants_target_id';
+  $handler->display->display_options['fields']['contact_id']['group_type'] = 'count_distinct';
+  $handler->display->display_options['fields']['contact_id']['label'] = 'Number of Donors';
+  $handler->display->display_options['fields']['contact_id']['element_type'] = 'div';
+  $handler->display->display_options['fields']['contact_id']['element_label_type'] = 'div';
+  $handler->display->display_options['fields']['contact_id']['element_label_colon'] = FALSE;
+
+  /* Display: Donations Frequency */
+  $handler = $view->new_display('block', 'Donations Frequency', 'frequency');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['group_by'] = FALSE;
+  $handler->display->display_options['group_by'] = TRUE;
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: CRM Activity: Activity ID */
+  $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['group_type'] = 'count';
+  $handler->display->display_options['fields']['activity_id']['exclude'] = TRUE;
+  /* Field: CRM Activity: Received Date */
+  $handler->display->display_options['fields']['field_donation_receive_date']['id'] = 'field_donation_receive_date';
+  $handler->display->display_options['fields']['field_donation_receive_date']['table'] = 'field_data_field_donation_receive_date';
+  $handler->display->display_options['fields']['field_donation_receive_date']['field'] = 'field_donation_receive_date';
+  $handler->display->display_options['fields']['field_donation_receive_date']['group_type'] = 'count_distinct';
+  $handler->display->display_options['fields']['field_donation_receive_date']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_donation_receive_date']['separator'] = ', ';
+  /* Field: Global: Math expression */
+  $handler->display->display_options['fields']['expression']['id'] = 'expression';
+  $handler->display->display_options['fields']['expression']['table'] = 'views';
+  $handler->display->display_options['fields']['expression']['field'] = 'expression';
+  $handler->display->display_options['fields']['expression']['label'] = 'Donations Frequency';
+  $handler->display->display_options['fields']['expression']['element_type'] = 'div';
+  $handler->display->display_options['fields']['expression']['element_label_type'] = 'div';
+  $handler->display->display_options['fields']['expression']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['expression']['set_precision'] = TRUE;
+  $handler->display->display_options['fields']['expression']['precision'] = '2';
+  $handler->display->display_options['fields']['expression']['suffix'] = ' per day';
+  $handler->display->display_options['fields']['expression']['expression'] = '[activity_id]/[field_donation_receive_date]';
+
+  /* Display: Average Amount */
+  $handler = $view->new_display('block', 'Average Amount', 'average');
+  $handler->display->display_options['defaults']['css_class'] = FALSE;
+  $handler->display->display_options['css_class'] = 'crm_core_widget';
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['group_by'] = FALSE;
+  $handler->display->display_options['group_by'] = TRUE;
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  /* Header: Global: View area */
+  $handler->display->display_options['header']['view']['id'] = 'view';
+  $handler->display->display_options['header']['view']['table'] = 'views';
+  $handler->display->display_options['header']['view']['field'] = 'view';
+  $handler->display->display_options['header']['view']['label'] = 'Number of Donors';
+  $handler->display->display_options['header']['view']['view_to_insert'] = 'crm_core_donor_widget:donors';
+  /* Header: Global: View area */
+  $handler->display->display_options['header']['view_1']['id'] = 'view_1';
+  $handler->display->display_options['header']['view_1']['table'] = 'views';
+  $handler->display->display_options['header']['view_1']['field'] = 'view';
+  $handler->display->display_options['header']['view_1']['label'] = 'Donations Frequency';
+  $handler->display->display_options['header']['view_1']['view_to_insert'] = 'crm_core_donor_widget:frequency';
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: CRM Activity: Activity ID */
+  $handler->display->display_options['fields']['activity_id']['id'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['table'] = 'crm_core_activity';
+  $handler->display->display_options['fields']['activity_id']['field'] = 'activity_id';
+  $handler->display->display_options['fields']['activity_id']['group_type'] = 'count';
+  $handler->display->display_options['fields']['activity_id']['exclude'] = TRUE;
+  /* Field: CRM Activity: Amount */
+  $handler->display->display_options['fields']['field_donation_amounts']['id'] = 'field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts']['table'] = 'field_data_field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts']['field'] = 'field_donation_amounts';
+  $handler->display->display_options['fields']['field_donation_amounts']['group_type'] = 'sum';
+  $handler->display->display_options['fields']['field_donation_amounts']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_donation_amounts']['settings'] = array(
+    'thousand_separator' => ' ',
+    'prefix_suffix' => 1,
+  );
+  /* Field: Global: Math expression */
+  $handler->display->display_options['fields']['expression']['id'] = 'expression';
+  $handler->display->display_options['fields']['expression']['table'] = 'views';
+  $handler->display->display_options['fields']['expression']['field'] = 'expression';
+  $handler->display->display_options['fields']['expression']['label'] = 'Average Donation Amount';
+  $handler->display->display_options['fields']['expression']['element_type'] = 'div';
+  $handler->display->display_options['fields']['expression']['element_label_type'] = 'div';
+  $handler->display->display_options['fields']['expression']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['expression']['set_precision'] = TRUE;
+  $handler->display->display_options['fields']['expression']['precision'] = '2';
+  $handler->display->display_options['fields']['expression']['prefix'] = '$';
+  $handler->display->display_options['fields']['expression']['expression'] = '[field_donation_amounts]/[activity_id]';
+  $export['crm_core_donor_widget'] = $view;
+
+  $view = new view();
   $view->name = 'crm_donation_activities_by_contact';
   $view->description = 'List of activities of the contact';
   $view->tag = 'default';
