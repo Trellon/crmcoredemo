@@ -418,7 +418,7 @@ function crm_core_blog_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Blog commenter activity report';
+  $handler->display->display_options['title'] = 'Commenter activity report';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['group_by'] = TRUE;
   $handler->display->display_options['access']['type'] = 'perm';
@@ -427,27 +427,37 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '50';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '25';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['pager']['options']['id'] = '0';
   $handler->display->display_options['pager']['options']['quantity'] = '9';
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
-    'name' => 'name',
+    'contact_id' => 'contact_id',
     'contact_name' => 'contact_name',
+    'name' => 'name',
     'cid' => 'cid',
     'nid' => 'nid',
+    'last_comment_timestamp' => 'last_comment_timestamp',
+    'view' => 'view',
   );
-  $handler->display->display_options['style_options']['default'] = 'cid';
+  $handler->display->display_options['style_options']['default'] = 'name';
   $handler->display->display_options['style_options']['info'] = array(
-    'name' => array(
-      'sortable' => 1,
+    'contact_id' => array(
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'contact_name' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'name' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -462,11 +472,29 @@ function crm_core_blog_views_default_views() {
       'empty_column' => 0,
     ),
     'nid' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'desc',
       'align' => 'views-align-right',
       'separator' => '',
       'empty_column' => 0,
     ),
+    'last_comment_timestamp' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'desc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'view' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
   );
+  /* Header: Global: Result summary */
+  $handler->display->display_options['header']['result']['id'] = 'result';
+  $handler->display->display_options['header']['result']['table'] = 'views';
+  $handler->display->display_options['header']['result']['field'] = 'result';
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
   $handler->display->display_options['empty']['area']['table'] = 'views';
@@ -484,11 +512,16 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['relationships']['uid']['table'] = 'node_revision';
   $handler->display->display_options['relationships']['uid']['field'] = 'uid';
   $handler->display->display_options['relationships']['uid']['relationship'] = 'nid';
+  /* Relationship: Comment: Author */
+  $handler->display->display_options['relationships']['uid_1']['id'] = 'uid_1';
+  $handler->display->display_options['relationships']['uid_1']['table'] = 'comment';
+  $handler->display->display_options['relationships']['uid_1']['field'] = 'uid';
+  $handler->display->display_options['relationships']['uid_1']['label'] = 'comment author';
   /* Relationship: User: Relation: Contact (user -&gt; crm_core_contact) */
   $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['id'] = 'relation_crm_user_sync_crm_core_contact';
   $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['table'] = 'users';
   $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['field'] = 'relation_crm_user_sync_crm_core_contact';
-  $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['relationship'] = 'uid';
+  $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['relationship'] = 'uid_1';
   $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['r_index'] = '-1';
   $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['entity_deduplication_left'] = 0;
   $handler->display->display_options['relationships']['relation_crm_user_sync_crm_core_contact']['entity_deduplication_right'] = 0;
@@ -533,7 +566,16 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['fields']['cid']['table'] = 'comment';
   $handler->display->display_options['fields']['cid']['field'] = 'cid';
   $handler->display->display_options['fields']['cid']['group_type'] = 'count';
-  $handler->display->display_options['fields']['cid']['label'] = 'Total Comments';
+  $handler->display->display_options['fields']['cid']['label'] = 'Total comments';
+  $handler->display->display_options['fields']['cid']['separator'] = '';
+  /* Field: COUNT(DISTINCT Content: Nid) */
+  $handler->display->display_options['fields']['nid']['id'] = 'nid';
+  $handler->display->display_options['fields']['nid']['table'] = 'node';
+  $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid']['relationship'] = 'nid';
+  $handler->display->display_options['fields']['nid']['group_type'] = 'count_distinct';
+  $handler->display->display_options['fields']['nid']['label'] = 'Total commented posts';
+  $handler->display->display_options['fields']['nid']['separator'] = '';
   /* Field: MAX(Content: Last comment time) */
   $handler->display->display_options['fields']['last_comment_timestamp']['id'] = 'last_comment_timestamp';
   $handler->display->display_options['fields']['last_comment_timestamp']['table'] = 'node_comment_statistics';
@@ -761,6 +803,70 @@ function crm_core_blog_views_default_views() {
   $handler = $view->new_display('block', 'Chart Block data', 'chart');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $export['crm_core_blog_comments_chart_block'] = $view;
+
+  $view = new view();
+  $view->name = 'crm_core_blog_recent_commented_blog_post';
+  $view->description = '';
+  $view->tag = 'default';
+  $view->base_table = 'node';
+  $view->human_name = 'CRM Core Blog: recent commented blog post';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'CRM Core Blog: recent commented blog post';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '1';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* Relationship: Comment: Comments of the node */
+  $handler->display->display_options['relationships']['cid']['id'] = 'cid';
+  $handler->display->display_options['relationships']['cid']['table'] = 'node';
+  $handler->display->display_options['relationships']['cid']['field'] = 'cid';
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Sort criterion: Comment: Post date */
+  $handler->display->display_options['sorts']['created_1']['id'] = 'created_1';
+  $handler->display->display_options['sorts']['created_1']['table'] = 'comment';
+  $handler->display->display_options['sorts']['created_1']['field'] = 'created';
+  $handler->display->display_options['sorts']['created_1']['relationship'] = 'cid';
+  $handler->display->display_options['sorts']['created_1']['order'] = 'DESC';
+  /* Contextual filter: Comment: Author */
+  $handler->display->display_options['arguments']['name']['id'] = 'name';
+  $handler->display->display_options['arguments']['name']['table'] = 'comment';
+  $handler->display->display_options['arguments']['name']['field'] = 'name';
+  $handler->display->display_options['arguments']['name']['relationship'] = 'cid';
+  $handler->display->display_options['arguments']['name']['default_action'] = 'empty';
+  $handler->display->display_options['arguments']['name']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['name']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['name']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['name']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['name']['limit'] = '0';
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+
+  /* Display: Block */
+  $handler = $view->new_display('block', 'Block', 'block');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $export['crm_core_blog_recent_commented_blog_post'] = $view;
 
   $view = new view();
   $view->name = 'crm_core_blog_widget';
