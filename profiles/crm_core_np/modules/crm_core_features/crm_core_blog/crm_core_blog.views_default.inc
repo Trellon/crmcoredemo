@@ -301,6 +301,12 @@ function crm_core_blog_views_default_views() {
       'empty_column' => 0,
     ),
   );
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['content'] = 'Summary of comment activity for specific blog authors.';
+  $handler->display->display_options['header']['area']['format'] = 'filtered_html';
   /* Header: Global: Result summary */
   $handler->display->display_options['header']['result']['id'] = 'result';
   $handler->display->display_options['header']['result']['table'] = 'views';
@@ -353,6 +359,7 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['fields']['contact_name']['label'] = 'Contact';
   $handler->display->display_options['fields']['contact_name']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['contact_name']['alter']['path'] = 'crm/contact/[contact_id]';
+  $handler->display->display_options['fields']['contact_name']['empty'] = '---';
   $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
   $handler->display->display_options['fields']['contact_name']['settings'] = array(
     'format' => 'default',
@@ -781,6 +788,7 @@ function crm_core_blog_views_default_views() {
   $handler->display->display_options['fields']['contact_name']['label'] = 'Contact';
   $handler->display->display_options['fields']['contact_name']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['contact_name']['alter']['path'] = 'crm/contact/[contact_id]';
+  $handler->display->display_options['fields']['contact_name']['empty'] = '---';
   $handler->display->display_options['fields']['contact_name']['click_sort_column'] = 'title';
   $handler->display->display_options['fields']['contact_name']['settings'] = array(
     'format' => 'default',
