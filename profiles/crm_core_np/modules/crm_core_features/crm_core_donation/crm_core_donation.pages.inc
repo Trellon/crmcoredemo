@@ -97,6 +97,7 @@ function crm_core_donation_page_form($form, &$form_state, $donation_page_id = NU
       '#multiple' => FALSE,
       '#options' => $options,
       '#default_value' => $default_value,
+      '#required' => TRUE,
     );
   }
 
@@ -105,13 +106,16 @@ function crm_core_donation_page_form($form, &$form_state, $donation_page_id = NU
     '#title' => 'Active',
     '#default_value' => (!empty($donation_page)) ? $donation_page['status'] : 1,
   );
-
-//  $form['options']['amounts'] = array(
-//    '#type' => 'textarea',
-//    '#title' => 'Amounts',
-//    '#description' => t('Please enter the donation amount options, each options should be on a separate line'),
-//    '#default_value' => (!empty($donation_page)) ? unserialize($donation_page['amounts']) : '',
-//  );
+  
+  $form['options']['amounts'] = array(
+    '#type' => 'textarea',
+    '#title' => 'Donation amounts',
+    '#description' => t('Please enter the donation amount options in, each options should be integers on a separate line'),
+    '#default_value' => (!empty($donation_page)) ?   implode('
+', unserialize($donation_page['amounts'])) : implode('
+', array(10, 20, 30, 50, 100)),
+    '#required' => TRUE,
+  );
 
   $header_default = (!empty($donation_page)) ? unserialize($donation_page['header']) : array();
   $form['options']['header'] = array(
@@ -218,7 +222,7 @@ function crm_core_donation_page_form_validate($form, &$form_state) {
   // @todo: validate the amount entered and make sure no symboles, etc
   if (isset($form_state['values']['options']['goal']) && $form_state['values']['options']['goal'] != '') {
     if (!is_numeric($form_state['values']['options']['goal'])) {
-      form_set_error('goal', 'Goal must be an integer number');
+      form_set_error('options][goal', 'Goal must be an integer number');
     }
   }
 
@@ -226,15 +230,40 @@ function crm_core_donation_page_form_validate($form, &$form_state) {
     // check machien name compitability
     $match = strcspn($form_state['values']['options']['path'], 'abcdefghijklmnopqrstuvwxyz0123456789-_');
     if ($match > 0) {
-      form_set_error('path', 'The path must only container lower case alphabets, numbers, dash (-) and underscore (_)');
+      form_set_error('options][path', 'The path must only container lower case alphabets, numbers, dash (-) and underscore (_)');
     }
     // check if the path alias exist
     $path = drupal_lookup_path('source', $form_state['values']['options']['path']);
     if (!empty($path)) {
       if ($path !== 'donation_pages/' . $form_state['values']['options']['id']) {
-        form_set_error('path', 'the url alias already exist');
+        form_set_error('options][path', 'the url alias already exist');
       }
     }
+  }
+  
+  // check the donation amount options to make sure integers are entered
+  if (isset($form_state['values']['options']['amounts']) && $form_state['values']['options']['amounts'] != '') {
+    $_amounts = nl2br($form_state['values']['options']['amounts']);
+    $amounts = explode('<br />', $_amounts);
+    if (!empty($amounts)) {
+      $errors = array();
+      foreach ($amounts as $amount) {
+        // check if amount is interger, not using is_int
+        if (!is_numeric($amount)) {
+          $errors[] = $amount;
+        } 
+      }
+      if (count($errors) > 0) {
+        form_set_error('options][amounts', 'Each amount option should be an integer value');  
+      } else {
+        // everything is ok and we can carry the amount options to submission
+        // handler for saving
+        foreach ($amounts as $_number) {
+          $temp[] = floor($_number);
+        }
+        $form_state['values']['options']['amounts'] = $temp;
+      }
+    }  
   }
 }
 

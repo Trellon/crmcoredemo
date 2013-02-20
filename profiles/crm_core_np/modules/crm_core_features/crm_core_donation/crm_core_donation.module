@@ -869,6 +869,30 @@ function crm_core_donation_form_crm_core_profile_entry_form_alter(&$form, &$form
 	// set campaign (the donation page id)	
 	$form['activity']['field_donation_campaign'][LANGUAGE_NONE][0]['value']['#default_value'] = $donation_page['id'];
 
+	// todo, use commerce's currency management
+	setlocale(LC_MONETARY, 'en_US');
+
+	$donation_amounts = array();
+	if (isset($donation_page['amounts'])) {
+  	$_amounts = unserialize($donation_page['amounts']);
+  	if (!empty($_amounts)) {
+    	foreach($_amounts as $amount) {
+      	$donation_amounts[$amount] = money_format('%(#2n', $amount);
+    	}
+  	}
+	} else {
+  	$donation_amounts = array(
+  	 10 => money_format('%(#2n', 10),
+  	 20 => money_format('%(#2n', 20),
+  	 50 => money_format('%(#2n', 50),
+  	 100 => money_format('%(#2n', 100),
+  	);
+	}
+
+	// set the amount widget to our options
+	$form['activity']['field_donation_amounts'][LANGUAGE_NONE][0]['value']['#type'] = 'radios';
+	$form['activity']['field_donation_amounts'][LANGUAGE_NONE][0]['value']['#options'] = $donation_amounts;
+	
   // preset an amount on the donation form according to get
   if (isset($form['activity']['field_donation_amounts'][LANGUAGE_NONE]['#options'])) {
     $amount_set = array_keys($form['activity']['field_donation_amounts'][LANGUAGE_NONE]['#options']);
@@ -878,6 +902,8 @@ function crm_core_donation_form_crm_core_profile_entry_form_alter(&$form, &$form
       }
     }
   }
+
+
 
   // set amount
 //  $amounts = unserialize($donation_page['amounts']);

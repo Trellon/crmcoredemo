@@ -277,7 +277,7 @@ function crm_core_donation_field_default_fields() {
       ),
       'widget' => array(
         'active' => 1,
-        'module' => 'select_or_other',
+        'module' => 'number',
         'settings' => array(
           'available_options' => '35|$35
 50|$50
@@ -295,7 +295,7 @@ function crm_core_donation_field_default_fields() {
           'other_unknown_defaults' => 'ignore',
           'sort_options' => 0,
         ),
-        'type' => 'select_or_other_buttons',
+        'type' => 'number',
         'weight' => '3',
       ),
     ),
