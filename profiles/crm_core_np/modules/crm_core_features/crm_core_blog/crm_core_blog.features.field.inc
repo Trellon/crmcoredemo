@@ -230,13 +230,13 @@ function crm_core_blog_field_default_fields() {
       ),
       'widget' => array(
         'active' => 1,
-        'module' => 'taxonomy',
+        'module' => 'active_tags',
         'settings' => array(
           'autocomplete_path' => 'taxonomy/autocomplete',
           'mode' => 'csv',
           'size' => 60,
         ),
-        'type' => 'taxonomy_autocomplete',
+        'type' => 'active_tags_taxonomy_autocomplete',
         'weight' => '1',
       ),
     ),
