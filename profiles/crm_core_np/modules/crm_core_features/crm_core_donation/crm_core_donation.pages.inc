@@ -111,7 +111,7 @@ function crm_core_donation_page_form($form, &$form_state, $donation_page_id = NU
     '#type' => 'textarea',
     '#title' => 'Donation amounts',
     '#description' => t('Please enter the donation amount options in, each options should be integers on a separate line'),
-    '#default_value' => (!isset($donation_page['amounts'])) ?   implode('
+    '#default_value' => (isset($donation_page['amounts'])) ?   implode('
 ', unserialize($donation_page['amounts'])) : implode('
 ', array(10, 20, 30, 50, 100)),
     '#required' => TRUE,
