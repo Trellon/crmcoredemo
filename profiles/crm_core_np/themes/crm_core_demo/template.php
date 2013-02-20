@@ -513,3 +513,25 @@ function crm_core_demo_bootstrap_btn_dropdown($variables) {
   return $output;
 }  
 
+/*
+ * Implements theme_button().
+ *
+ * Make <button> render as <input> for all cases as many contrib modules currently
+ * break: views, active_tags, ...
+ *
+ * @todo Revisit this function for later usage when contrib is more HTML5 compliant.
+ *
+ */
+function crm_core_demo_button($variables) {
+  $element = $variables['element'];
+  $label = check_plain($element['#value']);
+  element_set_attributes($element, array('id', 'name', 'value', 'type'));
+
+  $element['#attributes']['class'][] = 'form-' . $element['#button_type'];
+  if (!empty($element['#attributes']['disabled'])) {
+    $element['#attributes']['class'][] = 'form-button-disabled';
+  }
+
+  // @todo: We always return input elements for now, because <button> breaks many contrib modules and the exception white list is not extendable.
+  return '<input' . drupal_attributes($element['#attributes']) . ">\n"; // This line break adds inherent margin between multiple buttons
+}
