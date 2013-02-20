@@ -1486,6 +1486,12 @@ function crm_core_donation_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['path'] = 'crm/contact/%/activity/donation';
+  $handler->display->display_options['menu']['type'] = 'default tab';
+  $handler->display->display_options['menu']['title'] = 'Donations ';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['name'] = 'menu-crm-core-basic-nav';
+  $handler->display->display_options['menu']['context'] = 1;
+  $handler->display->display_options['tab_options']['weight'] = '0';
   $export['crm_donation_activities_by_contact'] = $view;
 
   $view = new view();
