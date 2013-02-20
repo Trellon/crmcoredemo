@@ -1841,7 +1841,7 @@ function crm_core_donation_views_query_alter(&$view, &$query) {
     $tz = new DateTimeZone(variable_get('date_default_timezone', 'America/New_York'));
     $current_time = new DateTime('now', $tz);
     $tz_offset   = $tz->getOffset($current_time);
-    $field = "DATE_FORMAT(ADDTIME(field_activity_participants_crm_core_contact__field_data_field_donation_receive_date.field_donation_receive_date_value, SEC_TO_TIME(" . $tz_offset . ")), '%Y-%m-%d') NOT BETWEEN :prev_year, :current_time";
+    $field = "DATE_FORMAT(ADDTIME(field_activity_participants_crm_core_contact__field_data_field_donation_receive_date.field_donation_receive_date_value, SEC_TO_TIME(" . $tz_offset . ")), '%Y-%m-%d') NOT BETWEEN :prev_year AND :current_time";
     $prev_year = new DateTime('now', $tz);
     $value = array(
       ':prev_year'    => $prev_year->modify('-1 year')->format('Y-m-d'),
