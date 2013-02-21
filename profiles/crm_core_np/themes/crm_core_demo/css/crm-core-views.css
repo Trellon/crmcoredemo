@@ -127,9 +127,29 @@
   width: 100%;
 }
 
+/* Donors Report Overview customizations. START */
+#block-views-crm-core-donor-widget-donors,
+#block-views-crm-core-donor-widget-frequency,
+#block-views-crm-core-donor-widget-average {
+  width: 33%;
+  float: left;
+  margin-right: 2px;
+}
 
+#views-exposed-form-crm-core-donor-page {
+  clear: both;
+  padding-top: 10px;
+}
 
+#views-exposed-form-crm-core-donor-page #edit-field-donation-receive-date-value-min-wrapper,
+#views-exposed-form-crm-core-donor-page #edit-field-donation-receive-date-value-max-wrapper {
+  float: left;
+}
 
+#views-exposed-form-crm-core-donor-page .views-exposed-form .views-submit-button {
+  float: none;
+}
+/* Donors Report Overview customizations. END */
 
 .view-petition-totals,
 .view-donations-totals {

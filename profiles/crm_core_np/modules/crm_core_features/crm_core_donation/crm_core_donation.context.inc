@@ -50,5 +50,51 @@ function crm_core_donation_context_default_contexts() {
   t('crm-core-report');
   $export['crm_core_donation_reports'] = $context;
 
+  $context = new stdClass();
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'crm_core_donor_reports_overview';
+  $context->description = 'Place chart block at report page';
+  $context->tag = 'crm-core-report';
+  $context->conditions = array(
+    'path' => array(
+      'values' => array(
+        'crm/reports/donors' => 'crm/reports/donors',
+        'crm/reports/donors/overview' => 'crm/reports/donors/overview',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-crm_core_donor_widget-donors' => array(
+          'module' => 'views',
+          'delta' => 'crm_core_donor_widget-donors',
+          'region' => 'content',
+          'weight' => '-10',
+        ),
+        'views-crm_core_donor_widget-frequency' => array(
+          'module' => 'views',
+          'delta' => 'crm_core_donor_widget-frequency',
+          'region' => 'content',
+          'weight' => '-10',
+        ),
+        'views-crm_core_donor_widget-average' => array(
+          'module' => 'views',
+          'delta' => 'crm_core_donor_widget-average',
+          'region' => 'content',
+          'weight' => '-10',
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Place chart block at report page');
+  t('crm-core-report');
+  $export['crm_core_donor_reports_overview'] = $context;
+
   return $export;
 }

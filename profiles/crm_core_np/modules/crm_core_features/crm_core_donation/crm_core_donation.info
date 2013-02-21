@@ -25,6 +25,7 @@ dependencies[] = select_or_other
 dependencies[] = strongarm
 dependencies[] = views
 features[context][] = crm_core_donation_reports
+features[context][] = crm_core_donor_reports_overview
 features[crm_core_activity_type][] = donation
 features[crm_core_profile][] = donation
 features[ctools][] = context:context:3
