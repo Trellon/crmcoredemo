@@ -90,6 +90,8 @@
   margin-bottom: 1em;
   font-size: 1.2em;
 }
+
+#boxes-box-crm_core_donor_widget_box .widget-outer-wrapper,
 .crm-core-overview-widget {
   border: 1px solid #CCC;
   text-align: center;
@@ -103,14 +105,30 @@
   background-color: #e1e1e1;
   padding: .5em 0em .7em 0em;
 }
+
+#boxes-box-crm_core_donor_widget_box .widget-inner-wrapper,
 .crm-core-overview-widget .views-row {
 	display: table;
 	width: 100%;
 }
+
+#boxes-box-crm_core_donor_widget_box .views-row {
+  display: block;
+  width: 100%;
+}
+
+#boxes-box-crm_core_donor_widget_box .widget,
 .crm-core-overview-widget .views-row .views-field {
 	display: table-cell;
 	width: 33%;
 }
+
+#boxes-box-crm_core_donor_widget_box .widget .views-field {
+  display: block;
+  width: auto;
+}
+
+
 .crm-core-overview-widget .views-row .views-field .views-label {
   text-transform: uppercase;
   font-size: 0.8em;
@@ -128,26 +146,10 @@
 }
 
 /* Donors Report Overview customizations. START */
-#block-views-crm-core-donor-widget-donors,
-#block-views-crm-core-donor-widget-frequency,
-#block-views-crm-core-donor-widget-average {
-  width: 33%;
-  float: left;
-  margin-right: 2px;
-}
-
-#views-exposed-form-crm-core-donor-page {
-  clear: both;
-  padding-top: 10px;
-}
-
-#views-exposed-form-crm-core-donor-page #edit-field-donation-receive-date-value-min-wrapper,
-#views-exposed-form-crm-core-donor-page #edit-field-donation-receive-date-value-max-wrapper {
-  float: left;
-}
-
-#views-exposed-form-crm-core-donor-page .views-exposed-form .views-submit-button {
-  float: none;
+#boxes-box-crm_core_donor_widget_box .widget-outer-wrapper .crm-core-overview-widget {
+  background: none;
+  border: medium none;
+  border-radius: 0 0 0 0;
 }
 /* Donors Report Overview customizations. END */
 

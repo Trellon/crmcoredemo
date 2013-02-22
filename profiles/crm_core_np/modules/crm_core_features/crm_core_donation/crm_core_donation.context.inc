@@ -27,17 +27,17 @@ function crm_core_donation_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'crm_core_donation-donation_reports_chart' => array(
+          'module' => 'crm_core_donation',
+          'delta' => 'donation_reports_chart',
+          'region' => 'content',
+          'weight' => '-10',
+        ),
         'views-donations_totals-block_1' => array(
           'module' => 'views',
           'delta' => 'donations_totals-block_1',
           'region' => 'above',
           'weight' => '-10',
-        ),
-        'crm_core_donation-crm_core_donation_reports_chart' => array(
-          'module' => 'crm_core_donation',
-          'delta' => 'crm_core_donation_reports_chart',
-          'region' => 'above',
-          'weight' => '-9',
         ),
       ),
     ),
@@ -67,21 +67,9 @@ function crm_core_donation_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-crm_core_donor_widget-donors' => array(
-          'module' => 'views',
-          'delta' => 'crm_core_donor_widget-donors',
-          'region' => 'content',
-          'weight' => '-10',
-        ),
-        'views-crm_core_donor_widget-frequency' => array(
-          'module' => 'views',
-          'delta' => 'crm_core_donor_widget-frequency',
-          'region' => 'content',
-          'weight' => '-10',
-        ),
-        'views-crm_core_donor_widget-average' => array(
-          'module' => 'views',
-          'delta' => 'crm_core_donor_widget-average',
+        'crm_core_donation-donor_report_widget' => array(
+          'module' => 'crm_core_donation',
+          'delta' => 'donor_report_widget',
           'region' => 'content',
           'weight' => '-10',
         ),
