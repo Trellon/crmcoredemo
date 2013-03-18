@@ -294,9 +294,9 @@ crm-core-profile-entry-form');
   variable_set('jquery_update_compression_type', 'min');
   variable_set('jquery_update_jquery_cdn', 'google');
   variable_set('jquery_update_jquery_version', '1.8');
- 
+
   // sync the admin user with a contact
-  if ($accout = user_load(1)) {
+  if ($account = user_load(1)) {
 	  crm_user_sync_sync($account);
   }
 }
@@ -393,17 +393,17 @@ function _crm_core_np_features_form_submit($form, &$form_state) {
   }
 
   module_enable($modules);
-  
+
   // let's install test data and turn on modules that might be breaking other things
   /*
   $other_modules = array(
     'deploy',
     'crm_core_demo_content'
   );
-  
-  module_enable($other_modules);  
+
+  module_enable($other_modules);
   */
-  
+
 }
 
 /**
@@ -479,10 +479,10 @@ function _crm_core_np_feature_config_form_submit($form, &$form_state) {
       }
     }
   }
-  
-  
 
-  
+
+
+
 }
 
 /**
